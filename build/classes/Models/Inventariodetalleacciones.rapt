@@ -1,0 +1,17 @@
+Models/Configuracion_.java
+Models/Cliente_.java
+Models/Producto_.java
+Models/Marca_.java
+Models/Notificacion_.java
+Models/Usuario_.java
+Models/Cotizaciondetalle_.java
+Models/Venta_.java
+Models/Compradetalle_.java
+Models/Inventariodetalleacciones_.java
+Models/Inventario_.java
+Models/Categoria_.java
+Models/Cotizacion_.java
+Models/Proveedor_.java
+Models/Compra_.java
+Models/Ventadetalle_.java
+Models/Empleado_.java
