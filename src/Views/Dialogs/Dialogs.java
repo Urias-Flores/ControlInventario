@@ -133,6 +133,13 @@ public class Dialogs {
         ied.dispose();
     }
     
+    public static void ShowInfoUsuarioDialog(int EmpleadoID){
+        InfoUsuarioDialog ied = new InfoUsuarioDialog(null, true);
+        ied.CargarUsuario(EmpleadoID);
+        ied.setVisible(true);
+        ied.dispose();
+    }
+    
     public static void ShowMarcasDialog(){
         MarcasDialog md = new MarcasDialog(null, true);
         md.setVisible(true);

@@ -5,7 +5,6 @@ import Controllers.exceptions.IllegalOrphanException;
 import Controllers.exceptions.NonexistentEntityException;
 import Models.Usuario;
 import Resource.Conection;
-import Resource.NoJpaConection;
 import Views.Dialogs.Dialogs;
 import java.util.List;
 import javax.swing.JTable;
@@ -29,26 +28,24 @@ public class UsuarioViewController {
     
     public void CargarUsuarios(){
         DefaultTableModel model = new DefaultTableModel();
-        String[] columns = {"No. Usuario", "Nombre de usuario", "Empleado autorizado", "Estado"};
+        String[] columns = {"No. Usuario", "Nombre de usuario", "Estado", "Cargo en sistema"};
         model.setColumnIdentifiers(columns);
         
-        List<Usuario> usuarios = new UsuarioJpaController(Conection.CreateEntityManager()).findUsuarioEntities();
+        List<Object[]> usuarios = Conection.CreateEntityManager().createEntityManager()
+                .createNativeQuery("SELECT UsuarioID, Nombre, Estado, Cargo FROM Usuario").getResultList();
+        
         usuarios.forEach(usuario -> {
-            Object[] row = {
-                usuario.getUsuarioID(), 
-                usuario.getNombre(), 
-                usuario.getEmpleadoID().getNombre()+" "+usuario.getEmpleadoID().getApellido(), 
-                usuario.getEstado() == 1 ? "Activo" : "Inactivo"
-            };
-            model.addRow(row);
+            usuario[2] = usuario[2].toString().equals("1") ? "Activo" : "Inactivo";
+            usuario[3] = usuario[3].toString().equals("A") ? "Administrador" : "Dependiente";
+            model.addRow(usuario);
         });
         
         Usuarios.setModel(model);
         
         Usuarios.getColumn("No. Usuario").setPreferredWidth(120);
         Usuarios.getColumn("Nombre de usuario").setPreferredWidth(450);
-        Usuarios.getColumn("Empleado autorizado").setPreferredWidth(550);
-        Usuarios.getColumn("Estado").setPreferredWidth(100);
+        Usuarios.getColumn("Estado").setPreferredWidth(190);
+        Usuarios.getColumn("Cargo en sistema").setPreferredWidth(210);
     }
     
     public void Buscar(){
@@ -82,6 +79,15 @@ public class UsuarioViewController {
                     Dialogs.ShowMessageDialog("Los datos de este usuario estan enlazados a otros. No se pudo eliminar", Dialogs.ERROR_ICON);
                 }
             }    
+        }else{
+            Dialogs.ShowMessageDialog("Seleccione un usuario de la lista", Dialogs.ERROR_ICON);
+        }
+    }
+    
+    public void mostrarInfoUsuario(){
+        int fila = Usuarios.getSelectedRow();
+        if(fila >= 0){
+            Dialogs.ShowInfoUsuarioDialog(Integer.parseInt(Usuarios.getValueAt(fila, 0).toString()));
         }else{
             Dialogs.ShowMessageDialog("Seleccione un usuario de la lista", Dialogs.ERROR_ICON);
         }

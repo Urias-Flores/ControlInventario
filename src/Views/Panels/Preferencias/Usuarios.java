@@ -142,6 +142,11 @@ public class Usuarios extends javax.swing.JPanel {
         btnInformacion.setToolTipText("Ver informacion completa");
         btnInformacion.setOpaque(true);
         btnInformacion.setPreferredSize(new java.awt.Dimension(38, 38));
+        btnInformacion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnInformacionMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -217,6 +222,10 @@ public class Usuarios extends javax.swing.JPanel {
     private void btnActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnActualizarMouseClicked
         vc.CargarUsuarios();
     }//GEN-LAST:event_btnActualizarMouseClicked
+
+    private void btnInformacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInformacionMouseClicked
+        vc.mostrarInfoUsuario();
+    }//GEN-LAST:event_btnInformacionMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
