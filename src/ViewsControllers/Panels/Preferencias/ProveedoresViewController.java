@@ -6,6 +6,7 @@ import Controllers.exceptions.NonexistentEntityException;
 import Models.Proveedor;
 import Resource.Conection;
 import Views.Dialogs.Dialogs;
+import java.text.DecimalFormat;
 import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -20,6 +21,7 @@ public class ProveedoresViewController {
     
     JTextField Buscar;
     JTable Proveedores;
+    JLabel Total;
     
     JLabel Nombre;
     JLabel RTN;
@@ -27,9 +29,10 @@ public class ProveedoresViewController {
     JLabel Numero;
     JTextArea Domicilio;
 
-    public ProveedoresViewController(JTextField Buscar, JTable Proveedores, JLabel Nombre, JLabel RTN, JLabel Correo, JLabel Numero) {
+    public ProveedoresViewController(JTextField Buscar, JTable Proveedores, JLabel Total, JLabel Nombre, JLabel RTN, JLabel Correo, JLabel Numero) {
         this.Buscar = Buscar;
         this.Proveedores = Proveedores;
+        this.Total = Total;
         this.Nombre = Nombre;
         this.RTN = RTN;
         this.Correo = Correo;
@@ -40,20 +43,24 @@ public class ProveedoresViewController {
     
     public void CargarProveedores(){
         DefaultTableModel model = new DefaultTableModel();
-        String[] columns = {"No. Proveedor", "Nombre", "RTN"};
+        String[] columns = {"No. Proveedor", "Nombre", "RTN", "Saldo"};
         model.setColumnIdentifiers(columns);
-        List<Proveedor> proveedores = new ProveedorJpaController(Conection.CreateEntityManager()).findProveedorEntities();
+        List<Object[]> proveedores = Conection.CreateEntityManager().createEntityManager()
+                .createNativeQuery("SELECT ProveedorID, Nombre, RTN, SALDO FROM Proveedor").getResultList();
         
         proveedores.forEach(proveedor -> {
-            Object[] row = {proveedor.getProveedorID(), proveedor.getNombre(), proveedor.getRtn()};
-            model.addRow(row);
+            proveedor[3] = getNumberFormat(Float.parseFloat(proveedor[3].toString()));
+            model.addRow(proveedor);
         });
         
         Proveedores.setModel(model);
         
-        Proveedores.getColumn("No. Proveedor").setPreferredWidth(140);
-        Proveedores.getColumn("Nombre").setPreferredWidth(700);
+        Proveedores.getColumn("No. Proveedor").setPreferredWidth(175);
+        Proveedores.getColumn("Nombre").setPreferredWidth(550);
         Proveedores.getColumn("RTN").setPreferredWidth(200);
+        Proveedores.getColumn("Saldo").setPreferredWidth(150);
+        
+        updateTotal();
     }
     
     public void CargarProveedor(){
@@ -65,6 +72,15 @@ public class ProveedoresViewController {
             Correo.setText(proveedor.getCorreoElectronico());
             Numero.setText(proveedor.getNumeroTelefono());
         }
+    }
+    
+    private void updateTotal(){
+        float total = 0;
+        for(int i = 0; i < Proveedores.getRowCount(); i++){
+            total += Float.parseFloat(Proveedores.getValueAt(i, 3).toString().replace(",", ""));
+        }
+        
+        Total.setText(getNumberFormat(total));
     }
     
     public void Edit(){
@@ -99,5 +115,10 @@ public class ProveedoresViewController {
         s.setModel(Proveedores.getModel());
         s.setRowFilter(RowFilter.regexFilter(Buscar.getText(), 1));
         Proveedores.setRowSorter(s);
+    }
+    
+    private String getNumberFormat(float Value){
+        DecimalFormat format = new DecimalFormat("#,##0.00");
+        return format.format(Value);
     }
 }
