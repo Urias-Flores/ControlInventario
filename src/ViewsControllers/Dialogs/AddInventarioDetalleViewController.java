@@ -49,7 +49,7 @@ public class AddInventarioDetalleViewController {
         Inventariodetalleacciones inventarioDetalle = new Inventariodetalleacciones();
         
         inventarioDetalle.setProductoID(new Producto(ProductoID));
-        inventarioDetalle.setUsuarioID(new Usuario(Integer.valueOf(Utilities.getUsuarioActual()[0].toString())));
+        inventarioDetalle.setUsuarioID(Utilities.getUsuarioActual());
         inventarioDetalle.setFecha(Utilities.getDate());
         inventarioDetalle.setHora(Utilities.getTime());
         inventarioDetalle.setDescripcion(Descripcion.getText());

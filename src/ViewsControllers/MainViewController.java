@@ -1,5 +1,6 @@
 package ViewsControllers;
 
+import Resource.Utilities;
 import Views.Login;
 import Views.Panels.Control.Compras;
 import Views.Panels.Control.Inventario;

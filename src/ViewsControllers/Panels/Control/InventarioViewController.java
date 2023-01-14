@@ -2,10 +2,8 @@
 package ViewsControllers.Panels.Control;
 
 import Controllers.CategoriaJpaController;
-import Controllers.InventariodetalleaccionesJpaController;
 import Controllers.MarcaJpaController;
 import Models.Categoria;
-import Models.Inventariodetalleacciones;
 import Models.Marca;
 import Reports.Reports;
 import Resource.Conection;
@@ -113,7 +111,7 @@ public class InventarioViewController {
     
     public void ImprimirInventario(){
         Reports report = new Reports();
-        report.GenerateInventarioReport(Utilities.getUsuarioActual()[1].toString());
+        report.GenerateInventarioReport(Utilities.getUsuarioActual().getNombre());
     }
     
     public void ModificarExistencia(){

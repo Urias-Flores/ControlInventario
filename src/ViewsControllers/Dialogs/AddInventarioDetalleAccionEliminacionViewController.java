@@ -44,7 +44,7 @@ public class AddInventarioDetalleAccionEliminacionViewController {
         Inventario inventario = new InventarioJpaController(Conection.CreateEntityManager()).findInventario(InventarioID);
         
         inventariodetalle.setProductoID(inventario.getProductoID());
-        inventariodetalle.setUsuarioID(new Usuario(Integer.valueOf(Utilities.getUsuarioActual()[0].toString())));
+        inventariodetalle.setUsuarioID(Utilities.getUsuarioActual());
         inventariodetalle.setFecha(Utilities.getDate());
         inventariodetalle.setHora(Utilities.getTime());
         inventariodetalle.setDescripcion(Descripcion.getText());

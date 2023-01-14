@@ -26,7 +26,7 @@ public class EnterPasswordDialogs extends javax.swing.JDialog {
         btnAceptar.addMouseListener(Utilities.getMLGeneralButton());
         btnCancelar.addMouseListener(Utilities.getMLGeneralButton());
         txtError.setBackground(Color.white);
-        txtUsuario.setText(Utilities.getUsuarioActual()[1].toString());
+        txtUsuario.setText(Utilities.getUsuarioActual().getNombre());
     }
     
     public void setText(String texto){

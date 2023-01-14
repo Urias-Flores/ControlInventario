@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 
 public class Utilities {
 
-    private static Object[] UsuarioActual = {1, "Admin"};
+    private static Usuario UsuarioActual = new Usuario();
     
     private static MouseListener mlButtonClose = new MouseListener() {
         @Override
@@ -233,6 +233,7 @@ public class Utilities {
             if (user.getContrasena() != null) {
                 
                 if(user.getEstado() == 1){
+                    UsuarioActual = user;
                     return user.getUsuarioID();
                 }else{
                     return -2;
@@ -246,11 +247,8 @@ public class Utilities {
         }
         return -1;
     }
-    public static void setUsuarioActual(int UsuarioID, String Nombre){
-        UsuarioActual[0] = UsuarioID;
-        UsuarioActual[1] = Nombre;
-    }
-    public static Object[] getUsuarioActual(){
+    
+    public static Usuario getUsuarioActual(){
         return UsuarioActual;
     }
 

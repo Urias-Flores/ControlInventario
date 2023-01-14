@@ -201,7 +201,7 @@ public class ComprasViewController {
         Compra compra = new Compra(); 
         
         compra.setNoFactura(Factura.getText());
-        compra.setUsuarioID(new Usuario(Integer.valueOf(Utilities.getUsuarioActual()[0].toString())));
+        compra.setUsuarioID(Utilities.getUsuarioActual());
         
         if(Proveedores.getSelectedIndex() == 0){
             compra.setProveedorID(null);

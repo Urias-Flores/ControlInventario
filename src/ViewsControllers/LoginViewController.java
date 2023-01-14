@@ -57,7 +57,6 @@ public class LoginViewController {
                     break;
                 default:
                     Main m = new Main();
-                    Utilities.setUsuarioActual(resultado, Nombre.getText());
                     m.setVisible(true);
                     m.Cargar(Instance, Nombre.getText());
                     Instance.setVisible(false);

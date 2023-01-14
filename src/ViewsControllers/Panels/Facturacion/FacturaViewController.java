@@ -269,7 +269,7 @@ public class FacturaViewController {
             venta.setEstado(Pagado.isSelected() ? "P" : "N");
         }
    
-        venta.setUsuarioID(new Usuario(Integer.valueOf(Utilities.getUsuarioActual()[0].toString())));
+        venta.setUsuarioID(Utilities.getUsuarioActual());
         venta.setFecha(Utilities.getDate());
         venta.setHora(Utilities.getTime());
         
@@ -304,7 +304,7 @@ public class FacturaViewController {
             cotizacion.setClienteID((Cliente) Clientes.getSelectedItem());
         }
    
-        cotizacion.setUsuarioID(new Usuario(Integer.valueOf(Utilities.getUsuarioActual()[0].toString())));
+        cotizacion.setUsuarioID(Utilities.getUsuarioActual());
         cotizacion.setFecha(Utilities.getDate());
         cotizacion.setHora(Utilities.getTime());
         
