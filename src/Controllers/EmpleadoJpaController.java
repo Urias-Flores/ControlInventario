@@ -71,41 +71,17 @@ public class EmpleadoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Empleado persistentEmpleado = em.find(Empleado.class, empleado.getEmpleadoID());
-            List<Usuario> usuarioListOld = persistentEmpleado.getUsuarioList();
             List<Usuario> usuarioListNew = empleado.getUsuarioList();
             List<String> illegalOrphanMessages = null;
-            for (Usuario usuarioListOldUsuario : usuarioListOld) {
-                if (!usuarioListNew.contains(usuarioListOldUsuario)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Usuario " + usuarioListOldUsuario + " since its empleadoID field is not nullable.");
-                }
-            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            List<Usuario> attachedUsuarioListNew = new ArrayList<Usuario>();
-            for (Usuario usuarioListNewUsuarioToAttach : usuarioListNew) {
-                usuarioListNewUsuarioToAttach = em.getReference(usuarioListNewUsuarioToAttach.getClass(), usuarioListNewUsuarioToAttach.getUsuarioID());
-                attachedUsuarioListNew.add(usuarioListNewUsuarioToAttach);
-            }
+            List<Usuario> attachedUsuarioListNew = new ArrayList<>();
             usuarioListNew = attachedUsuarioListNew;
             empleado.setUsuarioList(usuarioListNew);
             empleado = em.merge(empleado);
-            for (Usuario usuarioListNewUsuario : usuarioListNew) {
-                if (!usuarioListOld.contains(usuarioListNewUsuario)) {
-                    Empleado oldEmpleadoIDOfUsuarioListNewUsuario = usuarioListNewUsuario.getEmpleadoID();
-                    usuarioListNewUsuario.setEmpleadoID(empleado);
-                    usuarioListNewUsuario = em.merge(usuarioListNewUsuario);
-                    if (oldEmpleadoIDOfUsuarioListNewUsuario != null && !oldEmpleadoIDOfUsuarioListNewUsuario.equals(empleado)) {
-                        oldEmpleadoIDOfUsuarioListNewUsuario.getUsuarioList().remove(usuarioListNewUsuario);
-                        oldEmpleadoIDOfUsuarioListNewUsuario = em.merge(oldEmpleadoIDOfUsuarioListNewUsuario);
-                    }
-                }
-            }
             em.getTransaction().commit();
-        } catch (Exception ex) {
+        } catch (IllegalOrphanException ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = empleado.getEmpleadoID();

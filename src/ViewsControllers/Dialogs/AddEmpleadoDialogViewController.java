@@ -60,6 +60,7 @@ public class AddEmpleadoDialogViewController {
             } catch (NonexistentEntityException ex) {
                 Dialogs.ShowMessageDialog("Un dato de este empleado esta ligado a otros. No se pudo editar", Dialogs.ERROR_ICON);
             } catch (Exception ex) {
+                System.out.println("Test: "+ex.getMessage());
                 Dialogs.ShowMessageDialog("Ups... Ha ocurrido un error inesperado", Dialogs.ERROR_ICON);
             }
         }

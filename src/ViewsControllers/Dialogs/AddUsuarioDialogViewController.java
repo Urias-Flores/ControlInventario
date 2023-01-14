@@ -9,18 +9,23 @@ import Resource.Conection;
 import Resource.Security;
 import Views.Dialogs.Dialogs;
 import java.awt.Color;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class AddUsuarioDialogViewController {
-    UsuarioJpaController controller;
+    private UsuarioJpaController controller;
     
-    JTextField Nombre;
-    JTextField Empleado;
-    JLabel Error;
+    private JTextField Nombre;
+    private JComboBox Cargo;
+    private JTextField Empleado;
+    private JLabel Error;
+    
+    private Usuario currentUsuario = new Usuario();
 
-    public AddUsuarioDialogViewController(JTextField Nombre, JTextField Empleado ,JLabel Error) {
+    public AddUsuarioDialogViewController(JTextField Nombre, JComboBox Cargo,JTextField Empleado ,JLabel Error) {
         this.Nombre = Nombre;
+        this.Cargo = Cargo;
         this.Empleado = Empleado;
         this.Error = Error;
         
@@ -53,29 +58,40 @@ public class AddUsuarioDialogViewController {
     }
     
     public void setEditing(int UsuarioID){
-        Usuario usuario = controller.findUsuario(UsuarioID);
+        currentUsuario = controller.findUsuario(UsuarioID);
         
-        Nombre.setText(usuario.getNombre());
+        Nombre.setText(currentUsuario.getNombre());
         Nombre.setName(String.valueOf(UsuarioID));
         Nombre.setForeground(Color.BLACK);
-        Empleado.setText(usuario.getEmpleadoID().getNombre()+" "+usuario.getEmpleadoID().getApellido());
-        Empleado.setName(String.valueOf(usuario.getEmpleadoID().getEmpleadoID()));
+        Empleado.setText(currentUsuario.getEmpleadoID().getNombre()+" "+currentUsuario.getEmpleadoID().getApellido());
+        Empleado.setName(String.valueOf(currentUsuario.getEmpleadoID().getEmpleadoID()));
         Empleado.setForeground(Color.BLACK);
+        Cargo.setSelectedIndex(currentUsuario.getCargo().equals("A") ? 1 : 2);
     }
     
     public Usuario CreateObjectUsuario(){
+        
         Usuario usuario = new Usuario();
         double randomValue = 100000 + Math.random() * 999999;
-        Empleado empleado = new EmpleadoJpaController(Conection.CreateEntityManager()).findEmpleado(Integer.valueOf(Empleado.getName()));
+        Empleado empleado = new EmpleadoJpaController(Conection.CreateEntityManager())
+                .findEmpleado(Integer.valueOf(Empleado.getName()));
         
+        //Verificar si se esta editando
         if(Nombre.getName() != null){
+            usuario = currentUsuario;
             usuario.setUsuarioID(Integer.valueOf(Nombre.getName()));
         }
-        usuario.setNombre(Nombre.getText());
+        
+        //En caso de que no se este editando
+        if(Nombre.getName() == null){
+            usuario.setContrasena(Security.generateStrongPasswordHash(String.valueOf(randomValue).substring(0, 6)));
+            usuario.setToken(null);
+            usuario.setEstado(0);
+        }
+        
         usuario.setEmpleadoID(empleado);
-        usuario.setContrasena(Security.generateStrongPasswordHash(String.valueOf(randomValue).substring(0, 6)));
-        usuario.setToken(null);
-        usuario.setEstado(0);
+        usuario.setNombre(Nombre.getText());
+        usuario.setCargo(Cargo.getSelectedIndex() == 1 ? "A" : "D");
         
         return usuario;
     }
@@ -86,6 +102,13 @@ public class AddUsuarioDialogViewController {
             Error.setBackground(new Color(185, 0, 0));
             return false;
         }
+        
+        if(Cargo.getSelectedIndex() == 0){
+            Error.setText("Debe seleccionar el cargo del usuario");
+            Error.setBackground(new Color(185, 0, 0));
+            return false;
+        }
+        
         if(Empleado.getText().isEmpty() || Empleado.getForeground().equals(new Color(180, 180, 180)) || Empleado.getName() == null){
             Error.setText("La seleccion de un empleado es obligatoria");
             Error.setBackground(new Color(185, 0, 0));
