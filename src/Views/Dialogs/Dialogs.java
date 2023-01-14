@@ -210,6 +210,14 @@ public class Dialogs {
         cpd.dispose();
     }
     
+    public static void ShowCuentasProveedorDialog(int ProveedorID){
+        CuentasPendientesDialog cpd = new CuentasPendientesDialog(null, true);
+        cpd.setCompraState();
+        cpd.cargar(ProveedorID, false);
+        cpd.setVisible(true);
+        cpd.dispose();
+    }
+    
     public static void ShowDetalleFactura(int VentaID){
         DetalleFacturaDialog dfd = new DetalleFacturaDialog(null, true);
         dfd.cargar(VentaID, true);

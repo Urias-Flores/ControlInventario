@@ -3,11 +3,13 @@ package Views.Dialogs;
 
 import Resource.Utilities;
 import ViewsControllers.Dialogs.CuentasPendientesDialogViewController;
+import java.awt.Color;
+import javax.swing.ImageIcon;
 
 public class CuentasPendientesDialog extends javax.swing.JDialog {
 
     private int X, Y;
-    private boolean ClienteState = true;
+    private boolean isCliente = true;
     private CuentasPendientesDialogViewController vc;
     
     public CuentasPendientesDialog(java.awt.Frame parent, boolean modal) {
@@ -22,14 +24,13 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
     }
     
     public void cargar(int Entidad, boolean isCliente){
+        this.isCliente = isCliente;
         if(isCliente){
             vc.setCliente(Entidad);
             vc.CargarCliente();
-            ClienteState = isCliente;
         }else{
             vc.setProveedor(Entidad);
             vc.CargarProveedor();
-            ClienteState = isCliente;
         }
     }
     
@@ -255,11 +256,15 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnPagarMouseClicked
 
     private void btnPagarFacturaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPagarFacturaMouseClicked
-        vc.pagarFactura();
+        if(isCliente){
+            vc.pagarFactura();
+        }else{
+            vc.pagarCompra();
+        }
     }//GEN-LAST:event_btnPagarFacturaMouseClicked
 
     private void btnDetallesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDetallesMouseClicked
-        if(ClienteState){
+        if(isCliente){
             vc.cargarDetallesFactura();
         }else{
             
@@ -267,12 +272,15 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnDetallesMouseClicked
 
     public void setCompraState(){
+        lbTituloTotal.setForeground(new Color(150, 30, 10));
+        lbTotal.setForeground(new Color(150, 30, 10));
+        lbTotal.setIcon(new ImageIcon(getClass().getResource("/Icons/transaccionRojo.png")));
         lbTitulo.setText("Compras pendientes");
         lbEntidad.setText("Proveedor:");
         lbTotal.setText("Total por pagar");
         btnPagarFactura.setText("Pagar compra");
         btnDetalles.setToolTipText("Ver detalles de compra");
-        ClienteState = false;
+        isCliente = false;
     }
     
     public static void main(String args[]) {

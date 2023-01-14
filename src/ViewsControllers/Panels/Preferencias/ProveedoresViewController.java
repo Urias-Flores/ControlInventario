@@ -117,6 +117,15 @@ public class ProveedoresViewController {
         Proveedores.setRowSorter(s);
     }
     
+    public void mostrarInformacionCuenta(){
+        int fila = Proveedores.getSelectedRow();
+        if(fila >= 0){
+            Dialogs.ShowCuentasProveedorDialog(Integer.parseInt(Proveedores.getValueAt(fila, 0).toString()));
+        }else{
+            Dialogs.ShowMessageDialog("Seleccione un proveedor de la lista", Dialogs.ERROR_ICON);
+        }
+    }
+    
     private String getNumberFormat(float Value){
         DecimalFormat format = new DecimalFormat("#,##0.00");
         return format.format(Value);

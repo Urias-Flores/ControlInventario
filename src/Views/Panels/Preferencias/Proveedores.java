@@ -14,6 +14,7 @@ public class Proveedores extends javax.swing.JPanel {
         btnModificar.addMouseListener(Utilities.getMLGeneralButton());
         btnEliminar.addMouseListener(Utilities.getMLGeneralButton());
         btnActualizar.addMouseListener(Utilities.getMLGrayButton());
+        btnInformacion.addMouseListener(Utilities.getMLGrayButton());
         
         txtBuscar.addFocusListener(Utilities.getFLPlaceHolderEfect());
         
@@ -52,6 +53,7 @@ public class Proveedores extends javax.swing.JPanel {
         jLabel9 = new javax.swing.JLabel();
         lbNumero = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        btnInformacion = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -265,6 +267,18 @@ public class Proveedores extends javax.swing.JPanel {
                 .addContainerGap(295, Short.MAX_VALUE))
         );
 
+        btnInformacion.setBackground(new java.awt.Color(255, 255, 255));
+        btnInformacion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnInformacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/informacion.png"))); // NOI18N
+        btnInformacion.setToolTipText("Actualizar lista");
+        btnInformacion.setOpaque(true);
+        btnInformacion.setPreferredSize(new java.awt.Dimension(38, 38));
+        btnInformacion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnInformacionMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -277,6 +291,8 @@ public class Proveedores extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18))
@@ -294,7 +310,8 @@ public class Proveedores extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnInformacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -327,11 +344,16 @@ public class Proveedores extends javax.swing.JPanel {
         vc.CargarProveedor();
     }//GEN-LAST:event_tbProveedoresMousePressed
 
+    private void btnInformacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInformacionMouseClicked
+        vc.mostrarInformacionCuenta();
+    }//GEN-LAST:event_btnInformacionMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnActualizar;
     private javax.swing.JLabel btnAgregar;
     private javax.swing.JLabel btnEliminar;
+    private javax.swing.JLabel btnInformacion;
     private javax.swing.JLabel btnModificar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;

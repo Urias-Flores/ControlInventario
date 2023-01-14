@@ -83,7 +83,7 @@ public class CompraJpaController implements Serializable {
         }
     }
 
-    public void edit(Compra compra) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Compra compra) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -115,12 +115,6 @@ public class CompraJpaController implements Serializable {
                 usuarioIDNew = em.getReference(usuarioIDNew.getClass(), usuarioIDNew.getUsuarioID());
                 compra.setUsuarioID(usuarioIDNew);
             }
-            List<Compradetalle> attachedCompradetalleListNew = new ArrayList<Compradetalle>();
-            for (Compradetalle compradetalleListNewCompradetalleToAttach : compradetalleListNew) {
-                compradetalleListNewCompradetalleToAttach = em.getReference(compradetalleListNewCompradetalleToAttach.getClass(), compradetalleListNewCompradetalleToAttach.getCompraDetalleID());
-                attachedCompradetalleListNew.add(compradetalleListNewCompradetalleToAttach);
-            }
-            compradetalleListNew = attachedCompradetalleListNew;
             compra.setCompradetalleList(compradetalleListNew);
             compra = em.merge(compra);
             if (proveedorIDOld != null && !proveedorIDOld.equals(proveedorIDNew)) {
@@ -139,19 +133,8 @@ public class CompraJpaController implements Serializable {
                 usuarioIDNew.getCompraList().add(compra);
                 usuarioIDNew = em.merge(usuarioIDNew);
             }
-            for (Compradetalle compradetalleListNewCompradetalle : compradetalleListNew) {
-                if (!compradetalleListOld.contains(compradetalleListNewCompradetalle)) {
-                    Compra oldCompraIDOfCompradetalleListNewCompradetalle = compradetalleListNewCompradetalle.getCompraID();
-                    compradetalleListNewCompradetalle.setCompraID(compra);
-                    compradetalleListNewCompradetalle = em.merge(compradetalleListNewCompradetalle);
-                    if (oldCompraIDOfCompradetalleListNewCompradetalle != null && !oldCompraIDOfCompradetalleListNewCompradetalle.equals(compra)) {
-                        oldCompraIDOfCompradetalleListNewCompradetalle.getCompradetalleList().remove(compradetalleListNewCompradetalle);
-                        oldCompraIDOfCompradetalleListNewCompradetalle = em.merge(oldCompraIDOfCompradetalleListNewCompradetalle);
-                    }
-                }
-            }
             em.getTransaction().commit();
-        } catch (Exception ex) {
+        } catch (IllegalOrphanException ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = compra.getCompraID();
