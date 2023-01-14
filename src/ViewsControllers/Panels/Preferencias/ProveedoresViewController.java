@@ -7,8 +7,6 @@ import Models.Proveedor;
 import Resource.Conection;
 import Views.Dialogs.Dialogs;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;

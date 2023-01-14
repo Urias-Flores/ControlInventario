@@ -141,7 +141,6 @@ public class EnterPasswordDialogs extends javax.swing.JDialog {
 
         txtUsuario.setEditable(false);
         txtUsuario.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        txtUsuario.setForeground(new java.awt.Color(180, 180, 180));
         txtUsuario.setText("Usuario actual...");
 
         lbText4.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N

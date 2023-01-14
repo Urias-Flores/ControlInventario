@@ -88,25 +88,60 @@ public class CuentasPendientesDialogViewController {
     public void pagarFactura(){
         int fila = Cuentas.getSelectedRow();
         if(fila >= 0){
-            int VentaID = Integer.parseInt(Cuentas.getValueAt(fila, 0).toString());
-            VentaJpaController controllerVenta = new VentaJpaController(Conection.CreateEntityManager());
-            Venta venta = controllerVenta.findVenta(VentaID);
-            venta.setEstado("P");
+            if(Dialogs.ShowEnterPasswordDialog("Esta a punto de marcar como pagada una factura", 
+                    "con un valor de: "+Cuentas.getValueAt(fila, 3).toString()+" Lps. por medidas de seguridad", 
+                    "Por favor ingrese su contraseña de usuario para pagar.", Dialogs.WARNING_ICON)){
+                int VentaID = Integer.parseInt(Cuentas.getValueAt(fila, 0).toString());
+                VentaJpaController controllerVenta = new VentaJpaController(Conection.CreateEntityManager());
+                Venta venta = controllerVenta.findVenta(VentaID);
+                venta.setEstado("P");
+
+                try {
+                    controllerVenta.edit(venta);
+                    CargarCliente();
+                    Dialogs.ShowMessageDialog("Factura ha sido marcada como pagada exitosamente", Dialogs.COMPLETE_ICON);
+                } catch (NonexistentEntityException | IllegalOrphanException ex) {
+                    System.err.println("Test: "+ex.getMessage());
+                    Dialogs.ShowMessageDialog("Ups... Ha ocurrido un error, no se pudo pagar", Dialogs.ERROR_ICON);
+                }
+            }
+        }
+    }
+    
+    public void pagarFacturas(){
+        if(Dialogs.ShowEnterPasswordDialog("Esta a punto de marcar como pagada todas las facturas", 
+                    "pendientes de pago con un valor total de: "+Total.getText()+" Lps. ", 
+                    "por seguridad por favor ingrese su contraseña para pagar.", Dialogs.WARNING_ICON)){
+            boolean state = true;
             
-            try {
-                controllerVenta.edit(venta);
+            int fila = 0;
+            
+            while (fila < Cuentas.getRowCount()){
+                int VentaID = Integer.parseInt(Cuentas.getValueAt(fila, 0).toString());
+                VentaJpaController controllerVenta = new VentaJpaController(Conection.CreateEntityManager());
+                Venta venta = controllerVenta.findVenta(VentaID);
+                venta.setEstado("P");
+                
+                try {
+                    controllerVenta.edit(venta);
+                } catch (NonexistentEntityException | IllegalOrphanException ex) {
+                    System.err.println("Test: "+ex.getMessage());
+                    state = false;
+                    Dialogs.ShowMessageDialog("Ups... Ha ocurrido un error, no se pudo pagar la factura", Dialogs.ERROR_ICON);
+                }
+                fila++;
+            }
+            
+            if(state){
                 CargarCliente();
-                Dialogs.ShowMessageDialog("Factura ha sido marcada como pagada exitosamente", Dialogs.COMPLETE_ICON);
-            } catch (NonexistentEntityException | IllegalOrphanException ex) {
-                System.err.println("Test: "+ex.getMessage());
-                Dialogs.ShowMessageDialog("Ups... Ha ocurrido un error, no se pudo pagar", fila);
+                Dialogs.ShowMessageDialog("Las facturas han sido marcadas como pagadas exitosamente", Dialogs.COMPLETE_ICON);
             }
         }
     }
     
     public void updateTotal(){
         float total = 0;
-        for(int i = 0; i < Cuentas.getRowCount(); i++){
+        for(int i = 0; i < Cuentas.getModel().getRowCount(); i++){
             if(Cuentas.getValueAt(i, 3) != null){
                 total += Float.parseFloat(Cuentas.getValueAt(i, 3).toString().replace(",", ""));
             }
