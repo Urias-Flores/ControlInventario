@@ -286,9 +286,6 @@ public class ComprasViewController {
     }
     
     private void Clear(){
-        for(int i = 0; i <= model.getRowCount(); i++){
-            model.removeRow(i);
-        }
         Proveedores.setSelectedIndex(0);
         Factura.setText("12345...");
         Factura.setForeground(new Color(180, 180, 180));
@@ -300,5 +297,7 @@ public class ComprasViewController {
         Total.setText("0.00");
         
         cargarFechasActuales();
+        model = new DefaultTableModel();
+        InitTable();
     }
 }

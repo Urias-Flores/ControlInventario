@@ -1,6 +1,8 @@
 package ViewsControllers.Dialogs;
 
+import Controllers.CompraJpaController;
 import Controllers.VentaJpaController;
+import Models.Compra;
 import Models.Venta;
 import Resource.Conection;
 import java.text.DecimalFormat;
@@ -83,7 +85,31 @@ public class DetalleFacturaDialogViewController {
     }
     
     public void cargarCompra(int CompraID){
+        Compra compra = new CompraJpaController(Conection.CreateEntityManager()).findCompra(CompraID);
         
+        if(compra != null){
+            NoFactura.setText(String.valueOf(compra.getCompraID()));
+            Entidad.setText(compra.getProveedorID().getNombre());
+            Usuario.setText(compra.getUsuarioID().getNombre());
+            Hora.setText(new SimpleDateFormat("HH:mm").format(compra.getHora()));
+            Fecha.setText(new SimpleDateFormat("dd/MM/yyy").format(compra.getFecha()));
+        }
+        
+        compra.getCompradetalleList().forEach(detalle -> {
+            Object[] row = {
+                detalle.getProductoID().getProductoID(),
+                detalle.getProductoID().getDescripcion(),
+                detalle.getProductoID().getUnidad(),
+                getNumberFormat(detalle.getCantidad()),
+                getNumberFormat(detalle.getPrecio()),
+                getNumberFormat(detalle.getDescuento()),
+                getNumberFormat((detalle.getCantidad() * detalle.getPrecio()) - detalle.getDescuento())
+            };
+            
+            model.addRow(row);
+        });
+        
+        updateTotal();
     }
     
     public void updateTotal(){

@@ -224,4 +224,11 @@ public class Dialogs {
         dfd.setVisible(true);
         dfd.dispose();
     }
+    
+    public static void ShowDetalleCompra(int CompraID){
+        DetalleFacturaDialog dfd = new DetalleFacturaDialog(null, true);
+        dfd.cargar(CompraID, false);
+        dfd.setVisible(true);
+        dfd.dispose();
+    }
 }

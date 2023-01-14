@@ -364,7 +364,6 @@ public class Clientes extends javax.swing.JPanel {
 
     private void btnInformacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInformacionMouseClicked
         vc.mostrarInformacionCuenta();
-        vc.CargarClientes();
     }//GEN-LAST:event_btnInformacionMouseClicked
 
 

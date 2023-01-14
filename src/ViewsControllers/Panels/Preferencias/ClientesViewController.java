@@ -123,6 +123,7 @@ public class ClientesViewController {
         int fila = Clientes.getSelectedRow();
         if(fila >= 0){
             Dialogs.ShowCuentasClienteDialog(Integer.parseInt(Clientes.getValueAt(fila, 0).toString()));
+            CargarClientes();
         }else{
             Dialogs.ShowMessageDialog("Seleccione un cliente de la lista", Dialogs.ERROR_ICON);
         }

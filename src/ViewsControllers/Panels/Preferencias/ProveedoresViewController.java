@@ -121,6 +121,7 @@ public class ProveedoresViewController {
         int fila = Proveedores.getSelectedRow();
         if(fila >= 0){
             Dialogs.ShowCuentasProveedorDialog(Integer.parseInt(Proveedores.getValueAt(fila, 0).toString()));
+            CargarProveedores();
         }else{
             Dialogs.ShowMessageDialog("Seleccione un proveedor de la lista", Dialogs.ERROR_ICON);
         }

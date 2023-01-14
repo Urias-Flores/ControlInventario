@@ -32,6 +32,8 @@ public class DetalleFacturaDialog extends javax.swing.JDialog {
     public void cargar(int No, boolean isVenta){
         if(isVenta){
             vc.cargarFactura(No);
+        }else{
+            vc.cargarCompra(No);
         }
     }
     

@@ -252,7 +252,11 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_pnBarraMousePressed
 
     private void btnPagarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPagarMouseClicked
-        vc.pagarFacturas();
+        if(isCliente){
+            vc.pagarFacturas();
+        }else{
+            vc.pagarCompras();
+        }
     }//GEN-LAST:event_btnPagarMouseClicked
 
     private void btnPagarFacturaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPagarFacturaMouseClicked
@@ -267,7 +271,7 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
         if(isCliente){
             vc.cargarDetallesFactura();
         }else{
-            
+            vc.cargarDetallesCompra();
         }
     }//GEN-LAST:event_btnDetallesMouseClicked
 

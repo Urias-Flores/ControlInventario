@@ -119,6 +119,15 @@ public class CuentasPendientesDialogViewController {
         }
     }
     
+    public void cargarDetallesCompra(){
+        int fila = Cuentas.getSelectedRow();
+        if(fila >= 0){
+            Dialogs.ShowDetalleCompra(Integer.parseInt(Cuentas.getValueAt(fila, 0).toString()));
+        }else{
+            Dialogs.ShowMessageDialog("Seleccione una factura de la lista", Dialogs.ERROR_ICON);
+        }
+    }
+    
     public void pagarFactura(){
         int fila = Cuentas.getSelectedRow();
         if(fila >= 0){
@@ -155,7 +164,7 @@ public class CuentasPendientesDialogViewController {
 
                 try {
                     controllerCompra.edit(compra);
-                    CargarCliente();
+                    CargarProveedor();
                     Dialogs.ShowMessageDialog("La compra ha sido marcada como pagada exitosamente", Dialogs.COMPLETE_ICON);
                 } catch (NonexistentEntityException | IllegalOrphanException ex) {
                     System.err.println("Test: "+ex.getMessage());
@@ -221,7 +230,7 @@ public class CuentasPendientesDialogViewController {
             }
             
             if(state){
-                CargarCliente();
+                CargarProveedor();
                 Dialogs.ShowMessageDialog("Las facturas han sido marcadas como pagadas exitosamente", Dialogs.COMPLETE_ICON);
             }
         }
