@@ -1,9 +1,8 @@
 package Views.Panels.Estadisticas;
 
-import java.awt.Color;
+import ViewsControllers.Panels.Estadisticas.ResumenesViewController;
 import java.awt.Font;
-import java.awt.Shape;
-import java.awt.Stroke;
+import javax.swing.JLabel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -13,38 +12,12 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 public class Resumenes extends javax.swing.JPanel {
 
-    /**
-     * Creates new form Resumenes
-     */
+    private ResumenesViewController vc;
+    
     public Resumenes() {
         initComponents();
-        CargarGrafico();
-    }
-    
-    public final void CargarGrafico(){
-        JFreeChart grafico;
-        
-        DefaultCategoryDataset datos = new DefaultCategoryDataset();
-        datos.addValue(1, "Row 1", "Uno");
-        datos.addValue(3, "Row 1", "Dos");
-        datos.addValue(6, "Row 1", "Tres");
-        datos.addValue(4, "Row 1", "Cuatro");
-        datos.addValue(8, "Row 1", "Cinco");
-        
-        datos.addValue(3, "Row 2", "Uno");
-        datos.addValue(4, "Row 2", "Dos");
-        datos.addValue(5, "Row 2", "Tres");
-        datos.addValue(7, "Row 2", "Cuatro");
-        datos.addValue(5, "Row 2", "Cinco");
-        
-        //grafico = ChartFactory.createBarChart("Mi grafica", "Eje X", "Eje Y", datos, PlotOrientation.VERTICAL, true, true, true);
-        //grafico = ChartFactory.createBubbleChart("", "", "", null);
-        grafico = ChartFactory.createLineChart("Mi grafica", "Tiempo", "Dinero", datos, PlotOrientation.VERTICAL, true, true, true);
-        grafico.setTitle(new TextTitle("Grafica de compras y ventas", new Font("Roboto Bold", Font.PLAIN, 24)));
-        
-        ChartPanel panel = new ChartPanel(grafico);
-        
-        pnGrafico.add(panel);
+        vc = new ResumenesViewController(cmbTipo, cmbTiempo, pnGrafico);
+        vc.cargarGraficoHoy();
     }
 
     @SuppressWarnings("unchecked")
@@ -53,9 +26,9 @@ public class Resumenes extends javax.swing.JPanel {
 
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        cmbProveedores = new javax.swing.JComboBox<>();
+        cmbTipo = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        cmbProveedores1 = new javax.swing.JComboBox<>();
+        cmbTiempo = new javax.swing.JComboBox<>();
         pnGrafico = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
 
@@ -67,17 +40,29 @@ public class Resumenes extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel1.setText("Registro de:");
 
-        cmbProveedores.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        cmbProveedores.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ventas", "Compras", "Ventas y compras" }));
-        cmbProveedores.setPreferredSize(new java.awt.Dimension(246, 38));
+        cmbTipo.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        cmbTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ventas", "Compras", "Ventas y compras" }));
+        cmbTipo.setPreferredSize(new java.awt.Dimension(246, 38));
+        cmbTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTipoActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel3.setText("En un lapso de tiempo de:");
 
-        cmbProveedores1.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        cmbProveedores1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hoy", "Ultima semana", "Ultimo mes", "Ultimo año", "Todo el tiempo" }));
-        cmbProveedores1.setPreferredSize(new java.awt.Dimension(246, 38));
+        cmbTiempo.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        cmbTiempo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hoy", "Ultima semana", "Ultimo mes", "Ultimo año", "Todo el tiempo" }));
+        cmbTiempo.setPreferredSize(new java.awt.Dimension(246, 38));
+        cmbTiempo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTiempoActionPerformed(evt);
+            }
+        });
 
+        pnGrafico.setBackground(new java.awt.Color(255, 255, 255));
+        pnGrafico.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(220, 220, 220)));
         pnGrafico.setLayout(new java.awt.CardLayout());
 
         jLabel4.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
@@ -93,11 +78,11 @@ public class Resumenes extends javax.swing.JPanel {
                     .addComponent(pnGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(cmbProveedores, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cmbTipo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(cmbProveedores1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cmbTiempo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -114,23 +99,59 @@ public class Resumenes extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cmbProveedores1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(cmbTiempo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(18, 18, 18)
-                .addComponent(pnGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(180, Short.MAX_VALUE))
+                .addComponent(pnGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cmbTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoActionPerformed
+        cargarGrafico();
+    }//GEN-LAST:event_cmbTipoActionPerformed
+
+    private void cmbTiempoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTiempoActionPerformed
+        cargarGrafico();
+    }//GEN-LAST:event_cmbTiempoActionPerformed
+    
+    public void cargarGrafico(){
+        pnGrafico.removeAll();
+        JLabel noDisponible = new JLabel("grafico aun no disponible");
+        noDisponible.setFont(new Font("Roboto", Font.BOLD, 26));
+        noDisponible.setHorizontalAlignment(0);
+        
+        switch (cmbTiempo.getSelectedIndex()) {
+            case 0:
+                vc.cargarGraficoHoy();
+                break;
+            case 1:
+                vc.cargarGraficoSemana();
+                break;
+            case 2:
+                pnGrafico.add(noDisponible);
+                break;
+            case 3:
+                pnGrafico.add(noDisponible);
+                break;
+            case 4:
+                pnGrafico.add(noDisponible);
+                break;
+            default:
+                throw new AssertionError();
+        }
+        pnGrafico.revalidate();
+        pnGrafico.repaint();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> cmbProveedores;
-    private javax.swing.JComboBox<String> cmbProveedores1;
+    private javax.swing.JComboBox<String> cmbTiempo;
+    private javax.swing.JComboBox<String> cmbTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
