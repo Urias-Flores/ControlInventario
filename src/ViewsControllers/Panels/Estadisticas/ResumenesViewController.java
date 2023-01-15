@@ -42,21 +42,23 @@ public class ResumenesViewController {
         List<Object[]> registros = spq.getResultList();
         JFreeChart grafico;
         DefaultCategoryDataset datos = new DefaultCategoryDataset();
-        registros.forEach(registro -> {
-            datos.addValue(Double.parseDouble(registro[1].toString()), registro[0].toString(), "6 am");
-            datos.addValue(Double.parseDouble(registro[2].toString()), registro[0].toString(), "7 am");
-            datos.addValue(Double.parseDouble(registro[3].toString()), registro[0].toString(), "8 am");
-            datos.addValue(Double.parseDouble(registro[4].toString()), registro[0].toString(), "9 am");
-            datos.addValue(Double.parseDouble(registro[5].toString()), registro[0].toString(), "10 am");
-            datos.addValue(Double.parseDouble(registro[6].toString()), registro[0].toString(), "11 am");
-            datos.addValue(Double.parseDouble(registro[6].toString()), registro[0].toString(), "12 m");
-            datos.addValue(Double.parseDouble(registro[8].toString()), registro[0].toString(), "1 pm");
-            datos.addValue(Double.parseDouble(registro[9].toString()), registro[0].toString(), "2 pm");
-            datos.addValue(Double.parseDouble(registro[10].toString()), registro[0].toString(), "3 pm");
-            datos.addValue(Double.parseDouble(registro[11].toString()), registro[0].toString(), "4 pm");
-            datos.addValue(Double.parseDouble(registro[12].toString()), registro[0].toString(), "5 pm");
-            datos.addValue(Double.parseDouble(registro[13].toString()), registro[0].toString(), "6 pm");
-        });
+        if(registros.get(0)[1] != null){
+            registros.forEach(registro -> {
+                datos.addValue(Double.parseDouble(registro[1].toString()), registro[0].toString(), "6 am");
+                datos.addValue(Double.parseDouble(registro[2].toString()), registro[0].toString(), "7 am");
+                datos.addValue(Double.parseDouble(registro[3].toString()), registro[0].toString(), "8 am");
+                datos.addValue(Double.parseDouble(registro[4].toString()), registro[0].toString(), "9 am");
+                datos.addValue(Double.parseDouble(registro[5].toString()), registro[0].toString(), "10 am");
+                datos.addValue(Double.parseDouble(registro[6].toString()), registro[0].toString(), "11 am");
+                datos.addValue(Double.parseDouble(registro[6].toString()), registro[0].toString(), "12 m");
+                datos.addValue(Double.parseDouble(registro[8].toString()), registro[0].toString(), "1 pm");
+                datos.addValue(Double.parseDouble(registro[9].toString()), registro[0].toString(), "2 pm");
+                datos.addValue(Double.parseDouble(registro[10].toString()), registro[0].toString(), "3 pm");
+                datos.addValue(Double.parseDouble(registro[11].toString()), registro[0].toString(), "4 pm");
+                datos.addValue(Double.parseDouble(registro[12].toString()), registro[0].toString(), "5 pm");
+                datos.addValue(Double.parseDouble(registro[13].toString()), registro[0].toString(), "6 pm");
+            });
+        }
         
         grafico = ChartFactory.createLineChart("Mi grafica", "Tiempo", "Dinero", datos, PlotOrientation.VERTICAL, true, true, true);
         grafico.setTitle(new TextTitle("Grafica de compras y ventas", new Font("Roboto Bold", Font.PLAIN, 24)));
@@ -79,16 +81,16 @@ public class ResumenesViewController {
         List<Object[]> registros = spq.getResultList();
         JFreeChart grafico;
         DefaultCategoryDataset datos = new DefaultCategoryDataset();
-        
-        registros.forEach(registro -> {
-            datos.addValue(Double.parseDouble(registro[1].toString()), registro[0].toString(), "Lunes");
-            datos.addValue(Double.parseDouble(registro[2].toString()), registro[0].toString(), "Martes");
-            datos.addValue(Double.parseDouble(registro[3].toString()), registro[0].toString(), "Miercoles");
-            datos.addValue(Double.parseDouble(registro[4].toString()), registro[0].toString(), "Jueves");
-            datos.addValue(Double.parseDouble(registro[5].toString()), registro[0].toString(), "Viernes");
-            datos.addValue(Double.parseDouble(registro[6].toString()), registro[0].toString(), "Sabado");
-        });
-        
+        if(registros.get(0)[1] != null){
+            registros.forEach(registro -> {
+                datos.addValue(Double.parseDouble(registro[1].toString()), registro[0].toString(), "Lunes");
+                datos.addValue(Double.parseDouble(registro[2].toString()), registro[0].toString(), "Martes");
+                datos.addValue(Double.parseDouble(registro[3].toString()), registro[0].toString(), "Miercoles");
+                datos.addValue(Double.parseDouble(registro[4].toString()), registro[0].toString(), "Jueves");
+                datos.addValue(Double.parseDouble(registro[5].toString()), registro[0].toString(), "Viernes");
+                datos.addValue(Double.parseDouble(registro[6].toString()), registro[0].toString(), "Sabado");
+            });
+        }
         grafico = ChartFactory.createLineChart("Mi grafica", "Tiempo", "Dinero", datos, PlotOrientation.VERTICAL, true, true, true);
         grafico.setTitle(new TextTitle("Grafica de compras y ventas", new Font("Roboto Bold", Font.PLAIN, 24)));
         
