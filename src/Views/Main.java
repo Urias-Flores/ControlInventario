@@ -1,6 +1,7 @@
 package Views;
 
 import Resource.Conection;
+import Resource.Utilities;
 import ViewsControllers.MainViewController;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -13,10 +14,13 @@ public class Main extends javax.swing.JFrame {
         initComponents();
         setTitle("Inicio");
         setIconImage(new ImageIcon(getClass().getResource("/Icons/logo.png")).getImage());
+        if(!Utilities.getUsuarioActual().getCargo().equals("A")){
+            btnEstadisticas.setVisible(false);
+        }
     }
     
     public void Cargar(JFrame Login, String user){
-        MainVC = new MainViewController(this, Login, txtUsuarioActual, btnFacturacion, btnControl, btnEstadisticas, btnPreferecias, btnAjustes, btnCerrarSesion, tbpPrincipal);
+        MainVC = new MainViewController(this, Login, txtUsuarioActual, btnFacturacion, btnControl, btnEstadisticas, btnCuetas, btnAjustes, btnCerrarSesion, tbpPrincipal);
         MainVC.cargarUsuario(user);
         MainVC.CargarPanel(1);
         MainVC.activarBoton(btnFacturacion);
@@ -32,7 +36,7 @@ public class Main extends javax.swing.JFrame {
         btnFacturacion = new javax.swing.JLabel();
         btnControl = new javax.swing.JLabel();
         btnEstadisticas = new javax.swing.JLabel();
-        btnPreferecias = new javax.swing.JLabel();
+        btnCuetas = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         btnAjustes = new javax.swing.JLabel();
         btnCerrarSesion = new javax.swing.JLabel();
@@ -88,12 +92,12 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        btnPreferecias.setFont(new java.awt.Font("Roboto", 1, 28)); // NOI18N
-        btnPreferecias.setForeground(new java.awt.Color(255, 255, 255));
-        btnPreferecias.setText("    Preferencias");
-        btnPreferecias.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnCuetas.setFont(new java.awt.Font("Roboto", 1, 28)); // NOI18N
+        btnCuetas.setForeground(new java.awt.Color(255, 255, 255));
+        btnCuetas.setText("    Cuentas");
+        btnCuetas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnPrefereciasMouseClicked(evt);
+                btnCuetasMouseClicked(evt);
             }
         });
 
@@ -139,7 +143,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnControl, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
                     .addComponent(btnEstadisticas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
-                    .addComponent(btnPreferecias, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+                    .addComponent(btnCuetas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
                     .addComponent(btnAjustes, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnCerrarSesion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -160,9 +164,9 @@ public class Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnControl)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnEstadisticas)
+                .addComponent(btnCuetas)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnPreferecias)
+                .addComponent(btnEstadisticas)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addGap(18, 18, 18)
@@ -235,10 +239,10 @@ public class Main extends javax.swing.JFrame {
         MainVC.activarBoton(btnEstadisticas);
     }//GEN-LAST:event_btnEstadisticasMouseClicked
 
-    private void btnPrefereciasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPrefereciasMouseClicked
+    private void btnCuetasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCuetasMouseClicked
         MainVC.CargarPanel(4);
-        MainVC.activarBoton(btnPreferecias);
-    }//GEN-LAST:event_btnPrefereciasMouseClicked
+        MainVC.activarBoton(btnCuetas);
+    }//GEN-LAST:event_btnCuetasMouseClicked
 
     private void btnAjustesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAjustesMouseClicked
         MainVC.CargarPanel(5);
@@ -291,9 +295,9 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel btnAjustes;
     private javax.swing.JLabel btnCerrarSesion;
     private javax.swing.JLabel btnControl;
+    private javax.swing.JLabel btnCuetas;
     private javax.swing.JLabel btnEstadisticas;
     private javax.swing.JLabel btnFacturacion;
-    private javax.swing.JLabel btnPreferecias;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;

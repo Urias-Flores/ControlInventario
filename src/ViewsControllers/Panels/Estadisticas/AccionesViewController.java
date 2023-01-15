@@ -1,4 +1,4 @@
-package ViewsControllers.Panels.Facturacion;
+package ViewsControllers.Panels.Estadisticas;
 
 import Resource.Conection;
 import java.sql.Date;

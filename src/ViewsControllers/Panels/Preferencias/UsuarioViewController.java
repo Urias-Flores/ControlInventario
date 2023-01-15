@@ -99,7 +99,8 @@ public class UsuarioViewController {
             if(Dialogs.ShowOKCancelDialog("Esta seguro de la desactivacion/Activacion del usuario seleccionado", Dialogs.WARNING_ICON)){
                 try {
                     Usuario usuario = controller.findUsuario(Integer.valueOf(Usuarios.getValueAt(fila, 0).toString()));
-                    int State = Usuarios.getValueAt(fila, 3).toString().equals("Activo") ? 0 : 1;
+                    int State = Usuarios.getValueAt(fila, 2).toString().equals("Activo") ? 0 : 1;
+                    System.out.println("Test estado: "+State);
                     usuario.setEstado(State);
                     controller.edit(usuario);
                     CargarUsuarios();

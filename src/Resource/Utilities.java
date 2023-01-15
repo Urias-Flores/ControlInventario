@@ -216,13 +216,12 @@ public class Utilities {
         usuarios.forEach((usuario) -> {
             if (usuario.getNombre().equals(Nombre)) {
                 user.setNombre(usuario.getNombre());
-                
                 if (Security.validatePassword(Contrasena, usuario.getContrasena())) {
                     
                     user.setUsuarioID(usuario.getUsuarioID());
                     user.setContrasena(usuario.getContrasena());
                     user.setEstado(usuario.getEstado());
-                    
+                    user.setCargo(usuario.getCargo());
                 }
                 
             }

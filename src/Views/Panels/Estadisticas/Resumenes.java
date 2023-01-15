@@ -75,7 +75,7 @@ public class Resumenes extends javax.swing.JPanel {
         jLabel3.setText("En un lapso de tiempo de:");
 
         cmbProveedores1.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        cmbProveedores1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hoy", "Ultima semana", "Ultimo mes", "Ultimo año" }));
+        cmbProveedores1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hoy", "Ultima semana", "Ultimo mes", "Ultimo año", "Todo el tiempo" }));
         cmbProveedores1.setPreferredSize(new java.awt.Dimension(246, 38));
 
         pnGrafico.setLayout(new java.awt.CardLayout());
@@ -122,8 +122,8 @@ public class Resumenes extends javax.swing.JPanel {
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cmbProveedores1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(18, 18, 18)
-                .addComponent(pnGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
-                .addGap(18, 18, 18))
+                .addComponent(pnGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(180, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

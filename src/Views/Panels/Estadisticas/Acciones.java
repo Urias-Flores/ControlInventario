@@ -1,7 +1,7 @@
-package Views.Panels.Facturacion;
+package Views.Panels.Estadisticas;
 
 import Resource.Utilities;
-import ViewsControllers.Panels.Facturacion.AccionesViewController;
+import ViewsControllers.Panels.Estadisticas.AccionesViewController;
 
 public class Acciones extends javax.swing.JPanel {
 

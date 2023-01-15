@@ -2,11 +2,14 @@ package ViewsControllers;
 
 import Resource.Utilities;
 import Views.Login;
+import Views.Panels.Ajustes.Email;
+import Views.Panels.Ajustes.General;
+import Views.Panels.Ajustes.Reportes;
 import Views.Panels.Control.Compras;
 import Views.Panels.Control.Inventario;
 import Views.Panels.Control.Productos;
 import Views.Panels.Estadisticas.Resumenes;
-import Views.Panels.Facturacion.Acciones;
+import Views.Panels.Estadisticas.Acciones;
 import Views.Panels.Facturacion.Facturar;
 import Views.Panels.Facturacion.FacturasDia;
 import Views.Panels.Preferencias.Clientes;
@@ -58,7 +61,6 @@ public class MainViewController {
 
                     Facturar facturar = new Facturar();
                     FacturasDia facturasDia = new FacturasDia();
-                    Acciones acciones = new Acciones();
                     
                     Icon FacturarIcon = new ImageIcon(getClass().getResource("/Icons/factura.png"));
                     Icon FacturaDiaIcon = new ImageIcon(getClass().getResource("/Icons/facturaDia.png"));
@@ -66,7 +68,6 @@ public class MainViewController {
 
                     Principal.addTab("Facturar", FacturarIcon, facturar);
                     Principal.addTab("Facturas del dia", FacturaDiaIcon, facturasDia);
-                    Principal.addTab("Acciones", AccionesIcon, acciones);
                     break;
                 case 2:
                     
@@ -86,18 +87,16 @@ public class MainViewController {
                 case 3:
 
                     Resumenes resumenes = new Resumenes();
+                    Acciones acciones = new Acciones();
                     
-                    Icon ResumenIcon = new ImageIcon(getClass().getResource("/Icons/resumenes.png"));
+                    Icon ResumenIcon = new ImageIcon(getClass().getResource("/Icons/grafica.png"));
                     Icon TransaccionesIcon = new ImageIcon(getClass().getResource("/Icons/transacciones.png"));
 
-                    Principal.addTab("Resumenes", ResumenIcon, resumenes);
-                    Principal.addTab("Transacciones", TransaccionesIcon, null);
+                    Principal.addTab("Graficas", ResumenIcon, resumenes);
+                    Principal.addTab("Transacciones", TransaccionesIcon, acciones);
                     
                     break;
                 case 4:
-                    
-                    Usuarios usuario = new Usuarios();
-                    Empleados empleados = new Empleados();
                     Proveedores proveedores = new Proveedores();
                     Clientes clientes = new Clientes();
 
@@ -105,18 +104,31 @@ public class MainViewController {
                     Icon EmpleadoIcon = new ImageIcon(getClass().getResource("/Icons/empleados.png"));
                     Icon ClienteIcon = new ImageIcon(getClass().getResource("/Icons/clientes.png"));
                     Icon ProveedorIcon = new ImageIcon(getClass().getResource("/Icons/proveedores.png"));
-
+                    
                     Principal.addTab("Clientes", ClienteIcon, clientes);
                     Principal.addTab("Proveedores", ProveedorIcon, proveedores);
-                    Principal.addTab("Empleados", EmpleadoIcon, empleados);
-                    Principal.addTab("Usuarios", UsuarioIcon, usuario);
+                    
+                    if(Utilities.getUsuarioActual().getCargo().equals("A")){
+                        Usuarios usuario = new Usuarios();
+                        Empleados empleados = new Empleados();
+                        Principal.addTab("Empleados", EmpleadoIcon, empleados);
+                        Principal.addTab("Usuarios", UsuarioIcon, usuario);
+                    }
                     
                     break;
                 case 5:
-
-                    Icon AjustesIcon = new ImageIcon(getClass().getResource("/Icons/ajustes.png"));
-
-                    Principal.addTab("Ajustes", AjustesIcon, null);
+                    
+                    General general = new General();
+                    Reportes reportes = new Reportes();
+                    Email email = new Email();
+                    
+                    Icon AjustesGeneralIcon = new ImageIcon(getClass().getResource("/Icons/ajustes.png"));
+                    Icon AjustesReportesIcon = new ImageIcon(getClass().getResource("/Icons/reporte.png"));
+                    Icon AjustesEmailIcon = new ImageIcon(getClass().getResource("/Icons/correo.png"));
+                    
+                    Principal.addTab("General", AjustesGeneralIcon, general);
+                    Principal.addTab("Reportes", AjustesReportesIcon, reportes);
+                    Principal.addTab("Correo electronico", AjustesEmailIcon, email);
                     
                     break;
             }
