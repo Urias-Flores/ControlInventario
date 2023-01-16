@@ -53,7 +53,7 @@ public class Resumenes extends javax.swing.JPanel {
         jLabel3.setText("En un lapso de tiempo de:");
 
         cmbTiempo.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        cmbTiempo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hoy", "Ultima semana", "Ultimo mes", "Ultimo año", "Todo el tiempo" }));
+        cmbTiempo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hoy", "Ultima semana", "Ultimo mes", "Ultimo año" }));
         cmbTiempo.setPreferredSize(new java.awt.Dimension(246, 38));
         cmbTiempo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -134,10 +134,10 @@ public class Resumenes extends javax.swing.JPanel {
                 vc.cargarGraficoSemana();
                 break;
             case 2:
-                pnGrafico.add(noDisponible);
+                vc.cargarGraficoMes();
                 break;
             case 3:
-                pnGrafico.add(noDisponible);
+                vc.cargarGraficoAnio();
                 break;
             case 4:
                 pnGrafico.add(noDisponible);
