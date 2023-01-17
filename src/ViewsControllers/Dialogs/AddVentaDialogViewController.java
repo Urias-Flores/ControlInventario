@@ -156,7 +156,7 @@ public class AddVentaDialogViewController {
                     return false;
                 }
             }catch(NumberFormatException ex){
-                Error.setText("El descueto en porcentaje debe de ser un numero");
+                Error.setText("El descuento en porcentaje debe de ser un numero");
                 Error.setBackground(new Color(185, 0, 0));
                 return false;
             }
@@ -169,7 +169,7 @@ public class AddVentaDialogViewController {
                     return false;
                 }
             }catch(NumberFormatException ex){
-                Error.setText("El descueto en lempiras debe de ser un numero");
+                Error.setText("El descuento en lempiras debe de ser un numero");
                 Error.setBackground(new Color(185, 0, 0));
                 return false;
             }
@@ -191,6 +191,12 @@ public class AddVentaDialogViewController {
                 float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
                 if(cantidad <= 0){
                     Error.setText("La Cantidad debe de ser mayor a cero");
+                    Error.setBackground(new Color(185, 0, 0));
+                    return false;
+                }
+                float existencia = Float.parseFloat(Existencia.getText().replace(",", " "));
+                if(cantidad > existencia){
+                    Error.setText("La cantidad debe de ser menor a la existencia actual");
                     Error.setBackground(new Color(185, 0, 0));
                     return false;
                 }

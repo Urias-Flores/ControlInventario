@@ -1,6 +1,7 @@
 package ViewsControllers.Panels.Estadisticas;
 
 import Resource.Conection;
+import Views.Dialogs.Dialogs;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -128,6 +129,21 @@ public class AccionesViewController {
         Transacciones.getColumn("Cliente/Proveedor").setPreferredWidth(120);
         Transacciones.getColumn("Fecha").setPreferredWidth(80);
         Transacciones.getColumn("Total").setPreferredWidth(120);
+    }
+    
+    public void ShowInfoFactura(){
+        int fila = Transacciones.getSelectedRow();
+        if(fila >= 0){
+            int ID = Integer.parseInt(Transacciones.getValueAt(fila, 0).toString());
+            
+            if(Transacciones.getValueAt(fila, 1).toString().equals("Compra")){
+                Dialogs.ShowDetalleCompra(ID);
+            }else{
+                Dialogs.ShowDetalleFactura(ID);
+            }
+        }else{
+            Dialogs.ShowMessageDialog("Seleccione una transaccion de la lista", fila);
+        }
     }
     
     private String getNumberFormat(float Value){

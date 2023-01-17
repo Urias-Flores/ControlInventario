@@ -10,7 +10,6 @@ public class Acciones extends javax.swing.JPanel {
     public Acciones() {
         initComponents();
         
-        btnActualizar.addMouseListener(Utilities.getMLGrayButton());
         btnFiltros.addMouseListener(Utilities.getMLGeneralButton());
         
         vc = new AccionesViewController(lbVentas, lbCompras, tbTransacciones, cmbTipo, cmbIntervalo, cmbDiaInicial, cmbMesInicial, cmbAnioInicial, cmbDiaFinal, cmbMesFinal, cmbAnioFinal);
@@ -30,6 +29,7 @@ public class Acciones extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbTransacciones = new javax.swing.JTable();
+        btnVer = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -46,7 +46,6 @@ public class Acciones extends javax.swing.JPanel {
         cmbMesFinal = new javax.swing.JComboBox<>();
         cmbAnioFinal = new javax.swing.JComboBox<>();
         btnFiltros = new javax.swing.JLabel();
-        btnActualizar = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -90,20 +89,40 @@ public class Acciones extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(tbTransacciones);
 
+        btnVer.setBackground(new java.awt.Color(3, 57, 103));
+        btnVer.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        btnVer.setForeground(new java.awt.Color(255, 255, 255));
+        btnVer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnVer.setText("Ver completa");
+        btnVer.setToolTipText("Administrar marcas");
+        btnVer.setOpaque(true);
+        btnVer.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnVerMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1)
-                .addGap(18, 18, 18))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 818, Short.MAX_VALUE)
+                        .addGap(18, 18, 18))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
+                .addGap(18, 18, 18)
+                .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
         );
 
@@ -125,6 +144,7 @@ public class Acciones extends javax.swing.JPanel {
 
         cmbIntervalo.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         cmbIntervalo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todo el tiempo", "Hoy", "Ultima semana", "Ultimo mes", "Ultimo año", "Fecha especificas" }));
+        cmbIntervalo.setSelectedIndex(1);
         cmbIntervalo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbIntervaloActionPerformed(evt);
@@ -239,15 +259,10 @@ public class Acciones extends javax.swing.JPanel {
                     .addComponent(cmbDiaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbMesFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbAnioFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
                 .addComponent(btnFiltros, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
         );
-
-        btnActualizar.setBackground(new java.awt.Color(255, 255, 255));
-        btnActualizar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/actualizar.png"))); // NOI18N
-        btnActualizar.setOpaque(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -265,8 +280,7 @@ public class Acciones extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lbCompras, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1192, Short.MAX_VALUE))
                 .addGap(18, 18, 18))
             .addGroup(layout.createSequentialGroup()
@@ -290,8 +304,7 @@ public class Acciones extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbCompras, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnActualizar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lbCompras, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -311,6 +324,10 @@ public class Acciones extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_cmbIntervaloActionPerformed
 
+    private void btnVerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVerMouseClicked
+        vc.ShowInfoFactura();
+    }//GEN-LAST:event_btnVerMouseClicked
+
     private void CambiarEstadoFechas(boolean estado){
         cmbDiaInicial.setEnabled(estado);
         cmbMesInicial.setEnabled(estado);
@@ -321,8 +338,8 @@ public class Acciones extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel btnActualizar;
     private javax.swing.JLabel btnFiltros;
+    private javax.swing.JLabel btnVer;
     private javax.swing.JComboBox<String> cmbAnioFinal;
     private javax.swing.JComboBox<String> cmbAnioInicial;
     private javax.swing.JComboBox<String> cmbDiaFinal;
