@@ -124,7 +124,7 @@ public class FacturaViewController {
                         getNumberFormat(cotizacionDetalle.getCantidad()),
                         getNumberFormat(producto.getPrecioVenta()),
                         getNumberFormat(cotizacionDetalle.getDescuento()),
-                        getNumberFormat(cotizacionDetalle.getCantidad() * cotizacionDetalle.getPrecio() - cotizacionDetalle.getDescuento())
+                        getNumberFormat(cotizacionDetalle.getCantidad() * producto.getPrecioVenta() - cotizacionDetalle.getDescuento())
                     };
                     cargarProducto(row);
                 }
