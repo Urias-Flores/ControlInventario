@@ -128,11 +128,7 @@ public class RecoverPasswordViewController {
         String[] values = getValuesForUsuario(getUsuario());
         String Mensaje = email.generateRecoverAccountMessage(values[0], values[1], values[2]);
         
-        String[] EmailInformation = getEmailData();
-        
         email.SendEmail(
-                EmailInformation[0], 
-                EmailInformation[1], 
                 getUsuario().getEmpleadoID().getCorreoElectronico(), 
                 "Reestablece tu contraseña", 
                 Mensaje

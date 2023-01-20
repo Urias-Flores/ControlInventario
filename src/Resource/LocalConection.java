@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class LocalConection {
     private static Connection conec;
@@ -18,7 +16,7 @@ public class LocalConection {
             stm = conec.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
         }catch(SQLException ex)
                 {
-                   System.out.print(ex.getMessage());
+                   System.err.print(ex.getMessage());
                 }
         return stm;
     }
@@ -35,8 +33,9 @@ public class LocalConection {
             try{
             String url = "jdbc:sqlite:config.db";
             conec = DriverManager.getConnection(url);
+            System.out.println("Test local information: Archivo de configuracion encontrado.");
             }catch(SQLException ex){
-                System.out.print(ex.getMessage());
+                System.err.print(ex.getMessage());
             }
         }
     }
@@ -45,8 +44,9 @@ public class LocalConection {
         try {
             conec.close();
             conec = null;
+            System.out.println("Local information: Archivo de configuracion local cerrado.");
         } catch (SQLException ex) {
-            Logger.getLogger(LocalConection.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.print(ex.getMessage());
         }
     }
 }

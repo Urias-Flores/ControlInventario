@@ -117,16 +117,16 @@ public class MainViewController {
                     
                     break;
                 case 5:
-                    
-                    General general = new General();
+                    //Para ajustes generales, en caso de requerirse a futuro
+                    //General general = new General();
                     Reportes reportes = new Reportes();
                     Email email = new Email();
                     
-                    Icon AjustesGeneralIcon = new ImageIcon(getClass().getResource("/Icons/ajustes.png"));
+                    //Icon AjustesGeneralIcon = new ImageIcon(getClass().getResource("/Icons/ajustes.png"));
                     Icon AjustesReportesIcon = new ImageIcon(getClass().getResource("/Icons/reporte.png"));
                     Icon AjustesEmailIcon = new ImageIcon(getClass().getResource("/Icons/correo.png"));
                     
-                    Principal.addTab("General", AjustesGeneralIcon, general);
+                    //Principal.addTab("General", AjustesGeneralIcon, general);
                     Principal.addTab("Reportes", AjustesReportesIcon, reportes);
                     Principal.addTab("Correo electronico", AjustesEmailIcon, email);
                     

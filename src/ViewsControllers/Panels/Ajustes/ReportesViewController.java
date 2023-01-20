@@ -3,6 +3,7 @@ package ViewsControllers.Panels.Ajustes;
 import Views.Dialogs.Dialogs;
 import java.awt.Dialog;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,14 +25,25 @@ public class ReportesViewController {
 
         if (result == JFileChooser.APPROVE_OPTION) {
             FileOutputStream outputStream = null;
+            FileInputStream inputStream = null;
             try {
                 String path = jfc.getSelectedFile().getAbsolutePath();
+                
                 File file = new File(path);
-
-                outputStream = new FileOutputStream(reportPath);
-                byte[] b = new byte[(int) file.length()];
-                outputStream.write(b);
+                File fileCopy = new File(reportPath);
+                
+                inputStream = new FileInputStream(file);
+                outputStream = new FileOutputStream(fileCopy);
+                
+                byte[] b = new byte[1024];
+                
+                int length;
+                while((length = inputStream.read(b)) > 0){
+                    outputStream.write(b, 0, length);
+                }
+                
                 System.out.println("Archivo escrito");
+                
                 return true;
             } catch (FileNotFoundException ex) {
 
@@ -46,6 +58,7 @@ public class ReportesViewController {
             } finally {
                 try {
                     outputStream.close();
+                    inputStream.close();
                 } catch (IOException ex) {
                     Logger.getLogger(ReportesViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }

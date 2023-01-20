@@ -126,9 +126,7 @@ public class CreateAccountViewController {
         String Mensaje = email.generateCreateAccountMessage(values[0], values[1], values[2]);
         String Asunto = "Creacion de cuenta";
         
-        String[] information = getInformationForSendEmail();
-        
-        email.SendEmail(information[0], information[1], usuarioActual.getEmpleadoID().getCorreoElectronico(), Asunto, Mensaje);
+        email.SendEmail(usuarioActual.getEmpleadoID().getCorreoElectronico(), Asunto, Mensaje);
     }
     
     private String[] getValuesForEmail(){
@@ -140,17 +138,6 @@ public class CreateAccountViewController {
             CodigoActual
         };
         
-        return values;
-    }
-    
-    private String[] getInformationForSendEmail(){
-        Code code = new Code();
-        Configuracion configuracion = new ConfiguracionJpaController(Conection.CreateEntityManager()).findConfiguracion(1);
-        
-        String email = code.decodeString(configuracion.getDato());
-        String contrasena = code.decodeString(configuracion.getExtra());
-        
-        String[] values = {email, contrasena};
         return values;
     }
     

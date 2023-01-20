@@ -1,13 +1,9 @@
 package Views;
 
 import Resource.Conection;
+import Resource.LocalConection;
 import Resource.Utilities;
 import ViewsControllers.LoginViewController;
-import java.awt.Desktop;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 
@@ -45,7 +41,6 @@ public class Login extends javax.swing.JFrame {
         lbError = new javax.swing.JLabel();
         txtCargando = new javax.swing.JLabel();
         lbCrear = new javax.swing.JLabel();
-        btnAjustes = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -188,16 +183,6 @@ public class Login extends javax.swing.JFrame {
         });
         jPanel1.add(lbCrear, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, 300, 32));
 
-        btnAjustes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnAjustes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/ajustesConexion.png"))); // NOI18N
-        btnAjustes.setToolTipText("Ajsutes de conexion");
-        btnAjustes.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnAjustesMouseClicked(evt);
-            }
-        });
-        jPanel1.add(btnAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 680, 38, 38));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -230,6 +215,7 @@ public class Login extends javax.swing.JFrame {
 
     private void btnCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseClicked
         Conection.Disconnect(Conection.CreateEntityManager().createEntityManager());
+        new LocalConection().closeConection();
         System.exit(0);
     }//GEN-LAST:event_btnCloseMouseClicked
 
@@ -252,13 +238,6 @@ public class Login extends javax.swing.JFrame {
         createAccount.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_lbCrearMouseClicked
-
-    private void btnAjustesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAjustesMouseClicked
-        AjusteConexion ac = new AjusteConexion();
-        ac.setVisible(true);
-        this.setVisible(false);
-        this.dispose();
-    }//GEN-LAST:event_btnAjustesMouseClicked
 
     public void IniciarSesion() {
         txtCargando.setIcon(new ImageIcon(getClass().getResource("/Icons/cargando32px.gif")));
@@ -291,7 +270,6 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel btnAjustes;
     private javax.swing.JLabel btnClose;
     private javax.swing.JLabel btnIniciarSesion;
     private javax.swing.JCheckBox cbRecordarme;

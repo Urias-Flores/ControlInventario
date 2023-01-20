@@ -30,10 +30,10 @@ public class Conection {
         try{
             if(emf == null){
                 emf = Persistence.createEntityManagerFactory("ControlInventarioPU");
-                System.out.println("Message: Conexion con el servidor abierta");
+                System.out.println("Test external conection: Enlace de conexion con servidor creado");
             }
         }catch(Exception ex){
-            System.out.print("Error: "+ex.getMessage());
+            System.err.print("Error: "+ex.getMessage());
         }
         return emf;
     }
@@ -42,7 +42,7 @@ public class Conection {
         if(em != null){
             em.close();
             emf.close();
-            System.out.println("Message: Conexion con el servidor cerrada");
+            System.out.println("Test external conection: La conexion con el servidor ha sido cerrada");
         }
     }
     
@@ -50,6 +50,7 @@ public class Conection {
         Persistence.createEntityManagerFactory("", null);
     }
     
+    /* Test xml modification
     public static boolean alterConnection(String IP, String Port, String User, String Password){
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -79,5 +80,5 @@ public class Conection {
             Logger.getLogger(Conection.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
-    }
+    }*/
 }

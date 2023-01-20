@@ -1,5 +1,8 @@
 package Resource;
 
+import Controllers.ConfiguracionJpaController;
+import Controllers.LocalDataController;
+import Models.Configuracion;
 import Views.Dialogs.Dialogs;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -14,19 +17,48 @@ import javax.swing.JOptionPane;
 
 public class Email {
     
-    private final String contraseña_1;
-
-    public Email() {
-        this.contraseña_1 = "dc13dc14dc15";
+    private String[] getInformationForSendEmailOfDataBase(){
+        Code code = new Code();
+        Configuracion configuracion = new ConfiguracionJpaController(Conection.CreateEntityManager()).findConfiguracion(1);
+        
+        String email = code.decodeString(configuracion.getDato());
+        String contrasena = code.decodeString(configuracion.getExtra());
+        
+        String[] values = {email, contrasena};
+        return values;
     }
     
-    public void SendEmail(String CorreoRemitente, String Contrasena,String CorreoDestino, String Asunto, String Mensaje)
+    private String[] getInformationForSendEmailOfLocalData(){
+        LocalDataController ldc = new LocalDataController();
+        String Email = ldc.getValue("Email");
+        String Password = ldc.getValue("Password");
+        Code code = new Code();
+        String[] values = {code.decodeString(Email), code.decodeString(Password)};
+        
+        return values;
+    }
+    
+    public void SendEmail(String CorreoDestino, String Asunto, String Mensaje)
     {
         Properties props = new Properties();
         props.setProperty("mail.smtp.host", "smtp.gmail.com");
         props.setProperty("mail.smtp.starttls.enable", "true");
         props.setProperty("mail.smtp.port", "587");
         props.setProperty("mail.smtp.auth", "true");
+        
+        LocalDataController ldc = new LocalDataController();
+        
+        boolean state = Boolean.parseBoolean(ldc.getValue("PersonalizeEmail"));
+        String[] InformationForSend = {};
+        
+        if(state){
+            InformationForSend = getInformationForSendEmailOfLocalData();
+        }else{
+            InformationForSend = getInformationForSendEmailOfDataBase();
+        }
+        
+        String CorreoRemitente = InformationForSend[0];
+        String Contrasena  = InformationForSend[1];
         
         Session session = Session.getDefaultInstance(props);      
         MimeMessage message = new MimeMessage(session);
@@ -63,7 +95,7 @@ public class Email {
             message.setText(Mensaje);
             try (Transport t = session.getTransport("smtp"))
             {
-                t.connect(Correo_remitente, contraseña_1);
+                t.connect(Correo_remitente, "");
                 t.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
             }
             JOptionPane.showMessageDialog(null, "Mensaje Enviado");
@@ -90,7 +122,7 @@ public class Email {
             message.setText(Mensaje);
             try (Transport t = session.getTransport("smtp"))
             {
-                t.connect(Correo_remitente, contraseña_1);
+                t.connect(Correo_remitente, "");
                 t.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
             }
             JOptionPane.showMessageDialog(null, "Mensaje Enviado");
