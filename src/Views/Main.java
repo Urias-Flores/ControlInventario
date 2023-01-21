@@ -1,7 +1,9 @@
 package Views;
 
 import Resource.Conection;
+import Resource.LocalConection;
 import Resource.Utilities;
+import Views.Dialogs.Dialogs;
 import ViewsControllers.MainViewController;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -44,6 +46,7 @@ public class Main extends javax.swing.JFrame {
         txtUsuarioActual = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         tbpPrincipal = new javax.swing.JTabbedPane();
+        lbNotificaciones = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Principal");
@@ -67,7 +70,8 @@ public class Main extends javax.swing.JFrame {
 
         btnFacturacion.setFont(new java.awt.Font("Roboto", 1, 28)); // NOI18N
         btnFacturacion.setForeground(new java.awt.Color(255, 255, 255));
-        btnFacturacion.setText("    Facturación");
+        btnFacturacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/facturacion.png"))); // NOI18N
+        btnFacturacion.setText("  Facturación");
         btnFacturacion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnFacturacionMouseClicked(evt);
@@ -76,7 +80,8 @@ public class Main extends javax.swing.JFrame {
 
         btnControl.setFont(new java.awt.Font("Roboto", 1, 28)); // NOI18N
         btnControl.setForeground(new java.awt.Color(255, 255, 255));
-        btnControl.setText("    Control");
+        btnControl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/control.png"))); // NOI18N
+        btnControl.setText("  Control");
         btnControl.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnControlMouseClicked(evt);
@@ -85,7 +90,8 @@ public class Main extends javax.swing.JFrame {
 
         btnEstadisticas.setFont(new java.awt.Font("Roboto", 1, 28)); // NOI18N
         btnEstadisticas.setForeground(new java.awt.Color(255, 255, 255));
-        btnEstadisticas.setText("    Estadisticas");
+        btnEstadisticas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/estadisticas.png"))); // NOI18N
+        btnEstadisticas.setText("  Estadisticas");
         btnEstadisticas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnEstadisticasMouseClicked(evt);
@@ -94,7 +100,8 @@ public class Main extends javax.swing.JFrame {
 
         btnCuetas.setFont(new java.awt.Font("Roboto", 1, 28)); // NOI18N
         btnCuetas.setForeground(new java.awt.Color(255, 255, 255));
-        btnCuetas.setText("    Cuentas");
+        btnCuetas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/cuentas.png"))); // NOI18N
+        btnCuetas.setText("  Cuentas");
         btnCuetas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnCuetasMouseClicked(evt);
@@ -107,7 +114,8 @@ public class Main extends javax.swing.JFrame {
 
         btnAjustes.setFont(new java.awt.Font("Roboto", 1, 28)); // NOI18N
         btnAjustes.setForeground(new java.awt.Color(255, 255, 255));
-        btnAjustes.setText("    Ajustes");
+        btnAjustes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/ajustes38px.png"))); // NOI18N
+        btnAjustes.setText("  Ajustes");
         btnAjustes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnAjustesMouseClicked(evt);
@@ -116,7 +124,8 @@ public class Main extends javax.swing.JFrame {
 
         btnCerrarSesion.setFont(new java.awt.Font("Roboto", 1, 28)); // NOI18N
         btnCerrarSesion.setForeground(new java.awt.Color(255, 255, 255));
-        btnCerrarSesion.setText("    Cerrar sesión");
+        btnCerrarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/cerrarSesion.png"))); // NOI18N
+        btnCerrarSesion.setText("  Cerrar sesión");
         btnCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnCerrarSesionMouseClicked(evt);
@@ -173,7 +182,7 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(btnAjustes)
                 .addGap(18, 18, 18)
                 .addComponent(btnCerrarSesion)
-                .addContainerGap(219, Short.MAX_VALUE))
+                .addContainerGap(189, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
@@ -181,17 +190,33 @@ public class Main extends javax.swing.JFrame {
         tbpPrincipal.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(200, 200, 200)));
         tbpPrincipal.setFont(new java.awt.Font("Roboto", 0, 24)); // NOI18N
 
+        lbNotificaciones.setBackground(new java.awt.Color(255, 255, 255));
+        lbNotificaciones.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbNotificaciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/notificaciones.png"))); // NOI18N
+        lbNotificaciones.setOpaque(true);
+        lbNotificaciones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbNotificacionesMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(tbpPrincipal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1377, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbNotificaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(118, 118, 118)
-                .addComponent(tbpPrincipal))
+                .addGap(18, 18, 18)
+                .addComponent(lbNotificaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(74, 74, 74)
+                .addComponent(tbpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 722, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -259,7 +284,12 @@ public class Main extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         Conection.Disconnect(Conection.CreateEntityManager().createEntityManager());
+        new LocalConection().closeConection();
     }//GEN-LAST:event_formWindowClosing
+
+    private void lbNotificacionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbNotificacionesMouseClicked
+        Dialogs.ShowNotificacionesDialog();
+    }//GEN-LAST:event_lbNotificacionesMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -304,6 +334,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lbNotificaciones;
     private javax.swing.JTabbedPane tbpPrincipal;
     private javax.swing.JLabel txtUsuarioActual;
     // End of variables declaration//GEN-END:variables

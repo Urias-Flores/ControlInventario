@@ -30,6 +30,7 @@ public class Reports {
                 Dialogs.ShowMessageDialog("El archivo de modelo de factura no fue encontrado", Dialogs.ERROR_ICON);
             }
         } catch (JRException ex) {
+            System.err.println("Error: "+ex.getMessage());
             Dialogs.ShowMessageDialog("Ups... Ha ocurrido un error al enviar a imprimir", Dialogs.ERROR_ICON);
         }
     }

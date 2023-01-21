@@ -1,6 +1,7 @@
 package Views;
 
 import Resource.Conection;
+import Resource.LocalConection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import ViewsControllers.CreateAccountViewController;
@@ -261,6 +262,7 @@ public class CreateAccount extends javax.swing.JFrame {
 
     private void btnCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseClicked
         Conection.Disconnect(Conection.CreateEntityManager().createEntityManager());
+        new LocalConection().closeConection();
         System.exit(0);
     }//GEN-LAST:event_btnCloseMouseClicked
 

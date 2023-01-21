@@ -211,9 +211,7 @@ public class Email extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseClicked
-        if(rbPersonalizado.isSelected()){
-            vc.saveChange();
-        }
+        vc.saveChange();
     }//GEN-LAST:event_btnGuardarMouseClicked
 
     private void rbPersonalizadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPersonalizadoActionPerformed

@@ -331,7 +331,6 @@ public class FacturasDia extends javax.swing.JPanel {
 
     private void btnImprimirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnImprimirMouseClicked
         vc.Imprimir();
-        System.err.println("Hola");
     }//GEN-LAST:event_btnImprimirMouseClicked
 
     private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked

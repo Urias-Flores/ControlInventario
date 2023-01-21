@@ -2,9 +2,13 @@ package ViewsControllers.Panels.Ajustes;
 
 import Controllers.ConfiguracionJpaController;
 import Controllers.LocalDataController;
+import Controllers.UsuarioJpaController;
 import Models.Configuracion;
+import Models.Usuario;
 import Resource.Code;
 import Resource.Conection;
+import Resource.Email;
+import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -61,16 +65,33 @@ public class EmailViewController {
     public void saveChange(){
         if(validate()){
             LocalDataController ldc = new LocalDataController();
-            Code code = new Code();
             if(Personalizado.isSelected()){
-                ldc.UpdateData("PersonalizeEmail", "true");
-                ldc.UpdateData("Email", code.codeString(Email.getText()));
-                ldc.UpdateData("Password", code.codeString(String.valueOf(Password.getPassword())));
+                if(sendTestEmail()){
+                    Code code = new Code();
+                    
+                    ldc.UpdateData("PersonalizeEmail", "true");
+                    ldc.UpdateData("Email", code.codeString(Email.getText()));
+                    ldc.UpdateData("Password", code.codeString(String.valueOf(Password.getPassword())));
+                    Dialogs.ShowMessageDialog("Los cambios han sido aplicados exitosamente", Dialogs.COMPLETE_ICON);
+                }else{
+                    Error.setBackground(new Color(185, 0, 0));
+                    Error.setText("Error los cambios no pudieron aplicarse");
+                }
             }else{
                 ldc.UpdateData("PersonalizeEmail", "false");
+                ldc.UpdateData("Email", null);
+                    ldc.UpdateData("Password", null);
+                Dialogs.ShowMessageDialog("Los cambios han sido aplicados exitosamente", Dialogs.COMPLETE_ICON);
             }
-            Dialogs.ShowMessageDialog("Los cambios han sido aplicados exitosamente", Dialogs.COMPLETE_ICON);
         }
+    }
+    
+    private boolean sendTestEmail(){
+        Email email = new Email();
+        Usuario usuario = new UsuarioJpaController(Conection.CreateEntityManager()).findUsuario(Utilities.getUsuarioActual().getUsuarioID());
+        String message = email.generateTryAccountMessage(usuario.getEmpleadoID().getNombre(), usuario.getNombre());
+        
+        return email.SendEmail(usuario.getEmpleadoID().getCorreoElectronico(), "Modificacion de envio de correos", message);
     }
     
     private boolean validate(){
@@ -89,10 +110,12 @@ public class EmailViewController {
             Error.setText("La contraseña es obligatorio");
             return false;
         }
-        if(String.valueOf(Password.getPassword()).length() != 16){
-            Error.setBackground(new Color(185, 0, 0));
-            Error.setText("La contraseña debe contener 16 caracteres");
-            return false;
+        if(Personalizado.isSelected()){
+            if(String.valueOf(Password.getPassword()).length() != 16){
+                Error.setBackground(new Color(185, 0, 0));
+                Error.setText("La contraseña debe contener 16 caracteres");
+                return false;
+            }
         }
         return true;
     }

@@ -238,4 +238,10 @@ public class Dialogs {
         dfd.setVisible(true);
         dfd.dispose();
     }
+    
+    public static void ShowNotificacionesDialog(){
+        NotificacionesDialog nd = new NotificacionesDialog(null, true);
+        nd.setVisible(true);
+        nd.dispose();
+    }
 }
