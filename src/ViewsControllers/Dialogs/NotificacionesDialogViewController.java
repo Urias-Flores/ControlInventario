@@ -1,6 +1,7 @@
 
 package ViewsControllers.Dialogs;
 
+import Controllers.LocalDataController;
 import Controllers.NotificacionJpaController;
 import Models.Notificacion;
 import Resource.Conection;
@@ -21,9 +22,12 @@ public class NotificacionesDialogViewController {
     }
     
     public void cargarNotificaciones(){
-        List<Notificacion> notificaciones = controller.findNotificacionEntities(50, 0);
+        List<Object[]> notificaciones = Conection.CreateEntityManager().createEntityManager()
+                .createNativeQuery("SELECT * FROM Notificacion ORDER BY Fecha desc , Hora desc")
+                .getResultList();
         
-        notificaciones.forEach(notificacion -> {
+        notificaciones.forEach(Item -> {
+            Notificacion notificacion = new Notificacion(Integer.valueOf(Item[0].toString()));
             NotificacionComponent nc = new NotificacionComponent();
             nc.cargarNotificacion(notificacion.getNotificacionID());
             nc.setPreferredSize(new Dimension(567, 137));

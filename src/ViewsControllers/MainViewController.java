@@ -1,9 +1,9 @@
 package ViewsControllers;
 
+import Controllers.LocalDataController;
 import Resource.Utilities;
 import Views.Login;
 import Views.Panels.Ajustes.Email;
-import Views.Panels.Ajustes.General;
 import Views.Panels.Ajustes.Reportes;
 import Views.Panels.Control.Compras;
 import Views.Panels.Control.Inventario;
@@ -27,6 +27,7 @@ public class MainViewController {
     private JFrame Instance;
     private JFrame Login;
     private JLabel UsuarioActual;
+    private JLabel Notificaciones;
     private JLabel Facturacion;
     private JLabel Control;
     private JLabel Estadisticas;
@@ -36,10 +37,11 @@ public class MainViewController {
     private JTabbedPane Principal;
     private int PanelActivo = 0;
 
-    public MainViewController(JFrame Instance, JFrame Login, JLabel UsuarioActual, JLabel Facturacion, JLabel Control, JLabel Estadisticas, JLabel Preferencias, JLabel Ajustes, JLabel CerrarSesion, JTabbedPane Principal) {
+    public MainViewController(JFrame Instance, JFrame Login, JLabel UsuarioActual, JLabel Notificaciones,JLabel Facturacion, JLabel Control, JLabel Estadisticas, JLabel Preferencias, JLabel Ajustes, JLabel CerrarSesion, JTabbedPane Principal) {
         this.Instance = Instance;
         this.Login = Login;
         this.UsuarioActual = UsuarioActual;
+        this.Notificaciones = Notificaciones;
         this.Facturacion = Facturacion;
         this.Control = Control;
         this.Estadisticas = Estadisticas;
@@ -64,7 +66,6 @@ public class MainViewController {
                     
                     Icon FacturarIcon = new ImageIcon(getClass().getResource("/Icons/factura.png"));
                     Icon FacturaDiaIcon = new ImageIcon(getClass().getResource("/Icons/facturaDia.png"));
-                    Icon AccionesIcon = new ImageIcon(getClass().getResource("/Icons/acciones.png"));
 
                     Principal.addTab("Facturar", FacturarIcon, facturar);
                     Principal.addTab("Facturas del dia", FacturaDiaIcon, facturasDia);
@@ -154,5 +155,23 @@ public class MainViewController {
     public void activarBoton(JLabel label){
         desactivarBotones();
         label.setEnabled(true);
+    }
+    
+    public void updateNotificaciones(){
+        Runnable run = ()->{
+            while(true){
+                try {
+                    LocalDataController ldc = new LocalDataController();
+                    if(ldc.checkCambios()){
+                        Notificaciones.setIcon(new ImageIcon(getClass().getResource("/Icons/notificacionesActiva.png")));
+                        ldc.updateNotificaciones();
+                    }
+                    Thread.sleep(2000);
+                } catch (InterruptedException ex) {
+                    System.err.println("Error: "+ex.getMessage());
+                }
+            }
+        };
+        new Thread(run).start();
     }
 }

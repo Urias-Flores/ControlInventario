@@ -22,10 +22,11 @@ public class Main extends javax.swing.JFrame {
     }
     
     public void Cargar(JFrame Login, String user){
-        MainVC = new MainViewController(this, Login, txtUsuarioActual, btnFacturacion, btnControl, btnEstadisticas, btnCuetas, btnAjustes, btnCerrarSesion, tbpPrincipal);
+        MainVC = new MainViewController(this, Login, txtUsuarioActual, lbNotificaciones,btnFacturacion, btnControl, btnEstadisticas, btnCuetas, btnAjustes, btnCerrarSesion, tbpPrincipal);
         MainVC.cargarUsuario(user);
         MainVC.CargarPanel(1);
         MainVC.activarBoton(btnFacturacion);
+        MainVC.updateNotificaciones();
     }
 
     @SuppressWarnings("unchecked")
@@ -288,6 +289,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void lbNotificacionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbNotificacionesMouseClicked
+        lbNotificaciones.setIcon(new ImageIcon(getClass().getResource("/Icons/notificaciones.png")));
         Dialogs.ShowNotificacionesDialog();
     }//GEN-LAST:event_lbNotificacionesMouseClicked
 

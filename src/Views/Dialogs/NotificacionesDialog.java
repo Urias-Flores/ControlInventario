@@ -3,8 +3,6 @@ package Views.Dialogs;
 
 import Resource.Utilities;
 import ViewsControllers.Dialogs.NotificacionesDialogViewController;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 
 public class NotificacionesDialog extends javax.swing.JDialog {
