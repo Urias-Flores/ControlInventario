@@ -19,6 +19,7 @@ import Views.Dialogs.Dialogs;
 import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
@@ -85,6 +86,31 @@ public class FacturaViewController {
             model.addRow(values);
         }
         updateTotal();
+    }
+    
+    public void editarValoresItem(){
+        int fila = Ventas.getSelectedRow();
+        if(fila >= 0){
+            Object[] values = {
+                Ventas.getValueAt(fila, 0).toString(),
+                Ventas.getValueAt(fila, 1).toString(),
+                Ventas.getValueAt(fila, 2).toString(),
+                Ventas.getValueAt(fila, 3).toString(),
+                Ventas.getValueAt(fila, 4).toString(),
+                Ventas.getValueAt(fila, 5).toString(),
+            };
+            
+            Object[] newValues = Dialogs.ShowEditVentaDialog(values);
+            
+            if(newValues != null && newValues[0] != null){
+                Ventas.setValueAt(getNumberFormat(Float.parseFloat(newValues[0].toString())), fila, 3);
+                Ventas.setValueAt(getNumberFormat(Float.parseFloat(newValues[1].toString())), fila, 5);
+                Ventas.setValueAt(getNumberFormat(Float.parseFloat(newValues[2].toString())), fila, 6);
+                updateTotal();
+            }
+        }else{
+            Dialogs.ShowMessageDialog("Seleccione un producto de la lista", Dialogs.ERROR_ICON);
+        }
     }
 
     public void cargarPorCodigoBarras() {

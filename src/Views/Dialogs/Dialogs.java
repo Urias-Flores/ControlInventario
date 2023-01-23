@@ -66,6 +66,15 @@ public class Dialogs {
         return values;
     }
     
+    public static Object[] ShowEditVentaDialog(Object[] values){
+        EditVentaDialog evd = new EditVentaDialog(null, true);
+        evd.setValues(values);
+        evd.setVisible(true);
+        values = evd.getValues();
+        evd.dispose();
+        return values;
+    }
+    
     public static void ShowAddProveedorDialog(){
         AddProveedorDialog pd = new AddProveedorDialog(null, true);
         pd.setVisible(true);
