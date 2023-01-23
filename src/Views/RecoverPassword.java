@@ -78,7 +78,7 @@ public class RecoverPassword extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Roboto", 1, 42)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(90, 90, 90));
         jLabel1.setText("Reestablecer contraseña");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 60, 495, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 60, 460, -1));
 
         pnBarra.setBackground(new java.awt.Color(255, 255, 255));
         pnBarra.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(220, 220, 220)));
@@ -123,34 +123,34 @@ public class RecoverPassword extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(90, 90, 90));
         jLabel2.setText("Nombre de usuario");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 163, 495, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 163, 460, -1));
 
         txtCodigo.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         txtCodigo.setForeground(new java.awt.Color(180, 180, 180));
         txtCodigo.setText("Escribe tu codigo de seguridad...");
         txtCodigo.setEnabled(false);
-        jPanel1.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 290, 495, 40));
+        jPanel1.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 290, 460, 40));
 
         lbRepitaContrasena.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbRepitaContrasena.setForeground(new java.awt.Color(90, 90, 90));
         lbRepitaContrasena.setText("Repita su nueva contraseña");
-        jPanel1.add(lbRepitaContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 440, 495, -1));
+        jPanel1.add(lbRepitaContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 440, 460, -1));
 
         txtRepetirContrasena.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jPanel1.add(txtRepetirContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 480, 495, 40));
+        jPanel1.add(txtRepetirContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 480, 460, 40));
 
         jLabel4.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(90, 90, 90));
         jLabel4.setText("Codigo de seguridad");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 250, 495, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 250, 460, -1));
 
         lbEscribaContrasena.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbEscribaContrasena.setForeground(new java.awt.Color(90, 90, 90));
         lbEscribaContrasena.setText("Escriba su nueva contraseña");
-        jPanel1.add(lbEscribaContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 350, 495, -1));
+        jPanel1.add(lbEscribaContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 350, 460, -1));
 
         txtContrasena.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jPanel1.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 390, 495, 40));
+        jPanel1.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 390, 460, 40));
 
         btnGuardar.setBackground(new java.awt.Color(3, 57, 103));
         btnGuardar.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
@@ -171,7 +171,7 @@ public class RecoverPassword extends javax.swing.JFrame {
         lbError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbError.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         lbError.setOpaque(true);
-        jPanel1.add(lbError, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 535, 490, 38));
+        jPanel1.add(lbError, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 535, 460, 38));
 
         lbOlvidaste.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         lbOlvidaste.setForeground(new java.awt.Color(90, 90, 90));
@@ -198,7 +198,7 @@ public class RecoverPassword extends javax.swing.JFrame {
         txtNombre.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         txtNombre.setForeground(new java.awt.Color(180, 180, 180));
         txtNombre.setText("Escribe tu nombre de usuario...");
-        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 200, 495, 40));
+        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 200, 460, 40));
         jPanel1.add(txtCargando, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 590, 40, 40));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/usuario40px.png"))); // NOI18N

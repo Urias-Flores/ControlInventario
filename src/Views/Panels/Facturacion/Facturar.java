@@ -416,7 +416,9 @@ public class Facturar extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
-        vc.InsertVenta();
+        if(vc.InsertVenta()){
+            Dialogs.ShowMessageDialog("¡La facturacion ha sido exito", Dialogs.COMPLETE_ICON);
+        }
     }//GEN-LAST:event_btnAgregarMouseClicked
 
     private void btnAgregarCarritoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarCarritoMouseClicked
