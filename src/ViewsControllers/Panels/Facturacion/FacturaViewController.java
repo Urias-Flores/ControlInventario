@@ -203,12 +203,21 @@ public class FacturaViewController {
     public void DeleteVenta() {
         int fila = Ventas.getSelectedRow();
         if (fila >= 0) {
-            if (Dialogs.ShowOKCancelDialog("¿Desea eliminar la venta seleccionada?", Dialogs.WARNING_ICON)) {
+            if (Dialogs.ShowOKCancelDialog("¿Desea eliminar la venta seleccionada de la factura?", Dialogs.WARNING_ICON)) {
                 model.removeRow(fila);
                 updateTotal();
             }
         } else {
             Dialogs.ShowMessageDialog("Seleccion una venta de la lista", Dialogs.ERROR_ICON);
+        }
+    }
+    
+    public void deleteAllVenta(){
+        if(model.getRowCount() > 0){
+            if(Dialogs.ShowOKCancelDialog("¿Desea eliminar todas la ventas de la factura?", Dialogs.WARNING_ICON)){
+                model.setRowCount(0);
+                updateTotal();
+            }
         }
     }
 
@@ -235,6 +244,12 @@ public class FacturaViewController {
             Importe.setText(getNumberFormat(importe));
             ISV.setText(getNumberFormat(isv));
             Total.setText(getNumberFormat(total));
+        }else{
+            Subtotal.setText(getNumberFormat(0));
+            Descuento.setText(getNumberFormat(0));
+            Importe.setText(getNumberFormat(0));
+            ISV.setText(getNumberFormat(0));
+            Total.setText(getNumberFormat(0));
         }
     }
 

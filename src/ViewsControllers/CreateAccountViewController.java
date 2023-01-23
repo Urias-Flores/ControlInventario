@@ -1,11 +1,8 @@
 package ViewsControllers;
 
-import Controllers.ConfiguracionJpaController;
 import Controllers.UsuarioJpaController;
 import Controllers.exceptions.NonexistentEntityException;
-import Models.Configuracion;
 import Models.Usuario;
-import Resource.Code;
 import Resource.Conection;
 import Resource.Email;
 import Resource.Security;
@@ -21,8 +18,10 @@ public class CreateAccountViewController {
     private JTextField Nombre;
     private JTextField Codigo;
     private JLabel lbContrasena;
+    private JLabel lbContrasenaIcon;
     private JPasswordField Contrasena;
     private JLabel lbRepetirContrasena;
+    private JLabel lbRepetirContrasenaIcon;
     private JPasswordField RepetirContrasena;
     private JLabel Boton;
     private JLabel Error;
@@ -30,20 +29,30 @@ public class CreateAccountViewController {
     private String CodigoActual = "";
     private Usuario usuarioActual = null;
 
-    public CreateAccountViewController(JTextField Nombre, JTextField Codigo, JLabel lbContrasena, JPasswordField Contrasena, JLabel lbRepetirContrasena, JPasswordField RepetirContrasena, JLabel Boton, JLabel Error) {
+    public CreateAccountViewController(JTextField Nombre, JTextField Codigo, JLabel lbContrasena, JLabel lbContrasenaIcon, JPasswordField Contrasena, JLabel lbRepetirContrasena, JLabel lbRepetirContrasenaIcon, JPasswordField RepetirContrasena, JLabel Boton, JLabel Error) {
         this.Nombre = Nombre;
         this.Codigo = Codigo;
         this.lbContrasena = lbContrasena;
+        this.lbContrasenaIcon = lbContrasenaIcon;
         this.Contrasena = Contrasena;
         this.lbRepetirContrasena = lbRepetirContrasena;
+        this.lbRepetirContrasenaIcon = lbRepetirContrasenaIcon;
         this.RepetirContrasena = RepetirContrasena;
         this.Boton = Boton;
         this.Error = Error;
         
-        lbContrasena.setVisible(false);
-        Contrasena.setVisible(false);
-        lbRepetirContrasena.setVisible(false);
-        RepetirContrasena.setVisible(false);
+        setVisibleContrasena(false);
+    }
+
+    
+    
+    private void setVisibleContrasena(boolean state){
+        lbContrasena.setVisible(state);
+        lbContrasenaIcon.setVisible(state);
+        Contrasena.setVisible(state);
+        lbRepetirContrasena.setVisible(state);
+        lbRepetirContrasenaIcon.setVisible(state);
+        RepetirContrasena.setVisible(state);
     }
     
     public int verificarUsuario(){
@@ -70,10 +79,7 @@ public class CreateAccountViewController {
         if(validateToken()){
             if(usuarioActual.getToken().equals(Codigo.getText())){
                 Codigo.setEnabled(false);
-                lbContrasena.setVisible(true);
-                Contrasena.setVisible(true);
-                lbRepetirContrasena.setVisible(true);
-                RepetirContrasena.setVisible(true);
+                setVisibleContrasena(true);
                 
                 Boton.setText("Crear cuenta");
                 Error.setText("El codigo ha sido verificado");

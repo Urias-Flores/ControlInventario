@@ -68,12 +68,12 @@ public class Login extends javax.swing.JFrame {
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(631, 0, 570, 750));
 
         jLabel1.setFont(new java.awt.Font("Roboto", 1, 42)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(3, 56, 103));
+        jLabel1.setForeground(new java.awt.Color(90, 90, 90));
         jLabel1.setText("Iniciar Sesion");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 60, 460, -1));
 
         jLabel2.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(3, 56, 103));
+        jLabel2.setForeground(new java.awt.Color(90, 90, 90));
         jLabel2.setText("Nombre de usuario");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 163, 460, -1));
 
@@ -88,7 +88,7 @@ public class Login extends javax.swing.JFrame {
         jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 196, 460, 40));
 
         jLabel3.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(3, 56, 103));
+        jLabel3.setForeground(new java.awt.Color(90, 90, 90));
         jLabel3.setText("Contraseña");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 254, 460, -1));
 
@@ -111,15 +111,15 @@ public class Login extends javax.swing.JFrame {
                 btnIniciarSesionMouseClicked(evt);
             }
         });
-        jPanel1.add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 450, 238, 40));
+        jPanel1.add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 450, 240, 40));
 
         cbRecordarme.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        cbRecordarme.setForeground(new java.awt.Color(3, 56, 103));
+        cbRecordarme.setForeground(new java.awt.Color(90, 90, 90));
         cbRecordarme.setText("Recordarme");
         jPanel1.add(cbRecordarme, new org.netbeans.lib.awtextra.AbsoluteConstraints(65, 340, 460, 38));
 
         lbOlvidaste.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        lbOlvidaste.setForeground(new java.awt.Color(3, 56, 103));
+        lbOlvidaste.setForeground(new java.awt.Color(90, 90, 90));
         lbOlvidaste.setText("¿olvidaste tu contraseña?");
         lbOlvidaste.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbOlvidaste.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -175,13 +175,13 @@ public class Login extends javax.swing.JFrame {
         lbError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbError.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         lbError.setOpaque(true);
-        jPanel1.add(lbError, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 382, 490, 38));
+        jPanel1.add(lbError, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 382, 460, 38));
 
         txtCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel1.add(txtCargando, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 450, 40, 40));
+        jPanel1.add(txtCargando, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 450, 40, 40));
 
         lbCrear.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        lbCrear.setForeground(new java.awt.Color(3, 56, 103));
+        lbCrear.setForeground(new java.awt.Color(90, 90, 90));
         lbCrear.setText("¿No tienes una cuenta? Crea una.");
         lbCrear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbCrear.addMouseListener(new java.awt.event.MouseAdapter() {

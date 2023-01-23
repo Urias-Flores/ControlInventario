@@ -23,18 +23,22 @@ public class RecoverPasswordViewController {
     private JLabel ContrasenaLabel;
     private JLabel RepetirContrasenaLabel;
     private JPasswordField Contrasena;
+    private JLabel ContrasenaIcon;
     private JPasswordField RepetirContrasena;
+    private JLabel RepetirContrasenaIcon;
     private JLabel Error;
     private JLabel Cambiar;
     private String codigoActual = "";
 
-    public RecoverPasswordViewController(JTextField Nombre, JTextField Codigo, JLabel ContrasenaLabel, JLabel RepetirContrasenaLabel, JPasswordField Contrasena, JPasswordField RepetirContrasena, JLabel Error, JLabel Cambiar) {
+    public RecoverPasswordViewController(JTextField Nombre, JTextField Codigo, JLabel ContrasenaLabel, JLabel RepetirContrasenaLabel, JPasswordField Contrasena, JLabel ContrasenaIcon, JPasswordField RepetirContrasena, JLabel RepetirContrasenaIcon, JLabel Error, JLabel Cambiar) {
         this.Nombre = Nombre;
         this.Codigo = Codigo;
         this.ContrasenaLabel = ContrasenaLabel;
         this.RepetirContrasenaLabel = RepetirContrasenaLabel;
         this.Contrasena = Contrasena;
+        this.ContrasenaIcon = ContrasenaIcon;
         this.RepetirContrasena = RepetirContrasena;
+        this.RepetirContrasenaIcon = RepetirContrasenaIcon;
         this.Error = Error;
         this.Cambiar = Cambiar;
         
@@ -135,18 +139,6 @@ public class RecoverPasswordViewController {
         );
     }
     
-    private String[] getEmailData(){
-        ConfiguracionJpaController controller = new ConfiguracionJpaController(Conection.CreateEntityManager());
-        Code code = new Code();
-        
-        Configuracion configuracion = controller.findConfiguracion(1);
-        String[] values = {
-            code.decodeString(configuracion.getDato()),
-            code.decodeString(configuracion.getExtra())
-        };
-        return values;
-    }
-    
     private String[] getValuesForUsuario(Usuario usuario){
         double randomValue = 100000 + Math.random() * 999999;
         codigoActual = String.valueOf(randomValue).substring(0, 6);
@@ -171,7 +163,9 @@ public class RecoverPasswordViewController {
     
     private void setVisibleContrasena(boolean Estado){
         Contrasena.setVisible(Estado);
+        ContrasenaIcon.setVisible(Estado);
         RepetirContrasena.setVisible(Estado);
+        RepetirContrasenaIcon.setVisible(Estado);
         ContrasenaLabel.setVisible(Estado);
         RepetirContrasenaLabel.setVisible(Estado);
     }
