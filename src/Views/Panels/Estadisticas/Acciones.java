@@ -9,10 +9,12 @@ public class Acciones extends javax.swing.JPanel {
     
     public Acciones() {
         initComponents();
-        
+        Utilities.CargarAnios(cmbAnioInicial);
+        Utilities.CargarAnios(cmbAnioFinal);
         btnFiltros.addMouseListener(Utilities.getMLGeneralButton());
+        btnVer.addMouseListener(Utilities.getMLGeneralButton());
         
-        vc = new AccionesViewController(lbVentas, lbCompras, tbTransacciones, cmbTipo, cmbIntervalo, cmbDiaInicial, cmbMesInicial, cmbAnioInicial, cmbDiaFinal, cmbMesFinal, cmbAnioFinal);
+        vc = new AccionesViewController(lbVentas, lbCompras, tbTransacciones, cmbUsuarios, cmbClientesProveedores,cmbTipo, cmbIntervalo, cmbDiaInicial, cmbMesInicial, cmbAnioInicial, cmbDiaFinal, cmbMesFinal, cmbAnioFinal);
         vc.CargarTabla();
     }
 
@@ -30,6 +32,9 @@ public class Acciones extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tbTransacciones = new javax.swing.JTable();
         btnVer = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        cmbUsuarios = new javax.swing.JComboBox<>();
+        cmbClientesProveedores = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -102,6 +107,26 @@ public class Acciones extends javax.swing.JPanel {
             }
         });
 
+        jLabel13.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/filtrar.png"))); // NOI18N
+        jLabel13.setText("Filtrar");
+
+        cmbUsuarios.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        cmbUsuarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Todos los usuarios --" }));
+        cmbUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbUsuariosActionPerformed(evt);
+            }
+        });
+
+        cmbClientesProveedores.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        cmbClientesProveedores.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Todos los clientes/proveedores --" }));
+        cmbClientesProveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbClientesProveedoresActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -110,17 +135,32 @@ public class Acciones extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 945, Short.MAX_VALUE)
+                        .addGap(18, 18, 18))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 818, Short.MAX_VALUE)
-                        .addGap(18, 18, 18))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cmbUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(cmbClientesProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cmbUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbClientesProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
@@ -166,7 +206,6 @@ public class Acciones extends javax.swing.JPanel {
         cmbMesInicial.setEnabled(false);
 
         cmbAnioInicial.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        cmbAnioInicial.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2021", "2022" }));
         cmbAnioInicial.setEnabled(false);
 
         jLabel12.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
@@ -181,7 +220,6 @@ public class Acciones extends javax.swing.JPanel {
         cmbMesFinal.setEnabled(false);
 
         cmbAnioFinal.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        cmbAnioFinal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2021", "2022" }));
         cmbAnioFinal.setEnabled(false);
 
         btnFiltros.setBackground(new java.awt.Color(3, 57, 103));
@@ -259,7 +297,7 @@ public class Acciones extends javax.swing.JPanel {
                     .addComponent(cmbDiaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbMesFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbAnioFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnFiltros, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
         );
@@ -281,7 +319,7 @@ public class Acciones extends javax.swing.JPanel {
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lbCompras, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1192, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1319, Short.MAX_VALUE))
                 .addGap(18, 18, 18))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -328,6 +366,14 @@ public class Acciones extends javax.swing.JPanel {
         vc.ShowInfoFactura();
     }//GEN-LAST:event_btnVerMouseClicked
 
+    private void cmbUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbUsuariosActionPerformed
+        vc.filtrarUsuario();
+    }//GEN-LAST:event_cmbUsuariosActionPerformed
+
+    private void cmbClientesProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClientesProveedoresActionPerformed
+        vc.filtrarClienteProveedor();
+    }//GEN-LAST:event_cmbClientesProveedoresActionPerformed
+
     private void CambiarEstadoFechas(boolean estado){
         cmbDiaInicial.setEnabled(estado);
         cmbMesInicial.setEnabled(estado);
@@ -342,16 +388,19 @@ public class Acciones extends javax.swing.JPanel {
     private javax.swing.JLabel btnVer;
     private javax.swing.JComboBox<String> cmbAnioFinal;
     private javax.swing.JComboBox<String> cmbAnioInicial;
+    private javax.swing.JComboBox<String> cmbClientesProveedores;
     private javax.swing.JComboBox<String> cmbDiaFinal;
     private javax.swing.JComboBox<String> cmbDiaInicial;
     private javax.swing.JComboBox<String> cmbIntervalo;
     private javax.swing.JComboBox<String> cmbMesFinal;
     private javax.swing.JComboBox<String> cmbMesInicial;
     private javax.swing.JComboBox<String> cmbTipo;
+    private javax.swing.JComboBox<String> cmbUsuarios;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
