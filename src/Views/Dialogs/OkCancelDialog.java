@@ -23,6 +23,7 @@ public class OkCancelDialog extends javax.swing.JDialog {
         initComponents();
         btnClose.addMouseListener(Utilities.getMLButtonCloseBlue());
         btnAceptar.addMouseListener(Utilities.getMLGeneralButton());
+        btnCancelar.addMouseListener(Utilities.getMLGeneralButton());
         setOpacity(0.93f);
     }
     

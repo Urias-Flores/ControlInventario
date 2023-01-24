@@ -284,8 +284,12 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        Conection.Disconnect(Conection.CreateEntityManager().createEntityManager());
-        new LocalConection().closeConection();
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        if(Dialogs.ShowOKCancelDialog("Si sale su sesion se cerrara automaticamente ¿Desea continuar?", Dialogs.WARNING_ICON)){
+            Conection.Disconnect(Conection.CreateEntityManager().createEntityManager());
+            new LocalConection().closeConection();
+            System.exit(0);
+        }
     }//GEN-LAST:event_formWindowClosing
 
     private void lbNotificacionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbNotificacionesMouseClicked

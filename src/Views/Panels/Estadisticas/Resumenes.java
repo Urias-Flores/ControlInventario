@@ -30,7 +30,6 @@ public class Resumenes extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         cmbTiempo = new javax.swing.JComboBox<>();
         pnGrafico = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -65,9 +64,6 @@ public class Resumenes extends javax.swing.JPanel {
         pnGrafico.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(220, 220, 220)));
         pnGrafico.setLayout(new java.awt.CardLayout());
 
-        jLabel4.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        jLabel4.setText("Funcion proximamente disponible...");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -84,8 +80,7 @@ public class Resumenes extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(cmbTiempo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1162, Short.MAX_VALUE))
                 .addGap(18, 18, 18))
         );
@@ -103,9 +98,7 @@ public class Resumenes extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cmbTiempo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(cmbTiempo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addComponent(pnGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
                 .addContainerGap())
@@ -155,7 +148,6 @@ public class Resumenes extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel pnGrafico;
     // End of variables declaration//GEN-END:variables
 }
