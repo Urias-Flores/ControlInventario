@@ -23,6 +23,8 @@ import javax.swing.JTextField;
 public class Utilities {
 
     private static Usuario UsuarioActual = new Usuario();
+    private static boolean runProcess = true;
+    private static boolean stateProcess = false;
     
     private static MouseListener mlButtonClose = new MouseListener() {
         @Override
@@ -174,6 +176,22 @@ public class Utilities {
         for(int i = AnioActual; i >= 1920; i--){
             cmb.addItem(i+"");
         }
+    }
+
+    public static boolean isRunProcess() {
+        return runProcess;
+    }
+
+    public static void setRunProcess(boolean runProcess) {
+        Utilities.runProcess = runProcess;
+    }
+
+    public static boolean isStateProcess() {
+        return stateProcess;
+    }
+
+    public static void setStateProcess(boolean stateProcess) {
+        Utilities.stateProcess = stateProcess;
     }
     
     public static Date getDate(){

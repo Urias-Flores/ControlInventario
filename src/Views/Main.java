@@ -301,9 +301,12 @@ public class Main extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         if(Dialogs.ShowOKCancelDialog("Si sale su sesion se cerrara automaticamente ¿Desea continuar?", Dialogs.WARNING_ICON)){
-            Conection.Disconnect(Conection.CreateEntityManager().createEntityManager());
+            Utilities.setRunProcess(false);
+            if(Conection.CreateEntityManager().isOpen()){
+                Conection.Disconnect(Conection.CreateEntityManager().createEntityManager());
+            }
             new LocalConection().closeConection();
-            System.exit(0);
+            MainVC.waitCloseProcess();
         }
     }//GEN-LAST:event_formWindowClosing
 

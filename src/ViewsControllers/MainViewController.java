@@ -138,6 +138,7 @@ public class MainViewController {
     }
     
     public void cerrasSesion(){
+        Utilities.setRunProcess(false);
         Login login = new Login();
         login.setVisible(true);
         Instance.setVisible(false);
@@ -158,8 +159,10 @@ public class MainViewController {
     }
     
     public void updateNotificaciones(){
+        Utilities.setRunProcess(true);
         Runnable run = ()->{
-            while(true){
+            while(Utilities.isRunProcess()){
+                Utilities.setStateProcess(true);
                 try {
                     LocalDataController ldc = new LocalDataController();
                     if(ldc.checkCambios()){
@@ -167,6 +170,23 @@ public class MainViewController {
                         ldc.updateNotificaciones();
                     }
                     Thread.sleep(2000);
+                } catch (InterruptedException ex) {
+                    System.err.println("Error: "+ex.getMessage());
+                }
+            }
+            Utilities.setStateProcess(false);
+        };
+        new Thread(run).start();
+    }
+    
+    public void waitCloseProcess(){
+        Runnable run = ()->{
+            while(true){
+                try {
+                    if(!Utilities.isStateProcess()){
+                        System.exit(0);
+                    }
+                    Thread.sleep(50);
                 } catch (InterruptedException ex) {
                     System.err.println("Error: "+ex.getMessage());
                 }
