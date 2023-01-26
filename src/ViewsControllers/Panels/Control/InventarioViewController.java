@@ -9,8 +9,11 @@ import Reports.Reports;
 import Resource.Conection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
+import java.awt.print.PrinterException;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Query;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -123,7 +126,11 @@ public class InventarioViewController {
     
     public void ImprimirInventario(){
         Reports report = new Reports();
-        report.GenerateInventarioReport(Utilities.getUsuarioActual().getNombre());
+        try {
+            report.GenerateInventarioReport(Utilities.getUsuarioActual().getNombre());
+        } catch (PrinterException ex) {
+            Logger.getLogger(InventarioViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void ModificarExistencia(){

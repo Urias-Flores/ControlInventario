@@ -58,6 +58,16 @@ public class Dialogs {
         return values;
     }
     
+    public static Object[] ShowEditCompraDialog(Object[] values){
+        EditVentaDialog evd = new EditVentaDialog(null, true);
+        evd.setValues(values);
+        evd.setCompraState();
+        evd.setVisible(true);
+        values = evd.getValues();
+        evd.dispose();
+        return values;
+    }
+    
     public static Object[] ShowAddVentaDialog(){
         AddVentaDialog vd = new AddVentaDialog(null, true);
         vd.setVisible(true);

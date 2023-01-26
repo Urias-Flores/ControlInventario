@@ -105,7 +105,7 @@ public class OkCancelDialog extends javax.swing.JDialog {
         );
 
         lbIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/completado.png"))); // NOI18N
+        lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Completado.png"))); // NOI18N
 
         lbText.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         lbText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

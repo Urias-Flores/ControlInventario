@@ -19,7 +19,6 @@ import Views.Dialogs.Dialogs;
 import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
@@ -125,8 +124,9 @@ public class FacturaViewController {
                     getNumberFormat(1f),
                     getNumberFormat(producto.getPrecioVenta()),
                     getNumberFormat(0f),
-                    getNumberFormat(producto.getPrecioVenta()),};
-
+                    getNumberFormat(producto.getPrecioVenta())
+                };
+                
                 cargarProducto(row);
             }
         });

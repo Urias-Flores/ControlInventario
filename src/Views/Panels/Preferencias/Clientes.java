@@ -233,6 +233,7 @@ public class Clientes extends javax.swing.JPanel {
         txtDomicilio.setLineWrap(true);
         txtDomicilio.setRows(5);
         txtDomicilio.setText("Domicilio...");
+        txtDomicilio.setWrapStyleWord(true);
         txtDomicilio.setBorder(null);
         jScrollPane2.setViewportView(txtDomicilio);
 

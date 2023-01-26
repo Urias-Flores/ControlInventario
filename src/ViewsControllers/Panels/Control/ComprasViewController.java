@@ -2,12 +2,12 @@ package ViewsControllers.Panels.Control;
 
 import Controllers.CompraJpaController;
 import Controllers.CompradetalleJpaController;
+import Controllers.ProductoJpaController;
 import Controllers.ProveedorJpaController;
 import Models.Compra;
 import Models.Compradetalle;
 import Models.Producto;
 import Models.Proveedor;
-import Models.Usuario;
 import Reports.Reports;
 import Resource.Conection;
 import Resource.Utilities;
@@ -43,6 +43,8 @@ public class ComprasViewController {
     private JRadioButton Pagado;
     private JRadioButton Pendiente;
     
+    private JTextField Barra;
+    
     private JTable Compras;
     private JTextField Subtotal;
     private JTextField Descuento;
@@ -50,7 +52,7 @@ public class ComprasViewController {
     private JTextField ISV;
     private JTextField Total;
 
-    public ComprasViewController(JComboBox Proveedores, JTextField Factura, JComboBox DiaCompra, JComboBox MesCompra, JComboBox AnioCompra, JComboBox DiaVencimiento, JComboBox MesVencimiento, JComboBox AnioVencimiento, JRadioButton Pagado, JRadioButton Pendiente, JTable Compras, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total) {
+    public ComprasViewController(JComboBox Proveedores, JTextField Factura, JComboBox DiaCompra, JComboBox MesCompra, JComboBox AnioCompra, JComboBox DiaVencimiento, JComboBox MesVencimiento, JComboBox AnioVencimiento, JRadioButton Pagado, JRadioButton Pendiente, JTextField Barra, JTable Compras, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total) {
         this.Proveedores = Proveedores;
         this.Factura = Factura;
         this.DiaCompra = DiaCompra;
@@ -61,6 +63,7 @@ public class ComprasViewController {
         this.AnioVencimiento = AnioVencimiento;
         this.Pagado = Pagado;
         this.Pendiente = Pendiente;
+        this.Barra = Barra;
         this.Compras = Compras;
         this.Subtotal = Subtotal;
         this.Descuento = Descuento;
@@ -92,6 +95,53 @@ public class ComprasViewController {
         updateTotal();
     }
     
+    public void editarValoresItem(){
+        int fila = Compras.getSelectedRow();
+        if(fila >= 0){
+            Object[] values = {
+                Compras.getValueAt(fila, 0).toString(),
+                Compras.getValueAt(fila, 1).toString(),
+                Compras.getValueAt(fila, 2).toString(),
+                Compras.getValueAt(fila, 3).toString(),
+                Compras.getValueAt(fila, 4).toString(),
+                Compras.getValueAt(fila, 5).toString(),
+            };
+            
+            Object[] newValues = Dialogs.ShowEditCompraDialog(values);
+            
+            if(newValues != null && newValues[0] != null){
+                Compras.setValueAt(getNumberFormat(Float.parseFloat(newValues[0].toString())), fila, 3);
+                Compras.setValueAt(getNumberFormat(Float.parseFloat(newValues[1].toString())), fila, 4);
+                Compras.setValueAt(getNumberFormat(Float.parseFloat(newValues[2].toString())), fila, 5);
+                Compras.setValueAt(getNumberFormat(Float.parseFloat(newValues[3].toString())), fila, 6);
+                updateTotal();
+            }
+        }else{
+            Dialogs.ShowMessageDialog("Seleccione un producto de la lista", Dialogs.ERROR_ICON);
+        }
+    }
+    
+    public void cargarPorCodigoBarras() {
+        ProductoJpaController controllerProducto = new ProductoJpaController(Conection.CreateEntityManager());
+        List<Producto> productos = controllerProducto.findProductoEntities();
+        productos.forEach(producto -> {
+            if (producto.getBarra().equals(Barra.getText())) {
+                Object[] row = {
+                    producto.getProductoID(),
+                    producto.getDescripcion(),
+                    producto.getUnidad(),
+                    getNumberFormat(1f),
+                    getNumberFormat(producto.getPrecioCompra()),
+                    getNumberFormat(0f),
+                    getNumberFormat(producto.getPrecioCompra())
+                };
+                
+                cargarProducto(row);
+            }
+        });
+        Barra.setText("");
+    }
+    
     public void AgregarProveedor(){
         Dialogs.ShowAddProveedorDialog();
         Proveedores.removeAllItems();
@@ -117,6 +167,15 @@ public class ComprasViewController {
         MesCompra.setSelectedIndex(Calendar.getInstance().get(Calendar.MONTH));
         DiaVencimiento.setSelectedIndex(Calendar.getInstance().get(Calendar.DATE) - 1);
         MesVencimiento.setSelectedIndex(Calendar.getInstance().get(Calendar.MONTH));
+    }
+    
+    public void deleteAllCompras(){
+        if(model.getRowCount() > 0){
+            if(Dialogs.ShowOKCancelDialog("¿Desea eliminar todas la compras de la factura?", Dialogs.WARNING_ICON)){
+                model.setRowCount(0);
+                updateTotal();
+            }
+        }
     }
     
     public void InitTable(){

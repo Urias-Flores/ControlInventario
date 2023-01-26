@@ -3,7 +3,6 @@ package ViewsControllers.Dialogs;
 import Resource.Conection;
 import java.awt.Color;
 import java.text.DecimalFormat;
-import java.util.List;
 import javax.persistence.Query;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -59,6 +58,16 @@ public class EditVentaDialogViewController {
     public Object[] getValues(){
         Object[] values = {
             Cantidad.getText().replace(",", ""),
+            DescuentoLempiras.getText().replace(",", ""),
+            Subtotal.getText().replace(",", "").replace("Lps.", "")
+        };
+        return values;
+    }
+    
+    public Object[] getValuesforCompra(){
+        Object[] values = {
+            Cantidad.getText().replace(",", ""),
+            Precio.getText().replace(",", ""),
             DescuentoLempiras.getText().replace(",", ""),
             Subtotal.getText().replace(",", "").replace("Lps.", "")
         };

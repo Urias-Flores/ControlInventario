@@ -9,6 +9,7 @@ public class EditVentaDialog extends javax.swing.JDialog {
     private int X, Y;
     private Object[] Values;
     private EditVentaDialogViewController vc;
+    private boolean isCompra = false;
     
     public Object[] getValues(){
         return Values;
@@ -28,6 +29,13 @@ public class EditVentaDialog extends javax.swing.JDialog {
         vc.setValues(values);
     }
     
+    public void setCompraState(){
+        txtExistencia.setVisible(false);
+        lbExistencia.setVisible(false);
+        txtPrecio.setEditable(true);
+        isCompra = true;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -40,7 +48,7 @@ public class EditVentaDialog extends javax.swing.JDialog {
         txtSubtotal = new javax.swing.JTextField();
         txtError = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        lbExistencia = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtExistencia = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -108,6 +116,11 @@ public class EditVentaDialog extends javax.swing.JDialog {
         txtPrecio.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtPrecio.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtPrecio.setText("0.00");
+        txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPrecioKeyReleased(evt);
+            }
+        });
 
         txtSubtotal.setEditable(false);
         txtSubtotal.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
@@ -126,9 +139,9 @@ public class EditVentaDialog extends javax.swing.JDialog {
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel8.setText("Descuento (Lps.):");
 
-        jLabel10.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel10.setText("Existencia:");
+        lbExistencia.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        lbExistencia.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lbExistencia.setText("Existencia:");
 
         jLabel5.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
@@ -230,9 +243,7 @@ public class EditVentaDialog extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -241,10 +252,10 @@ public class EditVentaDialog extends javax.swing.JDialog {
                                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtDescuentoLempiras)
+                                            .addComponent(txtDescuentoLempiras, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
                                             .addComponent(txtDescuentoPorcentaje)))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lbExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(txtExistencia)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -254,7 +265,7 @@ public class EditVentaDialog extends javax.swing.JDialog {
                                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtPrecio)
+                                    .addComponent(txtPrecio, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
                                     .addComponent(txtSubtotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(txtCantidad)))
                             .addComponent(txtError, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -283,7 +294,7 @@ public class EditVentaDialog extends javax.swing.JDialog {
                     .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbExistencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txtExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -341,7 +352,12 @@ public class EditVentaDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_pnBarraMousePressed
 
     private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
-        Values = vc.getValues();
+        if(isCompra){
+            Values = vc.getValuesforCompra();
+        }else{
+            Values = vc.getValues();
+        }
+        
         if(Values != null){
             this.setVisible(false);
         }
@@ -360,6 +376,10 @@ public class EditVentaDialog extends javax.swing.JDialog {
         vc.updatePorcentajeLempiras();
         vc.updateSubtotal();
     }//GEN-LAST:event_txtDescuentoPorcentajeKeyReleased
+
+    private void txtPrecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyReleased
+        vc.updateSubtotal();
+    }//GEN-LAST:event_txtPrecioKeyReleased
 
     /**
      * @param args the command line arguments
@@ -405,7 +425,6 @@ public class EditVentaDialog extends javax.swing.JDialog {
     private javax.swing.JLabel btnAgregar;
     private javax.swing.JLabel btnClose;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel3;
@@ -417,6 +436,7 @@ public class EditVentaDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lbCodigo;
     private javax.swing.JLabel lbDescripcion;
+    private javax.swing.JLabel lbExistencia;
     private javax.swing.JLabel lbUnidades;
     private javax.swing.JPanel pnBarra;
     private javax.swing.JTextField txtCantidad;
