@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class NoJpaConection {
     private static Connection conec;
@@ -43,6 +45,7 @@ public class NoJpaConection {
             Class.forName(driver);
             String url = "jdbc:mysql://"+ip+":"+port+"/"+database;
             conec = DriverManager.getConnection(url, user , password);
+            System.out.println("La conexion noJpa ha sido abierta");
             }catch(ClassNotFoundException | SQLException ex){
                 System.out.print(ex.getMessage());
             }
@@ -62,9 +65,14 @@ public class NoJpaConection {
         return c;
     }
     
-    public void closeConec() throws SQLException
+    public void closeConec()
     {
-        conec.close();
-        conec = null;
+        try {
+            conec.close();
+            conec = null;
+            System.out.println("La conexion NoJpa ha sido cerrada");
+        } catch (SQLException ex) {
+            System.out.print(ex.getMessage());
+        }
     }
 }

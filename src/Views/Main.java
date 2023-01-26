@@ -2,6 +2,7 @@ package Views;
 
 import Resource.Conection;
 import Resource.LocalConection;
+import Resource.NoJpaConection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import ViewsControllers.MainViewController;
@@ -57,9 +58,6 @@ public class Main extends javax.swing.JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
-            }
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
             }
         });
 
@@ -294,10 +292,6 @@ public class Main extends javax.swing.JFrame {
         MainVC.cerrasSesion();
     }//GEN-LAST:event_btnCerrarSesionMouseClicked
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-
-    }//GEN-LAST:event_formWindowOpened
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         if(Dialogs.ShowOKCancelDialog("Si sale su sesion se cerrara automaticamente ¿Desea continuar?", Dialogs.WARNING_ICON)){
@@ -305,6 +299,7 @@ public class Main extends javax.swing.JFrame {
             if(Conection.CreateEntityManager().isOpen()){
                 Conection.Disconnect(Conection.CreateEntityManager().createEntityManager());
             }
+            new NoJpaConection().closeConec();
             new LocalConection().closeConection();
             MainVC.waitCloseProcess();
         }

@@ -87,7 +87,8 @@ public class Reports {
                 Map<String, Object> map = new HashMap<>();
                 map.put("Usuario", Usuario);
                 JasperPrint print = JasperFillManager.fillReport(jr, map, new NoJpaConection().getconec());
-                JasperPrintManager.printReport(print, true);
+                
+                JasperPrintManager.printReport(print, false);
             }else
             {
                 //Mensaje a mostrar en caso de no encontrar archio modelo

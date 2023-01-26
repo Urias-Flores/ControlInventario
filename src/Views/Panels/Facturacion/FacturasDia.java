@@ -11,6 +11,7 @@ public class FacturasDia extends javax.swing.JPanel {
         initComponents();
         lbActualizar.addMouseListener(Utilities.getMLGrayButton());
         btnImprimir.addMouseListener(Utilities.getMLGeneralButton());
+        btnImprimirReporte.addMouseListener(Utilities.getMLGeneralButton());
         btnEliminar.addMouseListener(Utilities.getMLGeneralButton());
         
         vc = new FacturasDiaViewController(cmbCliente, tbFacturas, tbVistaPreeliminar, txtSubtotal, txtDescuento, txtImporte, txtISV, txtTotal, txtCargando);
@@ -31,6 +32,7 @@ public class FacturasDia extends javax.swing.JPanel {
         tbFacturas = new javax.swing.JTable();
         btnImprimir = new javax.swing.JLabel();
         btnEliminar = new javax.swing.JLabel();
+        btnImprimirReporte = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -115,6 +117,19 @@ public class FacturasDia extends javax.swing.JPanel {
             }
         });
 
+        btnImprimirReporte.setBackground(new java.awt.Color(3, 57, 103));
+        btnImprimirReporte.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        btnImprimirReporte.setForeground(new java.awt.Color(255, 255, 255));
+        btnImprimirReporte.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnImprimirReporte.setText("Imprimir reporte");
+        btnImprimirReporte.setToolTipText("Administrar marcas");
+        btnImprimirReporte.setOpaque(true);
+        btnImprimirReporte.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnImprimirReporteMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -123,13 +138,15 @@ public class FacturasDia extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 809, Short.MAX_VALUE)
+                        .addGap(18, 18, 18))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnImprimirReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 809, Short.MAX_VALUE)
-                        .addGap(18, 18, 18))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,7 +156,8 @@ public class FacturasDia extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnImprimirReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18))
         );
 
@@ -279,11 +297,6 @@ public class FacturasDia extends javax.swing.JPanel {
         txtCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         txtCargando.setToolTipText("Actualizar lista");
         txtCargando.setOpaque(true);
-        txtCargando.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtCargandoMouseClicked(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -349,14 +362,15 @@ public class FacturasDia extends javax.swing.JPanel {
         vc.CargarFactura();
     }//GEN-LAST:event_tbFacturasMousePressed
 
-    private void txtCargandoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCargandoMouseClicked
+    private void btnImprimirReporteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnImprimirReporteMouseClicked
         
-    }//GEN-LAST:event_txtCargandoMouseClicked
+    }//GEN-LAST:event_btnImprimirReporteMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnEliminar;
     private javax.swing.JLabel btnImprimir;
+    private javax.swing.JLabel btnImprimirReporte;
     private javax.swing.JComboBox<String> cmbCliente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
