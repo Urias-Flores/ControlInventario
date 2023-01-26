@@ -9,9 +9,11 @@ import Reports.Reports;
 import Resource.Conection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
+import java.text.DecimalFormat;
 import java.util.List;
 import javax.persistence.Query;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
@@ -20,16 +22,20 @@ import javax.swing.table.TableRowSorter;
 
 public class InventarioViewController {
     
-    JTextField Buscar;
-    JTable Inventario;
-    JComboBox<Marca> Marcas;
-    JComboBox<Categoria> Categorias;
+    private JTextField Buscar;
+    private JTable Inventario;
+    private JComboBox<Marca> Marcas;
+    private JComboBox<Categoria> Categorias;
+    private JLabel Total;
+    private JLabel CantidadTotal;
 
-    public InventarioViewController(JTextField Buscar, JTable Inventario, JComboBox Marcas, JComboBox Categorias) {
+    public InventarioViewController(JTextField Buscar, JTable Inventario, JComboBox Marcas, JComboBox Categorias, JLabel Total, JLabel CantidadTotal) {
         this.Buscar = Buscar;
         this.Inventario = Inventario;
         this.Marcas = Marcas;
         this.Categorias = Categorias;
+        this.Total = Total;
+        this.CantidadTotal = CantidadTotal;
     }
     
     public void CargarInventario(){
@@ -41,16 +47,7 @@ public class InventarioViewController {
         List<Object[]> l = query.getResultList();
         
         l.forEach(inventario -> {
-            Object[] row = { 
-                inventario[0],
-                inventario[1],
-                inventario[2],
-                inventario[3],
-                inventario[4],
-                inventario[5],
-                inventario[6]
-            };
-            model.addRow(row);
+            model.addRow(inventario);
         });
         
         Inventario.setModel(model);
@@ -62,6 +59,21 @@ public class InventarioViewController {
         Inventario.getColumn("Categoria").setPreferredWidth(130);
         Inventario.getColumn("Precio/Compra").setPreferredWidth(80);
         Inventario.getColumn("Existencia").setPreferredWidth(40);
+        
+        updateTotales();
+    }
+    
+    private void updateTotales(){
+        float total = 0;
+        float cantidadTotal = 0;
+        
+        for(int i = 0; i < Inventario.getRowCount(); i ++){
+            total += (Float.parseFloat(Inventario.getValueAt(i, 5).toString()) * Float.parseFloat(Inventario.getValueAt(i, 6).toString()));
+            cantidadTotal += Float.parseFloat(Inventario.getValueAt(i, 6).toString());
+        }
+        
+        Total.setText(getNumberFormat(total));
+        CantidadTotal.setText(String.valueOf(cantidadTotal));
     }
     
     public void CargarMarcas(){
@@ -139,5 +151,10 @@ public class InventarioViewController {
         }else{
             Dialogs.ShowMessageDialog("Seleccione una elemento de la lista", Dialogs.ERROR_ICON);
         }
+    }
+    
+    private String getNumberFormat(float Value){
+        DecimalFormat format = new DecimalFormat("#,##0.00");
+        return format.format(Value);
     }
 }
