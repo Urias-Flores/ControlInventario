@@ -325,7 +325,8 @@ WHERE v.VentaID = $P{VentaID}]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="11" splitType="Stretch">
+		<band height="11" splitType="Prevent">
+			<property name="com.jaspersoft.studio.layout"/>
 			<textField>
 				<reportElement x="-8" y="0" width="95" height="11" uuid="bfcc8848-a34a-4649-9882-2e330f917d13">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4fcd8b89-7fb3-4ae3-93be-caef3c8fad24"/>
@@ -507,6 +508,8 @@ WHERE v.VentaID = $P{VentaID}]]>
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="12" splitType="Stretch"/>
+		<band splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
 	</summary>
 </jasperReport>
