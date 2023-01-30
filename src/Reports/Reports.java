@@ -1,37 +1,21 @@
 package Reports;
 
+import Controllers.LocalDataController;
 import Resource.NoJpaConection;
 import Views.Dialogs.Dialogs;
 import java.awt.Desktop;
-import java.awt.PrintJob;
 import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.Copies;
-import javax.print.attribute.standard.MediaPrintableArea;
-import javax.print.attribute.standard.MediaSize;
-import javax.print.attribute.standard.MediaSizeName;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.export.JRPrintServiceExporter;
-import net.sf.jasperreports.engine.export.JRPrintServiceExporterParameter;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 public class Reports {
@@ -43,9 +27,19 @@ public class Reports {
             {
                 JasperReport jr = JasperCompileManager.compileReport("reports/FacturaVenta.jrxml");
                 Map<String, Object> map = new HashMap<>();
+                LocalDataController ldc = new LocalDataController();
+                
                 map.put("VentaID", VentaID);
+                map.put("NombreTienda", ldc.getValue("Company"));
+                map.put("RNT", ldc.getValue("RTN"));
+                map.put("NumeroTelefono", ldc.getValue("NumberPhone"));
+                map.put("Direccion", ldc.getValue("Address"));
+                
                 JasperPrint print = JasperFillManager.fillReport(jr, map, new NoJpaConection().getconec());
-                JasperPrintManager.printReport(print, true);
+                JasperExportManager.exportReportToPdfFile(print, "temp/tempTikect.pdf");
+                
+                Desktop desktop = Desktop.getDesktop();
+                desktop.open(new File("temp/tempTikect.pdf"));
             }else
             {
                 Dialogs.ShowMessageDialog("El archivo de modelo de factura no fue encontrado", Dialogs.ERROR_ICON);
@@ -53,6 +47,9 @@ public class Reports {
         } catch (JRException ex) {
             System.err.println("Error: "+ex.getMessage());
             Dialogs.ShowMessageDialog("Ups... Ha ocurrido un error al enviar a imprimir", Dialogs.ERROR_ICON);
+        } catch (IOException ex) {
+            System.err.println("Error: "+ex.getMessage());
+            Dialogs.ShowMessageDialog("Error al buscar archivo de impresion", Dialogs.ERROR_ICON);
         }
     }
     
