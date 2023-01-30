@@ -31,7 +31,7 @@ public class Reports {
                 
                 map.put("VentaID", VentaID);
                 map.put("NombreTienda", ldc.getValue("Company"));
-                map.put("RNT", ldc.getValue("RTN"));
+                map.put("RTN", ldc.getValue("RTN"));
                 map.put("NumeroTelefono", ldc.getValue("NumberPhone"));
                 map.put("Direccion", ldc.getValue("Address"));
                 

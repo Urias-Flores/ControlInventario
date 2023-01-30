@@ -301,6 +301,7 @@ public class Main extends javax.swing.JFrame {
             }
             new NoJpaConection().closeConec();
             new LocalConection().closeConection();
+            this.setVisible(false);
             MainVC.waitCloseProcess();
         }
     }//GEN-LAST:event_formWindowClosing

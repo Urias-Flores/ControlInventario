@@ -4,6 +4,7 @@ import Controllers.LocalDataController;
 import Resource.Utilities;
 import Views.Login;
 import Views.Panels.Ajustes.Email;
+import Views.Panels.Ajustes.Empresa;
 import Views.Panels.Ajustes.Reportes;
 import Views.Panels.Control.Compras;
 import Views.Panels.Control.Inventario;
@@ -122,14 +123,17 @@ public class MainViewController {
                     //General general = new General();
                     Reportes reportes = new Reportes();
                     Email email = new Email();
+                    Empresa empresa = new Empresa();
                     
                     //Icon AjustesGeneralIcon = new ImageIcon(getClass().getResource("/Icons/ajustes.png"));
                     Icon AjustesReportesIcon = new ImageIcon(getClass().getResource("/Icons/reporte.png"));
                     Icon AjustesEmailIcon = new ImageIcon(getClass().getResource("/Icons/correo.png"));
+                    Icon AjustesEmpresaIcon = new ImageIcon(getClass().getResource("/Icons/empresa.png"));
                     
                     //Principal.addTab("General", AjustesGeneralIcon, general);
                     Principal.addTab("Reportes", AjustesReportesIcon, reportes);
                     Principal.addTab("Correo electronico", AjustesEmailIcon, email);
+                    Principal.addTab("Empresa", AjustesEmpresaIcon, empresa);
                     
                     break;
             }
