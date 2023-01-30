@@ -6,7 +6,6 @@ import Controllers.exceptions.NonexistentEntityException;
 import Models.Producto;
 import Resource.Conection;
 import Views.Dialogs.Dialogs;
-import static java.awt.image.ImageObserver.PROPERTIES;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -29,7 +28,7 @@ public class ProductoViewController {
 
     public void cargarProductos() {
         DefaultTableModel model = new DefaultTableModel();
-        String[] columns = {"Codigo", "Descripcion", "Marca", "Categoria", "Barra", "Unidad", "Pr.Compra", "Pr.Venta"};
+        String[] columns = {"Codigo", "Descripcion", "Marca", "Categoria", "Barra", "Unidad"};
         model.setColumnIdentifiers(columns);
         List<Producto> productos = new ProductoJpaController(Conection.CreateEntityManager()).findProductoEntities();
 
@@ -40,23 +39,19 @@ public class ProductoViewController {
                 producto.getMarcaID(),
                 producto.getCategoriaID(),
                 producto.getBarra(),
-                producto.getUnidad(),
-                producto.getPrecioCompra(),
-                producto.getPrecioVenta()
+                producto.getUnidad()
             };
             model.addRow(row);
         });
 
         Productos.setModel(model);
         
-        Productos.getColumn("Codigo").setPreferredWidth(10);
-        Productos.getColumn("Descripcion").setPreferredWidth(400);
-        Productos.getColumn("Marca").setPreferredWidth(70);
-        Productos.getColumn("Categoria").setPreferredWidth(70);
+        Productos.getColumn("Codigo").setPreferredWidth(5);
+        Productos.getColumn("Descripcion").setPreferredWidth(380);
+        Productos.getColumn("Marca").setPreferredWidth(90);
+        Productos.getColumn("Categoria").setPreferredWidth(120);
         Productos.getColumn("Barra").setPreferredWidth(100);
-        Productos.getColumn("Unidad").setPreferredWidth(60);
-        Productos.getColumn("Pr.Compra").setPreferredWidth(30);
-        Productos.getColumn("Pr.Venta").setPreferredWidth(30);
+        Productos.getColumn("Unidad").setPreferredWidth(40);
     }
 
     public void buscar() {
@@ -93,6 +88,15 @@ public class ProductoViewController {
             cargarProductos();
         }else{
             Dialogs.ShowMessageDialog("Seleccion un producto para modificar de la lista", Dialogs.ERROR_ICON);
+        }
+    }
+    
+    public void ShowInfoProducto(){
+        int fila = Productos.getSelectedRow();
+        if(fila >= 0){
+            Dialogs.ShowInfoProducto(Integer.parseInt(Productos.getValueAt(fila, 0).toString()));
+        }else{
+            Dialogs.ShowMessageDialog("Seleccione un producto de la lista", Dialogs.ERROR_ICON);
         }
     }
 }

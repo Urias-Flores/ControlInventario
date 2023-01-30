@@ -366,7 +366,7 @@ WHERE v.VentaID = $P{VentaID}]]>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="57" splitType="Stretch">
+		<band height="62" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<line>
 				<reportElement x="-8" y="0" width="202" height="1" forecolor="#B4B4B4" uuid="830c79d5-0416-42d3-9e95-57fc4369df81"/>
@@ -417,7 +417,7 @@ WHERE v.VentaID = $P{VentaID}]]>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
-					<font size="8"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{Total}]]></textFieldExpression>
 			</textField>
@@ -462,7 +462,7 @@ WHERE v.VentaID = $P{VentaID}]]>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
-					<font size="8"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total:]]></text>
 			</staticText>
@@ -477,6 +477,9 @@ WHERE v.VentaID = $P{VentaID}]]>
 			</line>
 			<line>
 				<reportElement x="145" y="0" width="1" height="56" forecolor="#B4B4B4" uuid="c4e392d2-4ce1-4687-b308-87b9f6c47198"/>
+			</line>
+			<line>
+				<reportElement x="-8" y="45" width="202" height="1" forecolor="#B4B4B4" uuid="26e23263-4785-4a5f-a06d-9b83a5d3b1ea"/>
 			</line>
 		</band>
 	</columnFooter>

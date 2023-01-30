@@ -8,8 +8,8 @@ Models/Proveedor_.java
 Models/Inventariodetalleacciones_.java
 Models/Marca_.java
 Models/Compradetalle_.java
-Models/Empleado_.java
 Models/Configuracion_.java
+Models/Empleado_.java
 Models/Cotizacion_.java
 Models/Cliente_.java
 Models/Producto_.java

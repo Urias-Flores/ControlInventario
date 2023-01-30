@@ -22,10 +22,10 @@ public class Reports {
     public void GenerateTickeVenta(int VentaID)
     {
         try {
-            File archivo = new File("reports/FacturaVenta.jrxml");
+            File archivo = new File("reports/FacturaVenta.jasper");
             if(archivo.exists())
             {
-                JasperReport jr = JasperCompileManager.compileReport("reports/FacturaVenta.jrxml");
+                JasperReport jr = (JasperReport) JRLoader.loadObject(archivo);
                 Map<String, Object> map = new HashMap<>();
                 LocalDataController ldc = new LocalDataController();
                 

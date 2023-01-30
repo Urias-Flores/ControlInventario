@@ -50,6 +50,13 @@ public class Dialogs {
         pd.dispose();
     }
     
+    public static void ShowInfoProducto(int ProductoID){
+        InfoProductoDialog ipd = new InfoProductoDialog(null, true);
+        ipd.cargarProducto(ProductoID);
+        ipd.setVisible(true);
+        ipd.dispose();
+    }
+    
     public static Object[] ShowAddCompraDialog(){
         AddCompraDialog cd = new AddCompraDialog(null, true);
         cd.setVisible(true);

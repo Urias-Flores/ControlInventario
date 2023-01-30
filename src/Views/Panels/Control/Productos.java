@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 
 public class Productos extends javax.swing.JPanel {
 
-    ProductoViewController vc;
+    private ProductoViewController vc;
     
     public Productos() {
         initComponents();
@@ -23,6 +23,7 @@ public class Productos extends javax.swing.JPanel {
         listButtons.add(btnEliminar);
         listButtons.add(btnModificar);
         btnActualizar.addMouseListener(Utilities.getMLGrayButton());
+        btnInformacion.addMouseListener(Utilities.getMLGrayButton());
         txtBuscar.addFocusListener(Utilities.getFLSearchTextField());
         
         listButtons.forEach((btn) -> {
@@ -48,6 +49,7 @@ public class Productos extends javax.swing.JPanel {
         btnAgregar = new javax.swing.JLabel();
         btnEliminar = new javax.swing.JLabel();
         btnModificar = new javax.swing.JLabel();
+        btnInformacion = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -56,7 +58,6 @@ public class Productos extends javax.swing.JPanel {
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(220, 220, 220)));
 
-        tbProductos.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         tbProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -161,6 +162,18 @@ public class Productos extends javax.swing.JPanel {
             }
         });
 
+        btnInformacion.setBackground(new java.awt.Color(255, 255, 255));
+        btnInformacion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnInformacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/informacion.png"))); // NOI18N
+        btnInformacion.setToolTipText("Ver informacion completa");
+        btnInformacion.setOpaque(true);
+        btnInformacion.setPreferredSize(new java.awt.Dimension(38, 38));
+        btnInformacion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnInformacionMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -185,7 +198,9 @@ public class Productos extends javax.swing.JPanel {
                                 .addComponent(btnAdmMarcas, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnAdmCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 287, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 237, Short.MAX_VALUE)
+                                .addComponent(btnInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -202,7 +217,8 @@ public class Productos extends javax.swing.JPanel {
                     .addComponent(txtBuscar)
                     .addComponent(btnAdmMarcas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnAdmCategorias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnInformacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
@@ -254,6 +270,10 @@ public class Productos extends javax.swing.JPanel {
         vc.Editar();
     }//GEN-LAST:event_btnModificarMouseClicked
 
+    private void btnInformacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInformacionMouseClicked
+        vc.ShowInfoProducto();
+    }//GEN-LAST:event_btnInformacionMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnActualizar;
@@ -261,6 +281,7 @@ public class Productos extends javax.swing.JPanel {
     private javax.swing.JLabel btnAdmMarcas;
     private javax.swing.JLabel btnAgregar;
     private javax.swing.JLabel btnEliminar;
+    private javax.swing.JLabel btnInformacion;
     private javax.swing.JLabel btnModificar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
