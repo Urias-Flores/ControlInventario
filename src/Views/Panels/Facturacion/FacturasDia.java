@@ -363,7 +363,7 @@ public class FacturasDia extends javax.swing.JPanel {
     }//GEN-LAST:event_tbFacturasMousePressed
 
     private void btnImprimirReporteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnImprimirReporteMouseClicked
-        
+        vc.ImprimirReporte();
     }//GEN-LAST:event_btnImprimirReporteMouseClicked
 
 

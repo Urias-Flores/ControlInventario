@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Models;
 
 import java.io.Serializable;
@@ -56,13 +60,15 @@ public class Compra implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechaVencimiento;
     @JoinColumn(name = "ProveedorID", referencedColumnName = "ProveedorID")
-    @ManyToOne(optional = true)
+    @ManyToOne
     private Proveedor proveedorID;
     @JoinColumn(name = "UsuarioID", referencedColumnName = "UsuarioID")
     @ManyToOne(optional = false)
     private Usuario usuarioID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "compraID")
     private List<Compradetalle> compradetalleList;
+    @OneToMany(mappedBy = "compraID")
+    private List<Abono> abonoList;
 
     public Compra() {
     }
@@ -158,6 +164,15 @@ public class Compra implements Serializable {
 
     public void setCompradetalleList(List<Compradetalle> compradetalleList) {
         this.compradetalleList = compradetalleList;
+    }
+
+    @XmlTransient
+    public List<Abono> getAbonoList() {
+        return abonoList;
+    }
+
+    public void setAbonoList(List<Abono> abonoList) {
+        this.abonoList = abonoList;
     }
 
     @Override

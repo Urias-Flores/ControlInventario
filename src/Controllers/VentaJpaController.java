@@ -13,10 +13,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import Models.Cliente;
 import Models.Usuario;
+import Models.Abono;
 import Models.Venta;
-import Models.Ventadetalle;
 import java.util.ArrayList;
 import java.util.List;
+import Models.Ventadetalle;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -36,6 +37,9 @@ public class VentaJpaController implements Serializable {
     }
 
     public int create(Venta venta) {
+        if (venta.getAbonoList() == null) {
+            venta.setAbonoList(new ArrayList<Abono>());
+        }
         if (venta.getVentadetalleList() == null) {
             venta.setVentadetalleList(new ArrayList<Ventadetalle>());
         }
@@ -53,6 +57,12 @@ public class VentaJpaController implements Serializable {
                 usuarioID = em.getReference(usuarioID.getClass(), usuarioID.getUsuarioID());
                 venta.setUsuarioID(usuarioID);
             }
+            List<Abono> attachedAbonoList = new ArrayList<Abono>();
+            for (Abono abonoListAbonoToAttach : venta.getAbonoList()) {
+                abonoListAbonoToAttach = em.getReference(abonoListAbonoToAttach.getClass(), abonoListAbonoToAttach.getAbonoID());
+                attachedAbonoList.add(abonoListAbonoToAttach);
+            }
+            venta.setAbonoList(attachedAbonoList);
             List<Ventadetalle> attachedVentadetalleList = new ArrayList<Ventadetalle>();
             for (Ventadetalle ventadetalleListVentadetalleToAttach : venta.getVentadetalleList()) {
                 ventadetalleListVentadetalleToAttach = em.getReference(ventadetalleListVentadetalleToAttach.getClass(), ventadetalleListVentadetalleToAttach.getVentaDetalleID());
@@ -68,6 +78,15 @@ public class VentaJpaController implements Serializable {
                 usuarioID.getVentaList().add(venta);
                 usuarioID = em.merge(usuarioID);
             }
+            for (Abono abonoListAbono : venta.getAbonoList()) {
+                Venta oldVentaIDOfAbonoListAbono = abonoListAbono.getVentaID();
+                abonoListAbono.setVentaID(venta);
+                abonoListAbono = em.merge(abonoListAbono);
+                if (oldVentaIDOfAbonoListAbono != null) {
+                    oldVentaIDOfAbonoListAbono.getAbonoList().remove(abonoListAbono);
+                    oldVentaIDOfAbonoListAbono = em.merge(oldVentaIDOfAbonoListAbono);
+                }
+            }
             for (Ventadetalle ventadetalleListVentadetalle : venta.getVentadetalleList()) {
                 Venta oldVentaIDOfVentadetalleListVentadetalle = ventadetalleListVentadetalle.getVentaID();
                 ventadetalleListVentadetalle.setVentaID(venta);
@@ -77,8 +96,8 @@ public class VentaJpaController implements Serializable {
                     oldVentaIDOfVentadetalleListVentadetalle = em.merge(oldVentaIDOfVentadetalleListVentadetalle);
                 }
             }
-            em.flush();
             em.getTransaction().commit();
+            em.flush();
             return venta.getVentaID();
         } finally {
             if (em != null) {
@@ -97,6 +116,8 @@ public class VentaJpaController implements Serializable {
             Cliente clienteIDNew = venta.getClienteID();
             Usuario usuarioIDOld = persistentVenta.getUsuarioID();
             Usuario usuarioIDNew = venta.getUsuarioID();
+            List<Abono> abonoListOld = persistentVenta.getAbonoList();
+            List<Abono> abonoListNew = venta.getAbonoList();
             List<Ventadetalle> ventadetalleListOld = persistentVenta.getVentadetalleList();
             List<Ventadetalle> ventadetalleListNew = venta.getVentadetalleList();
             List<String> illegalOrphanMessages = null;
@@ -119,6 +140,13 @@ public class VentaJpaController implements Serializable {
                 usuarioIDNew = em.getReference(usuarioIDNew.getClass(), usuarioIDNew.getUsuarioID());
                 venta.setUsuarioID(usuarioIDNew);
             }
+            List<Abono> attachedAbonoListNew = new ArrayList<Abono>();
+            for (Abono abonoListNewAbonoToAttach : abonoListNew) {
+                abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
+                attachedAbonoListNew.add(abonoListNewAbonoToAttach);
+            }
+            abonoListNew = attachedAbonoListNew;
+            venta.setAbonoList(abonoListNew);
             List<Ventadetalle> attachedVentadetalleListNew = new ArrayList<Ventadetalle>();
             for (Ventadetalle ventadetalleListNewVentadetalleToAttach : ventadetalleListNew) {
                 ventadetalleListNewVentadetalleToAttach = em.getReference(ventadetalleListNewVentadetalleToAttach.getClass(), ventadetalleListNewVentadetalleToAttach.getVentaDetalleID());
@@ -142,6 +170,34 @@ public class VentaJpaController implements Serializable {
             if (usuarioIDNew != null && !usuarioIDNew.equals(usuarioIDOld)) {
                 usuarioIDNew.getVentaList().add(venta);
                 usuarioIDNew = em.merge(usuarioIDNew);
+            }
+            for (Abono abonoListOldAbono : abonoListOld) {
+                if (!abonoListNew.contains(abonoListOldAbono)) {
+                    abonoListOldAbono.setVentaID(null);
+                    abonoListOldAbono = em.merge(abonoListOldAbono);
+                }
+            }
+            for (Abono abonoListNewAbono : abonoListNew) {
+                if (!abonoListOld.contains(abonoListNewAbono)) {
+                    Venta oldVentaIDOfAbonoListNewAbono = abonoListNewAbono.getVentaID();
+                    abonoListNewAbono.setVentaID(venta);
+                    abonoListNewAbono = em.merge(abonoListNewAbono);
+                    if (oldVentaIDOfAbonoListNewAbono != null && !oldVentaIDOfAbonoListNewAbono.equals(venta)) {
+                        oldVentaIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
+                        oldVentaIDOfAbonoListNewAbono = em.merge(oldVentaIDOfAbonoListNewAbono);
+                    }
+                }
+            }
+            for (Ventadetalle ventadetalleListNewVentadetalle : ventadetalleListNew) {
+                if (!ventadetalleListOld.contains(ventadetalleListNewVentadetalle)) {
+                    Venta oldVentaIDOfVentadetalleListNewVentadetalle = ventadetalleListNewVentadetalle.getVentaID();
+                    ventadetalleListNewVentadetalle.setVentaID(venta);
+                    ventadetalleListNewVentadetalle = em.merge(ventadetalleListNewVentadetalle);
+                    if (oldVentaIDOfVentadetalleListNewVentadetalle != null && !oldVentaIDOfVentadetalleListNewVentadetalle.equals(venta)) {
+                        oldVentaIDOfVentadetalleListNewVentadetalle.getVentadetalleList().remove(ventadetalleListNewVentadetalle);
+                        oldVentaIDOfVentadetalleListNewVentadetalle = em.merge(oldVentaIDOfVentadetalleListNewVentadetalle);
+                    }
+                }
             }
             em.getTransaction().commit();
         } catch (IllegalOrphanException ex) {
@@ -192,6 +248,11 @@ public class VentaJpaController implements Serializable {
             if (usuarioID != null) {
                 usuarioID.getVentaList().remove(venta);
                 usuarioID = em.merge(usuarioID);
+            }
+            List<Abono> abonoList = venta.getAbonoList();
+            for (Abono abonoListAbono : abonoList) {
+                abonoListAbono.setVentaID(null);
+                abonoListAbono = em.merge(abonoListAbono);
             }
             em.remove(venta);
             em.getTransaction().commit();

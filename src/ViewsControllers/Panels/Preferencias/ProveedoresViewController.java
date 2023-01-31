@@ -101,7 +101,7 @@ public class ProveedoresViewController {
                     controller.destroy(Integer.valueOf(Proveedores.getValueAt(fila, 0).toString()));
                     CargarProveedores();
                     Dialogs.ShowMessageDialog("El proveedor ha sido eliminado exitosamente", Dialogs.COMPLETE_ICON);
-                } catch (NonexistentEntityException | IllegalOrphanException ex) {
+                } catch (NonexistentEntityException ex) {
                     Dialogs.ShowMessageDialog("Proveedore no pudo ser eliminada, exista una relacion con este dato", Dialogs.ERROR_ICON);
                 }
            }

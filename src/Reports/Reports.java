@@ -1,6 +1,6 @@
 package Reports;
 
-import Controllers.LocalDataController;
+import Resource.LocalDataController;
 import Resource.NoJpaConection;
 import Views.Dialogs.Dialogs;
 import java.awt.Desktop;

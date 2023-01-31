@@ -11,6 +11,7 @@ import Models.Venta;
 import Models.Ventadetalle;
 import Reports.Reports;
 import Resource.Conection;
+import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -163,7 +164,18 @@ public class FacturasDiaViewController {
         }else{
             Dialogs.ShowMessageDialog("Seleccione una factura de la lista", Dialogs.ERROR_ICON);
         }   
-    } 
+    }
+    
+    public void ImprimirReporte(){
+        Cargando.setIcon(new ImageIcon(getClass().getResource("/Icons/cargando32px.gif")));
+        Runnable run = ()->{
+            Reports reports = new Reports();
+            reports.GenerateVentasReport(Utilities.getUsuarioActual().getNombre(), Utilities.getDate(), Utilities.getDate());
+            Cargando.setIcon(null);
+        };
+        Thread thread = new Thread(run);
+        thread.start();
+    }
     
     public void Eliminar(){
         int fila = Facturas.getSelectedRow();

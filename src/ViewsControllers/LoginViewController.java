@@ -1,6 +1,6 @@
 package ViewsControllers;
 
-import Controllers.LocalDataController;
+import Resource.LocalDataController;
 import Resource.Utilities;
 import Views.Main;
 import java.awt.Color;

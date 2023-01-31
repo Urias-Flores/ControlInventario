@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import Models.Compra;
 import Models.Venta;
+import Models.Abono;
 import Models.Cotizacion;
 import Models.Usuario;
 import javax.persistence.EntityManager;
@@ -46,6 +47,9 @@ public class UsuarioJpaController implements Serializable {
         }
         if (usuario.getVentaList() == null) {
             usuario.setVentaList(new ArrayList<Venta>());
+        }
+        if (usuario.getAbonoList() == null) {
+            usuario.setAbonoList(new ArrayList<Abono>());
         }
         if (usuario.getCotizacionList() == null) {
             usuario.setCotizacionList(new ArrayList<Cotizacion>());
@@ -77,6 +81,12 @@ public class UsuarioJpaController implements Serializable {
                 attachedVentaList.add(ventaListVentaToAttach);
             }
             usuario.setVentaList(attachedVentaList);
+            List<Abono> attachedAbonoList = new ArrayList<Abono>();
+            for (Abono abonoListAbonoToAttach : usuario.getAbonoList()) {
+                abonoListAbonoToAttach = em.getReference(abonoListAbonoToAttach.getClass(), abonoListAbonoToAttach.getAbonoID());
+                attachedAbonoList.add(abonoListAbonoToAttach);
+            }
+            usuario.setAbonoList(attachedAbonoList);
             List<Cotizacion> attachedCotizacionList = new ArrayList<Cotizacion>();
             for (Cotizacion cotizacionListCotizacionToAttach : usuario.getCotizacionList()) {
                 cotizacionListCotizacionToAttach = em.getReference(cotizacionListCotizacionToAttach.getClass(), cotizacionListCotizacionToAttach.getCotizacionID());
@@ -115,6 +125,15 @@ public class UsuarioJpaController implements Serializable {
                     oldUsuarioIDOfVentaListVenta = em.merge(oldUsuarioIDOfVentaListVenta);
                 }
             }
+            for (Abono abonoListAbono : usuario.getAbonoList()) {
+                Usuario oldUsuarioIDOfAbonoListAbono = abonoListAbono.getUsuarioID();
+                abonoListAbono.setUsuarioID(usuario);
+                abonoListAbono = em.merge(abonoListAbono);
+                if (oldUsuarioIDOfAbonoListAbono != null) {
+                    oldUsuarioIDOfAbonoListAbono.getAbonoList().remove(abonoListAbono);
+                    oldUsuarioIDOfAbonoListAbono = em.merge(oldUsuarioIDOfAbonoListAbono);
+                }
+            }
             for (Cotizacion cotizacionListCotizacion : usuario.getCotizacionList()) {
                 Usuario oldUsuarioIDOfCotizacionListCotizacion = cotizacionListCotizacion.getUsuarioID();
                 cotizacionListCotizacion.setUsuarioID(usuario);
@@ -146,6 +165,8 @@ public class UsuarioJpaController implements Serializable {
             List<Compra> compraListNew = usuario.getCompraList();
             List<Venta> ventaListOld = persistentUsuario.getVentaList();
             List<Venta> ventaListNew = usuario.getVentaList();
+            List<Abono> abonoListOld = persistentUsuario.getAbonoList();
+            List<Abono> abonoListNew = usuario.getAbonoList();
             List<Cotizacion> cotizacionListOld = persistentUsuario.getCotizacionList();
             List<Cotizacion> cotizacionListNew = usuario.getCotizacionList();
             List<String> illegalOrphanMessages = null;
@@ -171,6 +192,14 @@ public class UsuarioJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain Venta " + ventaListOldVenta + " since its usuarioID field is not nullable.");
+                }
+            }
+            for (Abono abonoListOldAbono : abonoListOld) {
+                if (!abonoListNew.contains(abonoListOldAbono)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Abono " + abonoListOldAbono + " since its usuarioID field is not nullable.");
                 }
             }
             for (Cotizacion cotizacionListOldCotizacion : cotizacionListOld) {
@@ -209,6 +238,13 @@ public class UsuarioJpaController implements Serializable {
             }
             ventaListNew = attachedVentaListNew;
             usuario.setVentaList(ventaListNew);
+            List<Abono> attachedAbonoListNew = new ArrayList<Abono>();
+            for (Abono abonoListNewAbonoToAttach : abonoListNew) {
+                abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
+                attachedAbonoListNew.add(abonoListNewAbonoToAttach);
+            }
+            abonoListNew = attachedAbonoListNew;
+            usuario.setAbonoList(abonoListNew);
             List<Cotizacion> attachedCotizacionListNew = new ArrayList<Cotizacion>();
             for (Cotizacion cotizacionListNewCotizacionToAttach : cotizacionListNew) {
                 cotizacionListNewCotizacionToAttach = em.getReference(cotizacionListNewCotizacionToAttach.getClass(), cotizacionListNewCotizacionToAttach.getCotizacionID());
@@ -255,6 +291,17 @@ public class UsuarioJpaController implements Serializable {
                     if (oldUsuarioIDOfVentaListNewVenta != null && !oldUsuarioIDOfVentaListNewVenta.equals(usuario)) {
                         oldUsuarioIDOfVentaListNewVenta.getVentaList().remove(ventaListNewVenta);
                         oldUsuarioIDOfVentaListNewVenta = em.merge(oldUsuarioIDOfVentaListNewVenta);
+                    }
+                }
+            }
+            for (Abono abonoListNewAbono : abonoListNew) {
+                if (!abonoListOld.contains(abonoListNewAbono)) {
+                    Usuario oldUsuarioIDOfAbonoListNewAbono = abonoListNewAbono.getUsuarioID();
+                    abonoListNewAbono.setUsuarioID(usuario);
+                    abonoListNewAbono = em.merge(abonoListNewAbono);
+                    if (oldUsuarioIDOfAbonoListNewAbono != null && !oldUsuarioIDOfAbonoListNewAbono.equals(usuario)) {
+                        oldUsuarioIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
+                        oldUsuarioIDOfAbonoListNewAbono = em.merge(oldUsuarioIDOfAbonoListNewAbono);
                     }
                 }
             }
@@ -319,6 +366,13 @@ public class UsuarioJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Venta " + ventaListOrphanCheckVenta + " in its ventaList field has a non-nullable usuarioID field.");
+            }
+            List<Abono> abonoListOrphanCheck = usuario.getAbonoList();
+            for (Abono abonoListOrphanCheckAbono : abonoListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Abono " + abonoListOrphanCheckAbono + " in its abonoList field has a non-nullable usuarioID field.");
             }
             List<Cotizacion> cotizacionListOrphanCheck = usuario.getCotizacionList();
             for (Cotizacion cotizacionListOrphanCheckCotizacion : cotizacionListOrphanCheck) {

@@ -12,8 +12,18 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Dell/Documents/GitHub/ControlInventario/src/ViewsControllers/Dialogs/AddProductDialogViewController.java</file>
             <file>file:/C:/Users/Dell/Documents/GitHub/ControlInventario/src/Reports/Reports.java</file>
+            <file>file:/C:/Users/Dell/Documents/GitHub/ControlInventario/src/ViewsControllers/Panels/Facturacion/FacturasDiaViewController.java</file>
+            <file>file:/C:/Users/Dell/Documents/GitHub/ControlInventario/src/ViewsControllers/Panels/Facturacion/FacturaViewController.java</file>
+            <file>file:/C:/Users/Dell/Documents/GitHub/ControlInventario/src/ViewsControllers/Panels/Control/ComprasViewController.java</file>
+            <file>file:/C:/Users/Dell/Documents/GitHub/ControlInventario/src/ViewsControllers/Panels/Preferencias/ProveedoresViewController.java</file>
+            <file>file:/C:/Users/Dell/Documents/GitHub/ControlInventario/src/ViewsControllers/Dialogs/CuentasPendientesDialogViewController.java</file>
+            <file>file:/C:/Users/Dell/Documents/GitHub/ControlInventario/src/Resource/Utilities.java</file>
+            <file>file:/C:/Users/Dell/Documents/GitHub/ControlInventario/src/Views/Panels/Facturacion/FacturasDia.java</file>
             <file>file:/C:/Users/Dell/Documents/GitHub/ControlInventario/src/Views/Panels/Control/Productos.java</file>
+            <file>file:/C:/Users/Dell/Documents/GitHub/ControlInventario/src/Models/Abono.java</file>
+            <file>file:/C:/Users/Dell/Documents/GitHub/ControlInventario/src/ViewsControllers/Dialogs/CategoriaDialogViewController.java</file>
         </group>
     </open-files>
 </project-private>

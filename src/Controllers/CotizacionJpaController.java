@@ -20,10 +20,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Dell
- */
 public class CotizacionJpaController implements Serializable {
 
     public CotizacionJpaController(EntityManagerFactory emf) {

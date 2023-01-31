@@ -1,5 +1,5 @@
 
-import Controllers.LocalDataController;
+import Resource.LocalDataController;
 import Resource.LocalConection;
 
 public class TestLocalConection {

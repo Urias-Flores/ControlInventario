@@ -1,8 +1,11 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Controllers;
 
 import Controllers.exceptions.IllegalOrphanException;
 import Controllers.exceptions.NonexistentEntityException;
-import Models.Compra;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -13,6 +16,8 @@ import Models.Usuario;
 import Models.Compradetalle;
 import java.util.ArrayList;
 import java.util.List;
+import Models.Abono;
+import Models.Compra;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -33,7 +38,10 @@ public class CompraJpaController implements Serializable {
 
     public int create(Compra compra) {
         if (compra.getCompradetalleList() == null) {
-            compra.setCompradetalleList(new ArrayList<>());
+            compra.setCompradetalleList(new ArrayList<Compradetalle>());
+        }
+        if (compra.getAbonoList() == null) {
+            compra.setAbonoList(new ArrayList<Abono>());
         }
         EntityManager em = null;
         try {
@@ -55,6 +63,12 @@ public class CompraJpaController implements Serializable {
                 attachedCompradetalleList.add(compradetalleListCompradetalleToAttach);
             }
             compra.setCompradetalleList(attachedCompradetalleList);
+            List<Abono> attachedAbonoList = new ArrayList<Abono>();
+            for (Abono abonoListAbonoToAttach : compra.getAbonoList()) {
+                abonoListAbonoToAttach = em.getReference(abonoListAbonoToAttach.getClass(), abonoListAbonoToAttach.getAbonoID());
+                attachedAbonoList.add(abonoListAbonoToAttach);
+            }
+            compra.setAbonoList(attachedAbonoList);
             em.persist(compra);
             if (proveedorID != null) {
                 proveedorID.getCompraList().add(compra);
@@ -71,6 +85,15 @@ public class CompraJpaController implements Serializable {
                 if (oldCompraIDOfCompradetalleListCompradetalle != null) {
                     oldCompraIDOfCompradetalleListCompradetalle.getCompradetalleList().remove(compradetalleListCompradetalle);
                     oldCompraIDOfCompradetalleListCompradetalle = em.merge(oldCompraIDOfCompradetalleListCompradetalle);
+                }
+            }
+            for (Abono abonoListAbono : compra.getAbonoList()) {
+                Compra oldCompraIDOfAbonoListAbono = abonoListAbono.getCompraID();
+                abonoListAbono.setCompraID(compra);
+                abonoListAbono = em.merge(abonoListAbono);
+                if (oldCompraIDOfAbonoListAbono != null) {
+                    oldCompraIDOfAbonoListAbono.getAbonoList().remove(abonoListAbono);
+                    oldCompraIDOfAbonoListAbono = em.merge(oldCompraIDOfAbonoListAbono);
                 }
             }
             em.flush();
@@ -95,11 +118,13 @@ public class CompraJpaController implements Serializable {
             Usuario usuarioIDNew = compra.getUsuarioID();
             List<Compradetalle> compradetalleListOld = persistentCompra.getCompradetalleList();
             List<Compradetalle> compradetalleListNew = compra.getCompradetalleList();
+            List<Abono> abonoListOld = persistentCompra.getAbonoList();
+            List<Abono> abonoListNew = compra.getAbonoList();
             List<String> illegalOrphanMessages = null;
             for (Compradetalle compradetalleListOldCompradetalle : compradetalleListOld) {
                 if (!compradetalleListNew.contains(compradetalleListOldCompradetalle)) {
                     if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<>();
+                        illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain Compradetalle " + compradetalleListOldCompradetalle + " since its compraID field is not nullable.");
                 }
@@ -115,7 +140,20 @@ public class CompraJpaController implements Serializable {
                 usuarioIDNew = em.getReference(usuarioIDNew.getClass(), usuarioIDNew.getUsuarioID());
                 compra.setUsuarioID(usuarioIDNew);
             }
+            List<Compradetalle> attachedCompradetalleListNew = new ArrayList<Compradetalle>();
+            for (Compradetalle compradetalleListNewCompradetalleToAttach : compradetalleListNew) {
+                compradetalleListNewCompradetalleToAttach = em.getReference(compradetalleListNewCompradetalleToAttach.getClass(), compradetalleListNewCompradetalleToAttach.getCompraDetalleID());
+                attachedCompradetalleListNew.add(compradetalleListNewCompradetalleToAttach);
+            }
+            compradetalleListNew = attachedCompradetalleListNew;
             compra.setCompradetalleList(compradetalleListNew);
+            List<Abono> attachedAbonoListNew = new ArrayList<Abono>();
+            for (Abono abonoListNewAbonoToAttach : abonoListNew) {
+                abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
+                attachedAbonoListNew.add(abonoListNewAbonoToAttach);
+            }
+            abonoListNew = attachedAbonoListNew;
+            compra.setAbonoList(abonoListNew);
             compra = em.merge(compra);
             if (proveedorIDOld != null && !proveedorIDOld.equals(proveedorIDNew)) {
                 proveedorIDOld.getCompraList().remove(compra);
@@ -132,6 +170,34 @@ public class CompraJpaController implements Serializable {
             if (usuarioIDNew != null && !usuarioIDNew.equals(usuarioIDOld)) {
                 usuarioIDNew.getCompraList().add(compra);
                 usuarioIDNew = em.merge(usuarioIDNew);
+            }
+            for (Compradetalle compradetalleListNewCompradetalle : compradetalleListNew) {
+                if (!compradetalleListOld.contains(compradetalleListNewCompradetalle)) {
+                    Compra oldCompraIDOfCompradetalleListNewCompradetalle = compradetalleListNewCompradetalle.getCompraID();
+                    compradetalleListNewCompradetalle.setCompraID(compra);
+                    compradetalleListNewCompradetalle = em.merge(compradetalleListNewCompradetalle);
+                    if (oldCompraIDOfCompradetalleListNewCompradetalle != null && !oldCompraIDOfCompradetalleListNewCompradetalle.equals(compra)) {
+                        oldCompraIDOfCompradetalleListNewCompradetalle.getCompradetalleList().remove(compradetalleListNewCompradetalle);
+                        oldCompraIDOfCompradetalleListNewCompradetalle = em.merge(oldCompraIDOfCompradetalleListNewCompradetalle);
+                    }
+                }
+            }
+            for (Abono abonoListOldAbono : abonoListOld) {
+                if (!abonoListNew.contains(abonoListOldAbono)) {
+                    abonoListOldAbono.setCompraID(null);
+                    abonoListOldAbono = em.merge(abonoListOldAbono);
+                }
+            }
+            for (Abono abonoListNewAbono : abonoListNew) {
+                if (!abonoListOld.contains(abonoListNewAbono)) {
+                    Compra oldCompraIDOfAbonoListNewAbono = abonoListNewAbono.getCompraID();
+                    abonoListNewAbono.setCompraID(compra);
+                    abonoListNewAbono = em.merge(abonoListNewAbono);
+                    if (oldCompraIDOfAbonoListNewAbono != null && !oldCompraIDOfAbonoListNewAbono.equals(compra)) {
+                        oldCompraIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
+                        oldCompraIDOfAbonoListNewAbono = em.merge(oldCompraIDOfAbonoListNewAbono);
+                    }
+                }
             }
             em.getTransaction().commit();
         } catch (IllegalOrphanException ex) {
@@ -182,6 +248,11 @@ public class CompraJpaController implements Serializable {
             if (usuarioID != null) {
                 usuarioID.getCompraList().remove(compra);
                 usuarioID = em.merge(usuarioID);
+            }
+            List<Abono> abonoList = compra.getAbonoList();
+            for (Abono abonoListAbono : abonoList) {
+                abonoListAbono.setCompraID(null);
+                abonoListAbono = em.merge(abonoListAbono);
             }
             em.remove(compra);
             em.getTransaction().commit();

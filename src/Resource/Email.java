@@ -1,7 +1,6 @@
 package Resource;
 
 import Controllers.ConfiguracionJpaController;
-import Controllers.LocalDataController;
 import Models.Configuracion;
 import Views.Dialogs.Dialogs;
 import java.util.Properties;

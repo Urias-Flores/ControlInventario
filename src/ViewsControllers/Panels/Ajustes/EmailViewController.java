@@ -1,7 +1,7 @@
 package ViewsControllers.Panels.Ajustes;
 
 import Controllers.ConfiguracionJpaController;
-import Controllers.LocalDataController;
+import Resource.LocalDataController;
 import Controllers.UsuarioJpaController;
 import Models.Configuracion;
 import Models.Usuario;

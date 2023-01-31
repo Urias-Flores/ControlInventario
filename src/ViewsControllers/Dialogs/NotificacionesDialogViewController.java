@@ -1,7 +1,7 @@
 
 package ViewsControllers.Dialogs;
 
-import Controllers.LocalDataController;
+import Resource.LocalDataController;
 import Controllers.NotificacionJpaController;
 import Models.Notificacion;
 import Resource.Conection;

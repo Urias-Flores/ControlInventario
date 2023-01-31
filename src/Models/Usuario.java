@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Models;
 
 import java.io.Serializable;
@@ -23,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u ORDER BY u.nombre"),
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
     @NamedQuery(name = "Usuario.findByUsuarioID", query = "SELECT u FROM Usuario u WHERE u.usuarioID = :usuarioID"),
     @NamedQuery(name = "Usuario.findByNombre", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre"),
     @NamedQuery(name = "Usuario.findByContrasena", query = "SELECT u FROM Usuario u WHERE u.contrasena = :contrasena"),
@@ -51,6 +55,8 @@ public class Usuario implements Serializable {
     private List<Compra> compraList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioID")
     private List<Venta> ventaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioID")
+    private List<Abono> abonoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioID")
     private List<Cotizacion> cotizacionList;
     @JoinColumn(name = "EmpleadoID", referencedColumnName = "EmpleadoID")
@@ -147,6 +153,15 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    public List<Abono> getAbonoList() {
+        return abonoList;
+    }
+
+    public void setAbonoList(List<Abono> abonoList) {
+        this.abonoList = abonoList;
+    }
+
+    @XmlTransient
     public List<Cotizacion> getCotizacionList() {
         return cotizacionList;
     }
@@ -185,7 +200,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return nombre;
+        return "Models.Usuario[ usuarioID=" + usuarioID + " ]";
     }
     
 }

@@ -1,6 +1,6 @@
 package ViewsControllers;
 
-import Controllers.LocalDataController;
+import Resource.LocalDataController;
 import Resource.Utilities;
 import Views.Login;
 import Views.Panels.Ajustes.Email;

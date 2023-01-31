@@ -1,9 +1,12 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Models;
 
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -45,8 +48,10 @@ public class Proveedor implements Serializable {
     private String numeroTelefono;
     @Basic(optional = false)
     private float saldo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proveedorID")
+    @OneToMany(mappedBy = "proveedorID")
     private List<Compra> compraList;
+    @OneToMany(mappedBy = "proveedorID")
+    private List<Abono> abonoList;
 
     public Proveedor() {
     }
@@ -121,6 +126,15 @@ public class Proveedor implements Serializable {
         this.compraList = compraList;
     }
 
+    @XmlTransient
+    public List<Abono> getAbonoList() {
+        return abonoList;
+    }
+
+    public void setAbonoList(List<Abono> abonoList) {
+        this.abonoList = abonoList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -143,7 +157,7 @@ public class Proveedor implements Serializable {
 
     @Override
     public String toString() {
-        return nombre;
+        return "Models.Proveedor[ proveedorID=" + proveedorID + " ]";
     }
     
 }

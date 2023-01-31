@@ -4,7 +4,6 @@
  */
 package Controllers;
 
-import Controllers.exceptions.IllegalOrphanException;
 import Controllers.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -12,9 +11,10 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import Models.Compra;
-import Models.Proveedor;
 import java.util.ArrayList;
 import java.util.List;
+import Models.Abono;
+import Models.Proveedor;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -37,6 +37,9 @@ public class ProveedorJpaController implements Serializable {
         if (proveedor.getCompraList() == null) {
             proveedor.setCompraList(new ArrayList<Compra>());
         }
+        if (proveedor.getAbonoList() == null) {
+            proveedor.setAbonoList(new ArrayList<Abono>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -47,6 +50,12 @@ public class ProveedorJpaController implements Serializable {
                 attachedCompraList.add(compraListCompraToAttach);
             }
             proveedor.setCompraList(attachedCompraList);
+            List<Abono> attachedAbonoList = new ArrayList<Abono>();
+            for (Abono abonoListAbonoToAttach : proveedor.getAbonoList()) {
+                abonoListAbonoToAttach = em.getReference(abonoListAbonoToAttach.getClass(), abonoListAbonoToAttach.getAbonoID());
+                attachedAbonoList.add(abonoListAbonoToAttach);
+            }
+            proveedor.setAbonoList(attachedAbonoList);
             em.persist(proveedor);
             for (Compra compraListCompra : proveedor.getCompraList()) {
                 Proveedor oldProveedorIDOfCompraListCompra = compraListCompra.getProveedorID();
@@ -57,6 +66,15 @@ public class ProveedorJpaController implements Serializable {
                     oldProveedorIDOfCompraListCompra = em.merge(oldProveedorIDOfCompraListCompra);
                 }
             }
+            for (Abono abonoListAbono : proveedor.getAbonoList()) {
+                Proveedor oldProveedorIDOfAbonoListAbono = abonoListAbono.getProveedorID();
+                abonoListAbono.setProveedorID(proveedor);
+                abonoListAbono = em.merge(abonoListAbono);
+                if (oldProveedorIDOfAbonoListAbono != null) {
+                    oldProveedorIDOfAbonoListAbono.getAbonoList().remove(abonoListAbono);
+                    oldProveedorIDOfAbonoListAbono = em.merge(oldProveedorIDOfAbonoListAbono);
+                }
+            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -65,19 +83,67 @@ public class ProveedorJpaController implements Serializable {
         }
     }
 
-    public void edit(Proveedor proveedor) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Proveedor proveedor) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             Proveedor persistentProveedor = em.find(Proveedor.class, proveedor.getProveedorID());
-            List<String> illegalOrphanMessages = null;
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            List<Compra> compraListOld = persistentProveedor.getCompraList();
+            List<Compra> compraListNew = proveedor.getCompraList();
+            List<Abono> abonoListOld = persistentProveedor.getAbonoList();
+            List<Abono> abonoListNew = proveedor.getAbonoList();
+            List<Compra> attachedCompraListNew = new ArrayList<Compra>();
+            for (Compra compraListNewCompraToAttach : compraListNew) {
+                compraListNewCompraToAttach = em.getReference(compraListNewCompraToAttach.getClass(), compraListNewCompraToAttach.getCompraID());
+                attachedCompraListNew.add(compraListNewCompraToAttach);
             }
+            compraListNew = attachedCompraListNew;
+            proveedor.setCompraList(compraListNew);
+            List<Abono> attachedAbonoListNew = new ArrayList<Abono>();
+            for (Abono abonoListNewAbonoToAttach : abonoListNew) {
+                abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
+                attachedAbonoListNew.add(abonoListNewAbonoToAttach);
+            }
+            abonoListNew = attachedAbonoListNew;
+            proveedor.setAbonoList(abonoListNew);
             proveedor = em.merge(proveedor);
+            for (Compra compraListOldCompra : compraListOld) {
+                if (!compraListNew.contains(compraListOldCompra)) {
+                    compraListOldCompra.setProveedorID(null);
+                    compraListOldCompra = em.merge(compraListOldCompra);
+                }
+            }
+            for (Compra compraListNewCompra : compraListNew) {
+                if (!compraListOld.contains(compraListNewCompra)) {
+                    Proveedor oldProveedorIDOfCompraListNewCompra = compraListNewCompra.getProveedorID();
+                    compraListNewCompra.setProveedorID(proveedor);
+                    compraListNewCompra = em.merge(compraListNewCompra);
+                    if (oldProveedorIDOfCompraListNewCompra != null && !oldProveedorIDOfCompraListNewCompra.equals(proveedor)) {
+                        oldProveedorIDOfCompraListNewCompra.getCompraList().remove(compraListNewCompra);
+                        oldProveedorIDOfCompraListNewCompra = em.merge(oldProveedorIDOfCompraListNewCompra);
+                    }
+                }
+            }
+            for (Abono abonoListOldAbono : abonoListOld) {
+                if (!abonoListNew.contains(abonoListOldAbono)) {
+                    abonoListOldAbono.setProveedorID(null);
+                    abonoListOldAbono = em.merge(abonoListOldAbono);
+                }
+            }
+            for (Abono abonoListNewAbono : abonoListNew) {
+                if (!abonoListOld.contains(abonoListNewAbono)) {
+                    Proveedor oldProveedorIDOfAbonoListNewAbono = abonoListNewAbono.getProveedorID();
+                    abonoListNewAbono.setProveedorID(proveedor);
+                    abonoListNewAbono = em.merge(abonoListNewAbono);
+                    if (oldProveedorIDOfAbonoListNewAbono != null && !oldProveedorIDOfAbonoListNewAbono.equals(proveedor)) {
+                        oldProveedorIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
+                        oldProveedorIDOfAbonoListNewAbono = em.merge(oldProveedorIDOfAbonoListNewAbono);
+                    }
+                }
+            }
             em.getTransaction().commit();
-        } catch (IllegalOrphanException ex) {
+        } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = proveedor.getProveedorID();
@@ -93,7 +159,7 @@ public class ProveedorJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -105,16 +171,15 @@ public class ProveedorJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The proveedor with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            List<Compra> compraListOrphanCheck = proveedor.getCompraList();
-            for (Compra compraListOrphanCheckCompra : compraListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Proveedor (" + proveedor + ") cannot be destroyed since the Compra " + compraListOrphanCheckCompra + " in its compraList field has a non-nullable proveedorID field.");
+            List<Compra> compraList = proveedor.getCompraList();
+            for (Compra compraListCompra : compraList) {
+                compraListCompra.setProveedorID(null);
+                compraListCompra = em.merge(compraListCompra);
             }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            List<Abono> abonoList = proveedor.getAbonoList();
+            for (Abono abonoListAbono : abonoList) {
+                abonoListAbono.setProveedorID(null);
+                abonoListAbono = em.merge(abonoListAbono);
             }
             em.remove(proveedor);
             em.getTransaction().commit();

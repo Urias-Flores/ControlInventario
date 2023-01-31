@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Models;
 
 import java.io.Serializable;
@@ -49,6 +53,8 @@ public class Cliente implements Serializable {
     private float saldo;
     @OneToMany(mappedBy = "clienteID")
     private List<Venta> ventaList;
+    @OneToMany(mappedBy = "clienteID")
+    private List<Abono> abonoList;
     @OneToMany(mappedBy = "clienteID")
     private List<Cotizacion> cotizacionList;
 
@@ -135,6 +141,15 @@ public class Cliente implements Serializable {
     }
 
     @XmlTransient
+    public List<Abono> getAbonoList() {
+        return abonoList;
+    }
+
+    public void setAbonoList(List<Abono> abonoList) {
+        this.abonoList = abonoList;
+    }
+
+    @XmlTransient
     public List<Cotizacion> getCotizacionList() {
         return cotizacionList;
     }
@@ -165,7 +180,7 @@ public class Cliente implements Serializable {
 
     @Override
     public String toString() {
-        return nombre;
+        return "Models.Cliente[ clienteID=" + clienteID + " ]";
     }
     
 }

@@ -5,7 +5,6 @@
 package Controllers;
 
 import Controllers.exceptions.NonexistentEntityException;
-import Models.Cliente;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -14,6 +13,8 @@ import javax.persistence.criteria.Root;
 import Models.Venta;
 import java.util.ArrayList;
 import java.util.List;
+import Models.Abono;
+import Models.Cliente;
 import Models.Cotizacion;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,6 +38,9 @@ public class ClienteJpaController implements Serializable {
         if (cliente.getVentaList() == null) {
             cliente.setVentaList(new ArrayList<Venta>());
         }
+        if (cliente.getAbonoList() == null) {
+            cliente.setAbonoList(new ArrayList<Abono>());
+        }
         if (cliente.getCotizacionList() == null) {
             cliente.setCotizacionList(new ArrayList<Cotizacion>());
         }
@@ -50,6 +54,12 @@ public class ClienteJpaController implements Serializable {
                 attachedVentaList.add(ventaListVentaToAttach);
             }
             cliente.setVentaList(attachedVentaList);
+            List<Abono> attachedAbonoList = new ArrayList<Abono>();
+            for (Abono abonoListAbonoToAttach : cliente.getAbonoList()) {
+                abonoListAbonoToAttach = em.getReference(abonoListAbonoToAttach.getClass(), abonoListAbonoToAttach.getAbonoID());
+                attachedAbonoList.add(abonoListAbonoToAttach);
+            }
+            cliente.setAbonoList(attachedAbonoList);
             List<Cotizacion> attachedCotizacionList = new ArrayList<Cotizacion>();
             for (Cotizacion cotizacionListCotizacionToAttach : cliente.getCotizacionList()) {
                 cotizacionListCotizacionToAttach = em.getReference(cotizacionListCotizacionToAttach.getClass(), cotizacionListCotizacionToAttach.getCotizacionID());
@@ -64,6 +74,15 @@ public class ClienteJpaController implements Serializable {
                 if (oldClienteIDOfVentaListVenta != null) {
                     oldClienteIDOfVentaListVenta.getVentaList().remove(ventaListVenta);
                     oldClienteIDOfVentaListVenta = em.merge(oldClienteIDOfVentaListVenta);
+                }
+            }
+            for (Abono abonoListAbono : cliente.getAbonoList()) {
+                Cliente oldClienteIDOfAbonoListAbono = abonoListAbono.getClienteID();
+                abonoListAbono.setClienteID(cliente);
+                abonoListAbono = em.merge(abonoListAbono);
+                if (oldClienteIDOfAbonoListAbono != null) {
+                    oldClienteIDOfAbonoListAbono.getAbonoList().remove(abonoListAbono);
+                    oldClienteIDOfAbonoListAbono = em.merge(oldClienteIDOfAbonoListAbono);
                 }
             }
             for (Cotizacion cotizacionListCotizacion : cliente.getCotizacionList()) {
@@ -89,17 +108,85 @@ public class ClienteJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Cliente persistentCliente = em.find(Cliente.class, cliente.getClienteID());
+            List<Venta> ventaListOld = persistentCliente.getVentaList();
             List<Venta> ventaListNew = cliente.getVentaList();
+            List<Abono> abonoListOld = persistentCliente.getAbonoList();
+            List<Abono> abonoListNew = cliente.getAbonoList();
+            List<Cotizacion> cotizacionListOld = persistentCliente.getCotizacionList();
             List<Cotizacion> cotizacionListNew = cliente.getCotizacionList();
             List<Venta> attachedVentaListNew = new ArrayList<Venta>();
-            
+            for (Venta ventaListNewVentaToAttach : ventaListNew) {
+                ventaListNewVentaToAttach = em.getReference(ventaListNewVentaToAttach.getClass(), ventaListNewVentaToAttach.getVentaID());
+                attachedVentaListNew.add(ventaListNewVentaToAttach);
+            }
             ventaListNew = attachedVentaListNew;
             cliente.setVentaList(ventaListNew);
+            List<Abono> attachedAbonoListNew = new ArrayList<Abono>();
+            for (Abono abonoListNewAbonoToAttach : abonoListNew) {
+                abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
+                attachedAbonoListNew.add(abonoListNewAbonoToAttach);
+            }
+            abonoListNew = attachedAbonoListNew;
+            cliente.setAbonoList(abonoListNew);
             List<Cotizacion> attachedCotizacionListNew = new ArrayList<Cotizacion>();
-            
+            for (Cotizacion cotizacionListNewCotizacionToAttach : cotizacionListNew) {
+                cotizacionListNewCotizacionToAttach = em.getReference(cotizacionListNewCotizacionToAttach.getClass(), cotizacionListNewCotizacionToAttach.getCotizacionID());
+                attachedCotizacionListNew.add(cotizacionListNewCotizacionToAttach);
+            }
             cotizacionListNew = attachedCotizacionListNew;
             cliente.setCotizacionList(cotizacionListNew);
             cliente = em.merge(cliente);
+            for (Venta ventaListOldVenta : ventaListOld) {
+                if (!ventaListNew.contains(ventaListOldVenta)) {
+                    ventaListOldVenta.setClienteID(null);
+                    ventaListOldVenta = em.merge(ventaListOldVenta);
+                }
+            }
+            for (Venta ventaListNewVenta : ventaListNew) {
+                if (!ventaListOld.contains(ventaListNewVenta)) {
+                    Cliente oldClienteIDOfVentaListNewVenta = ventaListNewVenta.getClienteID();
+                    ventaListNewVenta.setClienteID(cliente);
+                    ventaListNewVenta = em.merge(ventaListNewVenta);
+                    if (oldClienteIDOfVentaListNewVenta != null && !oldClienteIDOfVentaListNewVenta.equals(cliente)) {
+                        oldClienteIDOfVentaListNewVenta.getVentaList().remove(ventaListNewVenta);
+                        oldClienteIDOfVentaListNewVenta = em.merge(oldClienteIDOfVentaListNewVenta);
+                    }
+                }
+            }
+            for (Abono abonoListOldAbono : abonoListOld) {
+                if (!abonoListNew.contains(abonoListOldAbono)) {
+                    abonoListOldAbono.setClienteID(null);
+                    abonoListOldAbono = em.merge(abonoListOldAbono);
+                }
+            }
+            for (Abono abonoListNewAbono : abonoListNew) {
+                if (!abonoListOld.contains(abonoListNewAbono)) {
+                    Cliente oldClienteIDOfAbonoListNewAbono = abonoListNewAbono.getClienteID();
+                    abonoListNewAbono.setClienteID(cliente);
+                    abonoListNewAbono = em.merge(abonoListNewAbono);
+                    if (oldClienteIDOfAbonoListNewAbono != null && !oldClienteIDOfAbonoListNewAbono.equals(cliente)) {
+                        oldClienteIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
+                        oldClienteIDOfAbonoListNewAbono = em.merge(oldClienteIDOfAbonoListNewAbono);
+                    }
+                }
+            }
+            for (Cotizacion cotizacionListOldCotizacion : cotizacionListOld) {
+                if (!cotizacionListNew.contains(cotizacionListOldCotizacion)) {
+                    cotizacionListOldCotizacion.setClienteID(null);
+                    cotizacionListOldCotizacion = em.merge(cotizacionListOldCotizacion);
+                }
+            }
+            for (Cotizacion cotizacionListNewCotizacion : cotizacionListNew) {
+                if (!cotizacionListOld.contains(cotizacionListNewCotizacion)) {
+                    Cliente oldClienteIDOfCotizacionListNewCotizacion = cotizacionListNewCotizacion.getClienteID();
+                    cotizacionListNewCotizacion.setClienteID(cliente);
+                    cotizacionListNewCotizacion = em.merge(cotizacionListNewCotizacion);
+                    if (oldClienteIDOfCotizacionListNewCotizacion != null && !oldClienteIDOfCotizacionListNewCotizacion.equals(cliente)) {
+                        oldClienteIDOfCotizacionListNewCotizacion.getCotizacionList().remove(cotizacionListNewCotizacion);
+                        oldClienteIDOfCotizacionListNewCotizacion = em.merge(oldClienteIDOfCotizacionListNewCotizacion);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -133,6 +220,11 @@ public class ClienteJpaController implements Serializable {
             for (Venta ventaListVenta : ventaList) {
                 ventaListVenta.setClienteID(null);
                 ventaListVenta = em.merge(ventaListVenta);
+            }
+            List<Abono> abonoList = cliente.getAbonoList();
+            for (Abono abonoListAbono : abonoList) {
+                abonoListAbono.setClienteID(null);
+                abonoListAbono = em.merge(abonoListAbono);
             }
             List<Cotizacion> cotizacionList = cliente.getCotizacionList();
             for (Cotizacion cotizacionListCotizacion : cotizacionList) {
