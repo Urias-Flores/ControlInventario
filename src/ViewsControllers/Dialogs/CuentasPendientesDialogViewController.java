@@ -1,16 +1,19 @@
 package ViewsControllers.Dialogs;
 
+import Controllers.AbonoJpaController;
 import Controllers.ClienteJpaController;
 import Controllers.CompraJpaController;
 import Controllers.ProveedorJpaController;
 import Controllers.VentaJpaController;
 import Controllers.exceptions.IllegalOrphanException;
 import Controllers.exceptions.NonexistentEntityException;
+import Models.Abono;
 import Models.Cliente;
 import Models.Compra;
 import Models.Proveedor;
 import Models.Venta;
 import Resource.Conection;
+import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -25,8 +28,8 @@ public class CuentasPendientesDialogViewController {
     private JTable Cuentas;
     private JLabel Total;
     
-    private int Cliente;
-    private int Proveedor;
+    private int Cliente = 0;
+    private int Proveedor = 0;
 
     public void setCliente(int Cliente) {
         this.Cliente = Cliente;
@@ -46,7 +49,7 @@ public class CuentasPendientesDialogViewController {
     
     public void CargarCliente(){
         DefaultTableModel model = new DefaultTableModel();
-        String[] columns = {"No. Factura", "Fecha", "Hora", "Total"};
+        String[] columns = {"No. Factura", "Fecha", "Hora", "Total", "Abonado"};
         model.setColumnIdentifiers(columns);
         
         Cliente cliente = new ClienteJpaController(Conection.CreateEntityManager()).findCliente(Cliente);
@@ -62,6 +65,7 @@ public class CuentasPendientesDialogViewController {
             facturas.forEach(factura -> {
                 if(factura[3] != null){
                     factura[3] = getNumberFormat(Float.parseFloat(factura[3].toString()));
+                    factura[4] = getNumberFormat(getTotalAbonoVenta(new Venta(Integer.valueOf(factura[0].toString()))));
                 }
                 model.addRow(factura);
             });
@@ -71,15 +75,15 @@ public class CuentasPendientesDialogViewController {
             Cuentas.getColumn("No. Factura").setPreferredWidth(55);
             Cuentas.getColumn("Fecha").setPreferredWidth(80);
             Cuentas.getColumn("Hora").setPreferredWidth(80);
-            Cuentas.getColumn("Total").setPreferredWidth(130);
-            
+            Cuentas.getColumn("Total").setPreferredWidth(110);
+            Cuentas.getColumn("Abonado").setPreferredWidth(110);
             updateTotal();
         }
     }
     
     public void CargarProveedor(){
         DefaultTableModel model = new DefaultTableModel();
-        String[] columns = {"No. Compra", "Fecha", "Hora", "Total"};
+        String[] columns = {"No. Compra", "Fecha", "Hora", "Total", "Abonado"};
         model.setColumnIdentifiers(columns);
         
         Proveedor proveedor = new ProveedorJpaController(Conection.CreateEntityManager()).findProveedor(Proveedor);
@@ -95,6 +99,7 @@ public class CuentasPendientesDialogViewController {
             facturas.forEach(factura -> {
                 if(factura[3] != null){
                     factura[3] = getNumberFormat(Float.parseFloat(factura[3].toString()));
+                    factura[4] = getNumberFormat(getTotalAbonoCompra(new Compra(Integer.parseInt(factura[0].toString()))));
                 }
                 model.addRow(factura);
             });
@@ -104,9 +109,57 @@ public class CuentasPendientesDialogViewController {
             Cuentas.getColumn("No. Compra").setPreferredWidth(55);
             Cuentas.getColumn("Fecha").setPreferredWidth(80);
             Cuentas.getColumn("Hora").setPreferredWidth(80);
-            Cuentas.getColumn("Total").setPreferredWidth(130);
+            Cuentas.getColumn("Total").setPreferredWidth(110);
+            Cuentas.getColumn("Abonado").setPreferredWidth(110);
             
             updateTotal();
+        }
+    }
+    
+    private float getTotalAbonoVenta(Venta VentaID){
+        List<Abono> abonos = Conection.CreateEntityManager().createEntityManager()
+                .createNamedQuery("Abono.findByVentaID")
+                .setParameter("ventaID", VentaID)
+                .getResultList();
+        
+        float TotalAbonado = 0;
+        if(!abonos.isEmpty()){
+            for(Abono abono : abonos){
+                TotalAbonado+=abono.getTotal();
+            }
+        }
+        
+        return TotalAbonado;
+    }
+    
+    private float getTotalAbonoCompra(Compra CompraID){
+        List<Abono> abonos = Conection.CreateEntityManager().createEntityManager()
+                .createNamedQuery("Abono.findByCompraID")
+                .setParameter("compraID", CompraID)
+                .getResultList();
+        
+        float TotalAbonado = 0;
+        if(!abonos.isEmpty()){
+            for(Abono abono : abonos){
+                TotalAbonado+=abono.getTotal();
+            }
+        }
+        
+        return TotalAbonado;
+    }
+    
+    public void cargarAbonos(){
+        int fila = Cuentas.getSelectedRow();
+        if(fila >= 0){
+            if(Cliente != 0){ 
+                Dialogs.ShowAbonosClientesDialog(Integer.parseInt(Cuentas.getValueAt(fila, 0).toString()));
+                CargarCliente(); 
+            }else if(Proveedor != 0){ 
+                Dialogs.ShowAbonosProveedorDialog(Integer.parseInt(Cuentas.getValueAt(fila, 0).toString()));
+                CargarProveedor(); 
+            }
+        }else{
+            Dialogs.ShowMessageDialog("Seleccione una factura de la lista", Dialogs.ERROR_ICON);
         }
     }
     
@@ -131,20 +184,27 @@ public class CuentasPendientesDialogViewController {
     public void pagarFactura(){
         int fila = Cuentas.getSelectedRow();
         if(fila >= 0){
-            if(Dialogs.ShowEnterPasswordDialog("Esta a punto de marcar como pagada una factura", 
-                    "con un valor de: "+Cuentas.getValueAt(fila, 3).toString()+" Lps. por medidas de seguridad", 
+            float totalAporPagar = Float
+                    .parseFloat(Cuentas.getValueAt(fila, 3).toString().replace(",", "")) - Float
+                    .parseFloat(Cuentas.getValueAt(fila, 4).toString().replace(",", ""));
+            if(Dialogs.ShowEnterPasswordDialog("Esta a punto de marcar como pagada una factura se realizara un abono", 
+                    "a la factura con un valor de: "+getNumberFormat(totalAporPagar)+" Lps. por medidas de seguridad", 
                     "Por favor ingrese su contraseña de usuario para pagar.", Dialogs.WARNING_ICON)){
                 int VentaID = Integer.parseInt(Cuentas.getValueAt(fila, 0).toString());
                 VentaJpaController controllerVenta = new VentaJpaController(Conection.CreateEntityManager());
+                AbonoJpaController controllerAbono = new AbonoJpaController(Conection.CreateEntityManager());
+                
                 Venta venta = controllerVenta.findVenta(VentaID);
+                Abono abono = createObjectAbono(venta, null, fila);
                 venta.setEstado("P");
-
+    
                 try {
                     controllerVenta.edit(venta);
+                    controllerAbono.create(abono);
                     CargarCliente();
                     Dialogs.ShowMessageDialog("Factura ha sido marcada como pagada exitosamente", Dialogs.COMPLETE_ICON);
                 } catch (NonexistentEntityException | IllegalOrphanException ex) {
-                    System.err.println("Test: "+ex.getMessage());
+                    System.err.println("Error: "+ex.getMessage());
                     Dialogs.ShowMessageDialog("Ups... Ha ocurrido un error, no se pudo pagar", Dialogs.ERROR_ICON);
                 }
             }
@@ -167,11 +227,31 @@ public class CuentasPendientesDialogViewController {
                     CargarProveedor();
                     Dialogs.ShowMessageDialog("La compra ha sido marcada como pagada exitosamente", Dialogs.COMPLETE_ICON);
                 } catch (NonexistentEntityException | IllegalOrphanException ex) {
-                    System.err.println("Test: "+ex.getMessage());
+                    System.err.println("Error: "+ex.getMessage());
                     Dialogs.ShowMessageDialog("Ups... Ha ocurrido un error, no se pudo pagar", Dialogs.ERROR_ICON);
                 }
             }
         }
+    }
+    
+    public Abono createObjectAbono(Venta venta, Compra compra, int Fila){
+        Abono abono = new Abono();
+        
+        abono.setFecha(Utilities.getDate());
+        abono.setHora(Utilities.getTime());
+        abono.setUsuarioID(Utilities.getUsuarioActual());
+        abono.setTipo(Cliente != 0 ? "V" : "C");
+        abono.setVentaID(Cliente != 0 ? venta : null);
+        abono.setCompraID(Proveedor != 0 ? compra : null);
+        abono.setClienteID(Cliente != 0 ? venta.getClienteID() : null);
+        abono.setProveedorID(Proveedor != 0 ? compra.getProveedorID() : null);
+        
+        float totalAporPagar = Float
+                    .parseFloat(Cuentas.getValueAt(Fila, 3).toString().replace(",", "")) - Float
+                    .parseFloat(Cuentas.getValueAt(Fila, 4).toString().replace(",", ""));
+        abono.setTotal(totalAporPagar);
+      
+        return abono;
     }
     
     public void pagarFacturas(){
@@ -185,11 +265,14 @@ public class CuentasPendientesDialogViewController {
             while (fila < Cuentas.getRowCount()){
                 int VentaID = Integer.parseInt(Cuentas.getValueAt(fila, 0).toString());
                 VentaJpaController controllerVenta = new VentaJpaController(Conection.CreateEntityManager());
+                AbonoJpaController controllerAbono = new AbonoJpaController(Conection.CreateEntityManager());
                 Venta venta = controllerVenta.findVenta(VentaID);
+                Abono abono = createObjectAbono(venta, null, fila);
                 venta.setEstado("P");
                 
                 try {
                     controllerVenta.edit(venta);
+                    controllerAbono.create(abono);
                 } catch (NonexistentEntityException | IllegalOrphanException ex) {
                     System.err.println("Test: "+ex.getMessage());
                     state = false;
@@ -238,12 +321,15 @@ public class CuentasPendientesDialogViewController {
     
     public void updateTotal(){
         float total = 0;
+        float totalAbonado = 0;
         for(int i = 0; i < Cuentas.getModel().getRowCount(); i++){
-            if(Cuentas.getValueAt(i, 3) != null){
+            if(Cuentas.getValueAt(i, 3) != null && Cuentas.getValueAt(i, 4) != null){
                 total += Float.parseFloat(Cuentas.getValueAt(i, 3).toString().replace(",", ""));
+                totalAbonado += Float.parseFloat(Cuentas.getValueAt(i, 4).toString().replace(",", ""));
             }
         }
-        Total.setText(getNumberFormat(total));
+        
+        Total.setText(getNumberFormat(total - totalAbonado));
     }
     
     private String getNumberFormat(float Value){

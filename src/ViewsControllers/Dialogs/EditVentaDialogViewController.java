@@ -19,6 +19,12 @@ public class EditVentaDialogViewController {
     private JTextField Cantidad;
     private JTextField Subtotal;
     private JLabel Error;
+    
+    private boolean isVenta = false;
+    
+    public void setIsVenta(boolean isVenta){
+        this.isVenta = isVenta;
+    }
 
     public EditVentaDialogViewController(JLabel Codigo, JLabel Descripcion, JLabel Unidades, JTextField Existencia, JTextField DescuentoPorcentaje, JTextField DescuentoLempiras, JTextField Precio, JTextField Cantidad, JTextField Subtotal, JLabel Error) {
         this.Codigo = Codigo;
@@ -152,11 +158,13 @@ public class EditVentaDialogViewController {
                 Error.setBackground(new Color(185, 0, 0));
                 return false;
             }
-            float existencia = Float.parseFloat(Existencia.getText().replace(",", " "));
-            if(cantidad > existencia){
-                Error.setText("La cantidad debe de ser menor a la existencia actual");
-                Error.setBackground(new Color(185, 0, 0));
-                return false;
+            if(isVenta){
+                float existencia = Float.parseFloat(Existencia.getText().replace(",", " "));
+                if(cantidad > existencia){
+                    Error.setText("La cantidad debe de ser menor a la existencia actual");
+                    Error.setBackground(new Color(185, 0, 0));
+                    return false;
+                }
             }
         }catch(NumberFormatException ex){
             Error.setText("La cantidad del producto debe de ser un numero");

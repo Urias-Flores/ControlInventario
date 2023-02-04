@@ -1,11 +1,8 @@
 package ViewsControllers;
 
-import Controllers.ConfiguracionJpaController;
 import Controllers.UsuarioJpaController;
 import Controllers.exceptions.NonexistentEntityException;
-import Models.Configuracion;
 import Models.Usuario;
-import Resource.Code;
 import Resource.Conection;
 import Resource.Email;
 import Resource.Security;

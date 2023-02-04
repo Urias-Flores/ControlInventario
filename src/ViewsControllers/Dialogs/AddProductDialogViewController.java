@@ -10,6 +10,8 @@ import Resource.Conection;
 import Views.Dialogs.Dialogs;
 import java.awt.Color;
 import java.text.DecimalFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -103,6 +105,10 @@ public class AddProductDialogViewController {
             } catch (NonexistentEntityException | IllegalOrphanException ex) {
                 System.err.println("Error: "+ex.getMessage());
                 Dialogs.ShowMessageDialog("El producto esta ligado a otros datos, no puso ser monificado", Dialogs.ERROR_ICON);
+                return false;
+            } catch (Exception ex) {
+                System.err.println("Error: "+ex.getMessage());
+                Dialogs.ShowMessageDialog("Ha ocurrido un error inesperado al actualizar producto", Dialogs.ERROR_ICON);
                 return false;
             }
         }

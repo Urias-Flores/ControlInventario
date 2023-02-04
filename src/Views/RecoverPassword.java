@@ -185,7 +185,7 @@ public class RecoverPassword extends javax.swing.JFrame {
         btnGuardar.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
         btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
         btnGuardar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnGuardar.setText("Enviar codigo");
+        btnGuardar.setText("Validar usuario");
         btnGuardar.setOpaque(true);
         btnGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

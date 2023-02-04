@@ -61,10 +61,13 @@ public class AddInventarioDetalleViewController {
     }
     
     public void CargarCantidad(int InventarioID){
-        InventarioJpaController controllerInventario = new InventarioJpaController(Conection.CreateEntityManager());
-        Inventario inventario = controllerInventario.findInventario(InventarioID);
+        Object cantidad = Conection.CreateEntityManager().createEntityManager()
+                .createNativeQuery("SELECT Cantidad FROM inventario WHERE InventarioID = "+InventarioID)
+                .getSingleResult();
+        
+        Inventario inventario = new InventarioJpaController(Conection.CreateEntityManager()).findInventario(InventarioID);
         ProductoID = inventario.getProductoID().getProductoID();
-        ExistenciaPrevia.setText(getNumberFormat(inventario.getCantidad()));
+        ExistenciaPrevia.setText(getNumberFormat(Float.parseFloat(cantidad.toString())));
     }
     
     public void updateCantidad(){

@@ -22,6 +22,7 @@ public class EnterPasswordDialogs extends javax.swing.JDialog {
     public EnterPasswordDialogs(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
         btnClose.addMouseListener(Utilities.getMLButtonCloseBlue());
         btnAceptar.addMouseListener(Utilities.getMLGeneralButton());
         btnCancelar.addMouseListener(Utilities.getMLGeneralButton());

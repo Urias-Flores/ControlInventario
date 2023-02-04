@@ -19,6 +19,7 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
         btnDetalles.addMouseListener(Utilities.getMLGrayButton());
         btnPagar.addMouseListener(Utilities.getMLGeneralButton());
         btnPagarFactura.addMouseListener(Utilities.getMLGeneralButton());
+        btnAbono.addMouseListener(Utilities.getMLGeneralButton());
         
         vc = new CuentasPendientesDialogViewController(lbNombre, tbCuentas, lbTotal);
     }
@@ -51,8 +52,10 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
         btnPagar = new javax.swing.JLabel();
         btnPagarFactura = new javax.swing.JLabel();
         btnDetalles = new javax.swing.JLabel();
+        btnAbono = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setModal(true);
         setUndecorated(true);
         setResizable(false);
 
@@ -132,7 +135,7 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
         btnPagar.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         btnPagar.setForeground(new java.awt.Color(255, 255, 255));
         btnPagar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnPagar.setText("Pagar total");
+        btnPagar.setText("Pagar dueda total");
         btnPagar.setOpaque(true);
         btnPagar.setPreferredSize(new java.awt.Dimension(104, 38));
         btnPagar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -166,6 +169,19 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
             }
         });
 
+        btnAbono.setBackground(new java.awt.Color(3, 57, 103));
+        btnAbono.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        btnAbono.setForeground(new java.awt.Color(255, 255, 255));
+        btnAbono.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnAbono.setText("Realizar abono");
+        btnAbono.setOpaque(true);
+        btnAbono.setPreferredSize(new java.awt.Dimension(104, 38));
+        btnAbono.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAbonoMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -183,17 +199,20 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
                                 .addComponent(lbNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnDetalles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
                             .addComponent(lbTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(200, 200, 200)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(btnPagarFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(lbTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lbTituloTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(lbTituloTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnAbono, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnPagarFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -209,15 +228,16 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
                     .addComponent(lbNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDetalles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(lbTituloTotal)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPagarFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnPagarFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAbono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18))
         );
 
@@ -275,6 +295,10 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnDetallesMouseClicked
 
+    private void btnAbonoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAbonoMouseClicked
+        vc.cargarAbonos();
+    }//GEN-LAST:event_btnAbonoMouseClicked
+
     public void setCompraState(){
         lbTituloTotal.setForeground(new Color(150, 30, 10));
         lbTotal.setForeground(new Color(150, 30, 10));
@@ -326,6 +350,7 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel btnAbono;
     private javax.swing.JLabel btnClose;
     private javax.swing.JLabel btnDetalles;
     private javax.swing.JLabel btnPagar;

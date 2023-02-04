@@ -355,6 +355,7 @@ public class EditVentaDialog extends javax.swing.JDialog {
         if(isCompra){
             Values = vc.getValuesforCompra();
         }else{
+            vc.setIsVenta(true);
             Values = vc.getValues();
         }
         

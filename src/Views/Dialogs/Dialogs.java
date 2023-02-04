@@ -243,12 +243,26 @@ public class Dialogs {
         cpd.dispose();
     }
     
+    public static void ShowAbonosClientesDialog(int VentaID){
+        AddAbonoDialog ad = new AddAbonoDialog(null, true);    
+        ad.setFactura(VentaID, "V");
+        ad.setVisible(true);
+        ad.dispose();
+    }
+    
     public static void ShowCuentasProveedorDialog(int ProveedorID){
         CuentasPendientesDialog cpd = new CuentasPendientesDialog(null, true);
         cpd.setCompraState();
         cpd.cargar(ProveedorID, false);
         cpd.setVisible(true);
         cpd.dispose();
+    }
+    
+    public static void ShowAbonosProveedorDialog(int CompraID){
+        AddAbonoDialog ad = new AddAbonoDialog(null, true);    
+        ad.setFactura(CompraID, "C");
+        ad.setVisible(true);
+        ad.dispose();
     }
     
     public static void ShowDetalleFactura(int VentaID){

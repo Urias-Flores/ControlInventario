@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controllers;
 
 import Controllers.exceptions.IllegalOrphanException;
@@ -96,8 +92,8 @@ public class VentaJpaController implements Serializable {
                     oldVentaIDOfVentadetalleListVentadetalle = em.merge(oldVentaIDOfVentadetalleListVentadetalle);
                 }
             }
-            em.getTransaction().commit();
             em.flush();
+            em.getTransaction().commit();
             return venta.getVentaID();
         } finally {
             if (em != null) {

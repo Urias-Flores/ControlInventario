@@ -56,23 +56,35 @@ public class CreateAccountViewController {
     }
     
     public int verificarUsuario(){
-        if(validateNombre()){
-            if(validateNombreExist()){
-                sendEmail();
-                setTokenOnUser();
-                Nombre.setEnabled(false);
-                Codigo.setEnabled(true);
-                Codigo.requestFocus();
-                Boton.setText("Verificar codigo");
-                Error.setText("El codigo ha sido enviado exitosamente");
-                Error.setBackground(new Color(33, 146, 65));
-                return 1;
-            }else{
-                Error.setText("El usuario ingresado no existe");
-                Error.setBackground(new Color(185, 0, 0));
-            }
+        if(validate()){
+            sendEmail();
+            setTokenOnUser();
+            Nombre.setEnabled(false);
+            Codigo.setEnabled(true);
+            Codigo.requestFocus();
+            Boton.setText("Verificar codigo");
+            Error.setText("El codigo ha sido enviado exitosamente");
+            Error.setBackground(new Color(33, 146, 65));
+            return 1;
         }
+        Error.setBackground(new Color(185, 0, 0));
         return 0;
+    }
+    
+    private boolean validate(){
+        if(Nombre.getText().isEmpty() || Nombre.getForeground().equals(new Color(180, 180, 180))){
+            Error.setText("El nombre de usuario es obligatorio");
+            return false;
+        }
+        if(!validateNombreExist()){
+            Error.setText("El nombre de usuario ingresado no existe");
+            return false;
+        }
+        if(!validateUserIsNew()){
+            Error.setText("El usuario ingresado es un usuario existente o esta desactivado");
+            return false;
+        }
+        return true;
     }
     
     public int verificarCodigo(){
@@ -163,6 +175,17 @@ public class CreateAccountViewController {
             if(usuario.getNombre().equals(Nombre.getText())){
                 usuarioActual = usuario;
                 return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean validateUserIsNew(){
+        UsuarioJpaController controller = new UsuarioJpaController(Conection.CreateEntityManager());
+        List<Usuario> usuarios = controller.findUsuarioEntities();
+        for(Usuario usuario : usuarios){
+            if(usuario.getNombre().equals(Nombre.getText())){
+                return usuario.getEstado() == 0 && usuario.getToken() == null;
             }
         }
         return false;
