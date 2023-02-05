@@ -84,7 +84,7 @@ public class AddUsuarioDialogViewController {
         
         //En caso de que no se este editando
         if(Nombre.getName() == null){
-            usuario.setContrasena(Security.generateStrongPasswordHash(String.valueOf(randomValue).substring(0, 6)));
+            usuario.setContrasena(null);
             usuario.setToken(null);
             usuario.setEstado(0);
         }

@@ -4,6 +4,7 @@ import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import ViewsControllers.Panels.Control.ProductoViewController;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class Productos extends javax.swing.JPanel {
@@ -25,11 +26,12 @@ public class Productos extends javax.swing.JPanel {
         btnActualizar.addMouseListener(Utilities.getMLGrayButton());
         btnInformacion.addMouseListener(Utilities.getMLGrayButton());
         txtBuscar.addFocusListener(Utilities.getFLSearchTextField());
-        
+
         listButtons.forEach((btn) -> {
             btn.addMouseListener(Utilities.getMLGeneralButton());
         });
-        vc = new ProductoViewController(txtBuscar, tbProductos);
+
+        vc = new ProductoViewController(txtBuscar, tbProductos, txtCargando);
         vc.cargarProductos();
     }
 
@@ -50,6 +52,7 @@ public class Productos extends javax.swing.JPanel {
         btnEliminar = new javax.swing.JLabel();
         btnModificar = new javax.swing.JLabel();
         btnInformacion = new javax.swing.JLabel();
+        txtCargando = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -198,7 +201,9 @@ public class Productos extends javax.swing.JPanel {
                                 .addComponent(btnAdmMarcas, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnAdmCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 237, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 187, Short.MAX_VALUE)
+                                .addComponent(txtCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -218,7 +223,8 @@ public class Productos extends javax.swing.JPanel {
                     .addComponent(btnAdmMarcas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnAdmCategorias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnInformacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnInformacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
@@ -289,5 +295,6 @@ public class Productos extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tbProductos;
     private javax.swing.JTextField txtBuscar;
+    private javax.swing.JLabel txtCargando;
     // End of variables declaration//GEN-END:variables
 }

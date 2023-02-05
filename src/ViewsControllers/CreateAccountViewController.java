@@ -159,15 +159,6 @@ public class CreateAccountViewController {
         return values;
     }
     
-    private boolean validateNombre(){
-        if(Nombre.getText().isEmpty() || Nombre.getForeground().equals(new Color(180, 180, 180))){
-            Error.setBackground(new Color(185, 0, 0));
-            Error.setText("El nombre de usuario es obligatorio");
-            return false;
-        }
-        return true;
-    }
-    
     private boolean validateNombreExist(){
         UsuarioJpaController controller = new UsuarioJpaController(Conection.CreateEntityManager());
         List<Usuario> usuarios = controller.findUsuarioEntities();

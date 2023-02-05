@@ -46,7 +46,7 @@ public class AddMarcaDialogViewController {
     public boolean validateMarcaExist(String marcaIngresar){
         List<Marca> marcas = controller.findMarcaEntities();
         for(int i = 0; i < marcas.size(); i++){
-            if(marcas.get(i).getNombre().equals(marcaIngresar)){
+            if(marcas.get(i).getNombre().equalsIgnoreCase(marcaIngresar)){
                 return true;
             }
         }

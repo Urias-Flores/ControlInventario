@@ -1,12 +1,17 @@
 package ViewsControllers.Dialogs;
 
+import Controllers.MarcaJpaController;
 import Controllers.ProductoJpaController;
+import Models.Marca;
 import Models.Producto;
 import Resource.Conection;
+import Resource.Utilities;
 import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.List;
 import javax.persistence.Query;
+import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -17,6 +22,7 @@ import javax.swing.table.TableRowSorter;
 public class AddVentaDialogViewController {
     
     private JTextField Buscar;
+    private JComboBox Marcas;
     private JTable Productos;
     private JTextField Existencia;
     private JTextField DescuentoPorcentaje;
@@ -25,9 +31,11 @@ public class AddVentaDialogViewController {
     private JTextField Cantidad;
     private JTextField Subtotal;
     private JLabel Error;
+    private JLabel Cargando;
 
-    public AddVentaDialogViewController(JTextField Buscar, JTable Productos, JTextField Existencia, JTextField DescuentoPorcentaje, JTextField DescuentoLempiras, JTextField Precio, JTextField Cantidad, JTextField Subtotal, JLabel Error) {
+    public AddVentaDialogViewController(JTextField Buscar, JComboBox Marcas, JLabel Cargando, JTable Productos, JTextField Existencia, JTextField DescuentoPorcentaje, JTextField DescuentoLempiras, JTextField Precio, JTextField Cantidad, JTextField Subtotal, JLabel Error) {
         this.Buscar = Buscar;
+        this.Marcas = Marcas;
         this.Productos = Productos;
         this.Existencia = Existencia;
         this.DescuentoPorcentaje = DescuentoPorcentaje;
@@ -36,34 +44,67 @@ public class AddVentaDialogViewController {
         this.Cantidad = Cantidad;
         this.Subtotal = Subtotal;
         this.Error = Error;
+        this.Cargando = Cargando;
     }
     
     public void CargarProductos(){
-        DefaultTableModel model = new DefaultTableModel();
-        String[] columns = {"Codigo", "Descripcion", "Unidad", "Precio"};
-        model.setColumnIdentifiers(columns);
-        
-        List<Producto> productos = new ProductoJpaController(Conection.CreateEntityManager()).findProductoEntities();
-        productos.forEach(producto -> {
-            Object[] row = {
-                producto.getProductoID(), 
-                producto.getDescripcion(), producto.getUnidad(), 
-                producto.getPrecioVenta()
-            };
+        Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
+        Runnable run = ()->{
+            DefaultTableModel model = new DefaultTableModel();
+            String[] columns = {"Codigo", "Descripcion", "Marca", "Unidad", "Precio"};
+            model.setColumnIdentifiers(columns);
+
+            List<Producto> productos = new ProductoJpaController(Conection.CreateEntityManager()).findProductoEntities();
+            productos.forEach(producto -> {
+                Object[] row = {
+                    producto.getProductoID(), 
+                    producto.getDescripcion(),
+                    producto.getMarcaID().getNombre(),
+                    producto.getUnidad(), 
+                    producto.getPrecioVenta()
+                };
+
+                model.addRow(row);
+            });
+
+            Productos.setModel(model);
+            Productos.getColumn("Codigo").setPreferredWidth(50);
+            Productos.getColumn("Descripcion").setPreferredWidth(320);
+            Productos.getColumn("Marca").setPreferredWidth(100);
+            Productos.getColumn("Unidad").setPreferredWidth(80);
+            Productos.getColumn("Precio").setPreferredWidth(90);
             
-            model.addRow(row);
-        });
-        
-        Productos.setModel(model);
-        Productos.getColumn("Codigo").setPreferredWidth(70);
-        Productos.getColumn("Descripcion").setPreferredWidth(320);
-        Productos.getColumn("Unidad").setPreferredWidth(80);
-        Productos.getColumn("Precio").setPreferredWidth(90);
+            Cargando.setIcon(null);
+        };
+        new Thread(run).start();
+    }
+    
+    public void CargarMarcas(){
+        Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
+        Runnable run = ()->{
+            List<Marca> marcas = Conection.CreateEntityManager().createEntityManager()
+                .createNamedQuery("Marca.findAll")
+                .getResultList();
+            marcas.forEach(Marcas::addItem);
+            Cargando.setIcon(null);
+        };
+        new Thread(run).start(); 
     }
     
     public void Buscar(){
         TableRowSorter s = new TableRowSorter(Productos.getModel());
         s.setRowFilter(RowFilter.regexFilter(Buscar.getText(), 1));
+        Productos.setRowSorter(s);
+    }
+    
+    public void FiltrarMarcas(){
+        TableRowSorter s = new TableRowSorter();
+        s.setModel(Productos.getModel());
+        if(Marcas.getSelectedIndex() > 0){
+            s.setRowFilter(RowFilter.regexFilter(Marcas.getSelectedItem().toString() , 2));
+        }else{
+            s.setRowFilter(RowFilter.regexFilter("" , 2));
+        }
         Productos.setRowSorter(s);
     }
     
@@ -85,9 +126,9 @@ public class AddVentaDialogViewController {
             DescuentoLempiras.setText(getNumberFormat(0f));
             DescuentoPorcentaje.setText(getNumberFormat(0f));
             Existencia.setText(getNumberFormat(existenciaProducto));
-            Precio.setText(getNumberFormat(Float.parseFloat(Productos.getValueAt(fila, 3).toString())));
+            Precio.setText(getNumberFormat(Float.parseFloat(Productos.getValueAt(fila, 4).toString().replace(",", ""))));
             Cantidad.setText(getNumberFormat(1f));
-            float Total = Float.parseFloat(Productos.getValueAt(fila, 3).toString()) * Float.parseFloat(Cantidad.getText());
+            float Total = Float.parseFloat(Productos.getValueAt(fila, 4).toString()) * Float.parseFloat(Cantidad.getText());
             Subtotal.setText(getNumberFormat(Total));
         }
     }
@@ -99,7 +140,7 @@ public class AddVentaDialogViewController {
             float precio = Float.parseFloat(Precio.getText().replace(",", ""));
             float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
             float subtotal = (precio * cantidad) - descuento;
-            Subtotal.setText(getNumberFormat(subtotal)+" Lps.");
+            Subtotal.setText(getNumberFormat(subtotal));
         }
     }
     

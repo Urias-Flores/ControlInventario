@@ -46,7 +46,7 @@ public class AddCategoriDialogViewController {
     public boolean validateExist(String marcaIngresar){
         List<Categoria> categorias = controller.findCategoriaEntities();
         for(int i = 0; i < categorias.size(); i++){
-            if(categorias.get(i).getNombre().equals(marcaIngresar)){
+            if(categorias.get(i).getNombre().equalsIgnoreCase(marcaIngresar)){
                 return true;
             }
         }

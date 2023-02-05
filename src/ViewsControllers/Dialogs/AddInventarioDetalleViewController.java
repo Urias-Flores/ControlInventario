@@ -5,7 +5,6 @@ import Controllers.InventariodetalleaccionesJpaController;
 import Models.Inventario;
 import Models.Inventariodetalleacciones;
 import Models.Producto;
-import Models.Usuario;
 import Resource.Conection;
 import Resource.Utilities;
 import java.awt.Color;
@@ -72,8 +71,8 @@ public class AddInventarioDetalleViewController {
     
     public void updateCantidad(){
         if(validate()){
-            float cantidadPrevia = Float.parseFloat(ExistenciaPrevia.getText());
-            float cantidadResultante = Float.parseFloat(ExistenciaResultante.getText());
+            float cantidadPrevia = Float.parseFloat(ExistenciaPrevia.getText().replace(",", ""));
+            float cantidadResultante = Float.parseFloat(ExistenciaResultante.getText().replace(",", ""));
             
             Cantidad.setForeground(Color.black);
             Cantidad.setText(getNumberFormat(cantidadResultante - cantidadPrevia));
@@ -82,8 +81,8 @@ public class AddInventarioDetalleViewController {
     
     public void updateExistenciaResultante(){
         if(validate()){
-            float cantidadPrevia = Float.parseFloat(ExistenciaPrevia.getText());
-            float cantidad = Float.parseFloat(Cantidad.getText());
+            float cantidadPrevia = Float.parseFloat(ExistenciaPrevia.getText().replace(",", ""));
+            float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
             
             ExistenciaResultante.setForeground(Color.black);
             ExistenciaResultante.setText(getNumberFormat(cantidadPrevia + cantidad));

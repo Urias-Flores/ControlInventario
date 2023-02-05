@@ -15,6 +15,7 @@ public class CreateAccount extends javax.swing.JFrame {
     
     public CreateAccount() {
         initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Icons/LogoV1.0-Fondo.png")).getImage());
         btnClose.addMouseListener(Utilities.getMLButtonClose());
         btnCambiar.addMouseListener(Utilities.getMLGeneralButton());
         txtNombre.addFocusListener(Utilities.getFLPlaceHolderEfect());

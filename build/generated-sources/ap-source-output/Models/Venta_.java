@@ -1,5 +1,6 @@
 package Models;
 
+import Models.Abono;
 import Models.Cliente;
 import Models.Usuario;
 import Models.Ventadetalle;
@@ -9,7 +10,7 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-01-30T10:36:31")
+@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-02-05T09:12:32")
 @StaticMetamodel(Venta.class)
 public class Venta_ { 
 
@@ -18,6 +19,7 @@ public class Venta_ {
     public static volatile ListAttribute<Venta, Ventadetalle> ventadetalleList;
     public static volatile SingularAttribute<Venta, Cliente> clienteID;
     public static volatile SingularAttribute<Venta, Date> hora;
+    public static volatile ListAttribute<Venta, Abono> abonoList;
     public static volatile SingularAttribute<Venta, Integer> ventaID;
     public static volatile SingularAttribute<Venta, String> rtn;
     public static volatile SingularAttribute<Venta, Usuario> usuarioID;

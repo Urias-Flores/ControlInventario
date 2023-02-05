@@ -35,7 +35,6 @@ public class Usuario implements Serializable {
     private Integer usuarioID;
     @Basic(optional = false)
     private String nombre;
-    @Basic(optional = false)
     private String contrasena;
     private String token;
     private Integer estado;

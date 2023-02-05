@@ -17,7 +17,7 @@ public class Inventario extends javax.swing.JPanel {
         btnEliminar.addMouseListener(Utilities.getMLGeneralButton());
         btnActualizar.addMouseListener(Utilities.getMLGrayButton());
         
-        vc = new InventarioViewController(txtBuscar, tbProductos, cmbMarcas, cmbCategorias, lbTotal, lbTotalArticulos);
+        vc = new InventarioViewController(txtBuscar, tbProductos, cmbMarcas, cmbCategorias, lbTotal, lbTotalArticulos, txtCargando);
         vc.CargarInventario();
         vc.CargarMarcas();
         vc.CargarCategorias();
@@ -73,6 +73,7 @@ public class Inventario extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbProductos.setShowHorizontalLines(true);
         jScrollPane1.setViewportView(tbProductos);
 
         btnImprimir.setBackground(new java.awt.Color(3, 57, 103));
@@ -222,11 +223,11 @@ public class Inventario extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(667, 667, 667)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                             .addComponent(lbTotalArticulos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
                             .addComponent(lbTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(18, 18, 18))
         );
@@ -245,7 +246,7 @@ public class Inventario extends javax.swing.JPanel {
                     .addComponent(cmbCategorias)
                     .addComponent(txtCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()

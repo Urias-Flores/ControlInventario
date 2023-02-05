@@ -23,7 +23,8 @@ public class AddVentaDialog extends javax.swing.JDialog {
         txtBuscar.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtError.setBackground(Color.white);
         
-        vc = new AddVentaDialogViewController(txtBuscar, tbProductos, txtExistencia,txtDescuentoPorcentaje, txtDescuentoLempiras, txtPrecio, txtCantidad, txtSubtotal, txtError);
+        vc = new AddVentaDialogViewController(txtBuscar, cmbMarcas, txtCargando, tbProductos, txtExistencia,txtDescuentoPorcentaje, txtDescuentoLempiras, txtPrecio, txtCantidad, txtSubtotal, txtError);
+        vc.CargarMarcas();
         vc.CargarProductos();
     }
 
@@ -55,6 +56,9 @@ public class AddVentaDialog extends javax.swing.JDialog {
         txtError = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         txtExistencia = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        cmbMarcas = new javax.swing.JComboBox<>();
+        txtCargando = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -91,7 +95,7 @@ public class AddVentaDialog extends javax.swing.JDialog {
         pnBarraLayout.setHorizontalGroup(
             pnBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnBarraLayout.createSequentialGroup()
-                .addGap(0, 672, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnBarraLayout.setVerticalGroup(
@@ -140,6 +144,7 @@ public class AddVentaDialog extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbProductos.setShowHorizontalLines(true);
         tbProductos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tbProductosMousePressed(evt);
@@ -239,6 +244,27 @@ public class AddVentaDialog extends javax.swing.JDialog {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel4.setText("Filtrar:");
+
+        cmbMarcas.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        cmbMarcas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Todas las marcas --" }));
+        cmbMarcas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbMarcasActionPerformed(evt);
+            }
+        });
+
+        txtCargando.setBackground(new java.awt.Color(255, 255, 255));
+        txtCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        txtCargando.setToolTipText("Actualizar lista");
+        txtCargando.setOpaque(true);
+        txtCargando.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtCargandoMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -257,7 +283,13 @@ public class AddVentaDialog extends javax.swing.JDialog {
                                 .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbMarcas, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 25, Short.MAX_VALUE)
+                                .addComponent(txtCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -298,7 +330,10 @@ public class AddVentaDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(cmbMarcas)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -402,6 +437,14 @@ public class AddVentaDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtExistenciaKeyReleased
 
+    private void cmbMarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMarcasActionPerformed
+        vc.FiltrarMarcas();
+    }//GEN-LAST:event_cmbMarcasActionPerformed
+
+    private void txtCargandoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCargandoMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCargandoMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -446,10 +489,12 @@ public class AddVentaDialog extends javax.swing.JDialog {
     private javax.swing.JLabel btnActualizar;
     private javax.swing.JLabel btnAgregar;
     private javax.swing.JLabel btnClose;
+    private javax.swing.JComboBox<String> cmbMarcas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -461,6 +506,7 @@ public class AddVentaDialog extends javax.swing.JDialog {
     private javax.swing.JTable tbProductos;
     private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txtCantidad;
+    private javax.swing.JLabel txtCargando;
     private javax.swing.JTextField txtDescuentoLempiras;
     private javax.swing.JTextField txtDescuentoPorcentaje;
     private javax.swing.JLabel txtError;

@@ -225,7 +225,7 @@ WHERE v.VentaID = $P{VentaID}]]>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="17" splitType="Stretch">
+		<band height="13" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<line>
 				<reportElement x="-8" y="0" width="202" height="1" forecolor="#B4B4B4" uuid="42a74633-0b4a-4229-bb4f-2be2bbe17d31"/>
@@ -243,7 +243,7 @@ WHERE v.VentaID = $P{VentaID}]]>
 				<text><![CDATA[Total factura]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="95" y="1" width="49" height="11" uuid="24236191-13dc-44d7-be9f-63e518ec03f1">
+				<reportElement x="95" y="1" width="50" height="11" uuid="24236191-13dc-44d7-be9f-63e518ec03f1">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3f493944-81f0-4187-a16f-2871bb90bc87"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -253,7 +253,7 @@ WHERE v.VentaID = $P{VentaID}]]>
 				<text><![CDATA[Total abono]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="145" y="1" width="48" height="11" uuid="fdd48afc-c2c5-40ac-885e-4093c3146245">
+				<reportElement x="145" y="1" width="49" height="11" uuid="fdd48afc-c2c5-40ac-885e-4093c3146245">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="41cc497f-06cc-4092-a1e3-a338033c197b"/>
 				</reportElement>
 				<textElement textAlignment="Right">

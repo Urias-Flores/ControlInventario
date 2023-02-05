@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Query;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
@@ -116,18 +117,30 @@ public class FacturaViewController {
         ProductoJpaController controllerProducto = new ProductoJpaController(Conection.CreateEntityManager());
         List<Producto> productos = controllerProducto.findProductoEntities();
         productos.forEach(producto -> {
-            if (producto.getBarra().equals(Barra.getText())) {
-                Object[] row = {
-                    producto.getProductoID(),
-                    producto.getDescripcion(),
-                    producto.getUnidad(),
-                    getNumberFormat(1f),
-                    getNumberFormat(producto.getPrecioVenta()),
-                    getNumberFormat(0f),
-                    getNumberFormat(producto.getPrecioVenta())
-                };
-                
-                cargarProducto(row);
+            System.out.println(Barra.getText()+" = "+producto.getBarra());
+            if(producto.getBarra() != null){
+                if (producto.getBarra().equals(Barra.getText())) {
+                    Object[] row = {
+                        producto.getProductoID(),
+                        producto.getDescripcion(),
+                        producto.getUnidad(),
+                        getNumberFormat(1f),
+                        getNumberFormat(producto.getPrecioVenta()),
+                        getNumberFormat(0f),
+                        getNumberFormat(producto.getPrecioVenta())
+                    };
+
+                    Query query = Conection.CreateEntityManager().createEntityManager()
+                        .createNativeQuery("SELECT cantidad FROM inventario WHERE ProductoID = "+producto.getProductoID());
+                    List values = query.getResultList();
+
+                    float existenciaProducto = Float.parseFloat(values.get(0).toString());
+                    if(existenciaProducto <= 0){
+                        Dialogs.ShowMessageDialog("El producto no cuenta con existencia en inventario", Dialogs.ERROR_ICON);
+                    }else{
+                        cargarProducto(row);
+                    }
+                }
             }
         });
         Barra.setText("");
@@ -265,13 +278,15 @@ public class FacturaViewController {
             List<Ventadetalle> ventas = createListVentaDetalle(VentaID);
             VentadetalleJpaController ventadetalleJpaController = new VentadetalleJpaController(Conection.CreateEntityManager());
             ventas.forEach(ventadetalleJpaController::create);
-
-            Runnable run = () -> {
+            
+            if(Dialogs.ShowOKCancelDialog("¿Desea enviar a imprimir la factura ahora?", Dialogs.COMPLETE_ICON)){
+                Runnable run = () -> {
                 Reports reports = new Reports();
                 reports.GenerateTickeVenta(VentaID);
-            };
-            Thread thread = new Thread(run);
-            thread.start();
+                };
+                Thread thread = new Thread(run);
+                thread.start();
+            }
 
             Clear();
             return true;

@@ -5,8 +5,11 @@ import Controllers.exceptions.IllegalOrphanException;
 import Controllers.exceptions.NonexistentEntityException;
 import Models.Producto;
 import Resource.Conection;
+import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
@@ -15,49 +18,60 @@ import javax.swing.table.TableRowSorter;
 
 public class ProductoViewController {
 
-    ProductoJpaController controller;
+    private ProductoJpaController controller;
 
-    JTextField Buscar;
-    JTable Productos;
+    private JTextField Buscar;
+    private JTable Productos;
+    
+    private JLabel Cargando;
 
-    public ProductoViewController(JTextField Buscar, JTable Productos) {
+    public ProductoViewController(JTextField Buscar, JTable Productos, JLabel Cargando) {
         this.Buscar = Buscar;
         this.Productos = Productos;
+        this.Cargando = Cargando;
+        
         controller = new ProductoJpaController(Conection.CreateEntityManager());
     }
 
     public void cargarProductos() {
-        DefaultTableModel model = new DefaultTableModel();
-        String[] columns = {"Codigo", "Descripcion", "Marca", "Categoria", "Barra", "Unidad"};
-        model.setColumnIdentifiers(columns);
-        List<Producto> productos = new ProductoJpaController(Conection.CreateEntityManager()).findProductoEntities();
+        Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
+        Runnable run = ()->{
+            DefaultTableModel model = new DefaultTableModel();
+            String[] columns = {"Codigo", "Descripcion", "Marca", "Categoria", "Barra", "Unidad"};
+            model.setColumnIdentifiers(columns);
+            List<Producto> productos = new ProductoJpaController(Conection.CreateEntityManager()).findProductoEntities();
 
-        productos.forEach(producto -> {
-            Object[] row = {
-                producto.getProductoID(),
-                producto.getDescripcion(),
-                producto.getMarcaID(),
-                producto.getCategoriaID(),
-                producto.getBarra(),
-                producto.getUnidad()
-            };
-            model.addRow(row);
-        });
+            productos.forEach(producto -> {
+                Object[] row = {
+                    producto.getProductoID(),
+                    producto.getDescripcion(),
+                    producto.getMarcaID(),
+                    producto.getCategoriaID(),
+                    producto.getBarra(),
+                    producto.getUnidad()
+                };
+                model.addRow(row);
+            });
 
-        Productos.setModel(model);
+            Productos.setModel(model);
+
+            Productos.getColumn("Codigo").setPreferredWidth(5);
+            Productos.getColumn("Descripcion").setPreferredWidth(380);
+            Productos.getColumn("Marca").setPreferredWidth(90);
+            Productos.getColumn("Categoria").setPreferredWidth(120);
+            Productos.getColumn("Barra").setPreferredWidth(100);
+            Productos.getColumn("Unidad").setPreferredWidth(40);
+            
+            Cargando.setIcon(null);
+        };
+        new Thread(run).start();
         
-        Productos.getColumn("Codigo").setPreferredWidth(5);
-        Productos.getColumn("Descripcion").setPreferredWidth(380);
-        Productos.getColumn("Marca").setPreferredWidth(90);
-        Productos.getColumn("Categoria").setPreferredWidth(120);
-        Productos.getColumn("Barra").setPreferredWidth(100);
-        Productos.getColumn("Unidad").setPreferredWidth(40);
     }
 
     public void buscar() {
         TableRowSorter s = new TableRowSorter();
         s.setModel(Productos.getModel());
-        s.setRowFilter(RowFilter.regexFilter(Buscar.getText(), 1));
+        s.setRowFilter(RowFilter.regexFilter(Buscar.getText(), 0, 1, 4));
         Productos.setRowSorter(s);
     }
 

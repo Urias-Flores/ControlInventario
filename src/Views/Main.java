@@ -16,7 +16,7 @@ public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
         setTitle("Inicio");
-        setIconImage(new ImageIcon(getClass().getResource("/Icons/logo.png")).getImage());
+        setIconImage(new ImageIcon(getClass().getResource("/Icons/LogoV1.0-Fondo.png")).getImage());
         if(!Utilities.getUsuarioActual().getCargo().equals("A")){
             btnEstadisticas.setVisible(false);
         }

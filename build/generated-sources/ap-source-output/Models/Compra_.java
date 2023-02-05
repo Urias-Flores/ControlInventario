@@ -1,5 +1,6 @@
 package Models;
 
+import Models.Abono;
 import Models.Compradetalle;
 import Models.Proveedor;
 import Models.Usuario;
@@ -9,7 +10,7 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-01-30T10:36:31")
+@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-02-05T09:12:32")
 @StaticMetamodel(Compra.class)
 public class Compra_ { 
 
@@ -20,6 +21,7 @@ public class Compra_ {
     public static volatile SingularAttribute<Compra, Date> hora;
     public static volatile SingularAttribute<Compra, Date> fechaVencimiento;
     public static volatile ListAttribute<Compra, Compradetalle> compradetalleList;
+    public static volatile ListAttribute<Compra, Abono> abonoList;
     public static volatile SingularAttribute<Compra, String> noFactura;
     public static volatile SingularAttribute<Compra, Usuario> usuarioID;
     public static volatile SingularAttribute<Compra, Integer> compraID;

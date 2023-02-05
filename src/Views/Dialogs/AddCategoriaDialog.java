@@ -7,7 +7,7 @@ public class AddCategoriaDialog extends javax.swing.JDialog {
 
     private int X, Y;
     private int Valor;
-    AddCategoriDialogViewController vc;
+    private AddCategoriDialogViewController vc;
     
     public int getValor(){
         return Valor;

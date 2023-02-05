@@ -15,7 +15,7 @@ public class RecoverPassword extends javax.swing.JFrame {
     
     public RecoverPassword() {
         initComponents();
-        setIconImage(new ImageIcon(getClass().getResource("/Icons/logo.png")).getImage());
+        setIconImage(new ImageIcon(getClass().getResource("/Icons/LogoV1.0-Fondo.png")).getImage());
         btnClose.addMouseListener(Utilities.getMLButtonClose());
         btnGuardar.addMouseListener(Utilities.getMLGeneralButton());
         

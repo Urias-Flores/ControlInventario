@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Query;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -31,39 +32,48 @@ public class InventarioViewController {
     private JComboBox<Categoria> Categorias;
     private JLabel Total;
     private JLabel CantidadTotal;
+    
+    private JLabel Cargando;
 
-    public InventarioViewController(JTextField Buscar, JTable Inventario, JComboBox Marcas, JComboBox Categorias, JLabel Total, JLabel CantidadTotal) {
+    public InventarioViewController(JTextField Buscar, JTable Inventario, JComboBox Marcas, JComboBox Categorias, JLabel Total, JLabel CantidadTotal, JLabel Cargando) {
         this.Buscar = Buscar;
         this.Inventario = Inventario;
         this.Marcas = Marcas;
         this.Categorias = Categorias;
         this.Total = Total;
         this.CantidadTotal = CantidadTotal;
+        this.Cargando = Cargando;
     }
     
     public void CargarInventario(){
-        DefaultTableModel model = new DefaultTableModel();
-        String[] columns = {"No. Inventario", "Cd.", "Descripcion", "Marca", "Categoria", "Precio/Compra","Existencia"};
-        model.setColumnIdentifiers(columns);
-        
-        Query query = Conection.CreateEntityManager().createEntityManager().createNativeQuery("SELECT * FROM ViewInventario");
-        List<Object[]> l = query.getResultList();
-        
-        l.forEach(inventario -> {
-            model.addRow(inventario);
-        });
-        
-        Inventario.setModel(model);
-        
-        Inventario.getColumn("No. Inventario").setPreferredWidth(70);
-        Inventario.getColumn("Cd.").setPreferredWidth(30);
-        Inventario.getColumn("Descripcion").setPreferredWidth(450);
-        Inventario.getColumn("Marca").setPreferredWidth(100);
-        Inventario.getColumn("Categoria").setPreferredWidth(130);
-        Inventario.getColumn("Precio/Compra").setPreferredWidth(80);
-        Inventario.getColumn("Existencia").setPreferredWidth(40);
-        
-        updateTotales();
+        Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
+        Runnable run = ()->{
+            DefaultTableModel model = new DefaultTableModel();
+            String[] columns = {"No. Inventario", "Cd.", "Descripcion", "Marca", "Categoria", "Precio/Compra","Existencia"};
+            model.setColumnIdentifiers(columns);
+
+            Query query = Conection.CreateEntityManager().createEntityManager().createNativeQuery("SELECT * FROM ViewInventario");
+            List<Object[]> l = query.getResultList();
+
+            l.forEach(inventario -> {
+                model.addRow(inventario);
+            });
+
+            Inventario.setModel(model);
+
+            Inventario.getColumn("No. Inventario").setPreferredWidth(70);
+            Inventario.getColumn("Cd.").setPreferredWidth(30);
+            Inventario.getColumn("Descripcion").setPreferredWidth(450);
+            Inventario.getColumn("Marca").setPreferredWidth(100);
+            Inventario.getColumn("Categoria").setPreferredWidth(130);
+            Inventario.getColumn("Precio/Compra").setPreferredWidth(80);
+            Inventario.getColumn("Existencia").setPreferredWidth(40);
+
+            updateTotales();
+            
+            Cargando.setIcon(null);
+        };
+        new Thread(run).start();
     }
     
     private void updateTotales(){

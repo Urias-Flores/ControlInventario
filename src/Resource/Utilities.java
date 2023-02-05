@@ -170,6 +170,10 @@ public class Utilities {
         }
     };
     
+    public static String getLoadingImage(){
+        return "/Icons/cargando32px.gif";
+    }
+    
     public static void CargarAnios(JComboBox cmb){
         Calendar FechaActual = Calendar.getInstance();
         int AnioActual = FechaActual.get(Calendar.YEAR);

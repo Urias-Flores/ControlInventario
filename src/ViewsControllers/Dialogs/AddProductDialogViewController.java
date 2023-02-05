@@ -10,8 +10,6 @@ import Resource.Conection;
 import Views.Dialogs.Dialogs;
 import java.awt.Color;
 import java.text.DecimalFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -93,6 +91,7 @@ public class AddProductDialogViewController {
             controller.create(producto);
             return true;
         }
+        Error.setBackground(new Color(185, 0, 0));
         return false;
     }
     
@@ -135,81 +134,68 @@ public class AddProductDialogViewController {
     
     public boolean Validate(){
         if(Descripcion.getText().isEmpty() || Descripcion.getForeground().equals(new Color(180, 180, 180))){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("La descripcion del producto es obligatoria");
             return false;
         }
         
         if(Marca.getName() == null || Marca.getName().isEmpty() || Marca.getForeground().equals(new Color(180, 180, 180))){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("La seleccion de una marca de producto es obligatoria");
             return false;
         }
         
         if(Categoria.getName() == null || Categoria.getName().isEmpty() || Categoria.getForeground().equals(new Color(180, 180, 180))){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("La seleccion de una categoria de producto es obligatoria");
             return false;
         }
         
         if(Unidad.getText().isEmpty() || Unidad.getForeground().equals(new Color(180, 180, 180))){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("El tipo de unidad del producto es obligatorio");
             return false;
         }
         
         //Validacion de cantidad
         if(CantidadMinimo.getText().isEmpty() || CantidadMinimo.getForeground().equals(new Color(180, 180, 180))){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("La cantidad minima en inventario es obligatoria");
             return false;
         }
         try {
             float cantidadMinima = Float.parseFloat(CantidadMinimo.getText().replace(",", ""));
         } catch (NumberFormatException e) {
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("La cantidad minima debe ser un numero");
             return false;
         }
         if(Float.parseFloat(CantidadMinimo.getText().replace(",", "")) < 0){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("La cantidad minima debe ser mayor o igual a cero");
             return false;
         }
         
         //Validacion de precio de compra
         if(PrecioCompra.getText().isEmpty()){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("El precio de compra del producto es obligatorio");
             return false;
         }
         try {
             float precioCompra = Float.parseFloat(PrecioCompra.getText().replace(",", ""));
         } catch (NumberFormatException e) {
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("La precio de compra debe ser un numero");
             return false;
         }
         if(Float.parseFloat(PrecioCompra.getText().replace(",", "")) <= 0){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("El precio de compra del producto debe ser mayor a cero");
         }
         
         //Validacion de precio de venta
         if(PrecioVenta.getText().isEmpty()){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("El precio de venta del producto es obligatorio");
             return false;
         }
         try {
             float precioVenta = Float.parseFloat(PrecioVenta.getText().replace(",", ""));
         } catch (NumberFormatException e) {
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("La precio de venta debe ser un numero");
             return false;
         }
         if(Float.parseFloat(PrecioVenta.getText().replace(",", "")) <= 0){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("El precio de venta del producto debe ser mayor a cero");
         }
         
@@ -220,6 +206,7 @@ public class AddProductDialogViewController {
         try {
             float valor = Float.parseFloat(textField.getText());
             textField.setText(getNumberFormat(valor));
+            Error.setBackground(Color.white);
         } catch (NumberFormatException e) {
             Error.setBackground(new Color(185, 0, 0));
             Error.setText("El valor ingresado debe ser un numero");
