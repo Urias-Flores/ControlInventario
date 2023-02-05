@@ -51,6 +51,7 @@ public class Reports {
                 
                 Map<String, Object> parameters = getCompanyParameters();
                 parameters.put("CotizacionID", CotizacionID);
+                parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
                 
                 sendPrintTicket(jr, parameters);
             }else{
@@ -134,6 +135,7 @@ public class Reports {
         parameters.put("RTN", ldc.getValue("RTN"));
         parameters.put("NumeroTelefono", ldc.getValue("NumberPhone"));
         parameters.put("Direccion", ldc.getValue("Address"));
+        parameters.put("CAI", ldc.getValue("CAI"));
         
         return parameters;
     }

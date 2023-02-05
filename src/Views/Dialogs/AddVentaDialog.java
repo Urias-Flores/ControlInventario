@@ -62,7 +62,6 @@ public class AddVentaDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
-        setOpacity(0.93F);
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));

@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class NoJpaConection {
     private static Connection conec;
@@ -16,13 +14,11 @@ public class NoJpaConection {
     public Statement getStatement()
     {
         try{
-
             stm = conec.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-
         }catch(SQLException ex)
-                {
-                   System.out.print(ex.getMessage());
-                }
+        {
+           System.out.print(ex.getMessage());
+        }
         return stm;
     }
     
@@ -35,10 +31,10 @@ public class NoJpaConection {
     {
         if(conec == null)
         {
-            ip = "127.0.0.1";
+            ip = "192.168.1.100";
             port = "3306";
             user = "root";
-            password = "alone2020";
+            password = "ComercialNataren2023*";
             driver = "com.mysql.cj.jdbc.Driver";
             database = "inventario";
             try{
@@ -50,19 +46,6 @@ public class NoJpaConection {
                 System.out.print(ex.getMessage());
             }
         }
-    }
-    
-    public Connection tryConexion(String ip, String port, String user, String password, String driver, String database)
-    {
-        Connection c = null;
-        try{
-            Class.forName(driver);
-            String url = "jdbc:mysql://"+ip+":"+port+"/"+database;
-            c = DriverManager.getConnection(url, user , password);
-        }catch(ClassNotFoundException | SQLException ex){
-            System.out.print(ex.getMessage());
-        }
-        return c;
     }
     
     public void closeConec()

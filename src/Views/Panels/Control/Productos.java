@@ -72,6 +72,7 @@ public class Productos extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbProductos.setShowHorizontalLines(true);
         jScrollPane1.setViewportView(tbProductos);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/buscar.png"))); // NOI18N
