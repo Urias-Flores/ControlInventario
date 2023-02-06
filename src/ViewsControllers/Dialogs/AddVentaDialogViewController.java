@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 public class AddVentaDialogViewController {
-    
+
     private JTextField Buscar;
     private JComboBox Marcas;
     private JTable Productos;
@@ -31,10 +31,12 @@ public class AddVentaDialogViewController {
     private JTextField Subtotal;
     private JLabel Error;
     private JLabel Cargando;
-    
-    private DefaultTableModel model = new DefaultTableModel(){
+
+    private DefaultTableModel model = new DefaultTableModel() {
         @Override
-        public boolean isCellEditable(int row, int column){return false;}
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
     };
 
     public AddVentaDialogViewController(JTextField Buscar, JComboBox Marcas, JLabel Cargando, JTable Productos, JTextField Existencia, JTextField DescuentoPorcentaje, JTextField DescuentoLempiras, JTextField Precio, JTextField Cantidad, JTextField Subtotal, JLabel Error) {
@@ -49,44 +51,44 @@ public class AddVentaDialogViewController {
         this.Subtotal = Subtotal;
         this.Error = Error;
         this.Cargando = Cargando;
-        
+
         //Inhabilitando campos de edicion de venta
         setEditableFields(false);
-        
+
         //Cargando modelo de tabla en tabla de productos
         setModelTableProducts();
 
         //Inicializando carga de datos
         Init();
     }
-    
-    public void setLoad(boolean status){
+
+    public void setLoad(boolean status) {
         ImageIcon icon = new ImageIcon(getClass().getResource(Utilities.getLoadingImage()));
-        Cargando.setIcon(status ? icon : null );
+        Cargando.setIcon(status ? icon : null);
     }
-    
-    private void Init(){
+
+    private void Init() {
         setLoad(true);
-        Runnable run = ()->{
+        Runnable run = () -> {
             //Cargando datos de productos a la lista
             loadProducts();
-            
+
             //Cargando marcas en combobox
             loadBrands();
-            
+
             setLoad(false);
         };
         new Thread(run).start();
     }
-    
-    public void updateData(){
+
+    public void updateData() {
         Init();
     }
-    
-    private void setModelTableProducts(){
+
+    private void setModelTableProducts() {
         String[] columns = {"Codigo", "Descripcion", "Marca", "Unidad", "Precio"};
         model.setColumnIdentifiers(columns);
-        
+
         Productos.setModel(model);
         Productos.getColumn("Codigo").setPreferredWidth(50);
         Productos.getColumn("Descripcion").setPreferredWidth(320);
@@ -94,126 +96,130 @@ public class AddVentaDialogViewController {
         Productos.getColumn("Unidad").setPreferredWidth(80);
         Productos.getColumn("Precio").setPreferredWidth(90);
     }
-    
-    private void loadProducts(){
+
+    private void loadProducts() {
         model.setRowCount(0);
         List<Producto> productos = new ProductoJpaController(Conection.createEntityManagerFactory()).findProductoEntities();
         productos.forEach(producto -> {
             Object[] row = {
-                producto.getProductoID(), 
+                producto.getProductoID(),
                 producto.getDescripcion(),
                 producto.getMarcaID().getNombre(),
-                producto.getUnidad(), 
+                producto.getUnidad(),
                 getNumberFormat(producto.getPrecioVenta())
             };
 
             model.addRow(row);
         });
     }
-    
-    private void loadBrands(){
+
+    private void loadBrands() {
         Marcas.removeAllItems();
         Marcas.addItem("-- Todas la marcas --");
         List<Marca> marcas = Conection.createEntityManagerFactory().createEntityManager()
-            .createNamedQuery("Marca.findAll")
-            .getResultList();
+                .createNamedQuery("Marca.findAll")
+                .getResultList();
         marcas.forEach(Marcas::addItem);
     }
-    
-    public void search(){
+
+    public void search() {
         TableRowSorter s = new TableRowSorter(Productos.getModel());
-        s.setRowFilter(RowFilter.regexFilter("(?i)"+Buscar.getText(), 1));
+        s.setRowFilter(RowFilter.regexFilter("(?i)" + Buscar.getText(), 1));
         Productos.setRowSorter(s);
         clear();
     }
-    
-    public void filterBrands(){
+
+    public void filterBrands() {
         TableRowSorter s = new TableRowSorter(Productos.getModel());
         String Item = Marcas.getSelectedItem().toString();
-        s.setRowFilter(RowFilter.regexFilter(Marcas.getSelectedIndex() > 0 ? Item : "" , 2));
+        s.setRowFilter(RowFilter.regexFilter(Marcas.getSelectedIndex() > 0 ? Item : "", 2));
         Productos.setRowSorter(s);
         clear();
     }
-    
+
     //Task
-    public void loadProduct(){
+    public void loadProduct() {
         int fila = Productos.getSelectedRow();
-        if(fila >= 0){
+        if (fila >= 0) {
             setLoad(true);
-            Runnable run = ()->{
-                
+            Runnable run = () -> {
+
                 Query query = Conection.createEntityManagerFactory().createEntityManager()
-                    .createNativeQuery
-        ("SELECT cantidad FROM inventario WHERE ProductoID = "+Integer.valueOf(Productos.getValueAt(fila, 0).toString()));
+                        .createNativeQuery("SELECT cantidad FROM inventario WHERE ProductoID = " + Integer.valueOf(Productos.getValueAt(fila, 0).toString()));
                 List values = query.getResultList();
                 float existenciaProducto = Float.parseFloat(values.get(0).toString());
 
-                if(existenciaProducto <= 0){
+                if (existenciaProducto <= 0) {
                     Error.setBackground(new Color(185, 0, 0));
                     Error.setText("No hay existencia del producto seleccionado");
                     setEditableFields(false);
-                }else{
+                } else {
                     Error.setBackground(Color.white);
                     setEditableFields(true);
                 }
-                
+
                 DescuentoLempiras.setText(getNumberFormat(0f));
                 DescuentoPorcentaje.setText(getNumberFormat(0f));
                 Existencia.setText(getNumberFormat(existenciaProducto));
                 Precio.setText(getNumberFormat(Float.parseFloat(Productos.getValueAt(fila, 4).toString().replace(",", ""))));
                 Cantidad.setText(getNumberFormat(1f));
-                float Total = 
-                    Float.parseFloat(Productos.getValueAt(fila, 4).toString().replace(",", "")) 
-                        * 
-                    Float.parseFloat(Cantidad.getText().replace(",", ""));
+                float Total
+                        = Float.parseFloat(Productos.getValueAt(fila, 4).toString().replace(",", ""))
+                        * Float.parseFloat(Cantidad.getText().replace(",", ""));
                 Subtotal.setText(getNumberFormat(Total));
-                
+
                 setLoad(false);
             };
             new Thread(run).start();
         }
     }
-    
-    public void updateSubtotal(){
-        if(validate()){
+
+    public void updateSubtotal() {
+        if (validate()) {
             Error.setBackground(Color.white);
             float descuento = Float.parseFloat(DescuentoLempiras.getText().replace(",", ""));
             float precio = Float.parseFloat(Precio.getText().replace(",", ""));
             float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
             float subtotal = (precio * cantidad) - descuento;
             Subtotal.setText(getNumberFormat(subtotal));
-        }else{ Error.setBackground(new Color(185, 0, 0)); }
+        } else {
+            Error.setBackground(new Color(185, 0, 0));
+        }
     }
-    
-    public void updatePorcentLempiras(){
-        if(validate()){
+
+    public void updatePorcentLempiras() {
+        if (validate()) {
             float descuento = Float.parseFloat(DescuentoPorcentaje.getText().replace(",", ""));
             float precio = Float.parseFloat(Precio.getText().replace(",", ""));
             float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
             float DescuentoEnLempiras = (precio * cantidad) * (descuento * 0.01f);
             DescuentoLempiras.setText(getNumberFormat(DescuentoEnLempiras));
-        }else{ Error.setBackground(new Color(185, 0, 0)); }
+        } else {
+            Error.setBackground(new Color(185, 0, 0));
+        }
     }
-    
-    public void updateLempirasPorcent(){
-        if(validate()){
+
+    public void updateLempirasPorcent() {
+        if (validate()) {
             float descuento = Float.parseFloat(DescuentoLempiras.getText().replace(",", ""));
             float precio = Float.parseFloat(Precio.getText().replace(",", ""));
             float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
             float DescuentoEnPorcentaje = (descuento) / ((precio * cantidad) / 100);
             DescuentoPorcentaje.setText(getNumberFormat(DescuentoEnPorcentaje));
-        }else{ Error.setBackground(new Color(185, 0, 0)); }
+        } else {
+            Error.setBackground(new Color(185, 0, 0));
+        }
     }
-    
-    public Object[] getValues(){
-        
-        if(validate()){
+
+    public Object[] getValues() {
+
+        if (validate()) {
             float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
             float precio = Float.parseFloat(Precio.getText().replace(",", ""));
             float descuento = Float.parseFloat(DescuentoLempiras.getText().replace(",", ""));
             float subtotal = (cantidad * precio) - descuento;
-            
-            Object[] values  = {
+
+            Object[] values = {
                 Productos.getValueAt(Productos.getSelectedRow(), 0),
                 Productos.getValueAt(Productos.getSelectedRow(), 1),
                 Productos.getValueAt(Productos.getSelectedRow(), 3),
@@ -223,82 +229,84 @@ public class AddVentaDialogViewController {
                 getNumberFormat(subtotal)
             };
             return values;
-        }else{ Error.setBackground(new Color(185, 0, 0)); }
+        } else {
+            Error.setBackground(new Color(185, 0, 0));
+        }
         return null;
     }
-    
-    private boolean validate(){
+
+    private boolean validate() {
         int fila = Productos.getSelectedRow();
-        if(fila >= 0){
+        if (fila >= 0) {
             float descuentoLempiras;
             float precio;
             //validando descuento en porcentaje
-            try{
+            try {
                 float descuentoPorcentaje = Float.parseFloat(DescuentoPorcentaje.getText().replace(",", ""));
-                if(descuentoPorcentaje < 0 || descuentoPorcentaje > 100){
+                if (descuentoPorcentaje < 0 || descuentoPorcentaje > 100) {
                     Error.setText("El descuento en porcentaje debe de ser mayor a cero y menor a 100");
                     return false;
                 }
-            }catch(NumberFormatException ex){
+            } catch (NumberFormatException ex) {
                 Error.setText("El descuento en porcentaje debe de ser un numero");
                 return false;
             }
-            
+
             //validando descuento en lempiras
-            try{
+            try {
                 descuentoLempiras = Float.parseFloat(DescuentoLempiras.getText().replace(",", ""));
-                if(descuentoLempiras < 0){
+                if (descuentoLempiras < 0) {
                     Error.setText("El descuento debe de ser mayor a cero");
                     return false;
                 }
-            }catch(NumberFormatException ex){
+            } catch (NumberFormatException ex) {
                 Error.setText("El descuento en lempiras debe de ser un numero");
                 return false;
             }
-            
+
             //validando precio
-            try{
+            try {
                 precio = Float.parseFloat(Precio.getText().replace(",", ""));
-                if(precio <= 0){
+                if (precio <= 0) {
                     Error.setText("El precio debe de ser mayor a cero");
                     return false;
                 }
-            }catch(NumberFormatException ex){
+            } catch (NumberFormatException ex) {
                 Error.setText("El precio debe de ser un numero");
                 return false;
             }
-            
+
             //validando que el descuento no supere el precio
-            if(descuentoLempiras > precio){
+            if (descuentoLempiras > precio) {
                 Error.setText("El descuento no puede ser mayor al precio del producto");
                 return false;
             }
-            
+
             //validando la cantidad
-            try{
+            try {
                 float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
-                if(cantidad <= 0){
+                if (cantidad <= 0) {
                     Error.setText("La Cantidad debe de ser mayor a cero");
                     return false;
                 }
                 float existencia = Float.parseFloat(Existencia.getText().replace(",", " "));
-                if(cantidad > existencia){
+                if (cantidad > existencia) {
                     Error.setText("La cantidad debe de ser menor a la existencia actual");
                     return false;
                 }
-            }catch(NumberFormatException ex){
+            } catch (NumberFormatException ex) {
                 Error.setText("La cantidad del producto debe de ser un numero");
                 return false;
             }
-            
-        }else{
+
+        } else {
             Error.setText("Seleccione un producto de la lista");
             return false;
         }
         return true;
     }
-    
-    private void clear(){
+
+    private void clear() {
         Existencia.setText("0.00");
         DescuentoPorcentaje.setText("0.00");
         DescuentoLempiras.setText("0.00");
@@ -306,14 +314,14 @@ public class AddVentaDialogViewController {
         Cantidad.setText("0.00");
         Subtotal.setText("0.00");
     }
-    
-    private void setEditableFields(boolean status){
+
+    private void setEditableFields(boolean status) {
         DescuentoPorcentaje.setEditable(status);
         DescuentoLempiras.setEditable(status);
         Cantidad.setEditable(status);
     }
-    
-    private String getNumberFormat(float Value){
+
+    private String getNumberFormat(float Value) {
         DecimalFormat format = new DecimalFormat("#,##0.00");
         return format.format(Value);
     }
