@@ -128,14 +128,9 @@ public class AddVentaDialogViewController {
     }
     
     public void filterBrands(){
-        clear();
-        TableRowSorter s = new TableRowSorter();
-        s.setModel(Productos.getModel());
-        if(Marcas.getSelectedIndex() > 0){
-            s.setRowFilter(RowFilter.regexFilter(Marcas.getSelectedItem().toString() , 2));
-        }else{
-            s.setRowFilter(RowFilter.regexFilter("" , 2));
-        }
+        TableRowSorter s = new TableRowSorter(Productos.getModel());
+        String Item = Marcas.getSelectedItem().toString();
+        s.setRowFilter(RowFilter.regexFilter(Marcas.getSelectedIndex() > 0 ? Item : "" , 2));
         Productos.setRowSorter(s);
         clear();
     }
