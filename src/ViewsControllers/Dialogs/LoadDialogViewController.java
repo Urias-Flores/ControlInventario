@@ -1,5 +1,6 @@
 package ViewsControllers.Dialogs;
 
+import Resource.Conection;
 import Resource.NoJpaConection;
 import Views.Dialogs.LoadDialog;
 import javax.swing.ImageIcon;
@@ -27,13 +28,16 @@ public class LoadDialogViewController {
             NoJpaConection conectionNoJpa = new NoJpaConection();
             if(conectionNoJpa.getconec() != null){
                 try {
-                    Barra.setValue(90);
-                    Texto.setText("¡Conexion con el servidor establecida!");
-                    Icons.setIcon(new ImageIcon(getClass().getResource("/Icons/Completado.png")));
-                    Thread.sleep(1000);
-                    Barra.setValue(100);
-                    Thread.sleep(1000);
-                    Instance.setVisible(false);
+                    Barra.setValue(60);
+                    Object result = Conection.createEntityManager().createNativeQuery("SELECT 1").getSingleResult();
+                    if(result != null){
+                        Texto.setText("¡Conexion con el servidor establecida!");
+                        Icons.setIcon(new ImageIcon(getClass().getResource("/Icons/Completado.png")));
+                        Thread.sleep(1000);
+                        Barra.setValue(100);
+                        Thread.sleep(1000);
+                        Instance.setVisible(false);
+                    }
                 } catch (InterruptedException ex) {
                     System.err.println("Error: "+ex.getMessage());
                 }

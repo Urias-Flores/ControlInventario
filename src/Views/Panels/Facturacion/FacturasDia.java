@@ -14,9 +14,9 @@ public class FacturasDia extends javax.swing.JPanel {
         btnImprimirReporte.addMouseListener(Utilities.getMLGeneralButton());
         btnEliminar.addMouseListener(Utilities.getMLGeneralButton());
         
-        vc = new FacturasDiaViewController(cmbCliente, tbFacturas, tbVistaPreeliminar, txtSubtotal, txtDescuento, txtImporte, txtISV, txtTotal, txtCargando);
-        vc.CargarFacturas();
-        vc.CargarClientes();
+        vc = new FacturasDiaViewController(cmbCliente, tbFacturas, tbVistaPreeliminar, 
+                txtSubtotal, txtDescuento, txtImporte, 
+                txtISV, txtTotal, txtCargando);
     }
     
     @SuppressWarnings("unchecked")
@@ -347,11 +347,11 @@ public class FacturasDia extends javax.swing.JPanel {
     }//GEN-LAST:event_btnImprimirMouseClicked
 
     private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
-        vc.Eliminar();
+        vc.deleteFactura();
     }//GEN-LAST:event_btnEliminarMouseClicked
 
     private void lbActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbActualizarMouseClicked
-        vc.CargarFacturas();
+        vc.updateData();
     }//GEN-LAST:event_lbActualizarMouseClicked
 
     private void cmbClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClienteActionPerformed
@@ -359,7 +359,7 @@ public class FacturasDia extends javax.swing.JPanel {
     }//GEN-LAST:event_cmbClienteActionPerformed
 
     private void tbFacturasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbFacturasMousePressed
-        vc.CargarFactura();
+        vc.loadFactura();
     }//GEN-LAST:event_tbFacturasMousePressed
 
     private void btnImprimirReporteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnImprimirReporteMouseClicked

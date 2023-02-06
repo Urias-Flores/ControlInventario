@@ -21,7 +21,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Query;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -49,8 +51,11 @@ public class FacturaViewController {
     private JTextField Importe;
     private JTextField ISV;
     private JTextField Total;
+    
+    private JLabel Cargando;
 
-    public FacturaViewController(JComboBox Clientes, JTextField RTN, JRadioButton Pagado, JRadioButton Pendiente, JTextField Barra, JTextField Cotizacion, JTable Ventas, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total) {
+    public FacturaViewController(JLabel Cargando, JComboBox Clientes, JTextField RTN, JRadioButton Pagado, JRadioButton Pendiente, JTextField Barra, JTextField Cotizacion, JTable Ventas, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total) {
+        this.Cargando = Cargando;
         this.Clientes = Clientes;
         this.RTN = RTN;
         this.Pagado = Pagado;
@@ -66,6 +71,17 @@ public class FacturaViewController {
 
         controller = new VentaJpaController(Conection.createEntityManagerFactory());
         controllerCotizacion = new CotizacionJpaController(Conection.createEntityManagerFactory());
+        Init();
+    }
+    
+    private void Init(){
+        Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
+        Runnable run = ()->{
+            InitTable();
+            CargarClientes();
+            Cargando.setIcon(null);
+        };
+        new Thread(run).start();
     }
 
     public void cargarProducto(Object[] values) {
@@ -113,62 +129,74 @@ public class FacturaViewController {
         }
     }
 
+    //Task
     public void cargarPorCodigoBarras() {
-        ProductoJpaController controllerProducto = new ProductoJpaController(Conection.createEntityManagerFactory());
-        List<Producto> productos = controllerProducto.findProductoEntities();
-        productos.forEach(producto -> {
-            System.out.println(Barra.getText()+" = "+producto.getBarra());
-            if(producto.getBarra() != null){
-                if (producto.getBarra().equals(Barra.getText())) {
-                    Object[] row = {
-                        producto.getProductoID(),
-                        producto.getDescripcion(),
-                        producto.getUnidad(),
-                        getNumberFormat(1f),
-                        getNumberFormat(producto.getPrecioVenta()),
-                        getNumberFormat(0f),
-                        getNumberFormat(producto.getPrecioVenta())
-                    };
+        Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
+        Runnable run = ()->{
+            ProductoJpaController controllerProducto = new ProductoJpaController(Conection.createEntityManagerFactory());
+            List<Producto> productos = controllerProducto.findProductoEntities();
+            productos.forEach(producto -> {
+                System.out.println(Barra.getText()+" = "+producto.getBarra());
+                if(producto.getBarra() != null){
+                    if (producto.getBarra().equals(Barra.getText())) {
+                        Object[] row = {
+                            producto.getProductoID(),
+                            producto.getDescripcion(),
+                            producto.getUnidad(),
+                            getNumberFormat(1f),
+                            getNumberFormat(producto.getPrecioVenta()),
+                            getNumberFormat(0f),
+                            getNumberFormat(producto.getPrecioVenta())
+                        };
 
-                    Query query = Conection.createEntityManagerFactory().createEntityManager()
-                        .createNativeQuery("SELECT cantidad FROM inventario WHERE ProductoID = "+producto.getProductoID());
-                    List values = query.getResultList();
+                        Query query = Conection.createEntityManagerFactory().createEntityManager()
+                            .createNativeQuery("SELECT cantidad FROM inventario WHERE ProductoID = "+producto.getProductoID());
+                        List values = query.getResultList();
 
-                    float existenciaProducto = Float.parseFloat(values.get(0).toString());
-                    if(existenciaProducto <= 0){
-                        Dialogs.ShowMessageDialog("El producto no cuenta con existencia en inventario", Dialogs.ERROR_ICON);
-                    }else{
-                        cargarProducto(row);
+                        float existenciaProducto = Float.parseFloat(values.get(0).toString());
+                        if(existenciaProducto <= 0){
+                            Dialogs.ShowMessageDialog("El producto no cuenta con existencia en inventario", Dialogs.ERROR_ICON);
+                        }else{
+                            cargarProducto(row);
+                        }
                     }
                 }
-            }
-        });
-        Barra.setText("");
+            });
+            Cargando.setIcon(null);
+            Barra.setText("");
+        };
+        new Thread(run).start();
     }
 
+    //Task
     public void cargarCotizacion() {
         if (validateCotizacion()) {
-            List<Cotizaciondetalle> cotizacionDetalles = new CotizaciondetalleJpaController(Conection.createEntityManagerFactory()).findCotizaciondetalleEntities();
-            int currentCotizacionID = Integer.parseInt(Cotizacion.getText());
+            Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
+            Runnable run = ()->{
+               
+                List<Cotizaciondetalle> cotizacionDetalles = new CotizaciondetalleJpaController(Conection.createEntityManagerFactory()).findCotizaciondetalleEntities();
+                int currentCotizacionID = Integer.parseInt(Cotizacion.getText());
 
-            cotizacionDetalles.forEach(cotizacionDetalle -> {
-                int cotizacionID = cotizacionDetalle.getCotizacionID().getCotizacionID();
-                if (cotizacionID == currentCotizacionID) {
-                    Producto producto = new ProductoJpaController(Conection.createEntityManagerFactory())
-                            .findProducto(cotizacionDetalle.getProductoID().getProductoID());
-                    Object[] row = {
-                        cotizacionDetalle.getProductoID().getProductoID(),
-                        cotizacionDetalle.getProductoID().getDescripcion(),
-                        cotizacionDetalle.getProductoID().getUnidad(),
-                        getNumberFormat(cotizacionDetalle.getCantidad()),
-                        getNumberFormat(producto.getPrecioVenta()),
-                        getNumberFormat(cotizacionDetalle.getDescuento()),
-                        getNumberFormat(cotizacionDetalle.getCantidad() * producto.getPrecioVenta() - cotizacionDetalle.getDescuento())
-                    };
-                    cargarProducto(row);
-                }
-            });
-
+                cotizacionDetalles.forEach(cotizacionDetalle -> {
+                    int cotizacionID = cotizacionDetalle.getCotizacionID().getCotizacionID();
+                    if (cotizacionID == currentCotizacionID) {
+                        Producto producto = new ProductoJpaController(Conection.createEntityManagerFactory())
+                                .findProducto(cotizacionDetalle.getProductoID().getProductoID());
+                        Object[] row = {
+                            cotizacionDetalle.getProductoID().getProductoID(),
+                            cotizacionDetalle.getProductoID().getDescripcion(),
+                            cotizacionDetalle.getProductoID().getUnidad(),
+                            getNumberFormat(cotizacionDetalle.getCantidad()),
+                            getNumberFormat(producto.getPrecioVenta()),
+                            getNumberFormat(cotizacionDetalle.getDescuento()),
+                            getNumberFormat(cotizacionDetalle.getCantidad() * producto.getPrecioVenta() - cotizacionDetalle.getDescuento())
+                        };
+                        cargarProducto(row);
+                    }
+                }); 
+                Cargando.setIcon(null);
+            };
+            new Thread(run).start();
             Cotizacion.setText("");
         }
     }
@@ -195,14 +223,11 @@ public class FacturaViewController {
     }
 
     public void CargarClientes() {
-        Runnable run = ()->{
-            List<Cliente> clientes = new ClienteJpaController(Conection.createEntityManagerFactory()).findClienteEntities();
-            clientes.forEach(Clientes::addItem);  
-        };
-        new Thread(run).start();
+        List<Cliente> clientes = new ClienteJpaController(Conection.createEntityManagerFactory()).findClienteEntities();
+        clientes.forEach(Clientes::addItem);  
     }
 
-    public void InitTable() {
+    private void InitTable() {
         String[] columns = {"Codigo", "Producto", "Unidades", "Cantidad", "Precio", "Descuento", "Subtotal"};
         model.setColumnIdentifiers(columns);
 

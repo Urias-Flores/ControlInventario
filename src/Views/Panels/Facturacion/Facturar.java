@@ -23,9 +23,10 @@ public class Facturar extends javax.swing.JPanel {
         bgEstado.add(rbPagada);
         bgEstado.add(rbPendiente);
         
-        vc = new FacturaViewController(cmbCliente, txtRTN, rbPagada, rbPendiente, txtBarra, txtNoCotizacion,tbVentas, txtSubtotal, txtDescuento, txtImporte, txtISV, txtTotal);
-        vc.InitTable();
-        vc.CargarClientes();
+        vc = new FacturaViewController(lbCargando, cmbCliente, txtRTN, 
+                rbPagada, rbPendiente, txtBarra, 
+                txtNoCotizacion,tbVentas, txtSubtotal, 
+                txtDescuento, txtImporte, txtISV, txtTotal);
     }
 
     @SuppressWarnings("unchecked")
@@ -64,6 +65,7 @@ public class Facturar extends javax.swing.JPanel {
         txtNoCotizacion = new javax.swing.JTextField();
         btnEditarCarrito = new javax.swing.JLabel();
         btnEliminarTodo = new javax.swing.JLabel();
+        lbCargando = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -273,6 +275,8 @@ public class Facturar extends javax.swing.JPanel {
             }
         });
 
+        lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -316,6 +320,8 @@ public class Facturar extends javax.swing.JPanel {
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1371, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnCotizar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -410,7 +416,8 @@ public class Facturar extends javax.swing.JPanel {
                 .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCotizar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCotizar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -492,6 +499,7 @@ public class Facturar extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbCargando;
     private javax.swing.JRadioButton rbPagada;
     private javax.swing.JRadioButton rbPendiente;
     private javax.swing.JTable tbVentas;
