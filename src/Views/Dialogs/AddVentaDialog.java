@@ -23,9 +23,9 @@ public class AddVentaDialog extends javax.swing.JDialog {
         txtBuscar.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtError.setBackground(Color.white);
         
-        vc = new AddVentaDialogViewController(txtBuscar, cmbMarcas, txtCargando, tbProductos, txtExistencia,txtDescuentoPorcentaje, txtDescuentoLempiras, txtPrecio, txtCantidad, txtSubtotal, txtError);
-        vc.CargarMarcas();
-        vc.CargarProductos();
+        vc = new AddVentaDialogViewController(txtBuscar, cmbMarcas, txtCargando, tbProductos, 
+                txtExistencia,txtDescuentoPorcentaje, txtDescuentoLempiras, txtPrecio, 
+                txtCantidad, txtSubtotal, txtError);
     }
 
     @SuppressWarnings("unchecked")
@@ -407,12 +407,12 @@ public class AddVentaDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCloseMouseClicked
 
     private void txtDescuentoPorcentajeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescuentoPorcentajeKeyReleased
-        vc.updatePorcentajeLempiras();
+        vc.updatePorcentLempiras();
         vc.updateSubtotal();
     }//GEN-LAST:event_txtDescuentoPorcentajeKeyReleased
 
     private void txtDescuentoLempirasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescuentoLempirasKeyReleased
-        vc.updateLempirasPorcentajes();
+        vc.updateLempirasPorcent();
         vc.updateSubtotal();
     }//GEN-LAST:event_txtDescuentoLempirasKeyReleased
 
@@ -421,15 +421,15 @@ public class AddVentaDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_txtCantidadKeyReleased
 
     private void btnActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnActualizarMouseClicked
-        vc.CargarProductos();
+        vc.updateData();
     }//GEN-LAST:event_btnActualizarMouseClicked
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-        vc.Buscar();
+        vc.search();
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void tbProductosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbProductosMousePressed
-        vc.cargarProducto();
+        vc.loadProduct();
     }//GEN-LAST:event_tbProductosMousePressed
 
     private void txtExistenciaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExistenciaKeyReleased
@@ -437,7 +437,7 @@ public class AddVentaDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_txtExistenciaKeyReleased
 
     private void cmbMarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMarcasActionPerformed
-        vc.FiltrarMarcas();
+        vc.filterBrands();
     }//GEN-LAST:event_cmbMarcasActionPerformed
 
     private void txtCargandoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCargandoMouseClicked
