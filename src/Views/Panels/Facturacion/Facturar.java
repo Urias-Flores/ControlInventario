@@ -7,25 +7,29 @@ import ViewsControllers.Panels.Facturacion.FacturaViewController;
 public class Facturar extends javax.swing.JPanel {
 
     private FacturaViewController vc;
-    
+
     public Facturar() {
         initComponents();
+
         btnAgregarCliente.addMouseListener(Utilities.getMLGrayButton());
         btnAgregarCarrito.addMouseListener(Utilities.getMLGrayButton());
         btnEditarCarrito.addMouseListener(Utilities.getMLGrayButton());
         btnEliminarCarrito.addMouseListener(Utilities.getMLGrayButton());
         btnEliminarTodo.addMouseListener(Utilities.getMLGrayButton());
+
         btnAgregar.addMouseListener(Utilities.getMLGeneralButton());
+        btnCotizar.addMouseListener(Utilities.getMLGeneralButton());
+
         txtRTN.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtBarra.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtNoCotizacion.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        
+
         bgEstado.add(rbPagada);
         bgEstado.add(rbPendiente);
-        
-        vc = new FacturaViewController(lbCargando, cmbCliente, txtRTN, 
-                rbPagada, rbPendiente, txtBarra, 
-                txtNoCotizacion,tbVentas, txtSubtotal, 
+
+        vc = new FacturaViewController(lbCargando, cmbCliente, txtRTN,
+                rbPagada, rbPendiente, txtBarra,
+                txtNoCotizacion, tbVentas, txtSubtotal,
                 txtDescuento, txtImporte, txtISV, txtTotal);
     }
 
@@ -423,60 +427,60 @@ public class Facturar extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
-        if(vc.InsertVenta()){
+        if (vc.InsertSale()) {
             Dialogs.ShowMessageDialog("¡La facturacion ha sido exito", Dialogs.COMPLETE_ICON);
         }
     }//GEN-LAST:event_btnAgregarMouseClicked
 
     private void btnAgregarCarritoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarCarritoMouseClicked
         Object[] values = Dialogs.ShowAddVentaDialog();
-        if(values != null && values.length > 0){
-            vc.cargarProducto(values);
+        if (values != null && values.length > 0) {
+            vc.loadProduct(values);
         }
     }//GEN-LAST:event_btnAgregarCarritoMouseClicked
 
     private void btnEliminarCarritoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarCarritoMouseClicked
-        vc.DeleteVenta();
+        vc.deleteSale();
     }//GEN-LAST:event_btnEliminarCarritoMouseClicked
 
     private void btnAgregarClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarClienteMouseClicked
-        vc.AgregarCliente();
+        vc.addClient();
     }//GEN-LAST:event_btnAgregarClienteMouseClicked
 
     private void cmbClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClienteActionPerformed
-        if(cmbCliente.getSelectedIndex() < 2){
+        if (cmbCliente.getSelectedIndex() < 2) {
             setEnabledEstado(false);
-        }else{
+        } else {
             setEnabledEstado(true);
         }
     }//GEN-LAST:event_cmbClienteActionPerformed
 
     private void txtBarraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBarraActionPerformed
-        vc.cargarPorCodigoBarras();
+        vc.loadProductByBarCode();
     }//GEN-LAST:event_txtBarraActionPerformed
 
     private void btnCotizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCotizarMouseClicked
-        vc.InsertCotizacion();
+        vc.InsertQuote();
     }//GEN-LAST:event_btnCotizarMouseClicked
 
     private void txtNoCotizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoCotizacionActionPerformed
-        vc.cargarCotizacion();
+        vc.loadQuote();
     }//GEN-LAST:event_txtNoCotizacionActionPerformed
 
     private void btnEditarCarritoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarCarritoMouseClicked
-        vc.editarValoresItem();
+        vc.editItemValues();
     }//GEN-LAST:event_btnEditarCarritoMouseClicked
 
     private void btnEliminarTodoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarTodoMouseClicked
-        vc.deleteAllVenta();
+        vc.deleteAllSales();
     }//GEN-LAST:event_btnEliminarTodoMouseClicked
 
-    private void setEnabledEstado(boolean Estado){
+    private void setEnabledEstado(boolean Estado) {
         rbPagada.setEnabled(Estado);
         rbPendiente.setEnabled(Estado);
         bgEstado.clearSelection();
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgEstado;
     private javax.swing.JLabel btnAgregar;

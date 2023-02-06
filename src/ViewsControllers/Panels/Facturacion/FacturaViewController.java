@@ -34,7 +34,12 @@ public class FacturaViewController {
     private VentaJpaController controller;
     private CotizacionJpaController controllerCotizacion;
 
-    private DefaultTableModel model = new DefaultTableModel();
+    private DefaultTableModel model = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
+        }
+    };
 
     private JComboBox<Cliente> Clientes;
     private JTextField RTN;
@@ -51,7 +56,7 @@ public class FacturaViewController {
     private JTextField Importe;
     private JTextField ISV;
     private JTextField Total;
-    
+
     private JLabel Cargando;
 
     public FacturaViewController(JLabel Cargando, JComboBox Clientes, JTextField RTN, JRadioButton Pagado, JRadioButton Pendiente, JTextField Barra, JTextField Cotizacion, JTable Ventas, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total) {
@@ -71,20 +76,55 @@ public class FacturaViewController {
 
         controller = new VentaJpaController(Conection.createEntityManagerFactory());
         controllerCotizacion = new CotizacionJpaController(Conection.createEntityManagerFactory());
+
+        //Cargando modelo de tabla para factura
+        setModelTable();
+
+        //Inicializando carga de datos
         Init();
     }
-    
-    private void Init(){
-        Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
-        Runnable run = ()->{
-            InitTable();
-            CargarClientes();
-            Cargando.setIcon(null);
+
+    private void setLoad(boolean state) {
+        ImageIcon icon = new ImageIcon(getClass().getResource(Utilities.getLoadingImage()));
+        Cargando.setIcon(state ? icon : null);
+    }
+
+    private void Init() {
+        setLoad(true);
+        Runnable run = () -> {
+            loadClients();
+            setLoad(false);
         };
         new Thread(run).start();
     }
 
-    public void cargarProducto(Object[] values) {
+    private void setModelTable() {
+        String[] columns = {"Codigo", "Producto", "Unidades", "Cantidad", "Precio", "Descuento", "Subtotal"};
+        model.setColumnIdentifiers(columns);
+
+        Ventas.setModel(model);
+        Ventas.getColumn("Codigo").setPreferredWidth(60);
+        Ventas.getColumn("Producto").setPreferredWidth(710);
+        Ventas.getColumn("Unidades").setPreferredWidth(70);
+        Ventas.getColumn("Cantidad").setPreferredWidth(70);
+        Ventas.getColumn("Precio").setPreferredWidth(120);
+        Ventas.getColumn("Descuento").setPreferredWidth(120);
+        Ventas.getColumn("Subtotal").setPreferredWidth(120);
+    }
+
+    public void loadClients() {
+        List<Cliente> clientes = new ClienteJpaController(Conection.createEntityManagerFactory()).findClienteEntities();
+        clientes.forEach(Clientes::addItem);
+    }
+
+    public void addClient() {
+        Dialogs.ShowAddClienteDialog();
+        Clientes.removeAllItems();
+        Clientes.addItem(new Cliente(0, "-- Seleccione cliente --", "", "", "", "", 0));
+        Init();
+    }
+
+    public void loadProduct(Object[] values) {
         boolean NoexistRow = true;
         for (int i = 0; i < Ventas.getRowCount(); i++) {
             if (Ventas.getValueAt(i, 0).toString().equals(values[0].toString())) {
@@ -103,41 +143,41 @@ public class FacturaViewController {
         }
         updateTotal();
     }
-    
-    public void editarValoresItem(){
+
+    public void editItemValues() {
         int fila = Ventas.getSelectedRow();
-        if(fila >= 0){
+        if (fila >= 0) {
             Object[] values = {
                 Ventas.getValueAt(fila, 0).toString(),
                 Ventas.getValueAt(fila, 1).toString(),
                 Ventas.getValueAt(fila, 2).toString(),
                 Ventas.getValueAt(fila, 3).toString(),
                 Ventas.getValueAt(fila, 4).toString(),
-                Ventas.getValueAt(fila, 5).toString(),
-            };
-            
+                Ventas.getValueAt(fila, 5).toString(),};
+
             Object[] newValues = Dialogs.ShowEditVentaDialog(values);
-            
-            if(newValues != null && newValues[0] != null){
+
+            if (newValues != null && newValues[0] != null) {
                 Ventas.setValueAt(getNumberFormat(Float.parseFloat(newValues[0].toString())), fila, 3);
                 Ventas.setValueAt(getNumberFormat(Float.parseFloat(newValues[1].toString())), fila, 5);
                 Ventas.setValueAt(getNumberFormat(Float.parseFloat(newValues[2].toString())), fila, 6);
                 updateTotal();
             }
-        }else{
+        } else {
             Dialogs.ShowMessageDialog("Seleccione un producto de la lista", Dialogs.ERROR_ICON);
         }
     }
 
     //Task
-    public void cargarPorCodigoBarras() {
-        Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
-        Runnable run = ()->{
+    public void loadProductByBarCode() {
+        setLoad(true);
+        Runnable run = () -> {
+
             ProductoJpaController controllerProducto = new ProductoJpaController(Conection.createEntityManagerFactory());
             List<Producto> productos = controllerProducto.findProductoEntities();
+
             productos.forEach(producto -> {
-                System.out.println(Barra.getText()+" = "+producto.getBarra());
-                if(producto.getBarra() != null){
+                if (producto.getBarra() != null) {
                     if (producto.getBarra().equals(Barra.getText())) {
                         Object[] row = {
                             producto.getProductoID(),
@@ -149,31 +189,33 @@ public class FacturaViewController {
                             getNumberFormat(producto.getPrecioVenta())
                         };
 
-                        Query query = Conection.createEntityManagerFactory().createEntityManager()
-                            .createNativeQuery("SELECT cantidad FROM inventario WHERE ProductoID = "+producto.getProductoID());
+                        Query query = Conection.createEntityManager()
+                                .createNativeQuery("SELECT cantidad FROM inventario WHERE ProductoID = " + producto.getProductoID());
                         List values = query.getResultList();
 
                         float existenciaProducto = Float.parseFloat(values.get(0).toString());
-                        if(existenciaProducto <= 0){
+                        if (existenciaProducto <= 0) {
                             Dialogs.ShowMessageDialog("El producto no cuenta con existencia en inventario", Dialogs.ERROR_ICON);
-                        }else{
-                            cargarProducto(row);
+                        } else {
+                            loadProduct(row);
                         }
                     }
                 }
             });
-            Cargando.setIcon(null);
+
             Barra.setText("");
+            setLoad(false);
         };
         new Thread(run).start();
     }
 
     //Task
-    public void cargarCotizacion() {
-        if (validateCotizacion()) {
-            Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
-            Runnable run = ()->{
-               
+    public void loadQuote() {
+        if (validateQuote()) {
+
+            setLoad(true);
+            Runnable run = () -> {
+
                 List<Cotizaciondetalle> cotizacionDetalles = new CotizaciondetalleJpaController(Conection.createEntityManagerFactory()).findCotizaciondetalleEntities();
                 int currentCotizacionID = Integer.parseInt(Cotizacion.getText());
 
@@ -191,17 +233,18 @@ public class FacturaViewController {
                             getNumberFormat(cotizacionDetalle.getDescuento()),
                             getNumberFormat(cotizacionDetalle.getCantidad() * producto.getPrecioVenta() - cotizacionDetalle.getDescuento())
                         };
-                        cargarProducto(row);
+                        loadProduct(row);
                     }
-                }); 
-                Cargando.setIcon(null);
+                });
+
+                Cotizacion.setText("");
+                setLoad(false);
             };
             new Thread(run).start();
-            Cotizacion.setText("");
         }
     }
 
-    private boolean validateCotizacion() {
+    private boolean validateQuote() {
         if (Cotizacion.getText().isEmpty() || Cotizacion.getForeground().equals(new Color(180, 180, 180))) {
             Dialogs.ShowMessageDialog("Introduzca el numero de cotizacion", Dialogs.ERROR_ICON);
             return false;
@@ -209,39 +252,13 @@ public class FacturaViewController {
         try {
             int NoCotizacion = Integer.parseInt(Cotizacion.getText());
         } catch (NumberFormatException ex) {
-            Dialogs.ShowMessageDialog("El Numero de cotizacion debe ser un numero", Dialogs.ERROR_ICON);
+            Dialogs.ShowMessageDialog("El Numero de cotizacion debe ser un numerico", Dialogs.ERROR_ICON);
             return false;
         }
         return true;
     }
 
-    public void AgregarCliente() {
-        Dialogs.ShowAddClienteDialog();
-        Clientes.removeAllItems();
-        Clientes.addItem(new Cliente(0, "-- Seleccione cliente --", "", "", "", "", 0));
-        CargarClientes();
-    }
-
-    public void CargarClientes() {
-        List<Cliente> clientes = new ClienteJpaController(Conection.createEntityManagerFactory()).findClienteEntities();
-        clientes.forEach(Clientes::addItem);  
-    }
-
-    private void InitTable() {
-        String[] columns = {"Codigo", "Producto", "Unidades", "Cantidad", "Precio", "Descuento", "Subtotal"};
-        model.setColumnIdentifiers(columns);
-
-        Ventas.setModel(model);
-        Ventas.getColumn("Codigo").setPreferredWidth(60);
-        Ventas.getColumn("Producto").setPreferredWidth(710);
-        Ventas.getColumn("Unidades").setPreferredWidth(70);
-        Ventas.getColumn("Cantidad").setPreferredWidth(70);
-        Ventas.getColumn("Precio").setPreferredWidth(120);
-        Ventas.getColumn("Descuento").setPreferredWidth(120);
-        Ventas.getColumn("Subtotal").setPreferredWidth(120);
-    }
-
-    public void DeleteVenta() {
+    public void deleteSale() {
         int fila = Ventas.getSelectedRow();
         if (fila >= 0) {
             if (Dialogs.ShowOKCancelDialog("¿Desea eliminar la venta seleccionada de la factura?", Dialogs.WARNING_ICON)) {
@@ -252,10 +269,10 @@ public class FacturaViewController {
             Dialogs.ShowMessageDialog("Seleccion una venta de la lista", Dialogs.ERROR_ICON);
         }
     }
-    
-    public void deleteAllVenta(){
-        if(model.getRowCount() > 0){
-            if(Dialogs.ShowOKCancelDialog("¿Desea eliminar todas la ventas de la factura?", Dialogs.WARNING_ICON)){
+
+    public void deleteAllSales() {
+        if (model.getRowCount() > 0) {
+            if (Dialogs.ShowOKCancelDialog("¿Desea eliminar todas la ventas de la factura?", Dialogs.WARNING_ICON)) {
                 model.setRowCount(0);
                 updateTotal();
             }
@@ -285,7 +302,7 @@ public class FacturaViewController {
             Importe.setText(getNumberFormat(importe));
             ISV.setText(getNumberFormat(isv));
             Total.setText(getNumberFormat(total));
-        }else{
+        } else {
             Subtotal.setText(getNumberFormat(0));
             Descuento.setText(getNumberFormat(0));
             Importe.setText(getNumberFormat(0));
@@ -294,56 +311,63 @@ public class FacturaViewController {
         }
     }
 
-    private String getNumberFormat(float Value) {
-        DecimalFormat format = new DecimalFormat("#,##0.00");
-        return format.format(Value);
-    }
+    public boolean InsertSale() {
+        if (validate(false)) {
 
-    public boolean InsertVenta() {
-        if (validate()) {
-            Venta venta = CreateObjectVenta();
-            int VentaID = controller.create(venta);
-            List<Ventadetalle> ventas = createListVentaDetalle(VentaID);
-            VentadetalleJpaController ventadetalleJpaController = new VentadetalleJpaController(Conection.createEntityManagerFactory());
-            ventas.forEach(ventadetalleJpaController::create);
-            
-            if(Dialogs.ShowOKCancelDialog("¿Desea enviar a imprimir la factura ahora?", Dialogs.COMPLETE_ICON)){
-                Runnable run = () -> {
-                Reports reports = new Reports();
-                reports.GenerateTickeVenta(VentaID);
-                };
-                Thread thread = new Thread(run);
-                thread.start();
-            }
+            setLoad(true);
+            Runnable run = () -> {
+                //Insertando venta
+                Venta venta = CreateObjectSale();
+                int VentaID = controller.create(venta);
 
-            Clear();
+                //Insertando detalles de la factura
+                List<Ventadetalle> ventas = createListSaleDetails(VentaID);
+                VentadetalleJpaController ventadetalleJpaController = new VentadetalleJpaController(Conection.createEntityManagerFactory());
+                ventas.forEach(ventadetalleJpaController::create);
+
+                //Enviando a imprimir ticket de venta
+                if (Dialogs.ShowOKCancelDialog("¿Desea enviar a imprimir la factura ahora?", Dialogs.COMPLETE_ICON)) {
+                    Reports reports = new Reports();
+                    reports.GenerateTickeVenta(VentaID);
+                }
+
+                clear();
+                setLoad(false);
+            };
+            new Thread(run).start();
+
             return true;
         }
         return false;
     }
 
-    public boolean InsertCotizacion() {
-        if (validate()) {
-            Cotizacion cotizacion = CreateObjectCotizacion();
-            int CotizacionID = controllerCotizacion.create(cotizacion);
-            List<Cotizaciondetalle> cotizaciondetalles = createListCotizaciondetalle(CotizacionID);
-            CotizaciondetalleJpaController cotizaciondetalleJpaController = new CotizaciondetalleJpaController(Conection.createEntityManagerFactory());
-            cotizaciondetalles.forEach(cotizaciondetalleJpaController::create);
+    public void InsertQuote() {
+        if (validate(true)) {
 
+            setLoad(true);
             Runnable run = () -> {
+                //Insertando cotizacion
+                Cotizacion cotizacion = CreateObjectQuote();
+                int CotizacionID = controllerCotizacion.create(cotizacion);
+                
+                //Insertanto detalles de cotizacion
+                List<Cotizaciondetalle> cotizaciondetalles = createListQuoteDetails(CotizacionID);
+                CotizaciondetalleJpaController cotizaciondetalleJpaController = new CotizaciondetalleJpaController(Conection.createEntityManagerFactory());
+                cotizaciondetalles.forEach(cotizaciondetalleJpaController::create);
+
+                //Enviando a imprimir ticket de cotizacion
                 Reports reports = new Reports();
                 reports.GenerateTicketCotizacion(CotizacionID);
-            };
-            Thread thread = new Thread(run);
-            thread.start();
 
-            Clear();
-            return true;
+                clear();
+                setLoad(false);
+            };
+            new Thread(run).start();
+            
         }
-        return false;
     }
 
-    private Venta CreateObjectVenta() {
+    private Venta CreateObjectSale() {
         Venta venta = new Venta();
 
         venta.setRtn(RTN.getForeground().equals(Color.BLACK) && !RTN.getText().isEmpty() ? RTN.getText() : null);
@@ -363,7 +387,7 @@ public class FacturaViewController {
         return venta;
     }
 
-    private List<Ventadetalle> createListVentaDetalle(int VentaID) {
+    private List<Ventadetalle> createListSaleDetails(int VentaID) {
 
         ArrayList<Ventadetalle> list = new ArrayList<>();
         for (int i = 0; i < Ventas.getRowCount(); i++) {
@@ -382,7 +406,7 @@ public class FacturaViewController {
         return list;
     }
 
-    private Cotizacion CreateObjectCotizacion() {
+    private Cotizacion CreateObjectQuote() {
         Cotizacion cotizacion = new Cotizacion();
 
         if (Clientes.getSelectedIndex() < 2) {
@@ -398,7 +422,7 @@ public class FacturaViewController {
         return cotizacion;
     }
 
-    private List<Cotizaciondetalle> createListCotizaciondetalle(int CotizacionID) {
+    private List<Cotizaciondetalle> createListQuoteDetails(int CotizacionID) {
 
         ArrayList<Cotizaciondetalle> list = new ArrayList<>();
         for (int i = 0; i < Ventas.getRowCount(); i++) {
@@ -417,25 +441,31 @@ public class FacturaViewController {
         return list;
     }
 
-    private boolean validate() {
+    private boolean validate(boolean isQuote) {
+        String action = isQuote ? "imprimir" : "agregar";
+        String type = isQuote ? "cotizacion" : "venta";
+        
         if (Ventas.getRowCount() <= 0) {
-            Dialogs.ShowMessageDialog("Para agregar la venta debe agregar al menos una producto", Dialogs.ERROR_ICON);
+            Dialogs.ShowMessageDialog("Para "+ action +" la "+ type +" debe agregar al menos una producto", Dialogs.ERROR_ICON);
             return false;
         }
         if (Clientes.getSelectedIndex() == 0) {
-            Dialogs.ShowMessageDialog("Para agregar la venta debe seleccionar un cliente", Dialogs.ERROR_ICON);
+            Dialogs.ShowMessageDialog("Para "+ action +" la "+ type +" debe seleccionar un cliente", Dialogs.ERROR_ICON);
             return false;
         }
-        if (Clientes.getSelectedIndex() > 1) {
-            if (!Pagado.isSelected() && !Pendiente.isSelected()) {
-                Dialogs.ShowMessageDialog("Para agregar la venta debe seleccionar el estado de la factura", Dialogs.ERROR_ICON);
-                return false;
+        if(!isQuote){
+            if (Clientes.getSelectedIndex() > 1) {
+                if (!Pagado.isSelected() && !Pendiente.isSelected()) {
+                    Dialogs.ShowMessageDialog("Para agregar la venta debe seleccionar la forma de pago", Dialogs.ERROR_ICON);
+                    return false;
+                }
             }
         }
+        
         return true;
     }
 
-    private void Clear() {
+    private void clear() {
         Clientes.setSelectedIndex(0);
         RTN.setText("Escriba el RTN...");
         RTN.setForeground(new Color(180, 180, 180));
@@ -446,7 +476,11 @@ public class FacturaViewController {
         ISV.setText("0.00");
         Total.setText("0.00");
 
-        model = new DefaultTableModel();
-        InitTable();
+        model.setRowCount(0);
+    }
+
+    private String getNumberFormat(float Value) {
+        DecimalFormat format = new DecimalFormat("#,##0.00");
+        return format.format(Value);
     }
 }

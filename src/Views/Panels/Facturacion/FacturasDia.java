@@ -86,6 +86,7 @@ public class FacturasDia extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbFacturas.setShowHorizontalLines(true);
         tbFacturas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tbFacturasMousePressed(evt);

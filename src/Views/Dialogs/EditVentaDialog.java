@@ -353,10 +353,10 @@ public class EditVentaDialog extends javax.swing.JDialog {
 
     private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
         if(isCompra){
-            Values = vc.getValuesforCompra();
+            Values = vc.getValuesforBuy();
         }else{
             vc.setIsVenta(true);
-            Values = vc.getValues();
+            Values = vc.getValuesforSale();
         }
         
         if(Values != null){
@@ -369,12 +369,12 @@ public class EditVentaDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_txtCantidadKeyReleased
 
     private void txtDescuentoLempirasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescuentoLempirasKeyReleased
-        vc.updateLempirasPorcentajes();
+        vc.updateLempirasPorcent();
         vc.updateSubtotal();
     }//GEN-LAST:event_txtDescuentoLempirasKeyReleased
 
     private void txtDescuentoPorcentajeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescuentoPorcentajeKeyReleased
-        vc.updatePorcentajeLempiras();
+        vc.updatePorcentLempiras();
         vc.updateSubtotal();
     }//GEN-LAST:event_txtDescuentoPorcentajeKeyReleased
 
