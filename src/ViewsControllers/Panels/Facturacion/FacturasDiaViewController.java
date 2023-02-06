@@ -31,6 +31,7 @@ public class FacturasDiaViewController {
 
     private JComboBox<Cliente> Clientes;
     private JTable Facturas;
+    private JLabel TotalVentas;
     private JTable VistaPreeliminar;
     private JTextField Subtotal;
     private JTextField Descuento;
@@ -39,12 +40,23 @@ public class FacturasDiaViewController {
     private JTextField Total;
     private JLabel Cargando;
 
-    private DefaultTableModel model = new DefaultTableModel();
-    private DefaultTableModel modelPrevia = new DefaultTableModel();
+    private DefaultTableModel model = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
+        }
+    };
+    private DefaultTableModel modelPrevia = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
+        }
+    };
 
-    public FacturasDiaViewController(JComboBox Clientes, JTable Facturas, JTable VistaPreeliminar, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total, JLabel Cargando) {
+    public FacturasDiaViewController(JComboBox Clientes, JTable Facturas, JLabel TotalVentas, JTable VistaPreeliminar, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total, JLabel Cargando) {
         this.Clientes = Clientes;
         this.Facturas = Facturas;
+        this.TotalVentas = TotalVentas;
         this.VistaPreeliminar = VistaPreeliminar;
         this.Subtotal = Subtotal;
         this.Descuento = Descuento;
@@ -52,6 +64,14 @@ public class FacturasDiaViewController {
         this.ISV = ISV;
         this.Total = Total;
         this.Cargando = Cargando;
+
+        //Cargando modelo en tabla de factura
+        setModelTableBills();
+
+        //Cargando modelo en tabla de vista previa de facturas
+        setModelTablePreview();
+
+        //Inicializando carga de datos
         Init();
     }
 
@@ -60,33 +80,36 @@ public class FacturasDiaViewController {
         Cargando.setIcon(state ? icon : null);
     }
 
+    //Task
     private void Init() {
         setLoad(true);
         Runnable run = () -> {
-            //Cargando modelo de tabla de facturas
-            setModelTableFacturas();
+            //Cargando datos  a tabla de factura
+            loadBills();
 
-            //Cargando datos  a tabla
-            loadFacturas();
-
-            //Cargando model de tabla de vista previa de facturas
-            setModelTablePreview();
-
+            //Actualizando total de ventas
+            updateTotalSales();
+            
             //Cargando clientes en combobox
-            CargarClientes();
+            loadClients();
+            
+            //Limpiando datos de vista previa en caso de recarga
+            clear();
 
             setLoad(false);
         };
         new Thread(run).start();
     }
 
+    //Task
     public void updateData() {
         Init();
     }
 
-    private void setModelTableFacturas() {
+    private void setModelTableBills() {
         String[] columns = {"No.", "Cliente", "Usuario", "Hora", "Total"};
         model.setColumnIdentifiers(columns);
+
         Facturas.setModel(model);
 
         Facturas.getColumn("No.").setPreferredWidth(30);
@@ -96,14 +119,14 @@ public class FacturasDiaViewController {
         Facturas.getColumn("Total").setPreferredWidth(90);
     }
 
-    private void loadFacturas() {
+    private void loadBills() {
+        model.setRowCount(0);
         Query query = Conection.createEntityManagerFactory().createEntityManager().createNativeQuery("SELECT *  FROM ViewFacturasDia");
         List<Object[]> facturas = query.getResultList();
         facturas.forEach(factura -> {
             factura[4] = getNumberFormat(Float.parseFloat(factura[4].toString()));
             model.addRow(factura);
         });
-        Clear();
     }
 
     private void setModelTablePreview() {
@@ -117,13 +140,13 @@ public class FacturasDiaViewController {
         VistaPreeliminar.getColumn("Desc.").setPreferredWidth(40);
     }
 
-    public void loadFactura() {
+    public void loadBill() {
         int fila = Facturas.getSelectedRow();
         if (fila >= 0) {
             modelPrevia.setRowCount(0);
-            
+
             setLoad(true);
-            Runnable run = ()->{
+            Runnable run = () -> {
                 float subtotal = 0;
                 float descuento = 0;
 
@@ -151,21 +174,34 @@ public class FacturasDiaViewController {
                 Importe.setText(getNumberFormat(importe));
                 ISV.setText(getNumberFormat(isv));
                 Total.setText(getNumberFormat(total));
-                
+
                 setLoad(false);
             };
             new Thread(run).start();
+
         }
     }
 
-    public void CargarClientes() {
+    private void updateTotalSales() {
+        float totalSales = 0;
+        
+        int counter = 0;
+        while(counter < Facturas.getRowCount()){
+            totalSales += Float.parseFloat(Facturas.getValueAt(counter, 4).toString().replace(",", ""));
+            counter++;
+        }
+        
+        TotalVentas.setText(getNumberFormat(totalSales));
+    }
+
+    private void loadClients() {
         List<Cliente> clientes = new ClienteJpaController(Conection.createEntityManagerFactory()).findClienteEntities();
         clientes.forEach(cliente -> {
             Clientes.addItem(cliente);
         });
     }
 
-    public void Filtrar() {
+    public void filterClients() {
         if (Clientes.getSelectedIndex() > 0) {
             TableRowSorter s = new TableRowSorter(Facturas.getModel());
             s.setRowFilter(RowFilter.regexFilter(Clientes.getSelectedItem().toString(), 1));
@@ -178,10 +214,10 @@ public class FacturasDiaViewController {
     }
 
     //Task
-    public void Imprimir() {
+    public void printBill() {
         int fila = Facturas.getSelectedRow();
         if (fila >= 0) {
-            
+
             setLoad(true);
             Runnable run = () -> {
                 Reports reports = new Reports();
@@ -189,14 +225,14 @@ public class FacturasDiaViewController {
                 setLoad(false);
             };
             new Thread(run).start();
-            
+
         } else {
             Dialogs.ShowMessageDialog("Seleccione una factura de la lista", Dialogs.ERROR_ICON);
         }
     }
 
     //Task
-    public void ImprimirReporte() {
+    public void printSalesReport() {
         Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
         Runnable run = () -> {
             Reports reports = new Reports();
@@ -208,27 +244,26 @@ public class FacturasDiaViewController {
     }
 
     //Task
-    public void deleteFactura() {
+    public void deleteBill() {
         int fila = Facturas.getSelectedRow();
         if (fila >= 0) {
-            if (Dialogs.ShowEnterPasswordDialog("No es recomendable la eliminacion de facturas.",
-                    "Esta accion puede ocacionar desorden en inventario real.",
+            if (Dialogs.ShowEnterPasswordDialog("No es recomendable la eliminación de facturas.",
+                    "Esta acción puede ocacionar desorden en inventario real.",
                     "Para continuar con la eliminacion escriba su contraseña.", Dialogs.WARNING_ICON)) {
-                
+
                 setLoad(true);
                 Runnable run = () -> {
                     VentaJpaController controller = new VentaJpaController(Conection.createEntityManagerFactory());
-                    deleteVentaDetalle(fila);
+                    deleteBillDetail(fila);
                     try {
                         controller.destroy(Integer.valueOf(Facturas.getValueAt(fila, 0).toString()));
-                        loadFacturas();
-                        Clear();
+                        Init();
                         Dialogs.ShowMessageDialog("La factura ha sido eliminada exitosamente", Dialogs.COMPLETE_ICON);
                     } catch (IllegalOrphanException | NonexistentEntityException ex) {
                         System.err.println(ex.getMessage());
-                        Dialogs.ShowMessageDialog("La factura este ligada a otros datos, no se pudo eliminar", Dialogs.ERROR_ICON);
+                        Dialogs.ShowMessageDialog("La factura este ligada a otros datos, no pudo ser eliminada", Dialogs.ERROR_ICON);
                     }
-                    
+
                     setLoad(false);
                 };
                 new Thread(run).start();
@@ -238,7 +273,7 @@ public class FacturasDiaViewController {
         }
     }
 
-    private void deleteVentaDetalle(int fila) {
+    private void deleteBillDetail(int fila) {
         VentadetalleJpaController controller = new VentadetalleJpaController(Conection.createEntityManagerFactory());
         List<Ventadetalle> ventadetalles = controller.findVentadetalleEntities();
 
@@ -253,12 +288,13 @@ public class FacturasDiaViewController {
         });
     }
 
-    private void Clear() {
+    private void clear() {
         Subtotal.setText("0.00");
         Descuento.setText("0.00");
         Importe.setText("0.00");
         ISV.setText("0.00");
         Total.setText("0.00");
+        modelPrevia.setRowCount(0);
     }
 
     private String getNumberFormat(float Value) {
