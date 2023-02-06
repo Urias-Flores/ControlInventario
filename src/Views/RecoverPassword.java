@@ -259,7 +259,7 @@ public class RecoverPassword extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseClicked
-        Conection.Disconnect(Conection.CreateEntityManager().createEntityManager());
+        Conection.Disconnect(Conection.createEntityManagerFactory().createEntityManager());
         new LocalConection().closeConection();
         System.exit(0);
     }//GEN-LAST:event_btnCloseMouseClicked

@@ -7,6 +7,12 @@ public class Dialogs {
     public static int ERROR_ICON = 0;
     public static int COMPLETE_ICON = 1;
     
+    public static void ShowConectionDialog(){
+        LoadDialog ld = new LoadDialog(null, true);
+        ld.setVisible(true);
+        ld.dispose();
+    }
+    
     public static void ShowMessageDialog(String texto, int Icono){
         GeneralDialog gd = new GeneralDialog(null, true);
         gd.setText(texto);

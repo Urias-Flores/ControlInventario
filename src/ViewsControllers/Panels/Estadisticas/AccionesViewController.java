@@ -55,7 +55,7 @@ public class AccionesViewController {
         String[] Columns = {"No.", "Tipo", "Usuario", "Cliente/Proveedor", "Fecha", "Total"};
         model.setColumnIdentifiers(Columns);
 
-        StoredProcedureQuery sp = Conection.CreateEntityManager().createEntityManager()
+        StoredProcedureQuery sp = Conection.createEntityManagerFactory().createEntityManager()
                 .createStoredProcedureQuery("ProcedureComprasVentasRegistros")
                 .registerStoredProcedureParameter("registros", Integer.class, ParameterMode.IN)
                 .registerStoredProcedureParameter("tiempo", Integer.class, ParameterMode.IN)
@@ -92,13 +92,13 @@ public class AccionesViewController {
     }
 
     private void cargarUsuarios() {
-        List<Usuario> usuarios = Conection.CreateEntityManager().createEntityManager()
+        List<Usuario> usuarios = Conection.createEntityManagerFactory().createEntityManager()
                 .createNamedQuery("Usuario.findAll").getResultList();
         usuarios.forEach(Usuarios::addItem);
     }
 
     private void cargarProveedoresClientes() {
-        List<Object> entidades = Conection.CreateEntityManager().createEntityManager()
+        List<Object> entidades = Conection.createEntityManagerFactory().createEntityManager()
                 .createNativeQuery("SELECT * FROM viewproveedoresclientes").getResultList();
         entidades.forEach(ProveedoresClientes::addItem);
     }
@@ -124,7 +124,7 @@ public class AccionesViewController {
     }
 
     public void CargarTotalesPorSeleccion() {
-        StoredProcedureQuery sp = Conection.CreateEntityManager()
+        StoredProcedureQuery sp = Conection.createEntityManagerFactory()
                 .createEntityManager().createStoredProcedureQuery("ProcedureComprasVentas")
                 .registerStoredProcedureParameter("tiempo", Integer.class, ParameterMode.IN)
                 .registerStoredProcedureParameter("FechaInicio", Date.class, ParameterMode.IN)

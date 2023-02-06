@@ -56,7 +56,7 @@ public class FacturasDiaViewController {
         String[] columns = {"No.", "Cliente", "Usuario", "Hora", "Total"};
         model.setColumnIdentifiers(columns);
         
-        Query query = Conection.CreateEntityManager().createEntityManager().createNativeQuery("SELECT *  FROM ViewFacturasDia");
+        Query query = Conection.createEntityManagerFactory().createEntityManager().createNativeQuery("SELECT *  FROM ViewFacturasDia");
         List<Object[]> facturas = query.getResultList();
         facturas.forEach(factura -> {
             factura[4] = getNumberFormat(Float.parseFloat(factura[4].toString()));
@@ -94,7 +94,7 @@ public class FacturasDiaViewController {
         
         int fila = Facturas.getSelectedRow();
         if(fila >= 0){
-            Venta venta = new VentaJpaController(Conection.CreateEntityManager()).findVenta(Integer.valueOf(Facturas.getValueAt(fila, 0).toString()));
+            Venta venta = new VentaJpaController(Conection.createEntityManagerFactory()).findVenta(Integer.valueOf(Facturas.getValueAt(fila, 0).toString()));
             
             float subtotal = 0;
             float descuento = 0;
@@ -132,7 +132,7 @@ public class FacturasDiaViewController {
     }
     
     public void CargarClientes(){
-        List<Cliente> clientes = new ClienteJpaController(Conection.CreateEntityManager()).findClienteEntities();
+        List<Cliente> clientes = new ClienteJpaController(Conection.createEntityManagerFactory()).findClienteEntities();
         clientes.forEach(cliente -> {
             Clientes.addItem(cliente);
         });
@@ -183,7 +183,7 @@ public class FacturasDiaViewController {
             if(Dialogs.ShowEnterPasswordDialog("No es recomendable la eliminacion de facturas.", 
                     "Esta accion puede ocacionar desorden en inventario real.", 
                     "Para continuar con la eliminacion escriba su contraseña.", Dialogs.WARNING_ICON)){
-                VentaJpaController controller = new VentaJpaController(Conection.CreateEntityManager());
+                VentaJpaController controller = new VentaJpaController(Conection.createEntityManagerFactory());
                 DeleteVentaDetalle(fila);
                 try {
                     controller.destroy(Integer.valueOf(Facturas.getValueAt(fila, 0).toString()));
@@ -201,7 +201,7 @@ public class FacturasDiaViewController {
     }
     
     private void DeleteVentaDetalle(int fila){
-        VentadetalleJpaController controller = new VentadetalleJpaController(Conection.CreateEntityManager());
+        VentadetalleJpaController controller = new VentadetalleJpaController(Conection.createEntityManagerFactory());
         List<Ventadetalle> ventadetalles = controller.findVentadetalleEntities();
         
         ventadetalles.forEach(ventadetalle ->{

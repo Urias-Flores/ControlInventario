@@ -49,7 +49,7 @@ public class AddAbonoDialogViewController {
     
     public void setVenta(int VentaID){
         FacturaID.setText(String.valueOf(VentaID));
-        Venta venta = new VentaJpaController(Conection.CreateEntityManager()).findVenta(VentaID);
+        Venta venta = new VentaJpaController(Conection.createEntityManagerFactory()).findVenta(VentaID);
         
         List<Ventadetalle> detallesventa = venta.getVentadetalleList();
         float total = 0;
@@ -65,7 +65,7 @@ public class AddAbonoDialogViewController {
     public void setCompra(int CompraID){
         isAbonoVenta = false;
         FacturaID.setText(String.valueOf(CompraID));
-        Compra compra = new CompraJpaController(Conection.CreateEntityManager()).findCompra(CompraID);
+        Compra compra = new CompraJpaController(Conection.createEntityManagerFactory()).findCompra(CompraID);
         
         List<Compradetalle> detallescompra = compra.getCompradetalleList();
         float total = 0;
@@ -85,12 +85,12 @@ public class AddAbonoDialogViewController {
         
         List<Abono> abonos = new ArrayList<>();
         if(isAbonoVenta){
-            abonos = Conection.CreateEntityManager().createEntityManager()
+            abonos = Conection.createEntityManagerFactory().createEntityManager()
                     .createNamedQuery("Abono.findByVentaID")
                     .setParameter("ventaID", (Venta) Transaccion)
                     .getResultList();
         }else{
-            abonos = Conection.CreateEntityManager().createEntityManager()
+            abonos = Conection.createEntityManagerFactory().createEntityManager()
                   .createNamedQuery("Abono.findByCompraID")
                   .setParameter("compraID", (Compra) Transaccion)
                   .getResultList();  
@@ -132,7 +132,7 @@ public class AddAbonoDialogViewController {
     
     public boolean insertAbono(){
         if(validate()){
-            AbonoJpaController controller = new AbonoJpaController(Conection.CreateEntityManager());
+            AbonoJpaController controller = new AbonoJpaController(Conection.createEntityManagerFactory());
             Abono abono = createAbonoObject();
             controller.create(abono);
 
@@ -151,7 +151,7 @@ public class AddAbonoDialogViewController {
         if((totalAbonado + abono.getTotal()) == totalDeuda){
             if(isAbonoVenta){
                 try {
-                    VentaJpaController controller = new VentaJpaController(Conection.CreateEntityManager());
+                    VentaJpaController controller = new VentaJpaController(Conection.createEntityManagerFactory());
                     Venta venta = controller.findVenta(abono.getVentaID().getVentaID());
                     venta.setEstado("P");
                     controller.edit(venta);
@@ -161,7 +161,7 @@ public class AddAbonoDialogViewController {
                 }
             }else{
                 try {
-                    CompraJpaController controller = new CompraJpaController(Conection.CreateEntityManager());
+                    CompraJpaController controller = new CompraJpaController(Conection.createEntityManagerFactory());
                     Compra compra = controller.findCompra(abono.getCompraID().getCompraID());
                     compra.setEstado("P");
                     controller.edit(compra);
@@ -177,8 +177,8 @@ public class AddAbonoDialogViewController {
         
         Abono abono = new Abono();
         
-        Venta venta = new VentaJpaController(Conection.CreateEntityManager()).findVenta(Integer.valueOf(FacturaID.getText()));
-        Compra compra = new CompraJpaController(Conection.CreateEntityManager()).findCompra(Integer.valueOf(FacturaID.getText()));
+        Venta venta = new VentaJpaController(Conection.createEntityManagerFactory()).findVenta(Integer.valueOf(FacturaID.getText()));
+        Compra compra = new CompraJpaController(Conection.createEntityManagerFactory()).findCompra(Integer.valueOf(FacturaID.getText()));
         
         abono.setFecha(Utilities.getDate());
         abono.setHora(Utilities.getTime());

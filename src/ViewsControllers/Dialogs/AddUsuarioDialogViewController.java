@@ -29,7 +29,7 @@ public class AddUsuarioDialogViewController {
         this.Empleado = Empleado;
         this.Error = Error;
         
-        controller = new UsuarioJpaController(Conection.CreateEntityManager());
+        controller = new UsuarioJpaController(Conection.createEntityManagerFactory());
     }
     
     public boolean Insert(){
@@ -73,7 +73,7 @@ public class AddUsuarioDialogViewController {
         
         Usuario usuario = new Usuario();
         double randomValue = 100000 + Math.random() * 999999;
-        Empleado empleado = new EmpleadoJpaController(Conection.CreateEntityManager())
+        Empleado empleado = new EmpleadoJpaController(Conection.createEntityManagerFactory())
                 .findEmpleado(Integer.valueOf(Empleado.getName()));
         
         //Verificar si se esta editando

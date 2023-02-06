@@ -232,7 +232,7 @@ public class Utilities {
     }
 
     public static int IniciarSesion(String Nombre, String Contrasena) {
-        UsuarioJpaController usuarioJpaController = new UsuarioJpaController(Conection.CreateEntityManager());
+        UsuarioJpaController usuarioJpaController = new UsuarioJpaController(Conection.createEntityManagerFactory());
         List<Usuario> usuarios = usuarioJpaController.findUsuarioEntities();
         Usuario user = new Usuario();
         usuarios.forEach((usuario) -> {

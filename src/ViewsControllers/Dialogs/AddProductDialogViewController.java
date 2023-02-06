@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 
 public class AddProductDialogViewController {
     
-    ProductoJpaController controller = new ProductoJpaController(Conection.CreateEntityManager());
+    ProductoJpaController controller = new ProductoJpaController(Conection.createEntityManagerFactory());
     
     JTextArea Descripcion;
     JTextField Marca;

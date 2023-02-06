@@ -29,7 +29,7 @@ public class AddInventarioDetalleAccionEliminacionViewController {
     
     public boolean InsertAccion(){
         if(validate()){
-            InventariodetalleaccionesJpaController controller = new InventariodetalleaccionesJpaController(Conection.CreateEntityManager());
+            InventariodetalleaccionesJpaController controller = new InventariodetalleaccionesJpaController(Conection.createEntityManagerFactory());
             Inventariodetalleacciones inventariodetalle = createObjectInventarioDetalle();
             
             controller.create(inventariodetalle);
@@ -41,7 +41,7 @@ public class AddInventarioDetalleAccionEliminacionViewController {
     
     private Inventariodetalleacciones createObjectInventarioDetalle(){
         Inventariodetalleacciones inventariodetalle = new Inventariodetalleacciones();
-        Inventario inventario = new InventarioJpaController(Conection.CreateEntityManager()).findInventario(InventarioID);
+        Inventario inventario = new InventarioJpaController(Conection.createEntityManagerFactory()).findInventario(InventarioID);
         
         inventariodetalle.setProductoID(inventario.getProductoID());
         inventariodetalle.setUsuarioID(Utilities.getUsuarioActual());

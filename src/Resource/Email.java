@@ -15,7 +15,7 @@ public class Email {
     
     private String[] getInformationForSendEmailOfDataBase(){
         Code code = new Code();
-        Configuracion configuracion = new ConfiguracionJpaController(Conection.CreateEntityManager()).findConfiguracion(1);
+        Configuracion configuracion = new ConfiguracionJpaController(Conection.createEntityManagerFactory()).findConfiguracion(1);
         
         String email = code.decodeString(configuracion.getDato());
         String contrasena = code.decodeString(configuracion.getExtra());

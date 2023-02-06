@@ -20,7 +20,7 @@ public class NotificacionComponentViewController {
         this.Contenido = Contenido;
         this.FechaHora = FechaHora;
         
-        controller = new NotificacionJpaController(Conection.CreateEntityManager());
+        controller = new NotificacionJpaController(Conection.createEntityManagerFactory());
     }
     
     public void cargarNotificacion(int NotificacionID){

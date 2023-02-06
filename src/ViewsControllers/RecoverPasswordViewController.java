@@ -97,7 +97,7 @@ public class RecoverPasswordViewController {
             Usuario usuario = getUsuario();
             usuario.setContrasena(Security.generateStrongPasswordHash(String.valueOf(Contrasena.getPassword())));
             usuario.setToken(null);
-            UsuarioJpaController controller = new UsuarioJpaController(Conection.CreateEntityManager());
+            UsuarioJpaController controller = new UsuarioJpaController(Conection.createEntityManagerFactory());
             try {
                 controller.edit(usuario);
                 return true;
@@ -114,7 +114,7 @@ public class RecoverPasswordViewController {
         Usuario usuario = getUsuario();
         usuario.setToken(codigoActual);
         
-        UsuarioJpaController controller = new UsuarioJpaController(Conection.CreateEntityManager());
+        UsuarioJpaController controller = new UsuarioJpaController(Conection.createEntityManagerFactory());
         try {
             controller.edit(usuario);
         } catch (NonexistentEntityException ex) {
@@ -148,7 +148,7 @@ public class RecoverPasswordViewController {
     }
     
     private Usuario getUsuario(){
-        UsuarioJpaController controller = new UsuarioJpaController(Conection.CreateEntityManager());
+        UsuarioJpaController controller = new UsuarioJpaController(Conection.createEntityManagerFactory());
         List<Usuario> usuarios = controller.findUsuarioEntities();
         for(Usuario usuario : usuarios){
             if(usuario.getNombre().equals(Nombre.getText())){
@@ -205,7 +205,7 @@ public class RecoverPasswordViewController {
     }
     
     private boolean validateUsuarioExiste(){
-        UsuarioJpaController controller = new UsuarioJpaController(Conection.CreateEntityManager());
+        UsuarioJpaController controller = new UsuarioJpaController(Conection.createEntityManagerFactory());
         List<Usuario> usuarios = controller.findUsuarioEntities();
         for(Usuario usuario : usuarios){
             if(usuario.getNombre().equals(Nombre.getText())){

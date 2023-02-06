@@ -92,7 +92,7 @@ public class ResumenesViewController {
     }
     
     private List<Object[]> getResultListOfProcedure(){
-        StoredProcedureQuery spq = Conection.CreateEntityManager().createEntityManager()
+        StoredProcedureQuery spq = Conection.createEntityManagerFactory().createEntityManager()
                 .createStoredProcedureQuery("ProcedureComprasVentasGraficas")
                 .registerStoredProcedureParameter("registros", Integer.class, ParameterMode.IN)
                 .registerStoredProcedureParameter("tiempo", Integer.class, ParameterMode.IN)

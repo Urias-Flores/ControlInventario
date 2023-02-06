@@ -39,7 +39,7 @@ public class AddEmpleadoDialogViewController {
         this.Domicilio = Domicilio;
         this.Error = Error;
 
-        controller = new EmpleadoJpaController(Conection.CreateEntityManager());
+        controller = new EmpleadoJpaController(Conection.createEntityManagerFactory());
     }
 
     public boolean Insert() {

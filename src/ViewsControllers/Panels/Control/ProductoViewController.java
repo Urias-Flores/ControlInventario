@@ -30,7 +30,7 @@ public class ProductoViewController {
         this.Productos = Productos;
         this.Cargando = Cargando;
         
-        controller = new ProductoJpaController(Conection.CreateEntityManager());
+        controller = new ProductoJpaController(Conection.createEntityManagerFactory());
     }
 
     public void cargarProductos() {
@@ -39,7 +39,7 @@ public class ProductoViewController {
             DefaultTableModel model = new DefaultTableModel();
             String[] columns = {"Codigo", "Descripcion", "Marca", "Categoria", "Barra", "Unidad"};
             model.setColumnIdentifiers(columns);
-            List<Producto> productos = new ProductoJpaController(Conection.CreateEntityManager()).findProductoEntities();
+            List<Producto> productos = new ProductoJpaController(Conection.createEntityManagerFactory()).findProductoEntities();
 
             productos.forEach(producto -> {
                 Object[] row = {

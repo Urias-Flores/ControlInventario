@@ -34,7 +34,7 @@ public class AddInventarioDetalleViewController {
     public boolean InsertInventarioDetalle(){
         if(validateDescripcion()){
             if(validate()){
-                InventariodetalleaccionesJpaController controller = new InventariodetalleaccionesJpaController(Conection.CreateEntityManager());
+                InventariodetalleaccionesJpaController controller = new InventariodetalleaccionesJpaController(Conection.createEntityManagerFactory());
                 Inventariodetalleacciones inventarioDetalle = createObjectInventarioDetalle();
                 
                 controller.create(inventarioDetalle);
@@ -60,11 +60,11 @@ public class AddInventarioDetalleViewController {
     }
     
     public void CargarCantidad(int InventarioID){
-        Object cantidad = Conection.CreateEntityManager().createEntityManager()
+        Object cantidad = Conection.createEntityManagerFactory().createEntityManager()
                 .createNativeQuery("SELECT Cantidad FROM inventario WHERE InventarioID = "+InventarioID)
                 .getSingleResult();
         
-        Inventario inventario = new InventarioJpaController(Conection.CreateEntityManager()).findInventario(InventarioID);
+        Inventario inventario = new InventarioJpaController(Conection.createEntityManagerFactory()).findInventario(InventarioID);
         ProductoID = inventario.getProductoID().getProductoID();
         ExistenciaPrevia.setText(getNumberFormat(Float.parseFloat(cantidad.toString())));
     }

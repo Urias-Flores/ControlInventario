@@ -111,7 +111,7 @@ public class CreateAccountViewController {
             usuarioActual.setToken(null);
             usuarioActual.setEstado(1);
             
-            UsuarioJpaController controller = new UsuarioJpaController(Conection.CreateEntityManager());
+            UsuarioJpaController controller = new UsuarioJpaController(Conection.createEntityManagerFactory());
             try {
                 controller.edit(usuarioActual);
                 return true;
@@ -128,7 +128,7 @@ public class CreateAccountViewController {
     
     private void setTokenOnUser(){
         usuarioActual.setToken(CodigoActual);
-        UsuarioJpaController controller = new UsuarioJpaController(Conection.CreateEntityManager());
+        UsuarioJpaController controller = new UsuarioJpaController(Conection.createEntityManagerFactory());
         try {
             controller.edit(usuarioActual);
         } catch (NonexistentEntityException ex) {
@@ -160,7 +160,7 @@ public class CreateAccountViewController {
     }
     
     private boolean validateNombreExist(){
-        UsuarioJpaController controller = new UsuarioJpaController(Conection.CreateEntityManager());
+        UsuarioJpaController controller = new UsuarioJpaController(Conection.createEntityManagerFactory());
         List<Usuario> usuarios = controller.findUsuarioEntities();
         for(Usuario usuario : usuarios){
             if(usuario.getNombre().equals(Nombre.getText())){
@@ -172,7 +172,7 @@ public class CreateAccountViewController {
     }
     
     private boolean validateUserIsNew(){
-        UsuarioJpaController controller = new UsuarioJpaController(Conection.CreateEntityManager());
+        UsuarioJpaController controller = new UsuarioJpaController(Conection.createEntityManagerFactory());
         List<Usuario> usuarios = controller.findUsuarioEntities();
         for(Usuario usuario : usuarios){
             if(usuario.getNombre().equals(Nombre.getText())){

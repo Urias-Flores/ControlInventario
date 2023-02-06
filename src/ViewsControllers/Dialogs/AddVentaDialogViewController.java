@@ -54,7 +54,7 @@ public class AddVentaDialogViewController {
             String[] columns = {"Codigo", "Descripcion", "Marca", "Unidad", "Precio"};
             model.setColumnIdentifiers(columns);
 
-            List<Producto> productos = new ProductoJpaController(Conection.CreateEntityManager()).findProductoEntities();
+            List<Producto> productos = new ProductoJpaController(Conection.createEntityManagerFactory()).findProductoEntities();
             productos.forEach(producto -> {
                 Object[] row = {
                     producto.getProductoID(), 
@@ -82,7 +82,7 @@ public class AddVentaDialogViewController {
     public void CargarMarcas(){
         Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
         Runnable run = ()->{
-            List<Marca> marcas = Conection.CreateEntityManager().createEntityManager()
+            List<Marca> marcas = Conection.createEntityManagerFactory().createEntityManager()
                 .createNamedQuery("Marca.findAll")
                 .getResultList();
             marcas.forEach(Marcas::addItem);
@@ -111,7 +111,7 @@ public class AddVentaDialogViewController {
     public void cargarProducto(){
         int fila = Productos.getSelectedRow();
         if(fila >= 0){
-            Query query = Conection.CreateEntityManager().createEntityManager()
+            Query query = Conection.createEntityManagerFactory().createEntityManager()
                     .createNativeQuery("SELECT cantidad FROM inventario WHERE ProductoID = "+Integer.valueOf(Productos.getValueAt(fila, 0).toString()));
             List values = query.getResultList();
             float existenciaProducto = Float.parseFloat(values.get(0).toString());
@@ -175,7 +175,7 @@ public class AddVentaDialogViewController {
             Object[] values  = {
                 Productos.getValueAt(Productos.getSelectedRow(), 0),
                 Productos.getValueAt(Productos.getSelectedRow(), 1),
-                Productos.getValueAt(Productos.getSelectedRow(), 2),
+                Productos.getValueAt(Productos.getSelectedRow(), 3),
                 getNumberFormat(cantidad),
                 getNumberFormat(precio),
                 getNumberFormat(descuento),

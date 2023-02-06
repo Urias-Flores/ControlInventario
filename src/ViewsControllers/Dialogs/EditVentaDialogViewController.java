@@ -40,7 +40,7 @@ public class EditVentaDialogViewController {
     }
     
     public void setValues(Object[] values){
-        Query query = Conection.CreateEntityManager().createEntityManager()
+        Query query = Conection.createEntityManagerFactory().createEntityManager()
                     .createNativeQuery("SELECT cantidad FROM inventario WHERE ProductoID = "+Integer.valueOf(values[0].toString()));
         Object existencia = query.getSingleResult();
         

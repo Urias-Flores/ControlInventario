@@ -23,7 +23,7 @@ public class UsuarioViewController {
         this.Buscar = Buscar;
         this.Usuarios = Usuarios;
         
-        controller = new UsuarioJpaController(Conection.CreateEntityManager());
+        controller = new UsuarioJpaController(Conection.createEntityManagerFactory());
     }
     
     public void CargarUsuarios(){
@@ -31,7 +31,7 @@ public class UsuarioViewController {
         String[] columns = {"No. Usuario", "Nombre de usuario", "Estado", "Cargo en sistema"};
         model.setColumnIdentifiers(columns);
         
-        List<Object[]> usuarios = Conection.CreateEntityManager().createEntityManager()
+        List<Object[]> usuarios = Conection.createEntityManagerFactory().createEntityManager()
                 .createNativeQuery("SELECT UsuarioID, Nombre, Estado, Cargo FROM Usuario").getResultList();
         
         usuarios.forEach(usuario -> {

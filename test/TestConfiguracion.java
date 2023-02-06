@@ -8,7 +8,7 @@ import Resource.Conection;
 
 public class TestConfiguracion {
     public static void main(String[] args){
-        ConfiguracionJpaController config = new ConfiguracionJpaController(Conection.CreateEntityManager());
+        ConfiguracionJpaController config = new ConfiguracionJpaController(Conection.createEntityManagerFactory());
         
         Configuracion configuracion = config.findConfiguracion(1);
         Code code = new Code();

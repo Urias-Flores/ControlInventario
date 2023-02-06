@@ -35,7 +35,7 @@ public class InfoInventarioAccionViewController {
     }
     
     public void CargarAccion(int AccionID){
-        InventariodetalleaccionesJpaController controller = new InventariodetalleaccionesJpaController(Conection.CreateEntityManager());
+        InventariodetalleaccionesJpaController controller = new InventariodetalleaccionesJpaController(Conection.createEntityManagerFactory());
         Inventariodetalleacciones accion = controller.findInventariodetalleacciones(AccionID);
         
         NoAccion.setText(String.valueOf(accion.getInventarioDetalleAccionesID()));

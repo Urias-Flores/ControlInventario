@@ -16,7 +16,7 @@ public class AddCategoriDialogViewController {
     public AddCategoriDialogViewController(JTextField Nombre, JLabel Error) {
         this.Nombre = Nombre;
         this.Error = Error;
-        controller = new CategoriaJpaController(Conection.CreateEntityManager());
+        controller = new CategoriaJpaController(Conection.createEntityManagerFactory());
     }
     
     public boolean Insert(){

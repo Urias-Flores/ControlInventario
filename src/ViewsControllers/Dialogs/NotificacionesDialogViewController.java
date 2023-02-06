@@ -18,11 +18,11 @@ public class NotificacionesDialogViewController {
     public NotificacionesDialogViewController(JPanel Notificaciones) {
         this.Notificaciones = Notificaciones;
         
-        controller = new NotificacionJpaController(Conection.CreateEntityManager());
+        controller = new NotificacionJpaController(Conection.createEntityManagerFactory());
     }
     
     public void cargarNotificaciones(){
-        List<Object[]> notificaciones = Conection.CreateEntityManager().createEntityManager()
+        List<Object[]> notificaciones = Conection.createEntityManagerFactory().createEntityManager()
                 .createNativeQuery("SELECT * FROM Notificacion ORDER BY Fecha desc , Hora desc")
                 .getResultList();
         

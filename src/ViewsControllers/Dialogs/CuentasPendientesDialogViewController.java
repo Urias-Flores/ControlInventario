@@ -52,11 +52,11 @@ public class CuentasPendientesDialogViewController {
         String[] columns = {"No. Factura", "Fecha", "Hora", "Total", "Abonado"};
         model.setColumnIdentifiers(columns);
         
-        Cliente cliente = new ClienteJpaController(Conection.CreateEntityManager()).findCliente(Cliente);
+        Cliente cliente = new ClienteJpaController(Conection.createEntityManagerFactory()).findCliente(Cliente);
         
         if(cliente != null){
             Nombre.setText(cliente.getNombre());
-            StoredProcedureQuery sp = Conection.CreateEntityManager().createEntityManager()
+            StoredProcedureQuery sp = Conection.createEntityManagerFactory().createEntityManager()
                     .createStoredProcedureQuery("ProcedureFacturaCliente")
                     .registerStoredProcedureParameter("Cliente", Integer.class, ParameterMode.IN);
             sp.setParameter("Cliente", Cliente);
@@ -86,11 +86,11 @@ public class CuentasPendientesDialogViewController {
         String[] columns = {"No. Compra", "Fecha", "Hora", "Total", "Abonado"};
         model.setColumnIdentifiers(columns);
         
-        Proveedor proveedor = new ProveedorJpaController(Conection.CreateEntityManager()).findProveedor(Proveedor);
+        Proveedor proveedor = new ProveedorJpaController(Conection.createEntityManagerFactory()).findProveedor(Proveedor);
         
         if(proveedor != null){
             Nombre.setText(proveedor.getNombre());
-            StoredProcedureQuery sp = Conection.CreateEntityManager().createEntityManager()
+            StoredProcedureQuery sp = Conection.createEntityManagerFactory().createEntityManager()
                     .createStoredProcedureQuery("ProcedureFacturaProveedor")
                     .registerStoredProcedureParameter("Proveedor", Integer.class, ParameterMode.IN);
             sp.setParameter("Proveedor", Proveedor);
@@ -117,7 +117,7 @@ public class CuentasPendientesDialogViewController {
     }
     
     private float getTotalAbonoVenta(Venta VentaID){
-        List<Abono> abonos = Conection.CreateEntityManager().createEntityManager()
+        List<Abono> abonos = Conection.createEntityManagerFactory().createEntityManager()
                 .createNamedQuery("Abono.findByVentaID")
                 .setParameter("ventaID", VentaID)
                 .getResultList();
@@ -133,7 +133,7 @@ public class CuentasPendientesDialogViewController {
     }
     
     private float getTotalAbonoCompra(Compra CompraID){
-        List<Abono> abonos = Conection.CreateEntityManager().createEntityManager()
+        List<Abono> abonos = Conection.createEntityManagerFactory().createEntityManager()
                 .createNamedQuery("Abono.findByCompraID")
                 .setParameter("compraID", CompraID)
                 .getResultList();
@@ -191,8 +191,8 @@ public class CuentasPendientesDialogViewController {
                     "a la factura con un valor de: "+getNumberFormat(totalAporPagar)+" Lps. por medidas de seguridad", 
                     "Por favor ingrese su contraseña de usuario para pagar.", Dialogs.WARNING_ICON)){
                 int VentaID = Integer.parseInt(Cuentas.getValueAt(fila, 0).toString());
-                VentaJpaController controllerVenta = new VentaJpaController(Conection.CreateEntityManager());
-                AbonoJpaController controllerAbono = new AbonoJpaController(Conection.CreateEntityManager());
+                VentaJpaController controllerVenta = new VentaJpaController(Conection.createEntityManagerFactory());
+                AbonoJpaController controllerAbono = new AbonoJpaController(Conection.createEntityManagerFactory());
                 
                 Venta venta = controllerVenta.findVenta(VentaID);
                 Abono abono = createObjectAbono(venta, null, fila);
@@ -218,7 +218,7 @@ public class CuentasPendientesDialogViewController {
                     "con un valor de: "+Cuentas.getValueAt(fila, 3).toString()+" Lps. por medidas de seguridad", 
                     "Por favor ingrese su contraseña de usuario para pagar.", Dialogs.WARNING_ICON)){
                 int CompraID = Integer.parseInt(Cuentas.getValueAt(fila, 0).toString());
-                CompraJpaController controllerCompra = new CompraJpaController(Conection.CreateEntityManager());
+                CompraJpaController controllerCompra = new CompraJpaController(Conection.createEntityManagerFactory());
                 Compra compra = controllerCompra.findCompra(CompraID);
                 compra.setEstado("P");
 
@@ -264,8 +264,8 @@ public class CuentasPendientesDialogViewController {
             
             while (fila < Cuentas.getRowCount()){
                 int VentaID = Integer.parseInt(Cuentas.getValueAt(fila, 0).toString());
-                VentaJpaController controllerVenta = new VentaJpaController(Conection.CreateEntityManager());
-                AbonoJpaController controllerAbono = new AbonoJpaController(Conection.CreateEntityManager());
+                VentaJpaController controllerVenta = new VentaJpaController(Conection.createEntityManagerFactory());
+                AbonoJpaController controllerAbono = new AbonoJpaController(Conection.createEntityManagerFactory());
                 Venta venta = controllerVenta.findVenta(VentaID);
                 Abono abono = createObjectAbono(venta, null, fila);
                 venta.setEstado("P");
@@ -298,7 +298,7 @@ public class CuentasPendientesDialogViewController {
             
             while (fila < Cuentas.getRowCount()){
                 int CompraID = Integer.parseInt(Cuentas.getValueAt(fila, 0).toString());
-                CompraJpaController controllerCompra = new CompraJpaController(Conection.CreateEntityManager());
+                CompraJpaController controllerCompra = new CompraJpaController(Conection.createEntityManagerFactory());
                 Compra compra = controllerCompra.findCompra(CompraID);
                 compra.setEstado("P");
                 

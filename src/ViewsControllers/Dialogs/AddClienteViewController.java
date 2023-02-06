@@ -31,7 +31,7 @@ public class AddClienteViewController {
         this.Domicilio = Domicilio;
         this.Error = Error;
         
-        controller = new ClienteJpaController(Conection.CreateEntityManager());
+        controller = new ClienteJpaController(Conection.createEntityManagerFactory());
     }
     
     public boolean Insert(){

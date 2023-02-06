@@ -38,7 +38,7 @@ public class ClientesViewController {
         this.Numero = Numero;
         this.Domicilio = Domicilio;
         
-        controller = new ClienteJpaController(Conection.CreateEntityManager());
+        controller = new ClienteJpaController(Conection.createEntityManagerFactory());
     }
     
     public void CargarClientes(){

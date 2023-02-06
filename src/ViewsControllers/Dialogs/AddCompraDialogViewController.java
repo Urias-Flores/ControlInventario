@@ -50,7 +50,7 @@ public class AddCompraDialogViewController {
             String[] columns = {"Codigo", "Descripcion", "Marca","Unidad", "Precio base"};
             model.setColumnIdentifiers(columns);
 
-            List<Producto> productos = new ProductoJpaController(Conection.CreateEntityManager()).findProductoEntities();
+            List<Producto> productos = new ProductoJpaController(Conection.createEntityManagerFactory()).findProductoEntities();
             productos.forEach(producto -> {
                 Object[] row = {producto.getProductoID(), producto.getDescripcion(), producto.getUnidad(), producto.getPrecioCompra()};
                 model.addRow(row);
@@ -71,7 +71,7 @@ public class AddCompraDialogViewController {
     public void CargarMarcas(){
         Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
         Runnable run = ()->{
-            List<Marca> marcas = Conection.CreateEntityManager().createEntityManager()
+            List<Marca> marcas = Conection.createEntityManagerFactory().createEntityManager()
                 .createNamedQuery("Marca.findAll")
                 .getResultList();
             marcas.forEach(Marcas::addItem);

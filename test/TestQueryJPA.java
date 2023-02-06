@@ -7,7 +7,7 @@ import javax.persistence.Query;
 
 public class TestQueryJPA {
     public static void main(String[] args){
-        EntityManagerFactory emf =  Conection.CreateEntityManager();
+        EntityManagerFactory emf =  Conection.createEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
         Query query = em.createNativeQuery("SELECT * FROM categoria");
         

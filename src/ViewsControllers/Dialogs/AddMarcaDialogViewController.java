@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class AddMarcaDialogViewController {
-    MarcaJpaController controller = new MarcaJpaController(Conection.CreateEntityManager());
+    MarcaJpaController controller = new MarcaJpaController(Conection.createEntityManagerFactory());
     
     JTextField Nombre;
     JLabel Error;

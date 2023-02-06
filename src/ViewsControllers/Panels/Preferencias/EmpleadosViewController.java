@@ -25,7 +25,7 @@ public class EmpleadosViewController {
         this.Buscar = Buscar;
         this.Empleados = Empleados;
         
-        controller = new EmpleadoJpaController(Conection.CreateEntityManager());
+        controller = new EmpleadoJpaController(Conection.createEntityManagerFactory());
     }
     
     public void CargarEmpleados(){
@@ -33,7 +33,7 @@ public class EmpleadosViewController {
         String[] columns = {"No. Empleado", "Nombre completo", "No. Identidad"};
         model.setColumnIdentifiers(columns);
         
-        List<Empleado> empleados = new EmpleadoJpaController(Conection.CreateEntityManager()).findEmpleadoEntities();
+        List<Empleado> empleados = new EmpleadoJpaController(Conection.createEntityManagerFactory()).findEmpleadoEntities();
         empleados.forEach(empleado ->{
             Object[] row = {
                 empleado.getEmpleadoID(), 

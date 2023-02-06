@@ -88,7 +88,7 @@ public class EmailViewController {
     
     private boolean sendTestEmail(){
         Email email = new Email();
-        Usuario usuario = new UsuarioJpaController(Conection.CreateEntityManager()).findUsuario(Utilities.getUsuarioActual().getUsuarioID());
+        Usuario usuario = new UsuarioJpaController(Conection.createEntityManagerFactory()).findUsuario(Utilities.getUsuarioActual().getUsuarioID());
         String message = email.generateTryAccountMessage(usuario.getEmpleadoID().getNombre(), usuario.getNombre());
         
         return email.SendEmail(usuario.getEmpleadoID().getCorreoElectronico(), "Modificacion de envio de correos", message);
@@ -121,7 +121,7 @@ public class EmailViewController {
     }
     
     private void setEmailOfDataBase(){
-        ConfiguracionJpaController configController = new ConfiguracionJpaController(Conection.CreateEntityManager());
+        ConfiguracionJpaController configController = new ConfiguracionJpaController(Conection.createEntityManagerFactory());
         Configuracion config = configController.findConfiguracion(1);
 
         Code code = new Code();

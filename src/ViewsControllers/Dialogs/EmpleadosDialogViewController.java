@@ -27,7 +27,7 @@ public class EmpleadosDialogViewController {
         String[] columns = {"No. Empleado", "Nombre", "Identidad"};
         model.setColumnIdentifiers(columns);
         
-        List<Empleado> empleados = new EmpleadoJpaController(Conection.CreateEntityManager()).findEmpleadoEntities();
+        List<Empleado> empleados = new EmpleadoJpaController(Conection.createEntityManagerFactory()).findEmpleadoEntities();
         empleados.forEach(empleado ->{
             Object[] row = {empleado.getEmpleadoID(), empleado.getNombre()+" "+empleado.getApellido(), empleado.getIdentidad()};
             model.addRow(row);

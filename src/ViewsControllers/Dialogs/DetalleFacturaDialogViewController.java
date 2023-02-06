@@ -57,7 +57,7 @@ public class DetalleFacturaDialogViewController {
     }
     
     public void cargarFactura(int VentaID){
-        Venta venta = new VentaJpaController(Conection.CreateEntityManager()).findVenta(VentaID);
+        Venta venta = new VentaJpaController(Conection.createEntityManagerFactory()).findVenta(VentaID);
         
         if(venta != null){
             NoFactura.setText(String.valueOf(venta.getVentaID()));
@@ -85,7 +85,7 @@ public class DetalleFacturaDialogViewController {
     }
     
     public void cargarCompra(int CompraID){
-        Compra compra = new CompraJpaController(Conection.CreateEntityManager()).findCompra(CompraID);
+        Compra compra = new CompraJpaController(Conection.createEntityManagerFactory()).findCompra(CompraID);
         
         if(compra != null){
             NoFactura.setText(String.valueOf(compra.getCompraID()));

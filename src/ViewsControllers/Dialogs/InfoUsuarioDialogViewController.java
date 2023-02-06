@@ -21,7 +21,7 @@ public class InfoUsuarioDialogViewController {
     }
     
     public void cargarUsuario(int UsuarioID){
-        Usuario usuario = new UsuarioJpaController(Conection.CreateEntityManager()).findUsuario(UsuarioID);
+        Usuario usuario = new UsuarioJpaController(Conection.createEntityManagerFactory()).findUsuario(UsuarioID);
         
         Nombre.setText(usuario.getNombre());
         Empleado.setText(usuario.getEmpleadoID().getNombre()+" "+usuario.getEmpleadoID().getApellido());

@@ -22,7 +22,7 @@ public class AddProveedorDialogViewController {
         this.Correo = Correo;
         this.Numero = Numero;
         this.Error = Error;
-        controller = new ProveedorJpaController(Conection.CreateEntityManager());
+        controller = new ProveedorJpaController(Conection.createEntityManagerFactory());
     }
     
     public boolean Insert(){

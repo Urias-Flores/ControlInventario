@@ -296,8 +296,8 @@ public class Main extends javax.swing.JFrame {
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         if(Dialogs.ShowOKCancelDialog("Si sale su sesion se cerrara automaticamente ¿Desea continuar?", Dialogs.WARNING_ICON)){
             Utilities.setRunProcess(false);
-            if(Conection.CreateEntityManager().isOpen()){
-                Conection.Disconnect(Conection.CreateEntityManager().createEntityManager());
+            if(Conection.createEntityManagerFactory().isOpen()){
+                Conection.Disconnect(Conection.createEntityManagerFactory().createEntityManager());
             }
             new NoJpaConection().closeConec();
             new LocalConection().closeConection();

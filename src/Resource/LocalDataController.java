@@ -41,7 +41,7 @@ public class LocalDataController {
             rs.next();
             int TotalNotificacionesLocal  = rs.getInt(1);
             
-            List<Notificacion> notificaciones = new NotificacionJpaController(Conection.CreateEntityManager())
+            List<Notificacion> notificaciones = new NotificacionJpaController(Conection.createEntityManagerFactory())
                     .findNotificacionEntities();
             int TotalNotificacionesBaseDatos = notificaciones.size();
             
@@ -60,7 +60,7 @@ public class LocalDataController {
     public void updateNotificaciones(){
         deleteAllNotificaciones();
         
-        List<Object[]> notificaciones = Conection.CreateEntityManager()
+        List<Object[]> notificaciones = Conection.createEntityManagerFactory()
                 .createEntityManager()
                 .createNativeQuery("SELECT * FROM Notificacion")
                 .getResultList();

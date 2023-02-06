@@ -31,10 +31,10 @@ public class NoJpaConection {
     {
         if(conec == null)
         {
-            ip = "192.168.1.100";
+            ip = "192.168.0.100";
             port = "3306";
             user = "root";
-            password = "ComercialNataren2023*";
+            password = "alone2020";
             driver = "com.mysql.cj.jdbc.Driver";
             database = "inventario";
             try{

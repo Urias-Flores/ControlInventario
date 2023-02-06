@@ -5,8 +5,6 @@ import Controllers.exceptions.NonexistentEntityException;
 import Resource.Conection;
 import Views.Dialogs.Dialogs;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.Query;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -28,7 +26,7 @@ public class AccionesInventarioDialogViewController {
         String[] columns = {"Cd.", "Producto", "Usuario", "Fecha", "Accion", "Ext. previa", "Cant. modificada"};
         model.setColumnIdentifiers(columns);
         
-        Query query = Conection.CreateEntityManager().createEntityManager().createNativeQuery("Select * FROM ViewAccionesInventario");
+        Query query = Conection.createEntityManager().createNativeQuery("Select * FROM ViewAccionesInventario");
         List<Object[]> acciones = query.getResultList();
         acciones.forEach((accion) ->{
             Object[] row = {
@@ -74,7 +72,7 @@ public class AccionesInventarioDialogViewController {
         int fila = Acciones.getSelectedRow();
         if(fila >= 0){
             if(Dialogs.ShowOKCancelDialog("¿Esta seguro de eliminar la accion seleccionada?", Dialogs.WARNING_ICON)){
-                InventariodetalleaccionesJpaController controller = new InventariodetalleaccionesJpaController(Conection.CreateEntityManager());
+                InventariodetalleaccionesJpaController controller = new InventariodetalleaccionesJpaController(Conection.createEntityManagerFactory());
                 try {
                     controller.destroy(Integer.valueOf(Acciones.getValueAt(fila, 0).toString()));
                     CargarAcciones();

@@ -25,7 +25,7 @@ public class CategoriaDialogViewController {
     public CategoriaDialogViewController(JTextField Buscar, JTable Tabla) {
         this.Buscar = Buscar;
         this.Tabla = Tabla;
-        controller = new CategoriaJpaController(Conection.CreateEntityManager());
+        controller = new CategoriaJpaController(Conection.createEntityManagerFactory());
     }
 
     public void cargarCategorias() {
@@ -33,7 +33,7 @@ public class CategoriaDialogViewController {
         String[] headerStrings = {"Codigo", "Nombre"};
 
         model.setColumnIdentifiers(headerStrings);
-        List<Categoria> categorias = new CategoriaJpaController(Conection.CreateEntityManager()).findCategoriaEntities();
+        List<Categoria> categorias = new CategoriaJpaController(Conection.createEntityManagerFactory()).findCategoriaEntities();
 
         categorias.forEach(marca -> {
             ArrayList<Object> row = new ArrayList<>();

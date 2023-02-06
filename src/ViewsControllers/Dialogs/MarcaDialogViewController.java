@@ -25,7 +25,7 @@ public class MarcaDialogViewController {
     public MarcaDialogViewController(JTextField Buscar, JTable Tabla) {
         this.Buscar = Buscar;
         this.Tabla = Tabla;
-        marcaJpaController = new MarcaJpaController(Conection.CreateEntityManager());
+        marcaJpaController = new MarcaJpaController(Conection.createEntityManagerFactory());
     }
 
     public void cargarMarcas() {

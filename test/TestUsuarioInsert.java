@@ -15,7 +15,7 @@ public class TestUsuarioInsert {
         usuario.setToken(null);
         usuario.setEstado(1);
         
-        UsuarioJpaController controller = new UsuarioJpaController(Conection.CreateEntityManager());
+        UsuarioJpaController controller = new UsuarioJpaController(Conection.createEntityManagerFactory());
         controller.create(usuario);
     }
     

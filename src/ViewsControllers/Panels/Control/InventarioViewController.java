@@ -52,7 +52,7 @@ public class InventarioViewController {
             String[] columns = {"No. Inventario", "Cd.", "Descripcion", "Marca", "Categoria", "Precio/Compra","Existencia"};
             model.setColumnIdentifiers(columns);
 
-            Query query = Conection.CreateEntityManager().createEntityManager().createNativeQuery("SELECT * FROM ViewInventario");
+            Query query = Conection.createEntityManagerFactory().createEntityManager().createNativeQuery("SELECT * FROM ViewInventario");
             List<Object[]> l = query.getResultList();
 
             l.forEach(inventario -> {
@@ -90,7 +90,7 @@ public class InventarioViewController {
     }
     
     public void CargarMarcas(){
-        MarcaJpaController marcaJpaController = new MarcaJpaController(Conection.CreateEntityManager());
+        MarcaJpaController marcaJpaController = new MarcaJpaController(Conection.createEntityManagerFactory());
         List<Marca> marcas = marcaJpaController.findMarcaEntities();
         Marcas.removeAllItems();
         Marcas.addItem(new Marca(0, "-- Todas las marcas --"));
@@ -98,7 +98,7 @@ public class InventarioViewController {
     }
     
     public void CargarCategorias(){
-        CategoriaJpaController categoriaJpaController = new CategoriaJpaController(Conection.CreateEntityManager());
+        CategoriaJpaController categoriaJpaController = new CategoriaJpaController(Conection.createEntityManagerFactory());
         List<Categoria> categorias = categoriaJpaController.findCategoriaEntities();
         Categorias.removeAllItems();
         Categorias.addItem(new Categoria(0, "-- Todas las categorias --"));

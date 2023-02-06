@@ -257,7 +257,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_pnBarraMouseDragged
 
     private void btnCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseClicked
-        Conection.Disconnect(Conection.CreateEntityManager().createEntityManager());
+        Conection.Disconnect(Conection.createEntityManagerFactory().createEntityManager());
         new LocalConection().closeConection();
         System.exit(0);
     }//GEN-LAST:event_btnCloseMouseClicked

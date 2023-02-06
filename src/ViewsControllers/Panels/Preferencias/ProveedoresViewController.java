@@ -38,14 +38,14 @@ public class ProveedoresViewController {
         this.Correo = Correo;
         this.Numero = Numero;
         
-        controller = new ProveedorJpaController(Conection.CreateEntityManager());
+        controller = new ProveedorJpaController(Conection.createEntityManagerFactory());
     }
     
     public void CargarProveedores(){
         DefaultTableModel model = new DefaultTableModel();
         String[] columns = {"No. Proveedor", "Nombre", "RTN", "Saldo"};
         model.setColumnIdentifiers(columns);
-        List<Object[]> proveedores = Conection.CreateEntityManager().createEntityManager()
+        List<Object[]> proveedores = Conection.createEntityManagerFactory().createEntityManager()
                 .createNativeQuery("SELECT ProveedorID, Nombre, RTN, SALDO FROM Proveedor").getResultList();
         
         proveedores.forEach(proveedor -> {

@@ -64,8 +64,8 @@ public class FacturaViewController {
         this.ISV = ISV;
         this.Total = Total;
 
-        controller = new VentaJpaController(Conection.CreateEntityManager());
-        controllerCotizacion = new CotizacionJpaController(Conection.CreateEntityManager());
+        controller = new VentaJpaController(Conection.createEntityManagerFactory());
+        controllerCotizacion = new CotizacionJpaController(Conection.createEntityManagerFactory());
     }
 
     public void cargarProducto(Object[] values) {
@@ -114,7 +114,7 @@ public class FacturaViewController {
     }
 
     public void cargarPorCodigoBarras() {
-        ProductoJpaController controllerProducto = new ProductoJpaController(Conection.CreateEntityManager());
+        ProductoJpaController controllerProducto = new ProductoJpaController(Conection.createEntityManagerFactory());
         List<Producto> productos = controllerProducto.findProductoEntities();
         productos.forEach(producto -> {
             System.out.println(Barra.getText()+" = "+producto.getBarra());
@@ -130,7 +130,7 @@ public class FacturaViewController {
                         getNumberFormat(producto.getPrecioVenta())
                     };
 
-                    Query query = Conection.CreateEntityManager().createEntityManager()
+                    Query query = Conection.createEntityManagerFactory().createEntityManager()
                         .createNativeQuery("SELECT cantidad FROM inventario WHERE ProductoID = "+producto.getProductoID());
                     List values = query.getResultList();
 
@@ -148,13 +148,13 @@ public class FacturaViewController {
 
     public void cargarCotizacion() {
         if (validateCotizacion()) {
-            List<Cotizaciondetalle> cotizacionDetalles = new CotizaciondetalleJpaController(Conection.CreateEntityManager()).findCotizaciondetalleEntities();
+            List<Cotizaciondetalle> cotizacionDetalles = new CotizaciondetalleJpaController(Conection.createEntityManagerFactory()).findCotizaciondetalleEntities();
             int currentCotizacionID = Integer.parseInt(Cotizacion.getText());
 
             cotizacionDetalles.forEach(cotizacionDetalle -> {
                 int cotizacionID = cotizacionDetalle.getCotizacionID().getCotizacionID();
                 if (cotizacionID == currentCotizacionID) {
-                    Producto producto = new ProductoJpaController(Conection.CreateEntityManager())
+                    Producto producto = new ProductoJpaController(Conection.createEntityManagerFactory())
                             .findProducto(cotizacionDetalle.getProductoID().getProductoID());
                     Object[] row = {
                         cotizacionDetalle.getProductoID().getProductoID(),
@@ -181,7 +181,7 @@ public class FacturaViewController {
         try {
             int NoCotizacion = Integer.parseInt(Cotizacion.getText());
         } catch (NumberFormatException ex) {
-            Dialogs.ShowMessageDialog("El No de cotizacion debe ser un numero", Dialogs.ERROR_ICON);
+            Dialogs.ShowMessageDialog("El Numero de cotizacion debe ser un numero", Dialogs.ERROR_ICON);
             return false;
         }
         return true;
@@ -195,8 +195,11 @@ public class FacturaViewController {
     }
 
     public void CargarClientes() {
-        List<Cliente> clientes = new ClienteJpaController(Conection.CreateEntityManager()).findClienteEntities();
-        clientes.forEach(Clientes::addItem);
+        Runnable run = ()->{
+            List<Cliente> clientes = new ClienteJpaController(Conection.createEntityManagerFactory()).findClienteEntities();
+            clientes.forEach(Clientes::addItem);  
+        };
+        new Thread(run).start();
     }
 
     public void InitTable() {
@@ -276,7 +279,7 @@ public class FacturaViewController {
             Venta venta = CreateObjectVenta();
             int VentaID = controller.create(venta);
             List<Ventadetalle> ventas = createListVentaDetalle(VentaID);
-            VentadetalleJpaController ventadetalleJpaController = new VentadetalleJpaController(Conection.CreateEntityManager());
+            VentadetalleJpaController ventadetalleJpaController = new VentadetalleJpaController(Conection.createEntityManagerFactory());
             ventas.forEach(ventadetalleJpaController::create);
             
             if(Dialogs.ShowOKCancelDialog("¿Desea enviar a imprimir la factura ahora?", Dialogs.COMPLETE_ICON)){
@@ -299,7 +302,7 @@ public class FacturaViewController {
             Cotizacion cotizacion = CreateObjectCotizacion();
             int CotizacionID = controllerCotizacion.create(cotizacion);
             List<Cotizaciondetalle> cotizaciondetalles = createListCotizaciondetalle(CotizacionID);
-            CotizaciondetalleJpaController cotizaciondetalleJpaController = new CotizaciondetalleJpaController(Conection.CreateEntityManager());
+            CotizaciondetalleJpaController cotizaciondetalleJpaController = new CotizaciondetalleJpaController(Conection.createEntityManagerFactory());
             cotizaciondetalles.forEach(cotizaciondetalleJpaController::create);
 
             Runnable run = () -> {

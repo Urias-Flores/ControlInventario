@@ -27,7 +27,7 @@ public class InfoEmpleadoDialogViewController {
         this.FechaNacimiento = FechaNacimiento;
         this.Domicilio = Domicilio;
         
-        controller = new EmpleadoJpaController(Conection.CreateEntityManager());
+        controller = new EmpleadoJpaController(Conection.createEntityManagerFactory());
     }
     
     public void CargarEmpleado(int EmpleadoID){

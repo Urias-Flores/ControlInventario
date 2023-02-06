@@ -32,7 +32,7 @@ public class InfoProductoDialogViewController {
     }
 
     public void cargarProducto(int ProductoID){
-        Producto producto = new ProductoJpaController(Conection.CreateEntityManager()).findProducto(ProductoID);
+        Producto producto = new ProductoJpaController(Conection.createEntityManagerFactory()).findProducto(ProductoID);
         
         Codigo.setText(producto.getProductoID().toString());
         Descripcion.setText(producto.getDescripcion());

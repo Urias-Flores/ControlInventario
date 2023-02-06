@@ -74,7 +74,7 @@ public class ComprasViewController {
         CargarAnios(AnioCompra);
         CargarAnios(AnioVencimiento);
         cargarFechasActuales();
-        controller = new CompraJpaController(Conection.CreateEntityManager());
+        controller = new CompraJpaController(Conection.createEntityManagerFactory());
     }
     
     public void cargarProducto(Object[] values){
@@ -122,7 +122,7 @@ public class ComprasViewController {
     }
     
     public void cargarPorCodigoBarras() {
-        ProductoJpaController controllerProducto = new ProductoJpaController(Conection.CreateEntityManager());
+        ProductoJpaController controllerProducto = new ProductoJpaController(Conection.createEntityManagerFactory());
         List<Producto> productos = controllerProducto.findProductoEntities();
         productos.forEach(producto -> {
             if (producto.getBarra().equals(Barra.getText())) {
@@ -150,7 +150,7 @@ public class ComprasViewController {
     }
     
     public void CargarProveedores(){
-        List<Proveedor> proveedores = new ProveedorJpaController(Conection.CreateEntityManager()).findProveedorEntities();
+        List<Proveedor> proveedores = new ProveedorJpaController(Conection.createEntityManagerFactory()).findProveedorEntities();
         proveedores.forEach(Proveedores::addItem);
     }
     
@@ -240,7 +240,7 @@ public class ComprasViewController {
             Compra compra = CreateObjectCompra();
             int CompraID = controller.create(compra);
             List<Compradetalle> compras = createListCompraDetalle(CompraID);
-            CompradetalleJpaController compradetalleJpaController = new CompradetalleJpaController(Conection.CreateEntityManager());
+            CompradetalleJpaController compradetalleJpaController = new CompradetalleJpaController(Conection.createEntityManagerFactory());
             compras.forEach(compradetalleJpaController::create);
             
             Runnable run = ()->{
