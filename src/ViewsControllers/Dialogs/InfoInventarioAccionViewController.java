@@ -20,6 +20,8 @@ public class InfoInventarioAccionViewController {
     private JLabel CantidadModificada;
     private JLabel CantidadResultante;
 
+    private int AccionID = 0;
+    
     public InfoInventarioAccionViewController(JLabel NoAccion, JLabel TipoAccion, JLabel Fecha, JLabel Hora, JLabel Usuario, JLabel Empleado, JLabel Producto, JTextArea Descripcion, JLabel ExistenciaPrevia, JLabel CantidadModificada, JLabel CantidadResultante) {
         this.NoAccion = NoAccion;
         this.TipoAccion = TipoAccion;
@@ -34,7 +36,15 @@ public class InfoInventarioAccionViewController {
         this.CantidadResultante = CantidadResultante;
     }
     
-    public void CargarAccion(int AccionID){
+    public void Init(int AccionID){
+        Runnable run = () -> {
+            this.AccionID = AccionID;
+            loadAction();
+        };
+        new Thread(run).start();
+    }
+    
+    public void loadAction(){
         InventariodetalleaccionesJpaController controller = new InventariodetalleaccionesJpaController(Conection.createEntityManagerFactory());
         Inventariodetalleacciones accion = controller.findInventariodetalleacciones(AccionID);
         

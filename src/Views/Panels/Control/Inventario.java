@@ -15,12 +15,10 @@ public class Inventario extends javax.swing.JPanel {
         btnImprimir.addMouseListener(Utilities.getMLGeneralButton());
         btnModificar.addMouseListener(Utilities.getMLGeneralButton());
         btnEliminar.addMouseListener(Utilities.getMLGeneralButton());
+        btnVerAcciones.addMouseListener(Utilities.getMLGeneralButton());
         btnActualizar.addMouseListener(Utilities.getMLGrayButton());
         
         vc = new InventarioViewController(txtBuscar, tbProductos, cmbMarcas, cmbCategorias, lbTotal, lbTotalArticulos, txtCargando);
-        vc.CargarInventario();
-        vc.CargarMarcas();
-        vc.CargarCategorias();
     }
     
     @SuppressWarnings("unchecked")
@@ -270,7 +268,7 @@ public class Inventario extends javax.swing.JPanel {
     private void btnImprimirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnImprimirMouseClicked
         txtCargando.setIcon(new ImageIcon(getClass().getResource("/Icons/cargando32px.gif")));
         Runnable run = ()->{
-            vc.ImprimirInventario();
+            vc.printReportInventory();
             txtCargando.setIcon(null);
         };
         Thread thread = new Thread(run);
@@ -278,29 +276,28 @@ public class Inventario extends javax.swing.JPanel {
     }//GEN-LAST:event_btnImprimirMouseClicked
 
     private void btnActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnActualizarMouseClicked
-        vc.CargarInventario();
-        vc.CargarCategorias();
-        vc.CargarMarcas();
+        vc.updateData();
     }//GEN-LAST:event_btnActualizarMouseClicked
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-        vc.Buscar();
+        //vc.search();
+        vc.filter();
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void cmbMarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMarcasActionPerformed
-        vc.FiltrarMarcas();
+        vc.filter();
     }//GEN-LAST:event_cmbMarcasActionPerformed
 
     private void cmbCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCategoriasActionPerformed
-        vc.FiltrarCategorias();
+        vc.filter();
     }//GEN-LAST:event_cmbCategoriasActionPerformed
 
     private void btnModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseClicked
-        vc.ModificarExistencia();
+        vc.modifyExistence();
     }//GEN-LAST:event_btnModificarMouseClicked
 
     private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
-        vc.EliminarInventario();
+        vc.deleteInventory();
     }//GEN-LAST:event_btnEliminarMouseClicked
 
     private void btnVerAccionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVerAccionesMouseClicked

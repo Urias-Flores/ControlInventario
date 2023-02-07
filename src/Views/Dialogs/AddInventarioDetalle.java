@@ -21,11 +21,11 @@ public class AddInventarioDetalle extends javax.swing.JDialog {
         btnClose.addMouseListener(Utilities.getMLButtonCloseBlue());
         btnAceptar.addMouseListener(Utilities.getMLGeneralButton());
         
-        vc = new AddInventarioDetalleViewController(txtDescripcion, txtCantidad, txtExistenciaPrevia, txtExistenciaResultante, txtError);
+        vc = new AddInventarioDetalleViewController(this, txtDescripcion, txtCantidad, txtExistenciaPrevia, txtExistenciaResultante, txtError, lbCargando);
     }
     
     public void setInventario(){
-        vc.CargarCantidad(InventarioID);
+        vc.updateData(InventarioID);
     }
 
     @SuppressWarnings("unchecked")
@@ -47,6 +47,7 @@ public class AddInventarioDetalle extends javax.swing.JDialog {
         txtExistenciaResultante = new javax.swing.JTextField();
         btnAceptar = new javax.swing.JLabel();
         txtError = new javax.swing.JLabel();
+        lbCargando = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -105,11 +106,12 @@ public class AddInventarioDetalle extends javax.swing.JDialog {
         jLabel3.setText("Existencia previa:");
 
         jLabel4.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel4.setText("Existencia resultante:");
+        jLabel4.setText("Existencia real:");
 
         jLabel5.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel5.setText("Cantidad a modificar:");
 
+        txtCantidad.setEditable(false);
         txtCantidad.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtCantidad.setText("0.00");
         txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -122,6 +124,7 @@ public class AddInventarioDetalle extends javax.swing.JDialog {
         txtExistenciaPrevia.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtExistenciaPrevia.setText("0.00");
 
+        txtExistenciaResultante.setEditable(false);
         txtExistenciaResultante.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtExistenciaResultante.setText("0.00");
         txtExistenciaResultante.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -149,6 +152,8 @@ public class AddInventarioDetalle extends javax.swing.JDialog {
         txtError.setText("Texto de error");
         txtError.setOpaque(true);
 
+        lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -171,7 +176,10 @@ public class AddInventarioDetalle extends javax.swing.JDialog {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtExistenciaResultante)))
-                            .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(txtCantidad, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE))))
@@ -202,7 +210,9 @@ public class AddInventarioDetalle extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(txtError, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18))
         );
 
@@ -237,18 +247,15 @@ public class AddInventarioDetalle extends javax.swing.JDialog {
     }//GEN-LAST:event_pnBarraMousePressed
 
     private void btnAceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAceptarMouseClicked
-        if(vc.InsertInventarioDetalle()){
-            this.setVisible(false);
-            Dialogs.ShowMessageDialog("La cantidad de inventario ha sido modificada exitosamente", Dialogs.COMPLETE_ICON);
-        }
+        vc.insertInventoryDetail();
     }//GEN-LAST:event_btnAceptarMouseClicked
 
     private void txtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyReleased
-        vc.updateExistenciaResultante();
+        vc.updateResultExistence();
     }//GEN-LAST:event_txtCantidadKeyReleased
 
     private void txtExistenciaResultanteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExistenciaResultanteKeyReleased
-        vc.updateCantidad();
+        vc.updateAmount();
     }//GEN-LAST:event_txtExistenciaResultanteKeyReleased
 
     /**
@@ -302,6 +309,7 @@ public class AddInventarioDetalle extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbCargando;
     private javax.swing.JPanel pnBarra;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextArea txtDescripcion;

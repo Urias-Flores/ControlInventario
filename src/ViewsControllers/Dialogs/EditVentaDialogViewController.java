@@ -118,14 +118,13 @@ public class EditVentaDialogViewController {
     }
 
     private boolean validate() {
-        float descuentoPorcentaje;
         float descuentoLempiras;
         float precio;
 
         //Validando precio en porcentaje
         try {
-            descuentoPorcentaje = Float.parseFloat(DescuentoPorcentaje.getText().replace(",", ""));
-            if (descuentoPorcentaje < 0 && descuentoPorcentaje > 101) {
+            float descuentoPorcentaje = Float.parseFloat(DescuentoPorcentaje.getText().replace(",", ""));
+            if (descuentoPorcentaje < 0 || descuentoPorcentaje > 101) {
                 Error.setText("El descuento en porcentaje debe de ser mayor a cero y menor a 100");
                 return false;
             }

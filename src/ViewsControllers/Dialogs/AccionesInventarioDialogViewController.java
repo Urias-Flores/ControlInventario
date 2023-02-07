@@ -1,49 +1,77 @@
 package ViewsControllers.Dialogs;
 
+import Controllers.InventarioJpaController;
 import Controllers.InventariodetalleaccionesJpaController;
 import Controllers.exceptions.NonexistentEntityException;
+import Models.Inventario;
+import Models.Inventariodetalleacciones;
+import Models.Producto;
 import Resource.Conection;
+import Resource.Utilities;
 import Views.Dialogs.Dialogs;
+import java.awt.Color;
+import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Query;
+import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 public class AccionesInventarioDialogViewController {
-    JTextField Buscar;
-    JTable Acciones;
-
-    public AccionesInventarioDialogViewController(JTextField Buscar, JTable Acciones) {
+    private JTextField Buscar;
+    private JComboBox Tipo;
+    private JTable Acciones;
+    private JLabel Cargando;
+    
+    private DefaultTableModel model = new DefaultTableModel(){
+        @Override
+        public boolean isCellEditable(int row, int column){ return false; }
+    };
+    
+    public AccionesInventarioDialogViewController(JTextField Buscar, JComboBox Tipo, JTable Acciones, JLabel Cargando) {
         this.Buscar = Buscar;
+        this.Tipo = Tipo;
         this.Acciones = Acciones;
+        this.Cargando = Cargando;
+        //Cargando model de tabla en tabla de acciones
+        setModelTableForAcciones();
+        
+        //Inicializando carga de datos
+        Init();
     }
     
-    public void CargarAcciones(){
-        DefaultTableModel model = new DefaultTableModel();
+    private void setLoad(boolean state){
+        ImageIcon icon = new ImageIcon(getClass().getResource(Utilities.getLoadingImage()));
+        Cargando.setIcon(state ? icon : null);
+    }
+    
+    //Task
+    private void Init(){
+        setLoad(true);
+        Runnable run = () ->{
+            //Cargando de datos de acciones
+            loadActions();
+            
+            setLoad(false);
+        };
+        new Thread(run).start();
+    }
+    
+    public void updateData(){
+        Init();
+    }
+    
+    private void setModelTableForAcciones(){
         String[] columns = {"Cd.", "Producto", "Usuario", "Fecha", "Accion", "Ext. previa", "Cant. modificada"};
         model.setColumnIdentifiers(columns);
         
-        Query query = Conection.createEntityManager().createNativeQuery("Select * FROM ViewAccionesInventario");
-        List<Object[]> acciones = query.getResultList();
-        acciones.forEach((accion) ->{
-            Object[] row = {
-                accion[0],
-                accion[1],
-                accion[2],
-                accion[3],
-                accion[6] = accion[6].toString().equals("E") ? "Eliminacion" : "Modificacion",
-                accion[7],
-                accion[8]
-            };
-            
-            model.addRow(row);
-        });
-        
         Acciones.setModel(model);
-        
         Acciones.getColumn("Cd.").setPreferredWidth(40);
         Acciones.getColumn("Producto").setPreferredWidth(450);
         Acciones.getColumn("Usuario").setPreferredWidth(110);
@@ -53,13 +81,38 @@ public class AccionesInventarioDialogViewController {
         Acciones.getColumn("Cant. modificada").setPreferredWidth(70);
     }
     
-    public void Buscar(){
+    private void loadActions(){
+        model.setRowCount(0);
+        Query query = Conection.createEntityManager()
+                .createNativeQuery("select * from viewaccionesinventario ORDER BY Fecha desc , Hora desc;");
+        List<Object[]> acciones = query.getResultList();
+        acciones.forEach((accion) ->{
+            Object[] row = {
+                accion[0],
+                accion[1],
+                accion[2],
+                accion[3],
+                accion[6] = accion[6].toString().equals("E") ? "Eliminación" : "Modificación",
+                accion[7],
+                accion[8]
+            };
+            
+            model.addRow(row);
+        });
+    }
+    
+    public void filter(){
+        List<RowFilter<TableModel, String>> filters = new LinkedList<>();
+        
+        filters.add(RowFilter.regexFilter(Buscar.getForeground().equals(Color.BLACK) ? "(?i)"+Buscar.getText() : "", 0, 1));
+        filters.add(RowFilter.regexFilter(Tipo.getSelectedIndex() == 0 ? "" : Tipo.getSelectedItem().toString(), 4));
+        
         TableRowSorter s = new TableRowSorter(Acciones.getModel());
-        s.setRowFilter(RowFilter.regexFilter(Buscar.getText(), 0, 1, 4));
+        s.setRowFilter(RowFilter.andFilter(filters));
         Acciones.setRowSorter(s);
     }
     
-    public void InformacionCompletaAccion(){
+    public void showCompleteInformation(){
         int fila = Acciones.getSelectedRow();
         if(fila >= 0){
             Dialogs.ShowInfoInventarioAccion(Integer.parseInt(Acciones.getValueAt(fila, 0).toString()));
@@ -68,22 +121,52 @@ public class AccionesInventarioDialogViewController {
         }
     }
     
+    //Task
     public void EliminarAccion(){
         int fila = Acciones.getSelectedRow();
         if(fila >= 0){
             if(Dialogs.ShowOKCancelDialog("¿Esta seguro de eliminar la accion seleccionada?", Dialogs.WARNING_ICON)){
-                InventariodetalleaccionesJpaController controller = new InventariodetalleaccionesJpaController(Conection.createEntityManagerFactory());
-                try {
-                    controller.destroy(Integer.valueOf(Acciones.getValueAt(fila, 0).toString()));
-                    CargarAcciones();
-                    Dialogs.ShowMessageDialog("La accion ha sido eliminada exitosamente", Dialogs.COMPLETE_ICON);
-                } catch (NonexistentEntityException ex) {
-                    System.err.println("Error: "+ex.getMessage());
-                    Dialogs.ShowMessageDialog("Ups... ha ocurrido un error inesperado", Dialogs.ERROR_ICON);
-                }
+                
+                setLoad(true);
+                Runnable run = () -> {
+                    try {
+                        
+                        InventariodetalleaccionesJpaController controllerDetalle = new InventariodetalleaccionesJpaController
+                        (Conection.createEntityManagerFactory());
+                        int accionInventarioID = Integer.parseInt(Acciones.getValueAt(fila, 0).toString());
+                        
+                        if(validateDeleteAction(controllerDetalle, accionInventarioID)){
+                            controllerDetalle.destroy(Integer.valueOf(Acciones.getValueAt(fila, 0).toString()));
+                            Init();
+                            Dialogs.ShowMessageDialog("La accion ha sido eliminada exitosamente", Dialogs.COMPLETE_ICON);
+                        }else{
+                            setLoad(false);
+                            Dialogs.ShowMessageDialog("Error la cantidad en inventario ya cambio con respecto a la accion", Dialogs.ERROR_ICON);
+                        }
+                    } catch (NonexistentEntityException ex) {
+                        setLoad(false);
+                        System.err.println("Error: "+ex.getMessage());
+                        Dialogs.ShowMessageDialog("Ups... ha ocurrido un error inesperado", Dialogs.ERROR_ICON);
+                    }
+                    setLoad(false);
+                };
+                new Thread(run).start();
+                
             }
         }else{
             Dialogs.ShowMessageDialog("Seleccione una accion de la lista", Dialogs.ERROR_ICON);
         }
+    }
+    
+    private boolean validateDeleteAction(InventariodetalleaccionesJpaController controllerDetalle, int accionInventarioID){
+        Inventariodetalleacciones inventariodetalle = controllerDetalle.findInventariodetalleacciones(accionInventarioID);
+        Producto producto = inventariodetalle.getProductoID();
+        Inventario inventario = producto.getInventarioList().get(0);
+        
+        if(!inventariodetalle.getFecha().equals(Utilities.getDate())){
+            return false;
+        }
+        
+        return inventario.getCantidad() == inventariodetalle.getCantidadModificada() + inventariodetalle.getExistenciaPrevia();
     }
 }

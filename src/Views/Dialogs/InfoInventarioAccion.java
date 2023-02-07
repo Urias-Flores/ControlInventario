@@ -16,8 +16,8 @@ public class InfoInventarioAccion extends javax.swing.JDialog {
         vc = new InfoInventarioAccionViewController(lbNoAccion, lbTipoAccion, lbFecha, lbHora, lbUsuario, lbEmpleado, lbProducto, txtDescripcion, lbExistenciaPrevia, lbCantidadModificada, lbCantidadResultante);
     }
     
-    public void CargarAccion(int AccionID){
-        vc.CargarAccion(AccionID);
+    public void loadAction(int AccionID){
+        vc.Init(AccionID);
     }
     
     @SuppressWarnings("unchecked")

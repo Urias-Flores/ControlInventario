@@ -99,7 +99,7 @@ public class AddVentaDialogViewController {
 
     private void loadProducts() {
         model.setRowCount(0);
-        List<Producto> productos = new ProductoJpaController(Conection.createEntityManagerFactory()).findProductoEntities();
+        List<Producto> productos = Conection.createEntityManager().createNamedQuery("Producto.findAll").getResultList();
         productos.forEach(producto -> {
             Object[] row = {
                 producto.getProductoID(),
@@ -131,8 +131,7 @@ public class AddVentaDialogViewController {
 
     public void filterBrands() {
         TableRowSorter s = new TableRowSorter(Productos.getModel());
-        String Item = Marcas.getSelectedItem().toString();
-        s.setRowFilter(RowFilter.regexFilter(Marcas.getSelectedIndex() > 0 ? Item : "", 2));
+        s.setRowFilter(RowFilter.regexFilter(Marcas.getSelectedIndex() > 0 ? Marcas.getSelectedItem().toString() : "", 2));
         Productos.setRowSorter(s);
         clear();
     }

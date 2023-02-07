@@ -237,7 +237,7 @@ public class Dialogs {
     
     public static void ShowInfoInventarioAccion(int AccionID){
         InfoInventarioAccion i = new InfoInventarioAccion(null, true);
-        i.CargarAccion(AccionID);
+        i.loadAction(AccionID);
         i.setVisible(true);
         i.dispose();
     }
