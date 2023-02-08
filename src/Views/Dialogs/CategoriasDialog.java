@@ -23,6 +23,7 @@ public class CategoriasDialog extends javax.swing.JDialog {
         
         btnAgregar.addMouseListener(Utilities.getMLGeneralButton());
         btnEliminar.addMouseListener(Utilities.getMLGeneralButton());
+        btnSeleccionar.addMouseListener(Utilities.getMLGeneralButton());
         
         vc = new CategoriaDialogViewController(txtBuscar, lbCargando, tbCategorias);
         btnSeleccionar.setVisible(false);
@@ -133,6 +134,7 @@ public class CategoriasDialog extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbCategorias.setShowHorizontalLines(true);
         jScrollPane1.setViewportView(tbCategorias);
 
         btnActualizar.setBackground(new java.awt.Color(255, 255, 255));

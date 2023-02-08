@@ -8,7 +8,6 @@ import Resource.Conection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -19,8 +18,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 public class CategoriaDialogViewController {
-
-    private CategoriaJpaController controller;
 
     private JTextField Buscar;
     private JLabel Cargando;
@@ -36,8 +33,6 @@ public class CategoriaDialogViewController {
         this.Buscar = Buscar;
         this.Cargando = Cargando;
         this.Categorias = Tabla;
-        
-        controller = new CategoriaJpaController(Conection.createEntityManagerFactory());
         
         //Cargando modelo de tabla ne tabla de categorias
         setModelTableCategories();
@@ -57,6 +52,7 @@ public class CategoriaDialogViewController {
     private void Init(){
         setLoad(true);
         Runnable run = () -> {
+            //Cargando tabla de categorias
             loadCategories();
             
             setLoad(false);
@@ -82,35 +78,46 @@ public class CategoriaDialogViewController {
     }
 
     private void loadCategories() {
-        List<Categoria> categorias = new CategoriaJpaController(Conection.createEntityManagerFactory()).findCategoriaEntities();
-        categorias.forEach(marca -> {
-            ArrayList<Object> row = new ArrayList<>();
-            row.add(marca.getCategoriaID());
-            row.add(marca.getNombre());
-            model.addRow(row.toArray());
+        model.setRowCount(0);
+        List<Categoria> categorias = Conection.createEntityManager().createNamedQuery("Categoria.findAll").getResultList();
+        categorias.forEach(categoria -> {
+           Object[] row = { categoria.getCategoriaID(), categoria.getNombre() };
+            model.addRow(row);
         });
     }
 
     public void search() {
         rowSorter.setModel(Categorias.getModel());
         rowSorter.setRowFilter
-        (RowFilter.regexFilter(Buscar.getText().isEmpty() || Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+Buscar.getText(), 1, 2));
+        (RowFilter.regexFilter(Buscar.getText().isEmpty() || Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+Buscar.getText(), 0, 1));
         Categorias.setRowSorter(rowSorter);
     }
     
+    //Task
     public void deleteCategory() {
         int fila = Categorias.getSelectedRow();
         if (fila > 0) {
             if (Dialogs.ShowOKCancelDialog("¿Esta seguro que desea eliminar la marca seleccionada?", Dialogs.DELETE_ICON)) {
-                try {
-                    controller.destroy(Integer.valueOf(Categorias.getValueAt(fila, 0).toString()));
-                    loadCategories();
-                    Dialogs.ShowMessageDialog("La categoria ha sido eliminada exitosamente", Dialogs.COMPLETE_ICON);
-                } catch (IllegalOrphanException | NonexistentEntityException ex) {
-                    Dialogs.ShowMessageDialog("ps.. Puede que exista un producto registrado con esta categoria", Dialogs.ERROR_ICON);
-                }
-            }else{
-                Dialogs.ShowMessageDialog("La eliminacion de la categoria ah sido cancelada", Dialogs.ERROR_ICON);
+                
+                setLoad(true);
+                Runnable run = () -> {
+                    try {
+                        new CategoriaJpaController(Conection.createEntityManagerFactory())
+                                .destroy(Integer.valueOf(Categorias.getValueAt(fila, 0).toString()));
+
+                        Init();
+                        setLoad(false);
+                        Dialogs.ShowMessageDialog("La categoria ha sido eliminada exitosamente", Dialogs.COMPLETE_ICON);
+                    } catch (IllegalOrphanException | NonexistentEntityException ex) {
+                        setLoad(false);
+                        System.err.println("Error: "+ex.getMessage());
+                        Dialogs.ShowMessageDialog("ps.. Puede que exista un producto registrado con esta categoria", Dialogs.ERROR_ICON);
+                    }
+                    
+                    setLoad(false);
+                };
+                new Thread(run).start();
+                
             }
         }else{
             Dialogs.ShowMessageDialog("Seleccione una categoria de la lista", Dialogs.ERROR_ICON);

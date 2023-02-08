@@ -8,7 +8,6 @@ import Resource.Conection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -19,8 +18,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 public class MarcaDialogViewController {
-
-    private MarcaJpaController marcaJpaController;
 
     private JTextField Buscar;
     private JLabel Cargando;
@@ -36,7 +33,6 @@ public class MarcaDialogViewController {
         this.Buscar = Buscar;
         this.Cargando = Cargando;
         this.Marcas = Tabla;
-        marcaJpaController = new MarcaJpaController(Conection.createEntityManagerFactory());
         
         //Cargando model de tabla en tabla de marcas
         setModelTableBrands();
@@ -82,19 +78,18 @@ public class MarcaDialogViewController {
     }
             
     private void loadBrands() {
-        List<Marca> marcas = marcaJpaController.findMarcaEntities();
+        model.setRowCount(0);
+        List<Marca> marcas = Conection.createEntityManager().createNamedQuery("Marca.findAll").getResultList();
         marcas.forEach(marca -> {
-            ArrayList<Object> row = new ArrayList<>();
-            row.add(marca.getMarcaID());
-            row.add(marca.getNombre());
-            model.addRow(row.toArray());
+            Object[] row = { marca.getMarcaID(), marca.getNombre() };
+            model.addRow(row);
         });
     }
 
     public void search() {
         rowSorter.setRowFilter
         (RowFilter.regexFilter
-        (Buscar.getText().isEmpty() || Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+Buscar.getText(), 1, 2));
+        (Buscar.getText().isEmpty() || Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+Buscar.getText(), 0, 1));
         Marcas.setRowSorter(rowSorter);
     }
      
@@ -103,13 +98,25 @@ public class MarcaDialogViewController {
         int fila = Marcas.getSelectedRow();
         if (fila > 0) {
             if (Dialogs.ShowOKCancelDialog("¿Esta seguro que desea eliminar la marca seleccionada?", Dialogs.WARNING_ICON)) {
-                try {
-                    marcaJpaController.destroy(Integer.valueOf(Marcas.getValueAt(fila, 0).toString()));
-                    loadBrands();
-                    Dialogs.ShowMessageDialog("La marca ha sido eliminada exitosamente", Dialogs.COMPLETE_ICON);
-                } catch (IllegalOrphanException | NonexistentEntityException ex) {
-                    Dialogs.ShowMessageDialog("Ups.. Puede que exista un producto registrado con esta marca", Dialogs.ERROR_ICON);
-                }
+                
+                setLoad(true);
+                Runnable run = () -> {
+                    try {
+                        new MarcaJpaController(Conection.createEntityManagerFactory())
+                                .destroy(Integer.valueOf(Marcas.getValueAt(fila, 0).toString()));
+                        
+                        Init();
+                        setLoad(false);
+                        Dialogs.ShowMessageDialog("La marca ha sido eliminada exitosamente", Dialogs.COMPLETE_ICON);
+                    } catch (IllegalOrphanException | NonexistentEntityException ex) {
+                        setLoad(false);
+                        System.err.println("Error: "+ex.getMessage());
+                        Dialogs.ShowMessageDialog("Ups.. Puede que exista un producto registrado con esta marca", Dialogs.ERROR_ICON);
+                    }
+                    setLoad(false);
+                };
+                new Thread(run).start();
+                
             }
         }else{
             Dialogs.ShowMessageDialog("Seleccione una marca de la lista", Dialogs.ERROR_ICON);

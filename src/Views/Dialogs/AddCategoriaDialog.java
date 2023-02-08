@@ -16,10 +16,12 @@ public class AddCategoriaDialog extends javax.swing.JDialog {
     public AddCategoriaDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        btnAceptar.addMouseListener(Utilities.getMLGeneralButton());
         txtNombre.addFocusListener(Utilities.getFLPlaceHolderEfect());
         btnClose.addMouseListener(Utilities.getMLButtonCloseBlue());
         
-        vc = new AddCategoriDialogViewController(txtNombre, lbError);
+        vc = new AddCategoriDialogViewController(this, txtNombre, lbError, lbCargando);
     }
 
     /**
@@ -39,6 +41,7 @@ public class AddCategoriaDialog extends javax.swing.JDialog {
         txtNombre = new javax.swing.JTextField();
         btnAceptar = new javax.swing.JLabel();
         lbError = new javax.swing.JLabel();
+        lbCargando = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -107,6 +110,8 @@ public class AddCategoriaDialog extends javax.swing.JDialog {
         lbError.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         lbError.setForeground(new java.awt.Color(255, 0, 0));
 
+        lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -116,6 +121,8 @@ public class AddCategoriaDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -139,7 +146,9 @@ public class AddCategoriaDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbError, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
                 .addGap(24, 24, 24)
-                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnAceptar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18))
         );
 
@@ -174,10 +183,7 @@ public class AddCategoriaDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_pnBarraMousePressed
 
     private void btnAceptarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAceptarMouseClicked
-        if(vc.Insert()){
-            this.setVisible(false);
-            Dialogs.ShowMessageDialog("La marca ha sido agregada exitosamente", Dialogs.COMPLETE_ICON);
-        }
+        vc.Insert();
     }//GEN-LAST:event_btnAceptarMouseClicked
 
     /**
@@ -227,6 +233,7 @@ public class AddCategoriaDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lbCargando;
     private javax.swing.JLabel lbError;
     private javax.swing.JPanel pnBarra;
     private javax.swing.JTextField txtNombre;

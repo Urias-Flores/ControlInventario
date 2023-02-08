@@ -213,8 +213,13 @@ public class AddProductDialogViewController {
             return false;
         }
         
+        //Validacion de la unidad
         if(Unidad.getText().isEmpty() || Unidad.getForeground().equals(new Color(180, 180, 180))){
             Error.setText("El tipo de unidad del producto es obligatorio");
+            return false;
+        }
+        if(Unidad.getText().length() > 10){
+            Error.setText("El nombre de unidad admite únicamente 10 caracteres");
             return false;
         }
         
