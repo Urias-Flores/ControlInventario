@@ -88,7 +88,7 @@ public class AccionesInventarioDialog extends javax.swing.JDialog {
         );
 
         jLabel1.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
-        jLabel1.setText("Registro de acciones de modificacion de inventario");
+        jLabel1.setText("Registro de acciones de modificación de inventario");
 
         txtBuscar.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         txtBuscar.setForeground(new java.awt.Color(180, 180, 180));
@@ -118,7 +118,7 @@ public class AccionesInventarioDialog extends javax.swing.JDialog {
         btnEliminar.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnEliminar.setText("Eliminar accion");
+        btnEliminar.setText("Eliminar acción");
         btnEliminar.setToolTipText("Administrar marcas");
         btnEliminar.setOpaque(true);
         btnEliminar.addMouseListener(new java.awt.event.MouseAdapter() {

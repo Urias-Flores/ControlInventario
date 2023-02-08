@@ -10,6 +10,8 @@ import Resource.Conection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.awt.Color;
+import java.sql.Time;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Query;
@@ -143,9 +145,6 @@ public class AccionesInventarioDialogViewController {
                             controllerDetalle.destroy(Integer.valueOf(Acciones.getValueAt(fila, 0).toString()));
                             Init();
                             Dialogs.ShowMessageDialog("La accion ha sido eliminada exitosamente", Dialogs.COMPLETE_ICON);
-                        }else{
-                            setLoad(false);
-                            Dialogs.ShowMessageDialog("Error la cantidad en inventario ya cambio con respecto a la accion", Dialogs.ERROR_ICON);
                         }
                     } catch (NonexistentEntityException ex) {
                         setLoad(false);
@@ -163,14 +162,38 @@ public class AccionesInventarioDialogViewController {
     }
     
     private boolean validateDeleteAction(InventariodetalleaccionesJpaController controllerDetalle, int accionInventarioID){
+        
         Inventariodetalleacciones inventariodetalle = controllerDetalle.findInventariodetalleacciones(accionInventarioID);
         Producto producto = inventariodetalle.getProductoID();
-        Inventario inventario = producto.getInventarioList().get(0);
         
-        if(!inventariodetalle.getFecha().equals(Utilities.getDate()) && inventariodetalle.getHora().equals(null)){
-            return false;
+            List<Inventario> listInventory = producto.getInventarioList();
+        if(!listInventory.isEmpty()){
+            Inventario inventario = listInventory.get(0);
+
+            Date horaAccion = inventariodetalle.getHora();
+            int hora = horaAccion.getHours();
+            int minuto = horaAccion.getMinutes();
+
+            Time horaRecurrente = Utilities.getTime();
+            int horaActual = horaRecurrente.getHours();
+            int minutoActual = horaRecurrente.getMinutes();
+
+            //Comparacion de cantidad en inventario real con cantidad resultado de modificacion
+            if(inventario.getCantidad() == inventariodetalle.getCantidadModificada() + inventariodetalle.getExistenciaPrevia()){
+                Dialogs.ShowMessageDialog("Ya se realizaron transacciones desde creacion de accion", Dialogs.ERROR_ICON);
+                return false;
+            }
+            //Verificacion que sea del mismo dia
+            if(!inventariodetalle.getFecha().equals(Utilities.getDate())){
+                Dialogs.ShowMessageDialog("El tiempo de eliminacion (fecha) de esta accion a sido superado", Dialogs.ERROR_ICON);
+                return false;
+            }
+            //Verificando que sean de la misma hora
+            if(horaActual > hora && minutoActual > minuto){
+                Dialogs.ShowMessageDialog("El tiempo de eliminacion (hora) de esta accion a sido superado", Dialogs.ERROR_ICON);
+                return false;
+            }
         }
-        
-        return inventario.getCantidad() == inventariodetalle.getCantidadModificada() + inventariodetalle.getExistenciaPrevia();
+        return true;
     }
 }

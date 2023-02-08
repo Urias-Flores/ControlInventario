@@ -70,11 +70,11 @@ public class AddVentaDialogViewController {
     private void Init() {
         setLoad(true);
         Runnable run = () -> {
-            //Cargando datos de productos a la lista
-            loadProducts();
-
             //Cargando marcas en combobox
             loadBrands();
+            
+            //Cargando datos de productos a la lista
+            loadProducts();
 
             setLoad(false);
         };
@@ -101,15 +101,16 @@ public class AddVentaDialogViewController {
         model.setRowCount(0);
         List<Producto> productos = Conection.createEntityManager().createNamedQuery("Producto.findAll").getResultList();
         productos.forEach(producto -> {
-            Object[] row = {
-                producto.getProductoID(),
-                producto.getDescripcion(),
-                producto.getMarcaID().getNombre(),
-                producto.getUnidad(),
-                getNumberFormat(producto.getPrecioVenta())
-            };
-
-            model.addRow(row);
+            if(!producto.getInventarioList().isEmpty()){
+                Object[] row = {
+                    producto.getProductoID(),
+                    producto.getDescripcion(),
+                    producto.getMarcaID().getNombre(),
+                    producto.getUnidad(),
+                    getNumberFormat(producto.getPrecioVenta())
+                };
+                model.addRow(row);
+            }
         });
     }
 

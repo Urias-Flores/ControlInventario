@@ -187,7 +187,7 @@ public class InventarioViewController {
                 Dialogs.ShowAddInventarioDetalleForDelete(InventarioID);
                 loadInventory();
             } else {
-                Dialogs.ShowMessageDialog("Unicamente se pueden eliminar productos con cantidad 0", Dialogs.ERROR_ICON);
+                Dialogs.ShowMessageDialog("Únicamente se pueden eliminar productos con cantidad 0", Dialogs.ERROR_ICON);
             }
         } else {
             Dialogs.ShowMessageDialog("Seleccione una elemento de la lista", Dialogs.ERROR_ICON);
