@@ -54,13 +54,17 @@ public class AccionesInventarioDialogViewController {
     //Task
     private void Init(){
         setLoad(true);
-        Runnable run = () ->{
+        Runnable run = () -> {
             //Cargando de datos de acciones
             loadActions();
             
             setLoad(false);
         };
         new Thread(run).start();
+    }
+    
+    public void nombreFuncion(){
+        
     }
     
     public void updateData(){
@@ -163,7 +167,7 @@ public class AccionesInventarioDialogViewController {
         Producto producto = inventariodetalle.getProductoID();
         Inventario inventario = producto.getInventarioList().get(0);
         
-        if(!inventariodetalle.getFecha().equals(Utilities.getDate())){
+        if(!inventariodetalle.getFecha().equals(Utilities.getDate()) && inventariodetalle.getHora().equals(null)){
             return false;
         }
         

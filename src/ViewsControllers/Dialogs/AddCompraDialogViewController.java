@@ -45,6 +45,7 @@ public class AddCompraDialogViewController {
     
     public void CargarProductos(){
         Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
+        
         Runnable run = ()->{
             DefaultTableModel model = new DefaultTableModel();
             String[] columns = {"Codigo", "Descripcion", "Marca","Unidad", "Precio base"};
