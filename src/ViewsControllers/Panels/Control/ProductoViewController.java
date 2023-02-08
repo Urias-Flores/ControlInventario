@@ -143,30 +143,12 @@ public class ProductoViewController {
         rowSorter.setRowFilter(RowFilter.andFilter(filters));
         Productos.setRowSorter(rowSorter);
     }
-
-    public void deleteProduct() {
-        int fila = Productos.getSelectedRow();
-        if (fila >= 0) {
-            if (Dialogs.ShowOKCancelDialog("¿Esta seguro que desea eliminar el producto seleccionado?", Dialogs.WARNING_ICON)) {
-                try {
-                    controller.destroy(Integer.valueOf(Productos.getValueAt(fila, 0).toString()));
-                    loadProducts();
-                    Dialogs.ShowMessageDialog("El producto ha sido eliminado exitosamente", Dialogs.COMPLETE_ICON);
-                } catch (IllegalOrphanException | NonexistentEntityException ex) {
-                    System.err.println(ex.getMessage());
-                    Dialogs.ShowMessageDialog("Ups.. Puede que existan facturas con este producto registrado", Dialogs.ERROR_ICON);
-                }
-            }
-        } else {
-            Dialogs.ShowMessageDialog("Seleccion un producto de la lista de productos", Dialogs.ERROR_ICON);
-        }
-    }
     
     public void editProduct(){
         int fila = Productos.getSelectedRow();
         if(fila >= 0){
             Dialogs.ShowModifyProductDialog(Integer.parseInt(Productos.getValueAt(fila, 0).toString()));
-            loadProducts();
+            Init();
         }else{
             Dialogs.ShowMessageDialog("Seleccion un producto para modificar de la lista", Dialogs.ERROR_ICON);
         }

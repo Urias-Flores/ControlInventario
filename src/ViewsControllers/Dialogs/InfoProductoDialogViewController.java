@@ -31,18 +31,23 @@ public class InfoProductoDialogViewController {
         this.PrecioVenta = PrecioVenta;
     }
 
-    public void cargarProducto(int ProductoID){
-        Producto producto = new ProductoJpaController(Conection.createEntityManagerFactory()).findProducto(ProductoID);
+    //Task
+    public void loadProduct(int ProductoID){
+        Runnable run  = () -> {
+            Producto producto = new ProductoJpaController(Conection.createEntityManagerFactory()).findProducto(ProductoID);
         
-        Codigo.setText(producto.getProductoID().toString());
-        Descripcion.setText(producto.getDescripcion());
-        Marca.setText(producto.getMarcaID().getNombre());
-        Categoria.setText(producto.getCategoriaID().getNombre());
-        CodigoBarra.setText(producto.getBarra());
-        Unidad.setText(producto.getUnidad());
-        CantidadMinima.setText(getNumberFormat(producto.getCantidadMinima()));
-        PrecioCompra.setText(getNumberFormat(producto.getPrecioCompra()));
-        PrecioVenta.setText(getNumberFormat(producto.getPrecioVenta()));
+            Codigo.setText(producto.getProductoID().toString());
+            Descripcion.setText(producto.getDescripcion());
+            Marca.setText(producto.getMarcaID().getNombre());
+            Categoria.setText(producto.getCategoriaID().getNombre());
+            CodigoBarra.setText(producto.getBarra());
+            Unidad.setText(producto.getUnidad());
+            CantidadMinima.setText(getNumberFormat(producto.getCantidadMinima()));
+            PrecioCompra.setText(getNumberFormat(producto.getPrecioCompra()));
+            PrecioVenta.setText(getNumberFormat(producto.getPrecioVenta()));
+        };
+        new Thread(run).start();
+        
     }
     
     private String getNumberFormat(float Value){

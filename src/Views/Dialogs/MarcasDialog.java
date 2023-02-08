@@ -22,9 +22,9 @@ public class MarcasDialog extends javax.swing.JDialog {
 
         btnAgregar.addMouseListener(Utilities.getMLGeneralButton());
         btnEliminar.addMouseListener(Utilities.getMLGeneralButton());
+        btnSeleccionar.addMouseListener(Utilities.getMLGeneralButton());
 
-        vc = new MarcaDialogViewController(txtBuscar, tbMarcas);
-        vc.cargarMarcas();
+        vc = new MarcaDialogViewController(txtBuscar, lbCargando, tbMarcas);
         btnSeleccionar.setVisible(false);
     }
 
@@ -54,6 +54,7 @@ public class MarcasDialog extends javax.swing.JDialog {
         btnEliminar = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnSeleccionar = new javax.swing.JLabel();
+        lbCargando = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -98,7 +99,7 @@ public class MarcasDialog extends javax.swing.JDialog {
         );
 
         jLabel1.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
-        jLabel1.setText("Todas las marcas");
+        jLabel1.setText("Registro de marcas");
 
         txtBuscar.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         txtBuscar.setForeground(new java.awt.Color(180, 180, 180));
@@ -136,6 +137,7 @@ public class MarcasDialog extends javax.swing.JDialog {
             }
         ));
         tbMarcas.setRowHeight(28);
+        tbMarcas.setShowHorizontalLines(true);
         jScrollPane1.setViewportView(tbMarcas);
 
         btnActualizar.setBackground(new java.awt.Color(255, 255, 255));
@@ -178,6 +180,16 @@ public class MarcasDialog extends javax.swing.JDialog {
             }
         });
 
+        lbCargando.setBackground(new java.awt.Color(255, 255, 255));
+        lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbCargando.setToolTipText("Actualizar lista");
+        lbCargando.setOpaque(true);
+        lbCargando.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbCargandoMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -191,6 +203,8 @@ public class MarcasDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -212,7 +226,8 @@ public class MarcasDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
@@ -255,19 +270,19 @@ public class MarcasDialog extends javax.swing.JDialog {
 
     private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
         Dialogs.ShowAddMarcaDialog();
-        vc.cargarMarcas();
+        vc.updateData();
     }//GEN-LAST:event_btnAgregarMouseClicked
 
     private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
-        vc.Eliminar();
+        vc.deleteBrand();
     }//GEN-LAST:event_btnEliminarMouseClicked
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-        vc.Buscar();
+        vc.search();
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void btnActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnActualizarMouseClicked
-        vc.cargarMarcas();
+        vc.updateData();
     }//GEN-LAST:event_btnActualizarMouseClicked
 
     private void btnSeleccionarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSeleccionarMouseClicked
@@ -280,6 +295,10 @@ public class MarcasDialog extends javax.swing.JDialog {
             Dialogs.ShowMessageDialog("Seleccione una marca de la lista", Dialogs.ERROR_ICON);
         }
     }//GEN-LAST:event_btnSeleccionarMouseClicked
+
+    private void lbCargandoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbCargandoMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lbCargandoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -331,6 +350,7 @@ public class MarcasDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbCargando;
     private javax.swing.JPanel pnBarra;
     private javax.swing.JTable tbMarcas;
     private javax.swing.JTextField txtBuscar;

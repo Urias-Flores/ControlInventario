@@ -61,6 +61,8 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel2" min="-2" pref="38" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
+                          <Component id="lbCargando" min="-2" pref="38" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="btnActualizar" min="-2" pref="38" max="-2" attributes="0"/>
                       </Group>
                       <Component id="jScrollPane1" alignment="1" pref="612" max="32767" attributes="0"/>
@@ -88,6 +90,7 @@
                       <Component id="txtBuscar" alignment="1" max="32767" attributes="0"/>
                       <Component id="btnActualizar" pref="38" max="32767" attributes="0"/>
                       <Component id="jLabel2" max="32767" attributes="0"/>
+                      <Component id="lbCargando" alignment="0" pref="38" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" pref="554" max="32767" attributes="0"/>
@@ -152,7 +155,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Roboto" size="26" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Todas las marcas"/>
+            <Property name="text" type="java.lang.String" value="Registro de marcas"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtBuscar">
@@ -215,6 +218,7 @@
                   </Table>
                 </Property>
                 <Property name="rowHeight" type="int" value="28"/>
+                <Property name="showHorizontalLines" type="boolean" value="true"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -285,6 +289,19 @@
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnSeleccionarMouseClicked"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lbCargando">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="toolTipText" type="java.lang.String" value="Actualizar lista"/>
+            <Property name="opaque" type="boolean" value="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lbCargandoMouseClicked"/>
           </Events>
         </Component>
       </SubComponents>

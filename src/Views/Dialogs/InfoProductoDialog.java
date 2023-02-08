@@ -18,8 +18,8 @@ public class InfoProductoDialog extends javax.swing.JDialog {
         vc = new InfoProductoDialogViewController(txtCodigo, txtDescripcion, txtMarca, txtCategoria, txtBarra, txtUnidad, txtCantidadMinima, txtPrecioCompra, txtPrecioVenta);
     }
     
-    public void cargarProducto(int ProductoID){
-        vc.cargarProducto(ProductoID);
+    public void loadProduct(int ProductoID){
+        vc.loadProduct(ProductoID);
     }
 
     @SuppressWarnings("unchecked")

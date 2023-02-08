@@ -29,11 +29,14 @@ public class AddProductoDialog extends javax.swing.JDialog {
         txtPrecioCompra.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtPrecioVenta.addFocusListener(Utilities.getFLPlaceHolderEfect());
         
-        vc = new AddProductDialogViewController(txtDescripcion, txtMarca, txtCategoria, txtBarra, txtUnidad, txtCantidadMinima, txtPrecioCompra, txtPrecioVenta, txtError);
+        vc = new AddProductDialogViewController(this, txtDescripcion, txtMarca, 
+                txtCategoria, txtBarra, txtUnidad, 
+                txtCantidadMinima, txtPrecioCompra, 
+                txtPrecioVenta, txtError, lbCargando);
     }
 
     public void EditigingMode(int ProductoID){
-        vc.setProductoToEdit(ProductoID);
+        vc.setProductToEdit(ProductoID);
         btnAgregar.setText("Guardar");
         editing = true;
     }
@@ -69,6 +72,7 @@ public class AddProductoDialog extends javax.swing.JDialog {
         txtCantidadMinima = new javax.swing.JTextField();
         txtPrecioCompra = new javax.swing.JTextField();
         txtPrecioVenta = new javax.swing.JTextField();
+        lbCargando = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -219,7 +223,6 @@ public class AddProductoDialog extends javax.swing.JDialog {
         txtError.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
         txtError.setForeground(new java.awt.Color(255, 255, 255));
         txtError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        txtError.setText("Texto de error");
         txtError.setOpaque(true);
 
         jLabel13.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
@@ -255,6 +258,8 @@ public class AddProductoDialog extends javax.swing.JDialog {
             }
         });
 
+        lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -264,6 +269,8 @@ public class AddProductoDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -355,7 +362,9 @@ public class AddProductoDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(txtError, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18))
         );
 
@@ -390,17 +399,7 @@ public class AddProductoDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_pnBarraMousePressed
 
     private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
-        if(editing){
-            if(vc.Edit()){
-                this.setVisible(false);
-                Dialogs.ShowMessageDialog("El producto ha sido modificado exitosamente", Dialogs.COMPLETE_ICON);
-            }
-        }else{
-            if(vc.Insert()){
-                this.setVisible(false);
-                Dialogs.ShowMessageDialog("El producto ha sido agregado exitosamente", Dialogs.COMPLETE_ICON);
-            }
-        }
+        vc.save();
     }//GEN-LAST:event_btnAgregarMouseClicked
 
     private void btnAgregarMarcaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMarcaMouseClicked
@@ -412,11 +411,11 @@ public class AddProductoDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAgregarCategoriaMouseClicked
 
     private void btnListaMarcaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnListaMarcaMouseClicked
-        vc.cargarMarca();
+        vc.loadBrand();
     }//GEN-LAST:event_btnListaMarcaMouseClicked
 
     private void btnListaCategoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnListaCategoriaMouseClicked
-        vc.cargarCategoria();
+        vc.loadCatgory();
     }//GEN-LAST:event_btnListaCategoriaMouseClicked
 
     private void txtCantidadMinimaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCantidadMinimaFocusLost
@@ -489,6 +488,7 @@ public class AddProductoDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbCargando;
     private javax.swing.JPanel pnBarra;
     private javax.swing.JTextField txtBarra;
     private javax.swing.JTextField txtCantidadMinima;

@@ -7,30 +7,39 @@ import Models.Categoria;
 import Models.Marca;
 import Models.Producto;
 import Resource.Conection;
+import Resource.Utilities;
+import Views.Dialogs.AddProductoDialog;
 import Views.Dialogs.Dialogs;
 import java.awt.Color;
 import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Objects;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class AddProductDialogViewController {
     
-    ProductoJpaController controller = new ProductoJpaController(Conection.createEntityManagerFactory());
+    private ProductoJpaController controller = new ProductoJpaController(Conection.createEntityManagerFactory());
     
-    JTextArea Descripcion;
-    JTextField Marca;
-    JTextField Categoria;
-    JTextField Barra;
-    JTextField Unidad;
-    JTextField CantidadMinimo;
-    JTextField PrecioCompra;
-    JTextField PrecioVenta;
-    JLabel Error;
+    private AddProductoDialog Instance;
+    private JTextArea Descripcion;
+    private JTextField Marca;
+    private JTextField Categoria;
+    private JTextField Barra;
+    private JTextField Unidad;
+    private JTextField CantidadMinimo;
+    private JTextField PrecioCompra;
+    private JTextField PrecioVenta;
+    private JLabel Error;
+    private JLabel Cargando;
         
-    boolean Editing = false;
+    private int ProductoID = 0;
+    private boolean Editing = false;
 
-    public AddProductDialogViewController(JTextArea Descripcion, JTextField Marca, JTextField Categoria, JTextField Barra, JTextField Unidad, JTextField CantidadMinimo, JTextField PrecioCompra, JTextField PrecioVenta, JLabel Error) {
+    public AddProductDialogViewController(AddProductoDialog Instance, JTextArea Descripcion, JTextField Marca, JTextField Categoria, JTextField Barra, JTextField Unidad, JTextField CantidadMinimo, JTextField PrecioCompra, JTextField PrecioVenta, JLabel Error, JLabel Cargando) {
+        this.Instance = Instance;
         this.Descripcion = Descripcion;
         this.Marca = Marca;
         this.Categoria = Categoria;
@@ -40,9 +49,15 @@ public class AddProductDialogViewController {
         this.PrecioCompra = PrecioCompra;
         this.PrecioVenta = PrecioVenta;
         this.Error = Error;
+        this.Cargando = Cargando;
     }
     
-    public void cargarMarca(){
+    private void setLoad(boolean state){
+        ImageIcon icon = new ImageIcon(getClass().getResource(Utilities.getLoadingImage()));
+        Cargando.setIcon(state ? icon : null);
+    }
+    
+    public void loadBrand(){
         Object[] values = Dialogs.ShowSelectMarcaDialog();
         if(Integer.parseInt(values[0].toString()) > -1 && !values[1].toString().isEmpty()){
             Marca.setText(values[1].toString());
@@ -51,32 +66,7 @@ public class AddProductDialogViewController {
         }
     }
     
-    public void setProductoToEdit(int ProductoID){
-        Producto producto = controller.findProducto(ProductoID);
-        if(producto != null){
-            Editing = true;
-            Descripcion.setText(producto.getDescripcion());
-            Descripcion.setName(String.valueOf(ProductoID));
-            Marca.setName(producto.getMarcaID().getMarcaID().toString());
-            Marca.setText(producto.getMarcaID().getNombre());
-            Marca.setForeground(Color.BLACK);
-            Categoria.setName(producto.getCategoriaID().getCategoriaID().toString());
-            Categoria.setText(producto.getCategoriaID().getNombre());
-            Categoria.setForeground(Color.BLACK);
-            Barra.setText(producto.getBarra());
-            Barra.setForeground(Color.BLACK);
-            Unidad.setText(producto.getUnidad());
-            Unidad.setForeground(Color.BLACK);
-            CantidadMinimo.setText(String.valueOf(producto.getCantidadMinima()));
-            CantidadMinimo.setForeground(Color.black);
-            PrecioCompra.setText(String.valueOf(producto.getPrecioCompra()));
-            PrecioCompra.setForeground(Color.black);
-            PrecioVenta.setText(String.valueOf(producto.getPrecioVenta()));
-            PrecioVenta.setForeground(Color.black);
-        }
-    }
-    
-    public void cargarCategoria(){
+    public void loadCatgory(){
         Object[] values = Dialogs.ShowSelectCategoriaDialog();
         if(Integer.parseInt(values[0].toString()) > -1 && !values[1].toString().isEmpty()){
             Categoria.setText(values[1].toString());
@@ -85,36 +75,111 @@ public class AddProductDialogViewController {
         }
     }
     
-    public boolean Insert(){
-        if(Validate()){
-            Producto producto = CrearObjectoProducto();
-            controller.create(producto);
-            return true;
-        }
-        Error.setBackground(new Color(185, 0, 0));
-        return false;
-    }
-    
-    public boolean Edit() {
-        if(Validate()){
-            try {
-                Producto producto = CrearObjectoProducto();
-                controller.edit(producto);
-                return true;
-            } catch (NonexistentEntityException | IllegalOrphanException ex) {
-                System.err.println("Error: "+ex.getMessage());
-                Dialogs.ShowMessageDialog("El producto esta ligado a otros datos, no puso ser monificado", Dialogs.ERROR_ICON);
-                return false;
-            } catch (Exception ex) {
-                System.err.println("Error: "+ex.getMessage());
-                Dialogs.ShowMessageDialog("Ha ocurrido un error inesperado al actualizar producto", Dialogs.ERROR_ICON);
-                return false;
+    //Task
+    public void setProductToEdit(int ProductoID){
+        this.ProductoID = ProductoID;
+        
+        setLoad(true);
+        Runnable run = () -> {
+            Producto producto = controller.findProducto(ProductoID);
+            if(producto != null){
+                Editing = true;
+                Descripcion.setText(producto.getDescripcion());
+                Descripcion.setName(String.valueOf(ProductoID));
+                Marca.setName(producto.getMarcaID().getMarcaID().toString());
+                Marca.setText(producto.getMarcaID().getNombre());
+                Marca.setForeground(Color.BLACK);
+                Categoria.setName(producto.getCategoriaID().getCategoriaID().toString());
+                Categoria.setText(producto.getCategoriaID().getNombre());
+                Categoria.setForeground(Color.BLACK);
+                Barra.setText(producto.getBarra());
+                Barra.setForeground(Color.BLACK);
+                Unidad.setText(producto.getUnidad());
+                Unidad.setForeground(Color.BLACK);
+                CantidadMinimo.setText(String.valueOf(producto.getCantidadMinima()));
+                CantidadMinimo.setForeground(Color.black);
+                PrecioCompra.setText(String.valueOf(producto.getPrecioCompra()));
+                PrecioCompra.setForeground(Color.black);
+                PrecioVenta.setText(String.valueOf(producto.getPrecioVenta()));
+                PrecioVenta.setForeground(Color.black);
             }
-        }
-        return false;
+            setLoad(false);
+        };
+        new Thread(run).start();
+        
     }
     
-    private Producto CrearObjectoProducto(){
+    public void save(){
+        if(!Editing){ Insert(); } else { Edit(); }
+    }
+    
+    //Task
+    private void Insert(){
+        if(validate()){
+            setLoad(true);
+            Runnable run = () -> {
+                List<Producto> productos = controller.findProductoEntities();
+                if(!validateBarCodeExist(productos)){
+                    if(!validateDescriptioneExist(productos)){
+                        Producto producto = createObjectProduct();
+                        controller.create(producto);
+
+                        Instance.setVisible(false);
+                        Dialogs.ShowMessageDialog("¡El producto ha sido agregado exitosamente", Dialogs.COMPLETE_ICON);
+                    } else {
+                        Error.setBackground(new Color(185, 0, 0));
+                        Error.setText("La descripción del producto ya ha sido utilizada para otro de la misma marca");
+                    }
+                }else{
+                    Error.setBackground(new Color(185, 0, 0));
+                    Error.setText("El código de barra ingresado ya esta registrado en otro producto");
+                }
+                
+                setLoad(false);
+            };
+            new Thread(run).start();
+        }else{ Error.setBackground(new Color(185, 0, 0)); }
+    }
+    
+    //Task
+    private void Edit() {
+        if(validate()){
+            setLoad(true);
+            Runnable run = () ->{
+                List<Producto> productos = controller.findProductoEntities();
+                if(!validateBarCodeExist(productos)){
+                    if(!validateDescriptioneExist(productos)){
+                        try {
+                            Producto producto = createObjectProduct();
+                            controller.edit(producto);
+
+                            Instance.setVisible(false);
+                            Dialogs.ShowMessageDialog("", Dialogs.COMPLETE_ICON);
+                        } catch (NonexistentEntityException | IllegalOrphanException ex) {
+                            System.err.println("Error: "+ex.getMessage());
+                            setLoad(false);
+                            Dialogs.ShowMessageDialog("El producto esta ligado a otros datos, no pudo ser modificado", Dialogs.ERROR_ICON);
+                        } catch (Exception ex) {
+                            System.err.println("Error: "+ex.getMessage());
+                            setLoad(false);
+                            Dialogs.ShowMessageDialog("Ha ocurrido un error inesperado al modificar producto", Dialogs.ERROR_ICON);
+                        }                        
+                    } else {
+                        Error.setBackground(new Color(185, 0, 0));
+                        Error.setText("La descripción del producto ya ha sido utilizada para otro de la misma marca");
+                    }
+                } else { 
+                    Error.setBackground(new Color(185, 0, 0));
+                    Error.setText("El código de barra ingresado ya esta registrado en otro producto");
+                }
+                
+                setLoad(false);
+            };
+            new Thread(run).start();
+        } else { Error.setBackground(new Color(185, 0, 0)); }
+    }
+    
+    private Producto createObjectProduct(){
         Producto producto = new Producto();
         
         if(Descripcion.getName() != null){
@@ -132,7 +197,7 @@ public class AddProductDialogViewController {
         return producto;
     }
     
-    public boolean Validate(){
+    public boolean validate(){
         if(Descripcion.getText().isEmpty() || Descripcion.getForeground().equals(new Color(180, 180, 180))){
             Error.setText("La descripcion del producto es obligatoria");
             return false;
@@ -200,6 +265,47 @@ public class AddProductDialogViewController {
         }
         
         return true;
+    }
+    
+    //Validacion de codigo de barras repetido
+    private boolean validateBarCodeExist(List<Producto> productos){
+        boolean barcodeExist = false;
+        
+        if(!productos.isEmpty()){
+            if(!Barra.getText().isEmpty() || !Barra.getForeground().equals(new Color(180, 180, 180))){
+                for(Producto producto : productos){
+                    if(Barra.getText().equalsIgnoreCase(producto.getBarra())){
+                        if(ProductoID == 0){
+                            barcodeExist = true;
+                        }else{
+                            if(ProductoID != producto.getProductoID()){
+                                barcodeExist = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return barcodeExist;
+    }
+    
+    //Validacion de descripciones iguales en productos
+    private boolean validateDescriptioneExist(List<Producto> productos){
+        boolean descriptionExist = false;
+        
+        if(!productos.isEmpty()){
+            for(Producto producto : productos){
+                if(Descripcion.getText().equalsIgnoreCase(producto.getDescripcion())){
+                    if(Objects.equals(producto.getMarcaID().getMarcaID(), Integer.valueOf(Marca.getName()))){
+                        descriptionExist = true;
+                    }
+                }
+            }
+        }
+        
+        return descriptionExist;
     }
     
     public void setNumberFormat(JTextField textField){

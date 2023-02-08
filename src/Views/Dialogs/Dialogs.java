@@ -58,7 +58,7 @@ public class Dialogs {
     
     public static void ShowInfoProducto(int ProductoID){
         InfoProductoDialog ipd = new InfoProductoDialog(null, true);
-        ipd.cargarProducto(ProductoID);
+        ipd.loadProduct(ProductoID);
         ipd.setVisible(true);
         ipd.dispose();
     }
