@@ -1,7 +1,5 @@
 package ViewsControllers.Panels.Control;
 
-import Controllers.CategoriaJpaController;
-import Controllers.MarcaJpaController;
 import Models.Categoria;
 import Models.Marca;
 import Reports.Reports;
@@ -12,9 +10,7 @@ import java.awt.Color;
 import java.awt.print.PrinterException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -110,8 +106,8 @@ public class InventarioViewController {
 
     public void loadInventory() {
         model.setRowCount(0);
-        List<Object[]> l = Conection.createEntityManager().createNativeQuery("SELECT * FROM ViewInventario").getResultList();
-        l.forEach(model::addRow);
+        List<Object[]> listInventory = Conection.createEntityManager().createNativeQuery("SELECT * FROM ViewInventario").getResultList();
+        listInventory.forEach(model::addRow);
         updateTotales();
     }
 
@@ -133,16 +129,14 @@ public class InventarioViewController {
     public void loadBrands() {
         Marcas.removeAllItems();
         Marcas.addItem(new Marca(0, "-- Todas las marcas --"));
-        MarcaJpaController marcaJpaController = new MarcaJpaController(Conection.createEntityManagerFactory());
-        List<Marca> marcas = marcaJpaController.findMarcaEntities();
+        List<Marca> marcas = Conection.createEntityManager().createNamedQuery("Marca.findAll").getResultList();
         marcas.forEach(Marcas::addItem);
     }
 
     public void loadCategories() {
         Categorias.removeAllItems();
         Categorias.addItem(new Categoria(0, "-- Todas las categorias --"));
-        CategoriaJpaController categoriaJpaController = new CategoriaJpaController(Conection.createEntityManagerFactory());
-        List<Categoria> categorias = categoriaJpaController.findCategoriaEntities();
+        List<Categoria> categorias = Conection.createEntityManager().createNamedQuery("Categoria.findAll").getResultList();
         categorias.forEach(Categorias::addItem);
     }
 

@@ -97,6 +97,7 @@ public class Proveedores extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbProveedores.setShowHorizontalLines(true);
         tbProveedores.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tbProveedoresMousePressed(evt);

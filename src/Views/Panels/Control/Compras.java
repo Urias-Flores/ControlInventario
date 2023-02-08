@@ -122,6 +122,7 @@ public class Compras extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbCompras.setShowHorizontalLines(true);
         tbCompras.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 tbComprasPropertyChange(evt);

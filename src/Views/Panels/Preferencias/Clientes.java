@@ -95,6 +95,7 @@ public class Clientes extends javax.swing.JPanel {
             }
         ));
         tbClientes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbClientes.setShowHorizontalLines(true);
         tbClientes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tbClientesMousePressed(evt);

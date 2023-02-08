@@ -50,19 +50,19 @@ public class LoadDialogViewController {
             Thread.sleep(1000);
             return false;
         }
-        Thread.sleep(1000);
+        loadBar(0, 33);
         if(!testJpaConection()){
             Texto.setText("Error al intentar crear la persistencia de datos");
             Thread.sleep(1000);
             return false;
         }
-        Thread.sleep(1000);
+        loadBar(33, 66);
         if(!testFileLocalConection()){
             Texto.setText("Error en la busqueda de archivo de datos local");
             Thread.sleep(1000);
             return false;
         }
-        Thread.sleep(1000);
+        loadBar(66, 100);
         Icons.setIcon(new ImageIcon(getClass().getResource("/Icons/Completado.png")));
         Texto.setText("¡Todo listo!");
         return true;
@@ -71,7 +71,6 @@ public class LoadDialogViewController {
     private boolean testNoJpaConection(){
         NoJpaConection conectionNoJpa = new NoJpaConection();
         if(conectionNoJpa.getconec() != null){
-            Barra.setValue(33);
             Texto.setText("¡Conexión con el servidor establecida!");
             return true;
         }
@@ -81,7 +80,6 @@ public class LoadDialogViewController {
     private boolean testJpaConection(){
         Object result = Conection.createEntityManager().createNativeQuery("SELECT 1").getSingleResult();
         if(result != null){
-            Barra.setValue(66);
             Texto.setText("¡Conexión con pesistencia creada!");
             return true;
         }
@@ -91,10 +89,16 @@ public class LoadDialogViewController {
     private boolean testFileLocalConection(){
         LocalDataController ldc = new LocalDataController();
         if(ldc.getValue("User") != null){
-            Barra.setValue(100);
             Texto.setText("¡Carga de informacion local completada!");
             return true;
         }
         return false;
-    }   
+    }
+    
+    private void loadBar(int init, int end) throws InterruptedException{
+        for(int i = init; i <= end; i++){
+            Barra.setValue(i);
+            Thread.sleep(15);
+        }
+    }
 }
