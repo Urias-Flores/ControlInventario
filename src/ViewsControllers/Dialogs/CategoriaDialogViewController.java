@@ -97,7 +97,7 @@ public class CategoriaDialogViewController {
     public void deleteCategory() {
         int fila = Categorias.getSelectedRow();
         if (fila > 0) {
-            if (Dialogs.ShowOKCancelDialog("¿Esta seguro que desea eliminar la marca seleccionada?", Dialogs.DELETE_ICON)) {
+            if (Dialogs.ShowOKCancelDialog("¿Esta seguro que desea eliminar la categoria seleccionada?", Dialogs.DELETE_ICON)) {
                 
                 setLoad(true);
                 Runnable run = () -> {

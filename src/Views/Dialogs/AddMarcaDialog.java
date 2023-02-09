@@ -6,12 +6,7 @@ import ViewsControllers.Dialogs.AddMarcaDialogViewController;
 public class AddMarcaDialog extends javax.swing.JDialog {
 
     private int X, Y;
-    private int Valor;
     private AddMarcaDialogViewController vc;
-    
-    public int getValor(){
-        return Valor;
-    }
     
     public AddMarcaDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -106,6 +101,7 @@ public class AddMarcaDialog extends javax.swing.JDialog {
         lbError.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
         lbError.setForeground(new java.awt.Color(255, 255, 255));
         lbError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbError.setText("Error");
         lbError.setOpaque(true);
 
         lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

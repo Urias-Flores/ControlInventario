@@ -24,10 +24,10 @@ public class Compras extends javax.swing.JPanel {
         
         
         vc = new ComprasViewController(cmbProveedores, txtFactura, cmbDiaCompra, cmbMesCompra, cmbAnioCompra, cmbDiaVencimiento, cmbMesVencimiento, cmbAnioVencimiento, rbPagada, rbPendiente, txtCodigoBarra, tbCompras, txtSubtotal, txtDescuento, txtImporte, txtISV, txtTotal);
-        vc.CargarProveedores();
-        vc.InitTable();
-        vc.CargarAnios(cmbAnioCompra);
-        vc.CargarAnios(cmbAnioVencimiento);
+        vc.loadSuppliers();
+        vc.setModelTableBuys();
+        vc.loadYears(cmbAnioCompra);
+        vc.loadYears(cmbAnioVencimiento);
     }
 
     @SuppressWarnings("unchecked")
@@ -434,7 +434,7 @@ public class Compras extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
-        if(vc.InsertCompra()){
+        if(vc.insertBuy()){
             Dialogs.ShowMessageDialog("La compra ha sido agregada exitosamente", Dialogs.COMPLETE_ICON);
         }
     }//GEN-LAST:event_btnAgregarMouseClicked
@@ -442,13 +442,13 @@ public class Compras extends javax.swing.JPanel {
     private void btnAgregarCarritoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarCarritoMouseClicked
         Object[] values = Dialogs.ShowAddCompraDialog();
         if(values != null){
-            vc.cargarProducto(values);
+            vc.loadProduct(values);
             vc.updateTotal();
         }
     }//GEN-LAST:event_btnAgregarCarritoMouseClicked
 
     private void btnEliminarCarritoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarCarritoMouseClicked
-        vc.DeleteCompra();
+        vc.deleteBuy();
     }//GEN-LAST:event_btnEliminarCarritoMouseClicked
 
     private void tbComprasPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_tbComprasPropertyChange
@@ -456,7 +456,7 @@ public class Compras extends javax.swing.JPanel {
     }//GEN-LAST:event_tbComprasPropertyChange
 
     private void btnAgregarProveedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarProveedorMouseClicked
-        vc.AgregarProveedor();
+        vc.addSupplier();
     }//GEN-LAST:event_btnAgregarProveedorMouseClicked
 
     private void cmbProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProveedoresActionPerformed
@@ -468,15 +468,15 @@ public class Compras extends javax.swing.JPanel {
     }//GEN-LAST:event_cmbProveedoresActionPerformed
 
     private void btnEditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseClicked
-        vc.editarValoresItem();
+        vc.editItemValue();
     }//GEN-LAST:event_btnEditarMouseClicked
 
     private void btnEliminarTodoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarTodoMouseClicked
-        vc.deleteAllCompras();
+        vc.deleteAllBuys();
     }//GEN-LAST:event_btnEliminarTodoMouseClicked
 
     private void txtCodigoBarraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoBarraActionPerformed
-        vc.cargarPorCodigoBarras();
+        vc.loadbyBarCode();
     }//GEN-LAST:event_txtCodigoBarraActionPerformed
 
     private void setEnableEstado(boolean estado){

@@ -6,12 +6,8 @@ import ViewsControllers.Dialogs.AddCategoriDialogViewController;
 public class AddCategoriaDialog extends javax.swing.JDialog {
 
     private int X, Y;
-    private int Valor;
     private AddCategoriDialogViewController vc;
     
-    public int getValor(){
-        return Valor;
-    }
     
     public AddCategoriaDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -107,8 +103,12 @@ public class AddCategoriaDialog extends javax.swing.JDialog {
             }
         });
 
-        lbError.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        lbError.setForeground(new java.awt.Color(255, 0, 0));
+        lbError.setBackground(new java.awt.Color(255, 255, 255));
+        lbError.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        lbError.setForeground(new java.awt.Color(255, 255, 255));
+        lbError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbError.setText("Error");
+        lbError.setOpaque(true);
 
         lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
@@ -143,9 +143,9 @@ public class AddCategoriaDialog extends javax.swing.JDialog {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lbError, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
-                .addGap(24, 24, 24)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnAceptar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
                     .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))

@@ -54,7 +54,7 @@ public class AddCategoriDialogViewController {
                 }
             };
             new Thread(run).start();
-        }else { Error.setForeground(new Color(185, 0, 0)); }
+        } else { Error.setBackground(new Color(185, 0, 0)); }
     }
     
     public boolean validate(){

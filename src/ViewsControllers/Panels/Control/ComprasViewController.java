@@ -71,13 +71,13 @@ public class ComprasViewController {
         this.ISV = ISV;
         this.Total = Total;
         
-        CargarAnios(AnioCompra);
-        CargarAnios(AnioVencimiento);
-        cargarFechasActuales();
+        loadYears(AnioCompra);
+        loadYears(AnioVencimiento);
+        loadCurrentDate();
         controller = new CompraJpaController(Conection.createEntityManagerFactory());
     }
     
-    public void cargarProducto(Object[] values){
+    public void loadProduct(Object[] values){
         boolean NoexistRow = true;
         for(int i = 0; i < Compras.getRowCount(); i++){
             if(Compras.getValueAt(i, 0).toString().equals(values[0].toString())){
@@ -95,7 +95,7 @@ public class ComprasViewController {
         updateTotal();
     }
     
-    public void editarValoresItem(){
+    public void editItemValue(){
         int fila = Compras.getSelectedRow();
         if(fila >= 0){
             Object[] values = {
@@ -121,7 +121,7 @@ public class ComprasViewController {
         }
     }
     
-    public void cargarPorCodigoBarras() {
+    public void loadbyBarCode() {
         ProductoJpaController controllerProducto = new ProductoJpaController(Conection.createEntityManagerFactory());
         List<Producto> productos = controllerProducto.findProductoEntities();
         productos.forEach(producto -> {
@@ -136,25 +136,25 @@ public class ComprasViewController {
                     getNumberFormat(producto.getPrecioCompra())
                 };
                 
-                cargarProducto(row);
+                loadProduct(row);
             }
         });
         Barra.setText("");
     }
     
-    public void AgregarProveedor(){
+    public void addSupplier(){
         Dialogs.ShowAddProveedorDialog();
         Proveedores.removeAllItems();
         Proveedores.addItem(new Proveedor(0, "-- Seleccione proveedor --", "", "", "", 0));
-        CargarProveedores();
+        loadSuppliers();
     }
     
-    public void CargarProveedores(){
+    public void loadSuppliers(){
         List<Proveedor> proveedores = new ProveedorJpaController(Conection.createEntityManagerFactory()).findProveedorEntities();
         proveedores.forEach(Proveedores::addItem);
     }
     
-    public final void CargarAnios(JComboBox combo){
+    public final void loadYears(JComboBox combo){
         int Year = Calendar.getInstance().get(Calendar.YEAR);
         
         for(int i = Year; i >= 1900; i--){
@@ -162,23 +162,23 @@ public class ComprasViewController {
         }
     }
     
-    private void cargarFechasActuales(){
+    private void loadCurrentDate(){
         DiaCompra.setSelectedIndex(Calendar.getInstance().get(Calendar.DATE) - 1);
         MesCompra.setSelectedIndex(Calendar.getInstance().get(Calendar.MONTH));
         DiaVencimiento.setSelectedIndex(Calendar.getInstance().get(Calendar.DATE) - 1);
         MesVencimiento.setSelectedIndex(Calendar.getInstance().get(Calendar.MONTH));
     }
     
-    public void deleteAllCompras(){
+    public void deleteAllBuys(){
         if(model.getRowCount() > 0){
-            if(Dialogs.ShowOKCancelDialog("¿Desea eliminar todas la compras de la factura?", Dialogs.WARNING_ICON)){
+            if(Dialogs.ShowOKCancelDialog("¿Desea eliminar todas las compras de la factura?", Dialogs.WARNING_ICON)){
                 model.setRowCount(0);
                 updateTotal();
             }
         }
     }
     
-    public void InitTable(){
+    public void setModelTableBuys(){
         String[] columns = {"Codigo", "Producto", "Unidades", "Cantidad", "Precio", "Descuento", "Subtotal"};
         model.setColumnIdentifiers(columns);
         
@@ -192,7 +192,7 @@ public class ComprasViewController {
         Compras.getColumn("Subtotal").setPreferredWidth(120);
     }
     
-    public void DeleteCompra(){
+    public void deleteBuy(){
         int fila = Compras.getSelectedRow();
         if(fila >= 0){
             if(Dialogs.ShowOKCancelDialog("¿Desea eliminar la compra seleccionada?", Dialogs.WARNING_ICON)){
@@ -235,11 +235,11 @@ public class ComprasViewController {
         return format.format(Value);
     }
     
-    public boolean InsertCompra(){
+    public boolean insertBuy(){
         if(validate()){
-            Compra compra = CreateObjectCompra();
+            Compra compra = createObjectBuy();
             int CompraID = controller.create(compra);
-            List<Compradetalle> compras = createListCompraDetalle(CompraID);
+            List<Compradetalle> compras = createListBuyDetails(CompraID);
             CompradetalleJpaController compradetalleJpaController = new CompradetalleJpaController(Conection.createEntityManagerFactory());
             compras.forEach(compradetalleJpaController::create);
             
@@ -250,13 +250,13 @@ public class ComprasViewController {
             Thread thread = new Thread(run);
             thread.start();
             
-            Clear();
+            clear();
             return true;
         }
         return false;
     }
     
-    private Compra CreateObjectCompra(){
+    private Compra createObjectBuy(){
         Compra compra = new Compra(); 
         
         compra.setNoFactura(Factura.getText());
@@ -271,13 +271,13 @@ public class ComprasViewController {
         }
         compra.setFecha(Utilities.getDate());
         compra.setHora(Utilities.getTime());
-        compra.setFechaCompra(getFechaCompraReal());
-        compra.setFechaVencimiento(getFechaVencimiento());
+        compra.setFechaCompra(getRealBuyDate());
+        compra.setFechaVencimiento(getDueBuyDate());
         
         return compra;
     }
     
-    private List<Compradetalle> createListCompraDetalle(int CompraID){
+    private List<Compradetalle> createListBuyDetails(int CompraID){
         
         ArrayList<Compradetalle> list = new ArrayList<>();
         for(int i = 0; i < Compras.getRowCount(); i++){
@@ -296,7 +296,7 @@ public class ComprasViewController {
         return list;
     }
     
-    private Date getFechaCompraReal(){
+    private Date getRealBuyDate(){
         int diaCompra = DiaCompra.getSelectedIndex() + 1;
         int mesCompra = MesCompra.getSelectedIndex();
         int anioCompra = Integer.parseInt(AnioCompra.getSelectedItem().toString()) - 1900;
@@ -304,7 +304,7 @@ public class ComprasViewController {
         return new Date(anioCompra, mesCompra, diaCompra);
     }
     
-    private Date getFechaVencimiento(){
+    private Date getDueBuyDate(){
         int diaCompra = DiaVencimiento.getSelectedIndex() + 1;
         int mesCompra = MesVencimiento.getSelectedIndex();
         int anioCompra = Integer.parseInt(AnioVencimiento.getSelectedItem().toString()) - 1900;
@@ -327,16 +327,16 @@ public class ComprasViewController {
             Dialogs.ShowMessageDialog("Para agregar la compra debe agregar el numero de factura", Dialogs.ERROR_ICON);
             return false;
         }
-        if(getFechaCompraReal().after(Utilities.getDate())){
+        if(getRealBuyDate().after(Utilities.getDate())){
             Dialogs.ShowMessageDialog("La fecha de compra real no puede ser mayor a la fecha actual", Dialogs.ERROR_ICON);
             return false;
         }
-        if(getFechaVencimiento().before(getFechaCompraReal())){
+        if(getDueBuyDate().before(getRealBuyDate())){
             Dialogs.ShowMessageDialog("La fecha de vencimiento no puede ser menor a la fecha de compra real", Dialogs.ERROR_ICON);
             return false;
         }
         if(Pendiente.isSelected()){
-            if(getFechaVencimiento().compareTo(getFechaCompraReal()) == 0){
+            if(getDueBuyDate().compareTo(getRealBuyDate()) == 0){
                 Dialogs.ShowMessageDialog("En factura pendiente de pago debe agregar fecha de vencimiento", Dialogs.ERROR_ICON);
                 return false;
             }
@@ -344,7 +344,7 @@ public class ComprasViewController {
         return true;
     }
     
-    private void Clear(){
+    private void clear(){
         Proveedores.setSelectedIndex(0);
         Factura.setText("12345...");
         Factura.setForeground(new Color(180, 180, 180));
@@ -355,8 +355,8 @@ public class ComprasViewController {
         ISV.setText("0.00");
         Total.setText("0.00");
         
-        cargarFechasActuales();
+        loadCurrentDate();
         model = new DefaultTableModel();
-        InitTable();
+        setModelTableBuys();
     }
 }
