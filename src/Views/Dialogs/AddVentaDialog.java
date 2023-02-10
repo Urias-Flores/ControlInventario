@@ -425,7 +425,7 @@ public class AddVentaDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnActualizarMouseClicked
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-        vc.search();
+        vc.filter();
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void tbProductosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbProductosMousePressed
@@ -437,7 +437,7 @@ public class AddVentaDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_txtExistenciaKeyReleased
 
     private void cmbMarcasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMarcasActionPerformed
-        vc.filterBrands();
+        vc.filter();
     }//GEN-LAST:event_cmbMarcasActionPerformed
 
     private void txtCargandoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCargandoMouseClicked

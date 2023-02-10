@@ -69,6 +69,8 @@
                               <Component id="txtError" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="lbCargando" min="-2" pref="38" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="btnAgregar" min="-2" pref="213" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jScrollPane1" max="32767" attributes="0"/>
@@ -133,7 +135,10 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="txtError" min="-2" pref="35" max="-2" attributes="0"/>
                   <EmptySpace pref="24" max="32767" attributes="0"/>
-                  <Component id="btnAgregar" min="-2" pref="38" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="lbCargando" max="32767" attributes="0"/>
+                      <Component id="btnAgregar" pref="38" max="32767" attributes="0"/>
+                  </Group>
                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -438,9 +443,11 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Texto de error"/>
+            <Property name="text" type="java.lang.String" value="Ya existe un empleado registrado con el numero telefonico ingresado"/>
             <Property name="opaque" type="boolean" value="true"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lbCargando">
         </Component>
       </SubComponents>
     </Container>

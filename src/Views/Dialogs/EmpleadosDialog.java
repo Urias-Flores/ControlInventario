@@ -2,14 +2,13 @@
 package Views.Dialogs;
 
 import Resource.Utilities;
-import ViewsControllers.Dialogs.CategoriaDialogViewController;
-import ViewsControllers.Panels.Preferencias.EmpleadosViewController;
+import ViewsControllers.Dialogs.EmpleadosDialogViewController;
 
 public class EmpleadosDialog extends javax.swing.JDialog {
 
     private int X, Y;
     private Object[] value = {-1, ""};
-    private EmpleadosViewController vc;
+    private EmpleadosDialogViewController vc;
 
     public Object[] getValue() {
         return value;
@@ -21,9 +20,9 @@ public class EmpleadosDialog extends javax.swing.JDialog {
         btnClose.addMouseListener(Utilities.getMLButtonCloseBlue());
         txtBuscar.addFocusListener(Utilities.getFLPlaceHolderEfect());
         btnActualizar.addMouseListener(Utilities.getMLGrayButton());
+        btnSeleccionar.addMouseListener(Utilities.getMLGeneralButton());
         
-        vc = new EmpleadosViewController(txtBuscar, tbEmpleados);
-        vc.CargarEmpleados();
+        vc = new EmpleadosDialogViewController(txtBuscar, lbCargando, tbEmpleados);
     }
     
     @SuppressWarnings("unchecked")
@@ -39,6 +38,7 @@ public class EmpleadosDialog extends javax.swing.JDialog {
         tbEmpleados = new javax.swing.JTable();
         btnActualizar = new javax.swing.JLabel();
         btnSeleccionar = new javax.swing.JLabel();
+        lbCargando = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -130,6 +130,16 @@ public class EmpleadosDialog extends javax.swing.JDialog {
             }
         });
 
+        lbCargando.setBackground(new java.awt.Color(255, 255, 255));
+        lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbCargando.setToolTipText("Actualizar lista");
+        lbCargando.setOpaque(true);
+        lbCargando.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbCargandoMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -141,6 +151,8 @@ public class EmpleadosDialog extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -158,7 +170,8 @@ public class EmpleadosDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                    .addComponent(txtBuscar, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(txtBuscar, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
@@ -197,11 +210,11 @@ public class EmpleadosDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_pnBarraMousePressed
 
     private void btnActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnActualizarMouseClicked
-        vc.CargarEmpleados();
+        vc.updateData();
     }//GEN-LAST:event_btnActualizarMouseClicked
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-        vc.Buscar();
+        vc.search();
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void btnSeleccionarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSeleccionarMouseClicked
@@ -214,6 +227,10 @@ public class EmpleadosDialog extends javax.swing.JDialog {
             Dialogs.ShowMessageDialog("Seleccione una categoria de la lista", Dialogs.ERROR_ICON);
         }
     }//GEN-LAST:event_btnSeleccionarMouseClicked
+
+    private void lbCargandoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbCargandoMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lbCargandoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -265,6 +282,7 @@ public class EmpleadosDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbCargando;
     private javax.swing.JPanel pnBarra;
     private javax.swing.JTable tbEmpleados;
     private javax.swing.JTextField txtBuscar;

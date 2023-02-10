@@ -15,8 +15,8 @@ public class InfoUsuarioDialog extends javax.swing.JDialog {
         vc = new InfoUsuarioDialogViewController(lbNombre, lbEmpleado, lbIdentidad, lbEstado, lbCargo);
     }
     
-    public void CargarUsuario(int EmpleadoID){
-        vc.cargarUsuario(EmpleadoID);
+    public void loadUser(int UsuarioID){
+        vc.cargarUsuario(UsuarioID);
     }
     
     @SuppressWarnings("unchecked")

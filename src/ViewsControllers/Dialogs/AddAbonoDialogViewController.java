@@ -12,12 +12,14 @@ import Models.Venta;
 import Models.Ventadetalle;
 import Resource.Conection;
 import Resource.Utilities;
+import Views.Dialogs.AddAbonoDialog;
 import Views.Dialogs.Dialogs;
 import java.awt.Color;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -25,6 +27,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class AddAbonoDialogViewController {
     
+    private AddAbonoDialog Instance;
     private JLabel FacturaID;
     private JLabel DeudaTotal;
     private JLabel TotalAbonado;
@@ -33,10 +36,16 @@ public class AddAbonoDialogViewController {
     private JTextField TotalAbonar;
     private JTextField TotalRestante;
     private JLabel Error;
+    private JLabel Cargando;
     
     private boolean isAbonoVenta = true;
+    private DefaultTableModel model = new DefaultTableModel(){
+        @Override
+        public boolean isCellEditable(int row, int column){ return false; }
+    };
     
-    public AddAbonoDialogViewController(JLabel FacturaID, JLabel DeudaTotal, JLabel TotalAbonado, JLabel DeudaPendiente, JTable Abonos, JTextField TotalAbonar, JTextField TotalRestante, JLabel Error) {
+    public AddAbonoDialogViewController(AddAbonoDialog Instance, JLabel FacturaID, JLabel DeudaTotal, JLabel TotalAbonado, JLabel DeudaPendiente, JTable Abonos, JTextField TotalAbonar, JTextField TotalRestante, JLabel Error, JLabel Cargando) {
+        this.Instance = Instance;
         this.FacturaID = FacturaID;
         this.DeudaTotal = DeudaTotal;
         this.TotalAbonado = TotalAbonado;
@@ -45,44 +54,73 @@ public class AddAbonoDialogViewController {
         this.TotalAbonar = TotalAbonar;
         this.TotalRestante = TotalRestante;
         this.Error = Error;
+        this.Cargando = Cargando;
+        
+        //Cargando modelo de tabla
+        setModelTable();
     }
     
-    public void setVenta(int VentaID){
+    private void setLoad(boolean state){
+        ImageIcon icon = new ImageIcon(getClass().getResource(Utilities.getLoadingImage()));
+        Cargando.setIcon(state ? icon : null);
+    }
+    
+    //Task
+    public void setBill(int VentaID){
         FacturaID.setText(String.valueOf(VentaID));
-        Venta venta = new VentaJpaController(Conection.createEntityManagerFactory()).findVenta(VentaID);
         
-        List<Ventadetalle> detallesventa = venta.getVentadetalleList();
-        float total = 0;
-        for(Ventadetalle ventadetalle : detallesventa){
-            total+= ventadetalle.getCantidad() * ventadetalle.getPrecio() - ventadetalle.getDescuento();
-        }
-        
-        DeudaTotal.setText(getNumberFormat(total));
-        
-        loadAbonos(venta);
+        setLoad(true);
+        Runnable run = () -> {
+            //Calculando total de pago en factura
+            Venta venta = new VentaJpaController(Conection.createEntityManagerFactory()).findVenta(VentaID);
+            List<Ventadetalle> detallesventa = venta.getVentadetalleList();
+            float total = 0;
+            for(Ventadetalle ventadetalle : detallesventa){
+                total+= ventadetalle.getCantidad() * ventadetalle.getPrecio() - ventadetalle.getDescuento();
+            }
+            DeudaTotal.setText(getNumberFormat(total));
+            
+            //Envio a carga de abonos a factura
+            loadCredits(venta);
+            
+            setLoad(false);
+        };
+        new Thread(run).start();
     }
     
-    public void setCompra(int CompraID){
+    //Task
+    public void setBuy(int CompraID){
         isAbonoVenta = false;
         FacturaID.setText(String.valueOf(CompraID));
-        Compra compra = new CompraJpaController(Conection.createEntityManagerFactory()).findCompra(CompraID);
         
-        List<Compradetalle> detallescompra = compra.getCompradetalleList();
-        float total = 0;
-        for(Compradetalle compradetalle : detallescompra){
-            total+= compradetalle.getCantidad() * compradetalle.getPrecio() - compradetalle.getDescuento();
-        }
-        
-        DeudaTotal.setText(getNumberFormat(total));
-        
-        loadAbonos(compra);
+        setLoad(true);
+        Runnable run = () ->{
+            //Enviando a cargar dueda total en compra
+            Compra compra = new CompraJpaController(Conection.createEntityManagerFactory()).findCompra(CompraID);
+            List<Compradetalle> detallescompra = compra.getCompradetalleList();
+            float total = 0;
+            for(Compradetalle compradetalle : detallescompra){
+                total+= compradetalle.getCantidad() * compradetalle.getPrecio() - compradetalle.getDescuento();
+            }
+            DeudaTotal.setText(getNumberFormat(total));
+            
+            //Enviando a cargar abono a compra
+            loadCredits(compra);
+            
+            setLoad(false);
+        };
+        new Thread(run).start();
     }
     
-    private void loadAbonos(Object Transaccion){
-        DefaultTableModel model = new DefaultTableModel();
+    private void setModelTable(){
         String[] columns = {"No. Abono", "Fecha", "Hora", "Total"};
         model.setColumnIdentifiers(columns);
         
+        Abonos.setModel(model);
+    }
+    
+    //Inside Task
+    private void loadCredits(Object Transaccion){
         List<Abono> abonos = new ArrayList<>();
         if(isAbonoVenta){
             abonos = Conection.createEntityManagerFactory().createEntityManager()
@@ -91,9 +129,9 @@ public class AddAbonoDialogViewController {
                     .getResultList();
         }else{
             abonos = Conection.createEntityManagerFactory().createEntityManager()
-                  .createNamedQuery("Abono.findByCompraID")
-                  .setParameter("compraID", (Compra) Transaccion)
-                  .getResultList();  
+                    .createNamedQuery("Abono.findByCompraID")
+                    .setParameter("compraID", (Compra) Transaccion)
+                    .getResultList();  
         }
         
         if(!abonos.isEmpty()){
@@ -108,7 +146,6 @@ public class AddAbonoDialogViewController {
                 model.addRow(row);
             });
         }
-        Abonos.setModel(model);
         updateTotal();
     }
     
@@ -130,24 +167,39 @@ public class AddAbonoDialogViewController {
         }
     }
     
-    public boolean insertAbono(){
+    //Task
+    public void insertCredit(){
         if(validate()){
-            AbonoJpaController controller = new AbonoJpaController(Conection.createEntityManagerFactory());
-            Abono abono = createAbonoObject();
-            controller.create(abono);
+            Runnable run = () ->{
+                //Enviando a insertar abono
+                AbonoJpaController controller = new AbonoJpaController(Conection.createEntityManagerFactory());
+                Abono abono = createAbonoObject();
+                controller.create(abono);
 
-            updateFactura(abono);
-            return true;
-        }else{
-            Error.setBackground(new Color(185, 0, 0));
-        }
-        return false;
+                //Actualizando estado factura en caso de que ya se alla pagado por completa
+                updateFactura(abono);
+                
+                setLoad(false);
+                Instance.setVisible(false);
+                Dialogs.ShowMessageDialog("El abono ha sido agregado exitosamente", Dialogs.COMPLETE_ICON);
+                
+                if(Dialogs.ShowOKCancelDialog("¿Desea enviar a imprimir recibo de abono a cuenta?", Dialogs.WARNING_ICON)){
+                    setLoad(true);
+                    Runnable runnable = () ->{
+                        //Codigo para enviar a imprimir el tikect de abono
+                        setLoad(false);
+                    };
+                    new Thread(runnable).start();
+                }
+            };
+            new Thread(run).start();
+        }else{ Error.setBackground(new Color(185, 0, 0)); }
     }
     
+    //Inside Task
     private void updateFactura(Abono abono){
         float totalDeuda = Float.parseFloat(DeudaTotal.getText().replace(",", ""));
         float totalAbonado = Float.parseFloat(TotalAbonado.getText().replace(",", ""));
-        System.err.println("Total abono: "+abono.getTotal());
         if((totalAbonado + abono.getTotal()) == totalDeuda){
             if(isAbonoVenta){
                 try {
@@ -174,9 +226,7 @@ public class AddAbonoDialogViewController {
     }
     
     private Abono createAbonoObject(){
-        
         Abono abono = new Abono();
-        
         Venta venta = new VentaJpaController(Conection.createEntityManagerFactory()).findVenta(Integer.valueOf(FacturaID.getText()));
         Compra compra = new CompraJpaController(Conection.createEntityManagerFactory()).findCompra(Integer.valueOf(FacturaID.getText()));
         

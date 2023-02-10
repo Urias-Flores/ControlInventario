@@ -30,7 +30,7 @@ public class AddEmpleadoDialog extends javax.swing.JDialog {
         FieldsList.forEach(field -> {
             field.addFocusListener(Utilities.getFLPlaceHolderEfect());
         });
-        vc = new AddEmpleadoDialogViewController(txtNombre, txtApellido, txtIdentidad, txtCorreo, txtNumero, cmbDia, cmbMes, cmbAnio, txtDomicilio, txtError); 
+        vc = new AddEmpleadoDialogViewController(this, txtNombre, txtApellido, txtIdentidad, txtCorreo, txtNumero, cmbDia, cmbMes, cmbAnio, txtDomicilio, txtError, lbCargando); 
     }
     
     public void EditingMode(int EmpleadoID){
@@ -67,6 +67,7 @@ public class AddEmpleadoDialog extends javax.swing.JDialog {
         cmbAnio = new javax.swing.JComboBox<>();
         btnAgregar = new javax.swing.JLabel();
         txtError = new javax.swing.JLabel();
+        lbCargando = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -185,7 +186,7 @@ public class AddEmpleadoDialog extends javax.swing.JDialog {
         txtError.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
         txtError.setForeground(new java.awt.Color(255, 255, 255));
         txtError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        txtError.setText("Texto de error");
+        txtError.setText("Ya existe un empleado registrado con el numero telefonico ingresado");
         txtError.setOpaque(true);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -208,6 +209,8 @@ public class AddEmpleadoDialog extends javax.swing.JDialog {
                             .addComponent(txtError, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1)
                             .addComponent(txtNombre)
@@ -265,7 +268,9 @@ public class AddEmpleadoDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(txtError, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
                 .addGap(18, 18, 18))
         );
 
@@ -300,17 +305,7 @@ public class AddEmpleadoDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_pnBarraMousePressed
 
     private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
-        if(Editing){
-            if(vc.Edit()){
-                this.setVisible(false);
-                Dialogs.ShowMessageDialog("El empleado ha sido modificado exitosamente", Dialogs.COMPLETE_ICON);
-            }
-        }else{
-            if(vc.Insert()){
-                this.setVisible(false);
-                Dialogs.ShowMessageDialog("El empleado ha sido registrado exitosamente", Dialogs.COMPLETE_ICON);
-            }
-        }
+        if(Editing){ vc.Edit(); }else{ vc.Insert(); }
     }//GEN-LAST:event_btnAgregarMouseClicked
 
     public static void main(String args[]) {
@@ -365,6 +360,7 @@ public class AddEmpleadoDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbCargando;
     private javax.swing.JLabel lbTitulo;
     private javax.swing.JPanel pnBarra;
     private javax.swing.JTextField txtApellido;

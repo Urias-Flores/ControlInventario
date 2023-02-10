@@ -8,15 +8,15 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
 public class InfoEmpleadoDialogViewController {
-    EmpleadoJpaController controller;
+    private EmpleadoJpaController controller;
     
-    JLabel Nombre;
-    JLabel Apellido;
-    JLabel Identidad;
-    JLabel Correo;
-    JLabel Numero;
-    JLabel FechaNacimiento;
-    JTextArea Domicilio;
+    private JLabel Nombre;
+    private JLabel Apellido;
+    private JLabel Identidad;
+    private JLabel Correo;
+    private JLabel Numero;
+    private JLabel FechaNacimiento;
+    private JTextArea Domicilio;
 
     public InfoEmpleadoDialogViewController(JLabel Nombre, JLabel Apellido, JLabel Identidad, JLabel Correo, JLabel Numero, JLabel FechaNacimiento, JTextArea Domicilio) {
         this.Nombre = Nombre;
@@ -30,15 +30,20 @@ public class InfoEmpleadoDialogViewController {
         controller = new EmpleadoJpaController(Conection.createEntityManagerFactory());
     }
     
-    public void CargarEmpleado(int EmpleadoID){
-        Empleado empleado = controller.findEmpleado(EmpleadoID);
-        Nombre.setText(empleado.getNombre());
-        Apellido.setText(empleado.getApellido());
-        Identidad.setText(empleado.getIdentidad());
-        Correo.setText(empleado.getCorreoElectronico());
-        Numero.setText(empleado.getNumeroTelefonico());
-        Domicilio.setText(empleado.getDomicilio());
-        FechaNacimiento.setText
-        (empleado.getFechaNacimiento().getDate()+" de "+Utilities.getMonth(empleado.getFechaNacimiento().getMonth())+" del "+(empleado.getFechaNacimiento().getYear()+1900));
+    //Task
+    public void loadEmployee(int EmpleadoID){
+        Runnable run = () ->{
+            Empleado empleado = controller.findEmpleado(EmpleadoID);
+            Nombre.setText(empleado.getNombre());
+            Apellido.setText(empleado.getApellido());
+            Identidad.setText(empleado.getIdentidad());
+            Correo.setText(empleado.getCorreoElectronico());
+            Numero.setText(empleado.getNumeroTelefonico());
+            Domicilio.setText(empleado.getDomicilio());
+            FechaNacimiento.setText
+            (empleado.getFechaNacimiento().getDate()+" de "+Utilities.getMonth(empleado.getFechaNacimiento().getMonth())
+            +" del "+(empleado.getFechaNacimiento().getYear()+1900));
+        };
+        new Thread(run).start();
     }
 }

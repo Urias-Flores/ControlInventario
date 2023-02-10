@@ -20,13 +20,17 @@ public class InfoUsuarioDialogViewController {
         this.Cargo = Cargo;
     }
     
+    //Task
     public void cargarUsuario(int UsuarioID){
-        Usuario usuario = new UsuarioJpaController(Conection.createEntityManagerFactory()).findUsuario(UsuarioID);
+        Runnable run = () ->{
+            Usuario usuario = new UsuarioJpaController(Conection.createEntityManagerFactory()).findUsuario(UsuarioID);
         
-        Nombre.setText(usuario.getNombre());
-        Empleado.setText(usuario.getEmpleadoID().getNombre()+" "+usuario.getEmpleadoID().getApellido());
-        Identidad.setText(usuario.getEmpleadoID().getIdentidad());
-        Estado.setText(usuario.getEstado() == 1 ? "Activo" : "Inactivo");
-        Cargo.setText(usuario.getCargo().equals("A") ? "Administrador" : "Dependiente");
+            Nombre.setText(usuario.getNombre());
+            Empleado.setText(usuario.getEmpleadoID().getNombre()+" "+usuario.getEmpleadoID().getApellido());
+            Identidad.setText(usuario.getEmpleadoID().getIdentidad());
+            Estado.setText(usuario.getEstado() == 1 ? "Activo" : "Inactivo");
+            Cargo.setText(usuario.getCargo().equals("A") ? "Administrador" : "Dependiente");
+        };
+        new Thread(run).start();
     }
 }

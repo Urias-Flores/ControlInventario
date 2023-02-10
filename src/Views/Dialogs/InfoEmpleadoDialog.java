@@ -15,8 +15,8 @@ public class InfoEmpleadoDialog extends javax.swing.JDialog {
         vc = new InfoEmpleadoDialogViewController(lbNombre, lbApellido, lbIdentidad, lbCorreo, lbNumero, lbFecha, txtDomicilio);
     }
     
-    public void CargarEmpleado(int EmpleadoID){
-        vc.CargarEmpleado(EmpleadoID);
+    public void loadEmployee(int EmpleadoID){
+        vc.loadEmployee(EmpleadoID);
     }
     
     @SuppressWarnings("unchecked")

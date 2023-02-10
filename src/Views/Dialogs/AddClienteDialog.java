@@ -23,12 +23,12 @@ public class AddClienteDialog extends javax.swing.JDialog {
         txtNumero.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtError.setBackground(Color.white);
         
-        vc = new AddClienteViewController(txtNombre, txtDocumento, txtCorreo, txtNumero, txtDomicilio, txtError);
+        vc = new AddClienteViewController(this, txtNombre, txtDocumento, txtCorreo, txtNumero, txtDomicilio, txtError, lbCargando);
     }
     
     public void EditingMode(int ClienteID){
         btnAgregar.setText("Guardar");
-        lbTitulo.setText("Editar el cliente");
+        lbTitulo.setText("Editar cliente");
         vc.setEditCliente(ClienteID);
         Editing = true;
     }
@@ -55,6 +55,7 @@ public class AddClienteDialog extends javax.swing.JDialog {
         txtDomicilio = new javax.swing.JTextArea();
         btnAgregar = new javax.swing.JLabel();
         txtError = new javax.swing.JLabel();
+        lbCargando = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -159,6 +160,8 @@ public class AddClienteDialog extends javax.swing.JDialog {
         txtError.setText("Texto de error");
         txtError.setOpaque(true);
 
+        lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -168,6 +171,8 @@ public class AddClienteDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -215,7 +220,9 @@ public class AddClienteDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(txtError, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18))
         );
 
@@ -250,17 +257,7 @@ public class AddClienteDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_pnBarraMousePressed
 
     private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
-        if(Editing){
-            if(vc.Edit()){
-                this.setVisible(false);
-                Dialogs.ShowMessageDialog("El cliente ha sido modificado exitosamente", Dialogs.COMPLETE_ICON);
-            }
-        }else{
-            if(vc.Insert()){
-                this.setVisible(false);
-                Dialogs.ShowMessageDialog("El cliente ha sido agregado exitosamente", Dialogs.COMPLETE_ICON);
-            }
-        }
+        if(Editing){ vc.editClient(); }else{ vc.insertClient(); }
     }//GEN-LAST:event_btnAgregarMouseClicked
 
     /**
@@ -292,17 +289,15 @@ public class AddClienteDialog extends javax.swing.JDialog {
         //</editor-fold>
 
         /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                AddClienteDialog dialog = new AddClienteDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            AddClienteDialog dialog = new AddClienteDialog(new javax.swing.JFrame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
+                }
+            });
+            dialog.setVisible(true);
         });
     }
 
@@ -316,6 +311,7 @@ public class AddClienteDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbCargando;
     private javax.swing.JLabel lbTitulo;
     private javax.swing.JPanel pnBarra;
     private javax.swing.JTextField txtCorreo;

@@ -21,17 +21,15 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
         btnPagarFactura.addMouseListener(Utilities.getMLGeneralButton());
         btnAbono.addMouseListener(Utilities.getMLGeneralButton());
         
-        vc = new CuentasPendientesDialogViewController(lbNombre, tbCuentas, lbTotal);
+        vc = new CuentasPendientesDialogViewController(lbNombre, tbCuentas, lbTotal, lbCargando);
     }
     
     public void cargar(int Entidad, boolean isCliente){
         this.isCliente = isCliente;
         if(isCliente){
             vc.setCliente(Entidad);
-            vc.CargarCliente();
         }else{
             vc.setProveedor(Entidad);
-            vc.CargarProveedor();
         }
     }
     
@@ -53,6 +51,7 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
         btnPagarFactura = new javax.swing.JLabel();
         btnDetalles = new javax.swing.JLabel();
         btnAbono = new javax.swing.JLabel();
+        lbCargando = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setModal(true);
@@ -182,6 +181,17 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
             }
         });
 
+        lbCargando.setBackground(new java.awt.Color(255, 255, 255));
+        lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbCargando.setToolTipText("");
+        lbCargando.setOpaque(true);
+        lbCargando.setPreferredSize(new java.awt.Dimension(38, 38));
+        lbCargando.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbCargandoMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -198,6 +208,8 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(lbNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnDetalles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
                             .addComponent(lbTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -226,7 +238,8 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDetalles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnDetalles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
@@ -273,31 +286,35 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
 
     private void btnPagarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPagarMouseClicked
         if(isCliente){
-            vc.pagarFacturas();
+            vc.payBills();
         }else{
-            vc.pagarCompras();
+            vc.payBuys();
         }
     }//GEN-LAST:event_btnPagarMouseClicked
 
     private void btnPagarFacturaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPagarFacturaMouseClicked
         if(isCliente){
-            vc.pagarFactura();
+            vc.payBill();
         }else{
-            vc.pagarCompra();
+            vc.payBuy();
         }
     }//GEN-LAST:event_btnPagarFacturaMouseClicked
 
     private void btnDetallesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDetallesMouseClicked
         if(isCliente){
-            vc.cargarDetallesFactura();
+            vc.loadBillDetails();
         }else{
-            vc.cargarDetallesCompra();
+            vc.loadBuyDetails();
         }
     }//GEN-LAST:event_btnDetallesMouseClicked
 
     private void btnAbonoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAbonoMouseClicked
-        vc.cargarAbonos();
+        vc.loadCredits();
     }//GEN-LAST:event_btnAbonoMouseClicked
+
+    private void lbCargandoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbCargandoMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lbCargandoMouseClicked
 
     public void setCompraState(){
         lbTituloTotal.setForeground(new Color(150, 30, 10));
@@ -357,6 +374,7 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
     private javax.swing.JLabel btnPagarFactura;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbCargando;
     private javax.swing.JLabel lbEntidad;
     private javax.swing.JLabel lbNombre;
     private javax.swing.JLabel lbTitulo;

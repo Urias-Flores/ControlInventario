@@ -77,6 +77,8 @@
                       <Component id="lbTitulo" alignment="1" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="lbCargando" min="-2" pref="38" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="btnGuardar" min="-2" pref="210" max="-2" attributes="0"/>
                       </Group>
                       <Component id="lbError" alignment="1" max="32767" attributes="0"/>
@@ -145,8 +147,11 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="lbError" min="-2" pref="35" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" pref="16" max="32767" attributes="0"/>
-                  <Component id="btnGuardar" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="lbCargando" max="32767" attributes="0"/>
+                      <Component id="btnGuardar" max="32767" attributes="0"/>
+                  </Group>
                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -372,6 +377,8 @@
             </Property>
             <Property name="text" type="java.lang.String" value="0.00"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lbCargando">
         </Component>
       </SubComponents>
     </Container>

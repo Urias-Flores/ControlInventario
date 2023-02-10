@@ -39,10 +39,12 @@ public class DetalleFacturaDialogViewController {
         this.Importe = Importe;
         this.ISV = ISV;
         this.Total = Total;
+        
+        //Cargando modelo de tabla
+        setModelTable();
     }
     
-    public void InitTable(){
-        
+    private void setModelTable(){
         String[] columns = {"Codigo", "Producto", "Unidades", "Cantidad", "Precio", "Descuento", "Subtotal"};
         model.setColumnIdentifiers(columns);
         
@@ -56,68 +58,74 @@ public class DetalleFacturaDialogViewController {
         Detalles.getColumn("Subtotal").setPreferredWidth(90);
     }
     
-    public void cargarFactura(int VentaID){
-        Venta venta = new VentaJpaController(Conection.createEntityManagerFactory()).findVenta(VentaID);
-        
-        if(venta != null){
-            NoFactura.setText(String.valueOf(venta.getVentaID()));
-            Entidad.setText(venta.getClienteID().getNombre());
-            Usuario.setText(venta.getUsuarioID().getNombre());
-            Hora.setText(new SimpleDateFormat("HH:mm").format(venta.getHora()));
-            Fecha.setText(new SimpleDateFormat("dd/MM/yyy").format(venta.getFecha()));
-        }
-        
-        venta.getVentadetalleList().forEach(detalle -> {
-            Object[] row = {
-                detalle.getProductoID().getProductoID(),
-                detalle.getProductoID().getDescripcion(),
-                detalle.getProductoID().getUnidad(),
-                getNumberFormat(detalle.getCantidad()),
-                getNumberFormat(detalle.getPrecio()),
-                getNumberFormat(detalle.getDescuento()),
-                getNumberFormat((detalle.getCantidad() * detalle.getPrecio()) - detalle.getDescuento())
-            };
-            
-            model.addRow(row);
-        });
-        
-        updateTotal();
+    
+    //Task
+    public void loadBill(int VentaID){
+        Runnable run = () -> {
+            //Cargando informacion de factura
+            Venta venta = new VentaJpaController(Conection.createEntityManagerFactory()).findVenta(VentaID);
+            if(venta != null){
+                NoFactura.setText(String.valueOf(venta.getVentaID()));
+                Entidad.setText(venta.getClienteID().getNombre());
+                Usuario.setText(venta.getUsuarioID().getNombre());
+                Hora.setText(new SimpleDateFormat("HH:mm").format(venta.getHora()));
+                Fecha.setText(new SimpleDateFormat("dd/MM/yyy").format(venta.getFecha()));
+            }
+
+            //Cargando detalles de factura
+            venta.getVentadetalleList().forEach(detalle -> {
+                Object[] row = {
+                    detalle.getProductoID().getProductoID(),
+                    detalle.getProductoID().getDescripcion(),
+                    detalle.getProductoID().getUnidad(),
+                    getNumberFormat(detalle.getCantidad()),
+                    getNumberFormat(detalle.getPrecio()),
+                    getNumberFormat(detalle.getDescuento()),
+                    getNumberFormat((detalle.getCantidad() * detalle.getPrecio()) - detalle.getDescuento())
+                };
+                model.addRow(row);
+            });
+            updateTotal();
+        };
+        new Thread(run).start();
     }
     
-    public void cargarCompra(int CompraID){
-        Compra compra = new CompraJpaController(Conection.createEntityManagerFactory()).findCompra(CompraID);
-        
-        if(compra != null){
-            NoFactura.setText(String.valueOf(compra.getCompraID()));
-            Entidad.setText(compra.getProveedorID().getNombre());
-            Usuario.setText(compra.getUsuarioID().getNombre());
-            Hora.setText(new SimpleDateFormat("HH:mm").format(compra.getHora()));
-            Fecha.setText(new SimpleDateFormat("dd/MM/yyy").format(compra.getFecha()));
-        }
-        
-        compra.getCompradetalleList().forEach(detalle -> {
-            Object[] row = {
-                detalle.getProductoID().getProductoID(),
-                detalle.getProductoID().getDescripcion(),
-                detalle.getProductoID().getUnidad(),
-                getNumberFormat(detalle.getCantidad()),
-                getNumberFormat(detalle.getPrecio()),
-                getNumberFormat(detalle.getDescuento()),
-                getNumberFormat((detalle.getCantidad() * detalle.getPrecio()) - detalle.getDescuento())
-            };
-            
-            model.addRow(row);
-        });
-        
-        updateTotal();
+    //Task
+    public void loadBuy(int CompraID){
+        Runnable run = () ->{
+            //Cargando informacion de compra
+            Compra compra = new CompraJpaController(Conection.createEntityManagerFactory()).findCompra(CompraID);
+            if(compra != null){
+                NoFactura.setText(String.valueOf(compra.getCompraID()));
+                Entidad.setText(compra.getProveedorID().getNombre());
+                Usuario.setText(compra.getUsuarioID().getNombre());
+                Hora.setText(new SimpleDateFormat("HH:mm").format(compra.getHora()));
+                Fecha.setText(new SimpleDateFormat("dd/MM/yyy").format(compra.getFecha()));
+            }
+            //Cargando detalles de compra
+            compra.getCompradetalleList().forEach(detalle -> {
+                Object[] row = {
+                    detalle.getProductoID().getProductoID(),
+                    detalle.getProductoID().getDescripcion(),
+                    detalle.getProductoID().getUnidad(),
+                    getNumberFormat(detalle.getCantidad()),
+                    getNumberFormat(detalle.getPrecio()),
+                    getNumberFormat(detalle.getDescuento()),
+                    getNumberFormat((detalle.getCantidad() * detalle.getPrecio()) - detalle.getDescuento())
+                };
+                model.addRow(row);
+            });
+            updateTotal();
+        };
+        new Thread(run).start();
     }
     
-    public void updateTotal(){
+    private void updateTotal(){
         int numberRows = Detalles.getRowCount();
         if(numberRows > 0){
             float subtotal = 0;
             float descuento = 0;
-            
+
             for(int i = 0; i < numberRows; i++){
                 float cantidad = Float.parseFloat(Detalles.getValueAt(i, 3).toString().replace(",", ""));
                 float precio = Float.parseFloat(Detalles.getValueAt(i, 4).toString().replace(",", ""));

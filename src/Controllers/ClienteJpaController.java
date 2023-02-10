@@ -114,76 +114,94 @@ public class ClienteJpaController implements Serializable {
             List<Abono> abonoListNew = cliente.getAbonoList();
             List<Cotizacion> cotizacionListOld = persistentCliente.getCotizacionList();
             List<Cotizacion> cotizacionListNew = cliente.getCotizacionList();
-            List<Venta> attachedVentaListNew = new ArrayList<Venta>();
-            for (Venta ventaListNewVentaToAttach : ventaListNew) {
-                ventaListNewVentaToAttach = em.getReference(ventaListNewVentaToAttach.getClass(), ventaListNewVentaToAttach.getVentaID());
-                attachedVentaListNew.add(ventaListNewVentaToAttach);
+            List<Venta> attachedVentaListNew = new ArrayList<>();
+            if(ventaListNew != null && !ventaListNew.isEmpty()){
+                for (Venta ventaListNewVentaToAttach : ventaListNew) {
+                    ventaListNewVentaToAttach = em.getReference(ventaListNewVentaToAttach.getClass(), ventaListNewVentaToAttach.getVentaID());
+                    attachedVentaListNew.add(ventaListNewVentaToAttach);
+                }
             }
             ventaListNew = attachedVentaListNew;
             cliente.setVentaList(ventaListNew);
-            List<Abono> attachedAbonoListNew = new ArrayList<Abono>();
-            for (Abono abonoListNewAbonoToAttach : abonoListNew) {
-                abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
-                attachedAbonoListNew.add(abonoListNewAbonoToAttach);
+            List<Abono> attachedAbonoListNew = new ArrayList<>();
+            if(abonoListNew != null && !abonoListNew.isEmpty()){
+                for (Abono abonoListNewAbonoToAttach : abonoListNew) {
+                    abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
+                    attachedAbonoListNew.add(abonoListNewAbonoToAttach);
+                }
             }
             abonoListNew = attachedAbonoListNew;
             cliente.setAbonoList(abonoListNew);
-            List<Cotizacion> attachedCotizacionListNew = new ArrayList<Cotizacion>();
-            for (Cotizacion cotizacionListNewCotizacionToAttach : cotizacionListNew) {
-                cotizacionListNewCotizacionToAttach = em.getReference(cotizacionListNewCotizacionToAttach.getClass(), cotizacionListNewCotizacionToAttach.getCotizacionID());
-                attachedCotizacionListNew.add(cotizacionListNewCotizacionToAttach);
+            List<Cotizacion> attachedCotizacionListNew = new ArrayList<>();
+            if(cotizacionListNew != null && !cotizacionListNew.isEmpty()){
+                for (Cotizacion cotizacionListNewCotizacionToAttach : cotizacionListNew) {
+                    cotizacionListNewCotizacionToAttach = em.getReference(cotizacionListNewCotizacionToAttach.getClass(), cotizacionListNewCotizacionToAttach.getCotizacionID());
+                    attachedCotizacionListNew.add(cotizacionListNewCotizacionToAttach);
+                }
             }
             cotizacionListNew = attachedCotizacionListNew;
             cliente.setCotizacionList(cotizacionListNew);
             cliente = em.merge(cliente);
-            for (Venta ventaListOldVenta : ventaListOld) {
-                if (!ventaListNew.contains(ventaListOldVenta)) {
-                    ventaListOldVenta.setClienteID(null);
-                    ventaListOldVenta = em.merge(ventaListOldVenta);
-                }
+            if(ventaListOld != null && !ventaListOld.isEmpty()){
+                for (Venta ventaListOldVenta : ventaListOld) {
+                    if (!ventaListNew.contains(ventaListOldVenta)) {
+                        ventaListOldVenta.setClienteID(null);
+                        ventaListOldVenta = em.merge(ventaListOldVenta);
+                    }
+                } 
             }
-            for (Venta ventaListNewVenta : ventaListNew) {
-                if (!ventaListOld.contains(ventaListNewVenta)) {
-                    Cliente oldClienteIDOfVentaListNewVenta = ventaListNewVenta.getClienteID();
-                    ventaListNewVenta.setClienteID(cliente);
-                    ventaListNewVenta = em.merge(ventaListNewVenta);
-                    if (oldClienteIDOfVentaListNewVenta != null && !oldClienteIDOfVentaListNewVenta.equals(cliente)) {
-                        oldClienteIDOfVentaListNewVenta.getVentaList().remove(ventaListNewVenta);
-                        oldClienteIDOfVentaListNewVenta = em.merge(oldClienteIDOfVentaListNewVenta);
+            if(ventaListNew != null && !ventaListNew.isEmpty()){
+                for (Venta ventaListNewVenta : ventaListNew) {
+                    if (!ventaListOld.contains(ventaListNewVenta)) {
+                        Cliente oldClienteIDOfVentaListNewVenta = ventaListNewVenta.getClienteID();
+                        ventaListNewVenta.setClienteID(cliente);
+                        ventaListNewVenta = em.merge(ventaListNewVenta);
+                        if (oldClienteIDOfVentaListNewVenta != null && !oldClienteIDOfVentaListNewVenta.equals(cliente)) {
+                            oldClienteIDOfVentaListNewVenta.getVentaList().remove(ventaListNewVenta);
+                            oldClienteIDOfVentaListNewVenta = em.merge(oldClienteIDOfVentaListNewVenta);
+                        }
                     }
                 }
             }
-            for (Abono abonoListOldAbono : abonoListOld) {
-                if (!abonoListNew.contains(abonoListOldAbono)) {
-                    abonoListOldAbono.setClienteID(null);
-                    abonoListOldAbono = em.merge(abonoListOldAbono);
-                }
-            }
-            for (Abono abonoListNewAbono : abonoListNew) {
-                if (!abonoListOld.contains(abonoListNewAbono)) {
-                    Cliente oldClienteIDOfAbonoListNewAbono = abonoListNewAbono.getClienteID();
-                    abonoListNewAbono.setClienteID(cliente);
-                    abonoListNewAbono = em.merge(abonoListNewAbono);
-                    if (oldClienteIDOfAbonoListNewAbono != null && !oldClienteIDOfAbonoListNewAbono.equals(cliente)) {
-                        oldClienteIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
-                        oldClienteIDOfAbonoListNewAbono = em.merge(oldClienteIDOfAbonoListNewAbono);
+            if(abonoListOld != null && !abonoListOld.isEmpty()){
+                for (Abono abonoListOldAbono : abonoListOld) {
+                    if (!abonoListNew.contains(abonoListOldAbono)) {
+                        abonoListOldAbono.setClienteID(null);
+                        abonoListOldAbono = em.merge(abonoListOldAbono);
                     }
                 }
             }
-            for (Cotizacion cotizacionListOldCotizacion : cotizacionListOld) {
-                if (!cotizacionListNew.contains(cotizacionListOldCotizacion)) {
-                    cotizacionListOldCotizacion.setClienteID(null);
-                    cotizacionListOldCotizacion = em.merge(cotizacionListOldCotizacion);
+            if(abonoListNew != null && !abonoListNew.isEmpty()){
+                for (Abono abonoListNewAbono : abonoListNew) {
+                    if (!abonoListOld.contains(abonoListNewAbono)) {
+                        Cliente oldClienteIDOfAbonoListNewAbono = abonoListNewAbono.getClienteID();
+                        abonoListNewAbono.setClienteID(cliente);
+                        abonoListNewAbono = em.merge(abonoListNewAbono);
+                        if (oldClienteIDOfAbonoListNewAbono != null && !oldClienteIDOfAbonoListNewAbono.equals(cliente)) {
+                            oldClienteIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
+                            oldClienteIDOfAbonoListNewAbono = em.merge(oldClienteIDOfAbonoListNewAbono);
+                        }
+                    }
                 }
             }
-            for (Cotizacion cotizacionListNewCotizacion : cotizacionListNew) {
-                if (!cotizacionListOld.contains(cotizacionListNewCotizacion)) {
-                    Cliente oldClienteIDOfCotizacionListNewCotizacion = cotizacionListNewCotizacion.getClienteID();
-                    cotizacionListNewCotizacion.setClienteID(cliente);
-                    cotizacionListNewCotizacion = em.merge(cotizacionListNewCotizacion);
-                    if (oldClienteIDOfCotizacionListNewCotizacion != null && !oldClienteIDOfCotizacionListNewCotizacion.equals(cliente)) {
-                        oldClienteIDOfCotizacionListNewCotizacion.getCotizacionList().remove(cotizacionListNewCotizacion);
-                        oldClienteIDOfCotizacionListNewCotizacion = em.merge(oldClienteIDOfCotizacionListNewCotizacion);
+            if(abonoListOld != null && !abonoListOld.isEmpty()){
+                for (Cotizacion cotizacionListOldCotizacion : cotizacionListOld) {
+                    if (!cotizacionListNew.contains(cotizacionListOldCotizacion)) {
+                        cotizacionListOldCotizacion.setClienteID(null);
+                        cotizacionListOldCotizacion = em.merge(cotizacionListOldCotizacion);
+                    }
+                }
+            }
+            if(abonoListNew != null && !cotizacionListNew.isEmpty()){
+                for (Cotizacion cotizacionListNewCotizacion : cotizacionListNew) {
+                    if (!cotizacionListOld.contains(cotizacionListNewCotizacion)) {
+                        Cliente oldClienteIDOfCotizacionListNewCotizacion = cotizacionListNewCotizacion.getClienteID();
+                        cotizacionListNewCotizacion.setClienteID(cliente);
+                        cotizacionListNewCotizacion = em.merge(cotizacionListNewCotizacion);
+                        if (oldClienteIDOfCotizacionListNewCotizacion != null && !oldClienteIDOfCotizacionListNewCotizacion.equals(cliente)) {
+                            oldClienteIDOfCotizacionListNewCotizacion.getCotizacionList().remove(cotizacionListNewCotizacion);
+                            oldClienteIDOfCotizacionListNewCotizacion = em.merge(oldClienteIDOfCotizacionListNewCotizacion);
+                        }
                     }
                 }
             }

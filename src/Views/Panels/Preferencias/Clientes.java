@@ -6,7 +6,7 @@ import ViewsControllers.Panels.Preferencias.ClientesViewController;
 
 public class Clientes extends javax.swing.JPanel {
 
-    ClientesViewController vc;
+    private ClientesViewController vc;
     
     public Clientes() {
         initComponents();
@@ -17,8 +17,7 @@ public class Clientes extends javax.swing.JPanel {
         btnModificar.addMouseListener(Utilities.getMLGeneralButton());
         btnEliminar.addMouseListener(Utilities.getMLGeneralButton());
         
-        vc = new ClientesViewController(txtBuscar, tbClientes, lbTotal, lbNombre, lbDocumento, lbCorreo, lbNumero, txtDomicilio);
-        vc.CargarClientes();
+        vc = new ClientesViewController(txtBuscar, lbCargando, tbClientes, lbTotal, lbNombre, lbDocumento, lbCorreo, lbNumero, txtDomicilio);
     }
 
     @SuppressWarnings("unchecked")
@@ -51,6 +50,7 @@ public class Clientes extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDomicilio = new javax.swing.JTextArea();
         btnInformacion = new javax.swing.JLabel();
+        lbCargando = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -197,40 +197,42 @@ public class Clientes extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(220, 220, 220)));
 
-        jLabel3.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         jLabel3.setText("Informacion completa");
 
-        jLabel4.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel4.setText("Nombre:");
 
-        lbNombre.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        lbNombre.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         lbNombre.setText("Nombre...");
 
-        jLabel6.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel6.setText("Documento:");
 
-        lbDocumento.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        lbDocumento.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         lbDocumento.setText("Documento...");
 
-        lbCorreo.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        lbCorreo.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         lbCorreo.setText("Correo Electronico...");
 
-        jLabel9.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel9.setText("Correo electronico:");
 
-        lbNumero.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        lbNumero.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         lbNumero.setText("Numero telefonico...");
 
-        jLabel11.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel11.setText("Numero telefonico:");
 
-        jLabel13.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel13.setText("Domicilio:");
 
         jScrollPane2.setBorder(null);
 
+        txtDomicilio.setEditable(false);
+        txtDomicilio.setBackground(new java.awt.Color(255, 255, 255));
         txtDomicilio.setColumns(20);
-        txtDomicilio.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        txtDomicilio.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         txtDomicilio.setLineWrap(true);
         txtDomicilio.setRows(5);
         txtDomicilio.setText("Domicilio...");
@@ -283,7 +285,7 @@ public class Clientes extends javax.swing.JPanel {
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(151, Short.MAX_VALUE))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         btnInformacion.setBackground(new java.awt.Color(255, 255, 255));
@@ -298,6 +300,12 @@ public class Clientes extends javax.swing.JPanel {
             }
         });
 
+        lbCargando.setBackground(new java.awt.Color(255, 255, 255));
+        lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbCargando.setToolTipText("");
+        lbCargando.setOpaque(true);
+        lbCargando.setPreferredSize(new java.awt.Dimension(38, 38));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -310,6 +318,8 @@ public class Clientes extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -330,7 +340,8 @@ public class Clientes extends javax.swing.JPanel {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnInformacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnInformacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbCargando, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -340,32 +351,31 @@ public class Clientes extends javax.swing.JPanel {
 
     private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
         Dialogs.ShowAddClienteDialog();
-        vc.CargarClientes();
+        vc.updateData();
     }//GEN-LAST:event_btnAgregarMouseClicked
 
     private void btnModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseClicked
-        vc.Edit();
-        vc.CargarClientes();
+        vc.editClient();
     }//GEN-LAST:event_btnModificarMouseClicked
 
     private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
-        vc.Delete();
+        vc.deleteClient();
     }//GEN-LAST:event_btnEliminarMouseClicked
 
     private void btnActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnActualizarMouseClicked
-        vc.CargarClientes();
+        vc.updateData();
     }//GEN-LAST:event_btnActualizarMouseClicked
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-        vc.Buscar();
+        vc.search();
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void tbClientesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbClientesMousePressed
-        vc.CargarCliente();
+        vc.loadClient();
     }//GEN-LAST:event_tbClientesMousePressed
 
     private void btnInformacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInformacionMouseClicked
-        vc.mostrarInformacionCuenta();
+        vc.showClientInformation();
     }//GEN-LAST:event_btnInformacionMouseClicked
 
 
@@ -388,6 +398,7 @@ public class Clientes extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lbCargando;
     private javax.swing.JLabel lbCorreo;
     private javax.swing.JLabel lbDocumento;
     private javax.swing.JLabel lbNombre;

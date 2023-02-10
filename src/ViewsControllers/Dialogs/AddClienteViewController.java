@@ -4,80 +4,125 @@ import Controllers.ClienteJpaController;
 import Controllers.exceptions.NonexistentEntityException;
 import Models.Cliente;
 import Resource.Conection;
+import Resource.Utilities;
+import Views.Dialogs.AddClienteDialog;
 import Views.Dialogs.Dialogs;
 import java.awt.Color;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class AddClienteViewController {
     
-    ClienteJpaController controller;
+    private ClienteJpaController controller;
     
-    JTextField Nombre;
-    JTextField Documento;
-    JTextField Correo;
-    JTextField Numero;
-    JTextArea Domicilio;
-    JLabel Error;
+    private AddClienteDialog Instance;
+    private JTextField Nombre;
+    private JTextField Documento;
+    private JTextField Correo;
+    private JTextField Numero;
+    private JTextArea Domicilio;
+    private JLabel Error;
+    private JLabel Cargando;
 
-    public AddClienteViewController(JTextField Nombre, JTextField Documento, JTextField Correo, JTextField Numero, JTextArea Domicilio, JLabel Error) {
+    public AddClienteViewController(AddClienteDialog Instance, JTextField Nombre, JTextField Documento, JTextField Correo, JTextField Numero, JTextArea Domicilio, JLabel Error, JLabel Cargando) {
+        this.Instance = Instance;
         this.Nombre = Nombre;
         this.Documento = Documento;
         this.Correo = Correo;
         this.Numero = Numero;
         this.Domicilio = Domicilio;
         this.Error = Error;
+        this.Cargando = Cargando;
         
         controller = new ClienteJpaController(Conection.createEntityManagerFactory());
     }
     
-    public boolean Insert(){
-        if(validate()){
-            Cliente cliente = CreateObjectCLiente();
-            controller.create(cliente);
-            return true;
-        }
-        return false;
+    private void setLoad(boolean state){
+        ImageIcon icon = new ImageIcon(getClass().getResource(Utilities.getLoadingImage()));
+        Cargando.setIcon(state ? icon : null);
     }
     
+    //Task
+    public void insertClient(){
+        if(validate()){
+            setLoad(true);
+            Runnable run = () -> {
+                List<Cliente> clientes = controller.findClienteEntities();
+                if(validateRepitData(clientes)){
+                    Cliente cliente = createClientObject();
+                    controller.create(cliente);
+
+                    setLoad(false);
+                    Instance.setVisible(false);
+                    Dialogs.ShowMessageDialog("El cliente ha sido agregado exitosamente", Dialogs.COMPLETE_ICON);
+                } else { Error.setBackground(new Color(185, 0, 0)); }
+                setLoad(false);
+            };
+            new Thread(run).start();
+        } else { Error.setBackground(new Color(185, 0, 0)); }
+    }
+    
+    //Task
     public void setEditCliente(int ClienteID){
-        Cliente cliente = controller.findCliente(ClienteID);
-        Nombre.setText(cliente.getNombre());
-        Nombre.setName(String.valueOf(cliente.getClienteID()));
-        Nombre.setForeground(Color.BLACK);
-        Documento.setText(cliente.getDocumento());
-        Documento.setForeground(Color.BLACK);
-        Correo.setText(cliente.getCorreoElectronico());
-        Correo.setForeground(Color.BLACK);
-        Numero.setText(cliente.getNumeroTelefono());
-        Numero.setForeground(Color.BLACK);
-        Domicilio.setText(cliente.getDomicilio());
-        Domicilio.setForeground(Color.BLACK);
+        setLoad(true);
+        Runnable run = () -> {
+            Cliente cliente = controller.findCliente(ClienteID);
+            Nombre.setText(cliente.getNombre());
+            Nombre.setName(String.valueOf(cliente.getClienteID()));
+            Nombre.setForeground(Color.BLACK);
+            Documento.setText(cliente.getDocumento());
+            Documento.setForeground(Color.BLACK);
+            Correo.setText(cliente.getCorreoElectronico());
+            Correo.setForeground(Color.BLACK);
+            Numero.setText(cliente.getNumeroTelefono());
+            Numero.setForeground(Color.BLACK);
+            Domicilio.setText(cliente.getDomicilio());
+            Domicilio.setForeground(Color.BLACK);
+            
+            setLoad(false);
+        };
+        new Thread(run).start();
+        
     }
     
-    public boolean Edit(){
+    //Task
+    public void editClient(){
         if(validate()){
-            try {
-                Cliente cliente = CreateObjectCLiente();
-                controller.edit(cliente);
-            } catch (NonexistentEntityException ex) {
-                Dialogs.ShowMessageDialog("Ups.. Ha ocurrido un error inesperado", Dialogs.ERROR_ICON);
-                return false;
-            } catch (Exception ex) {
-                Logger.getLogger(AddClienteViewController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            return true;
-        }
-        return false;
+            setLoad(true);
+            Runnable run = () -> {
+                List<Cliente> clientes = controller.findClienteEntities();
+                if(validateRepitData(clientes)){
+                    try {
+                        Cliente cliente = createClientObject();
+                        controller.edit(cliente);
+
+                        setLoad(false);
+                        Instance.setVisible(false);
+                        Dialogs.ShowMessageDialog("El cliente ha sido modificado exitosamente", Dialogs.COMPLETE_ICON);
+                    } catch (NonexistentEntityException ex) {
+                        setLoad(false);
+                        System.err.println("Error: "+ex.getMessage());
+                        Dialogs.ShowMessageDialog("Error, No se ha podido modificar el cliente", Dialogs.ERROR_ICON);
+                    } catch (Exception ex) {
+                        setLoad(false);
+                        System.err.println("Error: "+ex.getMessage());
+                        Dialogs.ShowMessageDialog("Error, No se ha podido modificar el cliente", Dialogs.ERROR_ICON);
+                    }
+                    setLoad(false);
+                } else { Error.setBackground(new Color(185, 0, 0)); }
+            };
+            new Thread(run).start();
+        } else { Error.setBackground(new Color(185, 0, 0)); }
     }
     
-    public Cliente CreateObjectCLiente(){
+    //Insied Task
+    private Cliente createClientObject(){
         Cliente cliente = new Cliente();
         if(Nombre.getName() != null){
-            cliente.setClienteID(Integer.valueOf(Nombre.getName()));
+            cliente = controller.findCliente(Integer.valueOf(Nombre.getName()));
         }
         cliente.setNombre(Nombre.getText());
         cliente.setDocumento(Documento.getText());
@@ -87,32 +132,136 @@ public class AddClienteViewController {
         return cliente;
     }
     
-    public boolean validate(){
+    private boolean validate(){
+        //Validando campo de nombre
         if(Nombre.getText().isEmpty() || Nombre.getForeground().equals(new Color(180, 180, 180))){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("El nombre del cliente es obligatorio");
             return false;
         }
+        if(Nombre.getText().length() > 60){
+            Error.setText("El nombre debe tener menos de 60 caracteres");
+            return false;
+        }
+        
+        //Validando campo del documento
         if(Documento.getText().isEmpty() || Documento.getForeground().equals(new Color(180, 180, 180))){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("El documento del cliente es obligatorio");
             return false;
         }
+        if(Documento.getText().length() > 15 || Documento.getText().length() < 13){
+            Error.setText("El documento debe contener entre 13 y 15 caracteres");
+            return false;
+        }
+        
+        //Validando correo electronico
         if(Correo.getText().isEmpty() || Correo.getForeground().equals(new Color(180, 180, 180))){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("El correo electronico del cliente es obligatorio");
             return false;
         }
+        if(Correo.getText().length() > 60){
+            Error.setText("El correo electronico debe contener menos de 60 caracteres");
+            return false;
+        }
+        if(!Correo.getText().contains("@") || !Correo.getText().contains(".")){
+            Error.setText("El correo electronico ingresado no es valido");
+            return false;
+        }
+        
+        //Validando numero telfonico
         if(Numero.getText().isEmpty() || Numero.getForeground().equals(new Color(180, 180, 180))){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("El numero telefonico del cliente es obligatorio");
             return false;
         }
+        if(Numero.getText().length() > 8){
+            Error.setText("El numero telefonico debe contener menos de 8 numeros");
+            return false;
+        }
+        if(Numero.getText().length() < 8){
+            Error.setText("El numero telefonico debe contener al menos 8 numeros");
+            return false;
+        }
+        
+        //Validando campo de domicilio
         if(Domicilio.getText().isEmpty() || Domicilio.getForeground().equals(new Color(180, 180, 180))){
-            Error.setBackground(new Color(185, 0, 0));
             Error.setText("El domicilio del cliente es obligatorio");
             return false;
         }
+        if(Domicilio.getText().length() > 150){
+            Error.setText("El domicilio debe contener menos de 150 caracteres");
+            return false;
+        }
+        
         return true;
+    }
+    
+    //Insiede Task
+    private boolean validateRepitData(List<Cliente> clientes){
+        if(existDocument(clientes)){
+            Error.setText("Ya existe un cliente con el numero de documento ingresado");
+            return false;
+        }
+        if(existEmail(clientes)){
+            Error.setText("Ya existe un cliente con el correo electronico ingresado");
+            return false;
+        }
+        if(exisNumberPhone(clientes)){
+            Error.setText("Ya existe un cliente con el numero telefonico ingresado");
+            return false;
+        }
+        return true;
+    }
+    
+    //Inside Task
+    private boolean existDocument(List<Cliente> clientes){
+        if(!clientes.isEmpty()){
+            for(Cliente cliente : clientes){
+                if(Documento.getText().equalsIgnoreCase(cliente.getDocumento())){
+                    if(Nombre.getName() != null){
+                        int ClienteID = Integer.parseInt(Nombre.getName());
+                        
+                        if(ClienteID != cliente.getClienteID()){
+                            return true;
+                        }
+                    } else { return true; }
+                }
+            }
+        }
+        return false;
+    }
+    
+    //Inside Task
+    private boolean existEmail(List<Cliente> clientes){
+        if(!clientes.isEmpty()){
+            for(Cliente cliente : clientes){
+                if(Correo.getText().equalsIgnoreCase(cliente.getCorreoElectronico())){
+                    if(Nombre.getName() != null){
+                        int ClienteID = Integer.parseInt(Nombre.getName());
+                        
+                        if(ClienteID != cliente.getClienteID()){
+                            return true;
+                        } 
+                    } else { return true; }
+                }
+            }    
+        }
+        return false;
+    }
+    
+    //Inside Task
+    private boolean exisNumberPhone(List<Cliente> clientes){
+        if(!clientes.isEmpty()){
+            for(Cliente cliente : clientes){
+                if(Numero.getText().equalsIgnoreCase(cliente.getNumeroTelefono())){
+                    if(Nombre.getName() != null){
+                        int ClienteID = Integer.parseInt(Nombre.getName());
+                        
+                        if(ClienteID != cliente.getClienteID()){
+                            return true;
+                        } 
+                    } else { return true; }
+                }
+            }   
+        }
+        return false;
     }
 }

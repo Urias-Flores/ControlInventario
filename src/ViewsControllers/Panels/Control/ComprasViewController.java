@@ -3,7 +3,7 @@ package ViewsControllers.Panels.Control;
 import Controllers.CompraJpaController;
 import Controllers.CompradetalleJpaController;
 import Controllers.ProductoJpaController;
-import Controllers.ProveedorJpaController;
+import Controllers.exceptions.NonexistentEntityException;
 import Models.Compra;
 import Models.Compradetalle;
 import Models.Producto;
@@ -18,7 +18,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -27,7 +29,10 @@ import javax.swing.table.DefaultTableModel;
 public class ComprasViewController {
     
     private CompraJpaController controller;
-    private DefaultTableModel model = new DefaultTableModel();
+    private DefaultTableModel model = new DefaultTableModel(){
+        @Override
+        public boolean isCellEditable(int row, int column){ return false; } 
+    };
     
     private JComboBox<Proveedor> Proveedores;
     private JTextField Factura;
@@ -51,8 +56,9 @@ public class ComprasViewController {
     private JTextField Importe;
     private JTextField ISV;
     private JTextField Total;
+    private JLabel Cargando;
 
-    public ComprasViewController(JComboBox Proveedores, JTextField Factura, JComboBox DiaCompra, JComboBox MesCompra, JComboBox AnioCompra, JComboBox DiaVencimiento, JComboBox MesVencimiento, JComboBox AnioVencimiento, JRadioButton Pagado, JRadioButton Pendiente, JTextField Barra, JTable Compras, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total) {
+    public ComprasViewController(JComboBox Proveedores, JTextField Factura, JComboBox DiaCompra, JComboBox MesCompra, JComboBox AnioCompra, JComboBox DiaVencimiento, JComboBox MesVencimiento, JComboBox AnioVencimiento, JRadioButton Pagado, JRadioButton Pendiente, JTextField Barra, JTable Compras, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total, JLabel Cargando) {
         this.Proveedores = Proveedores;
         this.Factura = Factura;
         this.DiaCompra = DiaCompra;
@@ -70,11 +76,42 @@ public class ComprasViewController {
         this.Importe = Importe;
         this.ISV = ISV;
         this.Total = Total;
-        
-        loadYears(AnioCompra);
-        loadYears(AnioVencimiento);
-        loadCurrentDate();
+        this.Cargando = Cargando;
+     
         controller = new CompraJpaController(Conection.createEntityManagerFactory());
+        
+        //Cargando años en combobox de fechas
+        Utilities.CargarAnios(AnioCompra);
+        Utilities.CargarAnios(AnioVencimiento);
+            
+        //Cargando fecha actual
+        loadCurrentDate();
+        
+        //Cargando modelo de tabla en tabla de compra
+        setModelTableBuys();
+        
+        //Inicializando carga de datos
+        Init();
+    }
+    
+    private void setLoad(boolean state){
+        ImageIcon icon = new ImageIcon(getClass().getResource(Utilities.getLoadingImage()));
+        Cargando.setIcon(state ? icon : null);
+    }    
+    
+    private void Init(){
+        setLoad(true);
+        Runnable run = ()->{
+            //Cargando combobox de proveedores    
+            loadSuppliers();
+            
+            setLoad(false);
+        };
+        new Thread(run).start();
+    }
+    
+    public void updateData(){
+        Init();
     }
     
     public void loadProduct(Object[] values){
@@ -84,6 +121,7 @@ public class ComprasViewController {
                 float cantidadNew = Float.parseFloat(Compras.getValueAt(i, 3).toString().replace(",", "")) + Float.parseFloat(values[3].toString().replace(",", ""));
                 float descuentoNew = Float.parseFloat(Compras.getValueAt(i, 5).toString().replace(",", "")) + Float.parseFloat(values[5].toString().replace(",", ""));
                 float SubtotalNew = Float.parseFloat(Compras.getValueAt(i, 6).toString().replace(",", "")) + Float.parseFloat(values[6].toString().replace(",", ""));
+                
                 Compras.setValueAt(getNumberFormat(cantidadNew), i, 3);
                 Compras.setValueAt(getNumberFormat(descuentoNew), i, 5);
                 Compras.setValueAt(getNumberFormat(SubtotalNew), i, 6);
@@ -121,45 +159,42 @@ public class ComprasViewController {
         }
     }
     
+    //Task
     public void loadbyBarCode() {
-        ProductoJpaController controllerProducto = new ProductoJpaController(Conection.createEntityManagerFactory());
-        List<Producto> productos = controllerProducto.findProductoEntities();
-        productos.forEach(producto -> {
-            if (producto.getBarra().equals(Barra.getText())) {
-                Object[] row = {
-                    producto.getProductoID(),
-                    producto.getDescripcion(),
-                    producto.getUnidad(),
-                    getNumberFormat(1f),
-                    getNumberFormat(producto.getPrecioCompra()),
-                    getNumberFormat(0f),
-                    getNumberFormat(producto.getPrecioCompra())
-                };
-                
-                loadProduct(row);
+        setLoad(true);
+        Runnable run = ()->{
+            ProductoJpaController controllerProducto = new ProductoJpaController(Conection.createEntityManagerFactory());
+            List<Producto> productos = controllerProducto.findProductoEntities();
+            if(!productos.isEmpty()){
+                for(Producto producto  : productos) {
+                    if(producto.getBarra() != null){
+                        if (producto.getBarra().equals(Barra.getText())) {
+                            Object[] row = {
+                                producto.getProductoID(),
+                                producto.getDescripcion(),
+                                producto.getUnidad(),
+                                getNumberFormat(1f),
+                                getNumberFormat(producto.getPrecioCompra()),
+                                getNumberFormat(0f),
+                                getNumberFormat(producto.getPrecioCompra())
+                            };
+                            loadProduct(row);
+                            break;
+                        }
+                    }
+                }
             }
-        });
-        Barra.setText("");
+            setLoad(false);
+            Barra.setText("");
+        };
+        new Thread(run).start();
     }
     
-    public void addSupplier(){
-        Dialogs.ShowAddProveedorDialog();
+    private void loadSuppliers(){
         Proveedores.removeAllItems();
         Proveedores.addItem(new Proveedor(0, "-- Seleccione proveedor --", "", "", "", 0));
-        loadSuppliers();
-    }
-    
-    public void loadSuppliers(){
-        List<Proveedor> proveedores = new ProveedorJpaController(Conection.createEntityManagerFactory()).findProveedorEntities();
+        List<Proveedor> proveedores = Conection.createEntityManager().createNamedQuery("Proveedor.findAll").getResultList();
         proveedores.forEach(Proveedores::addItem);
-    }
-    
-    public final void loadYears(JComboBox combo){
-        int Year = Calendar.getInstance().get(Calendar.YEAR);
-        
-        for(int i = Year; i >= 1900; i--){
-            combo.addItem(i);
-        }
     }
     
     private void loadCurrentDate(){
@@ -178,13 +213,13 @@ public class ComprasViewController {
         }
     }
     
-    public void setModelTableBuys(){
+    private void setModelTableBuys(){
         String[] columns = {"Codigo", "Producto", "Unidades", "Cantidad", "Precio", "Descuento", "Subtotal"};
         model.setColumnIdentifiers(columns);
         
         Compras.setModel(model);
-        Compras.getColumn("Codigo").setPreferredWidth(40);
-        Compras.getColumn("Producto").setPreferredWidth(750);
+        Compras.getColumn("Codigo").setPreferredWidth(60);
+        Compras.getColumn("Producto").setPreferredWidth(720);
         Compras.getColumn("Unidades").setPreferredWidth(70);
         Compras.getColumn("Cantidad").setPreferredWidth(70);
         Compras.getColumn("Precio").setPreferredWidth(120);
@@ -235,25 +270,39 @@ public class ComprasViewController {
         return format.format(Value);
     }
     
-    public boolean insertBuy(){
+    public void insertBuy(){
         if(validate()){
-            Compra compra = createObjectBuy();
-            int CompraID = controller.create(compra);
-            List<Compradetalle> compras = createListBuyDetails(CompraID);
-            CompradetalleJpaController compradetalleJpaController = new CompradetalleJpaController(Conection.createEntityManagerFactory());
-            compras.forEach(compradetalleJpaController::create);
-            
-            Runnable run = ()->{
-                Reports reports = new Reports();
-                reports.GenerateTickeCompra(CompraID);
+            setLoad(true);
+            Runnable run = () ->{
+                //Insertando compra
+                Compra compra = createObjectBuy();
+                int CompraID = controller.create(compra);
+                
+                //Insertando detalles de la compra
+                List<Compradetalle> compras = createListBuyDetails(CompraID);
+                CompradetalleJpaController compradetalleJpaController = new CompradetalleJpaController(Conection.createEntityManagerFactory());
+                compras.forEach(compradetalleJpaController::create);
+                
+                //Actulizando precios de producto a nuevos precios
+                updateProductPrice(compras);
+                
+                setLoad(false);
+                Dialogs.ShowMessageDialog("La compra ha sido agregada exitosamente", Dialogs.COMPLETE_ICON);
+                
+                //Enviando a imprimir factura de compra propia
+                if(Dialogs.ShowOKCancelDialog("¿Desea imprimir una factura de compra propia?", Dialogs.WARNING_ICON)){
+                    setLoad(true);
+                    Runnable runnable = () -> {
+                        Reports reports = new Reports();
+                        reports.GenerateTickeCompra(CompraID);
+                        setLoad(false);
+                    };
+                    new Thread(runnable).start();
+                }
+                clear();
             };
-            Thread thread = new Thread(run);
-            thread.start();
-            
-            clear();
-            return true;
+            new Thread(run).start();
         }
-        return false;
     }
     
     private Compra createObjectBuy(){
@@ -261,14 +310,8 @@ public class ComprasViewController {
         
         compra.setNoFactura(Factura.getText());
         compra.setUsuarioID(Utilities.getUsuarioActual());
-        
-        if(Proveedores.getSelectedIndex() == 0){
-            compra.setProveedorID(null);
-            compra.setEstado("P");
-        }else{
-            compra.setProveedorID((Proveedor) Proveedores.getSelectedItem());
-            compra.setEstado(Pagado.isSelected() ? "P": "N");
-        }
+        compra.setProveedorID((Proveedor) Proveedores.getSelectedItem());
+        compra.setEstado(!Pagado.isSelected() ? "N": "P");
         compra.setFecha(Utilities.getDate());
         compra.setHora(Utilities.getTime());
         compra.setFechaCompra(getRealBuyDate());
@@ -277,20 +320,41 @@ public class ComprasViewController {
         return compra;
     }
     
+    private void updateProductPrice(List<Compradetalle> compras){
+        if(!compras.isEmpty()){
+            compras.forEach(compra ->{
+                ProductoJpaController controllerProduct = new ProductoJpaController(Conection.createEntityManagerFactory());
+                Producto producto = controllerProduct.findProducto(compra.getProductoID().getProductoID());
+                producto.setPrecioCompra(compra.getPrecio());
+
+                try {
+                    controllerProduct.edit(producto);
+                } catch (NonexistentEntityException ex) {
+                    System.err.println("Error: "+ex.getMessage());
+                } catch (Exception ex) {
+                    System.err.println("Error: "+ex.getMessage());
+                }
+            });
+        }
+    }
+    
     private List<Compradetalle> createListBuyDetails(int CompraID){
         
         ArrayList<Compradetalle> list = new ArrayList<>();
-        for(int i = 0; i < Compras.getRowCount(); i++){
+        int index = 0;
+        while(index < Compras.getRowCount()){
             Compradetalle compradetalle = new Compradetalle();
             
             compradetalle.setCompraID(new Compra(CompraID));
-            compradetalle.setProductoID(new Producto(Integer.valueOf(Compras.getValueAt(i, 0).toString())));
-            compradetalle.setCantidad(Float.parseFloat(Compras.getValueAt(i, 3).toString().replace(",", "")));
-            compradetalle.setPrecio(Float.parseFloat(Compras.getValueAt(i, 4).toString().replace(",", "")));
-            compradetalle.setDescuento(Float.parseFloat(Compras.getValueAt(i, 5).toString().replace(",", "")));
+            compradetalle.setProductoID(new Producto(Integer.valueOf(Compras.getValueAt(index, 0).toString())));
+            compradetalle.setCantidad(Float.parseFloat(Compras.getValueAt(index, 3).toString().replace(",", "")));
+            compradetalle.setPrecio(Float.parseFloat(Compras.getValueAt(index, 4).toString().replace(",", "")));
+            compradetalle.setDescuento(Float.parseFloat(Compras.getValueAt(index, 5).toString().replace(",", "")));
             compradetalle.setIsv(0.15f);
             
             list.add(compradetalle);
+            
+            index++;
         }
       
         return list;
@@ -317,9 +381,13 @@ public class ComprasViewController {
             Dialogs.ShowMessageDialog("Para agregar la compra debe agregar al menos una producto", Dialogs.ERROR_ICON);
             return false;
         }
-        if(Proveedores.getSelectedIndex() != 0){
+        if(Proveedores.getSelectedIndex() == 0){
+            Dialogs.ShowMessageDialog("Para agregar la compra debe seleccionar un proveedor", Dialogs.ERROR_ICON);
+            return false;
+        }
+        if(Proveedores.getSelectedIndex() !=  0){
             if(!Pendiente.isSelected() && !Pagado.isSelected()){
-                Dialogs.ShowMessageDialog("Para agregar la compra debe definir el estado de la factura", Dialogs.ERROR_ICON);
+                Dialogs.ShowMessageDialog("Para agregar la compra debe seleccionar la forma de pago de la factura", Dialogs.ERROR_ICON);
                 return false;
             }
         }
@@ -356,7 +424,6 @@ public class ComprasViewController {
         Total.setText("0.00");
         
         loadCurrentDate();
-        model = new DefaultTableModel();
-        setModelTableBuys();
+        model.setRowCount(0);
     }
 }

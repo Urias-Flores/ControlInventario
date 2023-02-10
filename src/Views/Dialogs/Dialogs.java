@@ -160,14 +160,14 @@ public class Dialogs {
     
     public static void ShowInfoEmpleadoDialog(int EmpleadoID){
         InfoEmpleadoDialog ied = new InfoEmpleadoDialog(null, true);
-        ied.CargarEmpleado(EmpleadoID);
+        ied.loadEmployee(EmpleadoID);
         ied.setVisible(true);
         ied.dispose();
     }
     
     public static void ShowInfoUsuarioDialog(int EmpleadoID){
         InfoUsuarioDialog ied = new InfoUsuarioDialog(null, true);
-        ied.CargarUsuario(EmpleadoID);
+        ied.loadUser(EmpleadoID);
         ied.setVisible(true);
         ied.dispose();
     }
@@ -273,14 +273,14 @@ public class Dialogs {
     
     public static void ShowDetalleFactura(int VentaID){
         DetalleFacturaDialog dfd = new DetalleFacturaDialog(null, true);
-        dfd.cargar(VentaID, true);
+        dfd.load(VentaID, true);
         dfd.setVisible(true);
         dfd.dispose();
     }
     
     public static void ShowDetalleCompra(int CompraID){
         DetalleFacturaDialog dfd = new DetalleFacturaDialog(null, true);
-        dfd.cargar(CompraID, false);
+        dfd.load(CompraID, false);
         dfd.setVisible(true);
         dfd.dispose();
     }

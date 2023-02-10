@@ -1,12 +1,12 @@
 package ViewsControllers.Dialogs;
 
-import Controllers.ProductoJpaController;
 import Models.Marca;
 import Models.Producto;
 import Resource.Conection;
 import Resource.Utilities;
 import java.awt.Color;
 import java.text.DecimalFormat;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -15,6 +15,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 public class AddCompraDialogViewController {
@@ -29,6 +30,12 @@ public class AddCompraDialogViewController {
     private JTextField Subtotal;
     private JLabel Error;
     private JLabel Cargando;
+    
+    private TableRowSorter rowSorter = new TableRowSorter();
+    private DefaultTableModel model = new DefaultTableModel(){
+        @Override
+        public boolean isCellEditable(int row, int column){ return false; }
+    };
 
     public AddCompraDialogViewController(JTextField Buscar, JComboBox Marcas,JTable Productos, JTextField DescuentoProcentaje, JTextField DescuentoLempiras, JTextField Precio, JTextField Cantidad, JTextField Subtotal, JLabel Error, JLabel Cargando) {
         this.Buscar = Buscar;
@@ -41,71 +48,104 @@ public class AddCompraDialogViewController {
         this.Subtotal = Subtotal;
         this.Error = Error;
         this.Cargando = Cargando;
+        
+        //Inhabilitando la edicion de datos
+        setEditableFields(false);
+        
+        //Cargano modelo de tabla en tabla de productos
+        setModelTableProducts();
+        
+        //Agregando modelo en filtro de busqueda
+        addRowSorter();
+        
+        //Inicializando carga de datos
+        Init();
     }
     
-    public void CargarProductos(){
-        Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
-        
-        Runnable run = ()->{
-            DefaultTableModel model = new DefaultTableModel();
-            String[] columns = {"Codigo", "Descripcion", "Marca","Unidad", "Precio base"};
-            model.setColumnIdentifiers(columns);
-
-            List<Producto> productos = new ProductoJpaController(Conection.createEntityManagerFactory()).findProductoEntities();
-            productos.forEach(producto -> {
-                Object[] row = {producto.getProductoID(), producto.getDescripcion(), producto.getUnidad(), producto.getPrecioCompra()};
-                model.addRow(row);
-            });
-
-            Productos.setModel(model);
-            Productos.getColumn("Codigo").setPreferredWidth(50);
-            Productos.getColumn("Descripcion").setPreferredWidth(320);
-            Productos.getColumn("Marca").setPreferredWidth(100);
-            Productos.getColumn("Unidad").setPreferredWidth(80);
-            Productos.getColumn("Precio base").setPreferredWidth(90);
+    private void setLoad(boolean state){
+        ImageIcon icon = new ImageIcon(getClass().getResource(Utilities.getLoadingImage()));
+        Cargando.setIcon(state ? icon : null);
+    }
+    
+    private void Init(){
+        setLoad(true);
+        Runnable run = () -> {
+            //Cargando marcas en combobox
+            loadBrands();
             
-            Cargando.setIcon(null);
+            //Cargando productos en tabla
+            loadProducts();
+            
+            setLoad(false);
         };
         new Thread(run).start();
     }
     
-    public void CargarMarcas(){
-        Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
-        Runnable run = ()->{
-            List<Marca> marcas = Conection.createEntityManagerFactory().createEntityManager()
-                .createNamedQuery("Marca.findAll")
-                .getResultList();
-            marcas.forEach(Marcas::addItem);
-            Cargando.setIcon(null);
-        };
-        new Thread(run).start(); 
+    public void updateData(){
+        Init();
     }
     
-    public void Buscar(){
-        TableRowSorter s = new TableRowSorter(Productos.getModel());
-        s.setRowFilter(RowFilter.regexFilter(Buscar.getText(), 1));
-        Productos.setRowSorter(s);
+    private void addRowSorter(){
+        rowSorter.setModel(Productos.getModel());
     }
     
-    public void FiltrarMarcas(){
-        TableRowSorter s = new TableRowSorter();
-        s.setModel(Productos.getModel());
-        if(Marcas.getSelectedIndex() > 0){
-            s.setRowFilter(RowFilter.regexFilter(Marcas.getSelectedItem().toString() , 2));
-        }else{
-            s.setRowFilter(RowFilter.regexFilter("" , 2));
+    private void setModelTableProducts(){
+        String[] columns = {"Codigo", "Descripcion", "Marca","Unidad", "Precio base"};
+        model.setColumnIdentifiers(columns);
+        
+        Productos.setModel(model);
+        Productos.getColumn("Codigo").setPreferredWidth(50);
+        Productos.getColumn("Descripcion").setPreferredWidth(320);
+        Productos.getColumn("Marca").setPreferredWidth(100);
+        Productos.getColumn("Unidad").setPreferredWidth(80);
+        Productos.getColumn("Precio base").setPreferredWidth(90);
+    }
+    
+    private void loadProducts(){
+        model.setRowCount(0);
+        List<Producto> productos = Conection.createEntityManager().createNamedQuery("Producto.findAll").getResultList();
+        if(!productos.isEmpty()){
+            productos.forEach(producto -> {
+                Object[] row = {
+                    producto.getProductoID(), 
+                    producto.getDescripcion(),
+                    producto.getMarcaID().getNombre(),
+                    producto.getUnidad(), 
+                    producto.getPrecioCompra()
+                };
+                model.addRow(row);
+            });
         }
-        Productos.setRowSorter(s);
     }
     
-    public void cargarProducto(){
+    private void loadBrands(){
+        Marcas.removeAllItems();
+        Marcas.addItem("-- Todas la marcas --");
+        List<Marca> marcas = Conection.createEntityManagerFactory().createEntityManager()
+            .createNamedQuery("Marca.findAll")
+            .getResultList();
+        marcas.forEach(Marcas::addItem);
+    }
+    
+    public void filter(){
+        List<RowFilter<TableModel, String>> filters = new LinkedList<>();
+        filters.add(RowFilter.regexFilter(Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+Buscar.getText(), 1));
+        filters.add(RowFilter.regexFilter(Marcas.getSelectedIndex() <= 0 ? "" : Marcas.getSelectedItem().toString(), 2));
+        rowSorter.setRowFilter(RowFilter.andFilter(filters));
+        Productos.setRowSorter(rowSorter);
+        clear();
+        setEditableFields(false);
+    }
+    
+    public void loadProduct(){
         int fila = Productos.getSelectedRow();
         if(fila >= 0){
+            setEditableFields(true);
             DescuentoLempiras.setText(getNumberFormat(0f));
             DescuentoPorcentaje.setText(getNumberFormat(0f));
-            Precio.setText(getNumberFormat(Float.parseFloat(Productos.getValueAt(fila, 3).toString())));
+            Precio.setText(getNumberFormat(Float.parseFloat(Productos.getValueAt(fila, 4).toString())));
             Cantidad.setText(getNumberFormat(1f));
-            float Total = Float.parseFloat(Productos.getValueAt(fila, 3).toString()) * Float.parseFloat(Cantidad.getText());
+            float Total = Float.parseFloat(Productos.getValueAt(fila, 4).toString()) * Float.parseFloat(Cantidad.getText());
             Subtotal.setText(getNumberFormat(Total));
         }
     }
@@ -117,7 +157,7 @@ public class AddCompraDialogViewController {
             float precio = Float.parseFloat(Precio.getText().replace(",", ""));
             float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
             float subtotal = (precio * cantidad) - descuento;
-            Subtotal.setText(getNumberFormat(subtotal)+" Lps.");
+            Subtotal.setText(getNumberFormat(subtotal));
         }
     }
     
@@ -142,7 +182,6 @@ public class AddCompraDialogViewController {
     }
     
     public Object[] getValues(){
-        
         if(validate()){
             float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
             float precio = Float.parseFloat(Precio.getText().replace(",", ""));
@@ -152,7 +191,7 @@ public class AddCompraDialogViewController {
             Object[] values  = {
                 Productos.getValueAt(Productos.getSelectedRow(), 0),
                 Productos.getValueAt(Productos.getSelectedRow(), 1),
-                Productos.getValueAt(Productos.getSelectedRow(), 2),
+                Productos.getValueAt(Productos.getSelectedRow(), 3),
                 getNumberFormat(cantidad),
                 getNumberFormat(precio),
                 getNumberFormat(descuento),
@@ -224,6 +263,21 @@ public class AddCompraDialogViewController {
             return false;
         }
         return true;
+    }
+    
+    private void clear() {
+        DescuentoPorcentaje.setText("0.00");
+        DescuentoLempiras.setText("0.00");
+        Precio.setText("0.00");
+        Cantidad.setText("0.00");
+        Subtotal.setText("0.00");
+    }
+    
+    private void setEditableFields(boolean status) {
+        Precio.setEditable(status);
+        DescuentoPorcentaje.setEditable(status);
+        DescuentoLempiras.setEditable(status);
+        Cantidad.setEditable(status);
     }
     
     private String getNumberFormat(float Value){

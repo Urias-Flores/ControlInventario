@@ -215,7 +215,7 @@ public class FacturaViewController {
 
             setLoad(true);
             Runnable run = () -> {
-
+                
                 List<Cotizaciondetalle> cotizacionDetalles = new CotizaciondetalleJpaController(Conection.createEntityManagerFactory()).findCotizaciondetalleEntities();
                 int currentCotizacionID = Integer.parseInt(Cotizacion.getText());
 
@@ -311,7 +311,7 @@ public class FacturaViewController {
         }
     }
 
-    public boolean InsertSale() {
+    public void InsertSale() {
         if (validate(false)) {
 
             setLoad(true);
@@ -324,21 +324,25 @@ public class FacturaViewController {
                 List<Ventadetalle> ventas = createListSaleDetails(VentaID);
                 VentadetalleJpaController ventadetalleJpaController = new VentadetalleJpaController(Conection.createEntityManagerFactory());
                 ventas.forEach(ventadetalleJpaController::create);
-
+                
+                setLoad(false);
+                Dialogs.ShowMessageDialog("La factura ha sido ingresada exitosamente", Dialogs.COMPLETE_ICON);
+                
                 //Enviando a imprimir ticket de venta
-                if (Dialogs.ShowOKCancelDialog("¿Desea enviar a imprimir la factura ahora?", Dialogs.COMPLETE_ICON)) {
-                    Reports reports = new Reports();
-                    reports.GenerateTickeVenta(VentaID);
+                if (Dialogs.ShowOKCancelDialog("¿Desea enviar a imprimir la factura ahora?", Dialogs.WARNING_ICON)) {
+                    setLoad(true);
+                    Runnable runnable = () ->{
+                        Reports reports = new Reports();
+                        reports.GenerateTickeVenta(VentaID);
+                        setLoad(false);
+                    };
+                    new Thread(runnable).start();
                 }
-
                 clear();
                 setLoad(false);
             };
             new Thread(run).start();
-
-            return true;
         }
-        return false;
     }
 
     public void InsertQuote() {
@@ -371,12 +375,10 @@ public class FacturaViewController {
         Venta venta = new Venta();
 
         venta.setRtn(RTN.getForeground().equals(Color.BLACK) && !RTN.getText().isEmpty() ? RTN.getText() : null);
-
+        venta.setClienteID((Cliente) Clientes.getSelectedItem());
         if (Clientes.getSelectedIndex() < 2) {
-            venta.setClienteID(new Cliente(1));
             venta.setEstado("P");
         } else {
-            venta.setClienteID((Cliente) Clientes.getSelectedItem());
             venta.setEstado(Pagado.isSelected() ? "P" : "N");
         }
 
@@ -446,7 +448,7 @@ public class FacturaViewController {
         String type = isQuote ? "cotizacion" : "venta";
         
         if (Ventas.getRowCount() <= 0) {
-            Dialogs.ShowMessageDialog("Para "+ action +" la "+ type +" debe agregar al menos una producto", Dialogs.ERROR_ICON);
+            Dialogs.ShowMessageDialog("Para "+ action +" la "+ type +" debe agregar al menos un producto", Dialogs.ERROR_ICON);
             return false;
         }
         if (Clientes.getSelectedIndex() == 0) {

@@ -1,12 +1,12 @@
 package ViewsControllers.Dialogs;
 
-import Controllers.ProductoJpaController;
 import Models.Marca;
 import Models.Producto;
 import Resource.Conection;
 import Resource.Utilities;
 import java.awt.Color;
 import java.text.DecimalFormat;
+import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Query;
 import javax.swing.ImageIcon;
@@ -16,6 +16,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 public class AddVentaDialogViewController {
@@ -57,7 +58,7 @@ public class AddVentaDialogViewController {
 
         //Cargando modelo de tabla en tabla de productos
         setModelTableProducts();
-
+        
         //Inicializando carga de datos
         Init();
     }
@@ -101,7 +102,7 @@ public class AddVentaDialogViewController {
         model.setRowCount(0);
         List<Producto> productos = Conection.createEntityManager().createNamedQuery("Producto.findAll").getResultList();
         productos.forEach(producto -> {
-            if(!producto.getInventarioList().isEmpty()){
+            if(productExistence(producto.getProductoID()) > 0){
                 Object[] row = {
                     producto.getProductoID(),
                     producto.getDescripcion(),
@@ -118,23 +119,20 @@ public class AddVentaDialogViewController {
         Marcas.removeAllItems();
         Marcas.addItem("-- Todas la marcas --");
         List<Marca> marcas = Conection.createEntityManagerFactory().createEntityManager()
-                .createNamedQuery("Marca.findAll")
-                .getResultList();
+            .createNamedQuery("Marca.findAll")
+            .getResultList();
         marcas.forEach(Marcas::addItem);
     }
 
-    public void search() {
-        TableRowSorter s = new TableRowSorter(Productos.getModel());
-        s.setRowFilter(RowFilter.regexFilter("(?i)" + Buscar.getText(), 1));
-        Productos.setRowSorter(s);
+    public void filter(){
+        TableRowSorter rowSorter = new TableRowSorter(Productos.getModel());
+        List<RowFilter<TableModel, String>> filters = new LinkedList<>();
+        filters.add(RowFilter.regexFilter(Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+Buscar.getText(), 1));
+        filters.add(RowFilter.regexFilter(Marcas.getSelectedIndex() <= 0 ? "" : Marcas.getSelectedItem().toString(), 2));
+        rowSorter.setRowFilter(RowFilter.andFilter(filters));
+        Productos.setRowSorter(rowSorter);
         clear();
-    }
-
-    public void filterBrands() {
-        TableRowSorter s = new TableRowSorter(Productos.getModel());
-        s.setRowFilter(RowFilter.regexFilter(Marcas.getSelectedIndex() > 0 ? Marcas.getSelectedItem().toString() : "", 2));
-        Productos.setRowSorter(s);
-        clear();
+        setEditableFields(false);
     }
 
     //Task
@@ -143,11 +141,7 @@ public class AddVentaDialogViewController {
         if (fila >= 0) {
             setLoad(true);
             Runnable run = () -> {
-
-                Query query = Conection.createEntityManagerFactory().createEntityManager()
-                        .createNativeQuery("SELECT cantidad FROM inventario WHERE ProductoID = " + Integer.valueOf(Productos.getValueAt(fila, 0).toString()));
-                List values = query.getResultList();
-                float existenciaProducto = Float.parseFloat(values.get(0).toString());
+                float existenciaProducto = productExistence(Integer.parseInt(Productos.getValueAt(fila, 0).toString()));
 
                 if (existenciaProducto <= 0) {
                     Error.setBackground(new Color(185, 0, 0));
@@ -172,6 +166,16 @@ public class AddVentaDialogViewController {
             };
             new Thread(run).start();
         }
+    }
+    
+    //Use in task
+    private float productExistence(int ProductoID){
+        Query query = Conection.createEntityManagerFactory().createEntityManager()
+                        .createNativeQuery("SELECT cantidad FROM inventario WHERE ProductoID = " + ProductoID);
+        List values = query.getResultList();
+        float existenciaProducto = Float.parseFloat(values.get(0).toString());
+        
+        return existenciaProducto;
     }
 
     public void updateSubtotal() {
