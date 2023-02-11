@@ -86,25 +86,33 @@ public class AddCierreDialogViewController {
     public void saveCloseDay(){
         float saldoReal = Float.parseFloat(SaldoReal.getText().replace(",", ""));
         if(validate()){
-            LocalDataController ldc = new LocalDataController();
-            ldc.closeDay(saldoReal);
-            
-            Instance.setVisible(false);
-            Dialogs.ShowMessageDialog("El cierre se ha guardado exitosamente", Dialogs.COMPLETE_ICON);
+            if(!Dialogs.ShowOKCancelDialog("¿Esta seguro de realizar cierre ahora?", Dialogs.WARNING_ICON)){
+                LocalDataController ldc = new LocalDataController();
+                ldc.closeDay(saldoReal);
+
+                Instance.setVisible(false);
+                Dialogs.ShowMessageDialog("El cierre se ha guardado exitosamente", Dialogs.COMPLETE_ICON);
+                
+                if(Dialogs.ShowOKCancelDialog("¿Enviar a imprimir cierre de ventas ahora?", 0)){
+                    Runnable run = () -> {
+                        
+                    };
+                    new Thread(run).start();
+                }
+            }
         }
     }
     
     private boolean validate(){
         if(SaldoReal.getText().isEmpty()){
-            Dialogs.ShowMessageDialog("Error, No se puede realizar arqueo con numeros negativos", Dialogs.ERROR_ICON);
+            Dialogs.ShowMessageDialog("El total real es obligatorio", Dialogs.ERROR_ICON);
             return false;
         }
         try {
             float saldoReal = Float.parseFloat(SaldoReal.getText().replace(",", ""));
-            if(saldoReal == 0){
-                if(!Dialogs.ShowOKCancelDialog("¿Desea guardar arqueo con un saldo final de 0?", Dialogs.WARNING_ICON)){
-                    return false;
-                }
+            if(saldoReal <= 0){
+                Dialogs.ShowMessageDialog("El saldo real debe ser mayor a cero", Dialogs.ERROR_ICON);
+                return false;
             }
         } catch (NumberFormatException e) {
             Dialogs.ShowMessageDialog("El saldo real debe contener unicamente numeros", Dialogs.ERROR_ICON);
