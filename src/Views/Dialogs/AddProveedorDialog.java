@@ -22,7 +22,7 @@ public class AddProveedorDialog extends javax.swing.JDialog {
         txtNumero.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtError.setBackground(Color.white);
         
-        vc = new AddProveedorDialogViewController(txtNombre, txtRNT, txtCorreo, txtNumero, txtError);
+        vc = new AddProveedorDialogViewController(this, txtNombre, txtRNT, txtCorreo, txtNumero, txtError, lbCargando);
     }
     
     public void EditingMode(int ProveedorID){
@@ -50,6 +50,7 @@ public class AddProveedorDialog extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         txtError = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JLabel();
+        lbCargando = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -145,6 +146,8 @@ public class AddProveedorDialog extends javax.swing.JDialog {
             }
         });
 
+        lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -154,6 +157,8 @@ public class AddProveedorDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -195,7 +200,9 @@ public class AddProveedorDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(txtError, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 16, Short.MAX_VALUE))
         );
 
@@ -230,17 +237,7 @@ public class AddProveedorDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_pnBarraMousePressed
 
     private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
-        if(editing){
-            if(vc.Edit()){
-                this.setVisible(false);
-                Dialogs.ShowMessageDialog("El proveedore ha sido modificado exitosamente", Dialogs.COMPLETE_ICON);
-            }
-        }else{
-            if(vc.Insert()){
-                this.setVisible(false);
-                Dialogs.ShowMessageDialog("El proveedore ha sido agregado exitosamente", Dialogs.COMPLETE_ICON);
-            }
-        }
+        if(editing){ vc.editSupplier(); } else { vc.insertSupplier(); }
     }//GEN-LAST:event_btnAgregarMouseClicked
 
     /**
@@ -291,6 +288,7 @@ public class AddProveedorDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lbCargando;
     private javax.swing.JLabel lbTitulo;
     private javax.swing.JPanel pnBarra;
     private javax.swing.JTextField txtCorreo;

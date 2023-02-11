@@ -3,12 +3,6 @@ package Views.Panels.Estadisticas;
 import ViewsControllers.Panels.Estadisticas.ResumenesViewController;
 import java.awt.Font;
 import javax.swing.JLabel;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.title.TextTitle;
-import org.jfree.data.category.DefaultCategoryDataset;
 
 public class Resumenes extends javax.swing.JPanel {
 
@@ -16,8 +10,8 @@ public class Resumenes extends javax.swing.JPanel {
     
     public Resumenes() {
         initComponents();
-        vc = new ResumenesViewController(cmbTipo, cmbTiempo, pnGrafico);
-        vc.cargarGraficoHoy();
+        vc = new ResumenesViewController(lbCargando, cmbTipo, cmbTiempo, pnGrafico);
+        vc.loadDayGrafic();
     }
 
     @SuppressWarnings("unchecked")
@@ -30,6 +24,7 @@ public class Resumenes extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         cmbTiempo = new javax.swing.JComboBox<>();
         pnGrafico = new javax.swing.JPanel();
+        lbCargando = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -64,6 +59,8 @@ public class Resumenes extends javax.swing.JPanel {
         pnGrafico.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(220, 220, 220)));
         pnGrafico.setLayout(new java.awt.CardLayout());
 
+        lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -77,10 +74,12 @@ public class Resumenes extends javax.swing.JPanel {
                             .addComponent(cmbTipo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(cmbTiempo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cmbTiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1162, Short.MAX_VALUE))
                 .addGap(18, 18, 18))
         );
@@ -98,7 +97,9 @@ public class Resumenes extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbTiempo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cmbTiempo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(18, 18, 18)
                 .addComponent(pnGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
                 .addContainerGap())
@@ -121,16 +122,16 @@ public class Resumenes extends javax.swing.JPanel {
         
         switch (cmbTiempo.getSelectedIndex()) {
             case 0:
-                vc.cargarGraficoHoy();
+                vc.loadDayGrafic();
                 break;
             case 1:
-                vc.cargarGraficoSemana();
+                vc.loadWeekGhrapic();
                 break;
             case 2:
-                vc.cargarGraficoMes();
+                vc.loadMonthGrafic();
                 break;
             case 3:
-                vc.cargarGraficoAnio();
+                vc.loadYearGrafic();
                 break;
             case 4:
                 pnGrafico.add(noDisponible);
@@ -148,6 +149,7 @@ public class Resumenes extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel lbCargando;
     private javax.swing.JPanel pnGrafico;
     // End of variables declaration//GEN-END:variables
 }

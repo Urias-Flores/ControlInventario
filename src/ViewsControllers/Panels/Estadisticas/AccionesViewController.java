@@ -2,41 +2,54 @@ package ViewsControllers.Panels.Estadisticas;
 
 import Models.Usuario;
 import Resource.Conection;
+import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.sql.Date;
 import java.text.DecimalFormat;
+import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 public class AccionesViewController {
 
-    JLabel Ventas;
-    JLabel Compras;
-    JTable Transacciones;
-    JComboBox Usuarios;
-    JComboBox ProveedoresClientes;
-    JComboBox TipoTransaccion;
-    JComboBox Intervalo;
-    JComboBox DiaInicial;
-    JComboBox MesInicial;
-    JComboBox AnioInicial;
-    JComboBox DiaFinal;
-    JComboBox MesFinal;
-    JComboBox AnioFinal;
+    private JLabel Ventas;
+    private JLabel Compras;
+    private JTable Transacciones;
+    private JComboBox Usuarios;
+    private JComboBox ProveedoresClientes;
+    private JLabel Cargando;
+    private JComboBox TipoTransaccion;
+    private JComboBox Intervalo;
+    private JComboBox DiaInicial;
+    private JComboBox MesInicial;
+    private JComboBox AnioInicial;
+    private JComboBox DiaFinal;
+    private JComboBox MesFinal;
+    private JComboBox AnioFinal;
 
-    public AccionesViewController(JLabel Ventas, JLabel Compras, JTable Transacciones, JComboBox Usuarios, JComboBox ProveedoresClientes, JComboBox TipoTransaccion, JComboBox Intervalo, JComboBox DiaInicial, JComboBox MesInicial, JComboBox AnioInicial, JComboBox DiaFinal, JComboBox MesFinal, JComboBox AnioFinal) {
+    private DefaultTableModel model = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+
+    public AccionesViewController(JLabel Ventas, JLabel Compras, JTable Transacciones, JComboBox Usuarios, JComboBox ProveedoresClientes, JLabel Cargando, JComboBox TipoTransaccion, JComboBox Intervalo, JComboBox DiaInicial, JComboBox MesInicial, JComboBox AnioInicial, JComboBox DiaFinal, JComboBox MesFinal, JComboBox AnioFinal) {
         this.Ventas = Ventas;
         this.Compras = Compras;
         this.Transacciones = Transacciones;
         this.Usuarios = Usuarios;
         this.ProveedoresClientes = ProveedoresClientes;
+        this.Cargando = Cargando;
         this.TipoTransaccion = TipoTransaccion;
         this.Intervalo = Intervalo;
         this.DiaInicial = DiaInicial;
@@ -46,15 +59,55 @@ public class AccionesViewController {
         this.MesFinal = MesFinal;
         this.AnioFinal = AnioFinal;
 
-        cargarUsuarios();
-        cargarProveedoresClientes();
+        //Cargando model de tabla
+        setModelTable();
+        
+        //Cargando usuarios
+        loadUsers();
+        
+        //Cargando usuarios y proveedores
+        loadClientsSuppliers();
+        
+        //Inicializando carga de datos
+        Init();
     }
 
-    public void CargarTabla() {
-        DefaultTableModel model = new DefaultTableModel();
+    private void setLoad(boolean state){
+        ImageIcon icon = new ImageIcon(getClass().getResource(Utilities.getLoadingImage()));
+        Cargando.setIcon(state ? icon : null);
+    }
+    
+    private void Init() {
+        setLoad(true);
+        Runnable run = () -> {
+            //Cargando datos
+            loadTable();
+            
+            setLoad(false);
+        };
+        new Thread(run).start();
+    }
+    
+    public void updateData(){
+        Init();
+    }
+
+    private void setModelTable() {
         String[] Columns = {"No.", "Tipo", "Usuario", "Cliente/Proveedor", "Fecha", "Total"};
         model.setColumnIdentifiers(Columns);
 
+        Transacciones.setModel(model);
+        Transacciones.getColumn("No.").setPreferredWidth(10);
+        Transacciones.getColumn("Tipo").setPreferredWidth(80);
+        Transacciones.getColumn("Usuario").setPreferredWidth(100);
+        Transacciones.getColumn("Cliente/Proveedor").setPreferredWidth(120);
+        Transacciones.getColumn("Fecha").setPreferredWidth(80);
+        Transacciones.getColumn("Total").setPreferredWidth(120);
+    }
+
+    //Inside Task
+    private void loadTable() {
+        model.setRowCount(0);
         StoredProcedureQuery sp = Conection.createEntityManagerFactory().createEntityManager()
                 .createStoredProcedureQuery("ProcedureComprasVentasRegistros")
                 .registerStoredProcedureParameter("registros", Integer.class, ParameterMode.IN)
@@ -68,8 +121,8 @@ public class AccionesViewController {
             sp.setParameter("FechaInicio", null);
             sp.setParameter("FechaFinal", null);
         } else {
-            Date fechaInicio = generateDateInicial();
-            Date fechaFinal = generateDateFinal();
+            Date fechaInicio = generateInitialDate();
+            Date fechaFinal = generateEndDate();
 
             sp.setParameter("FechaInicio", fechaInicio);
             sp.setParameter("FechaFinal", fechaFinal);
@@ -84,46 +137,44 @@ public class AccionesViewController {
             model.addRow(transaccion);
         });
 
-        Transacciones.setModel(model);
         Usuarios.setSelectedIndex(0);
         ProveedoresClientes.setSelectedIndex(0);
-        setColumnsWidths();
-        CargarTotalesPorSeleccion();
+        loadTotalBySelection();
     }
 
-    private void cargarUsuarios() {
-        List<Usuario> usuarios = Conection.createEntityManagerFactory().createEntityManager()
-                .createNamedQuery("Usuario.findAll").getResultList();
-        usuarios.forEach(Usuarios::addItem);
+    private void loadUsers() {
+        setLoad(true);
+        Runnable run = () -> {
+            List<Usuario> usuarios = Conection.createEntityManagerFactory().createEntityManager()
+                    .createNamedQuery("Usuario.findAll").getResultList();
+            usuarios.forEach(Usuarios::addItem);
+            setLoad(false);
+        };
+        new Thread(run).start();
     }
 
-    private void cargarProveedoresClientes() {
-        List<Object> entidades = Conection.createEntityManagerFactory().createEntityManager()
-                .createNativeQuery("SELECT * FROM viewproveedoresclientes").getResultList();
-        entidades.forEach(ProveedoresClientes::addItem);
+    private void loadClientsSuppliers() {
+        setLoad(true);
+        Runnable run = () -> {
+            List<Object> entidades = Conection.createEntityManagerFactory().createEntityManager()
+                    .createNativeQuery("SELECT * FROM viewproveedoresclientes").getResultList();
+            entidades.forEach(ProveedoresClientes::addItem);
+            setLoad(false);
+        };
+        new Thread(run).start();
     }
 
-    public void filtrarUsuario() {
+    public void filter() {
         TableRowSorter s = new TableRowSorter(Transacciones.getModel());
-        if(Usuarios.getSelectedIndex() != 0){
-            s.setRowFilter(RowFilter.regexFilter(Usuarios.getSelectedItem().toString(), 2));
-        }else{
-            s.setRowFilter(RowFilter.regexFilter("", 2));
-        }
+        List<RowFilter<TableModel, String>> filters = new LinkedList<>();
+        filters.add(RowFilter.regexFilter(Usuarios.getSelectedIndex() != 0 ? Usuarios.getSelectedItem().toString() : "" , 2));
+        filters.add(RowFilter.regexFilter
+        (ProveedoresClientes.getSelectedIndex() != 0 ? ProveedoresClientes.getSelectedItem().toString() : "", 3));
+        s.setRowFilter(RowFilter.andFilter(filters));
         Transacciones.setRowSorter(s);
     }
 
-    public void filtrarClienteProveedor() {
-        TableRowSorter s = new TableRowSorter(Transacciones.getModel());
-        if(ProveedoresClientes.getSelectedIndex() != 0){
-            s.setRowFilter(RowFilter.regexFilter(ProveedoresClientes.getSelectedItem().toString(), 3));
-        }else{
-            s.setRowFilter(RowFilter.regexFilter("", 3));
-        }
-        Transacciones.setRowSorter(s);
-    }
-
-    public void CargarTotalesPorSeleccion() {
+    public void loadTotalBySelection() {
         StoredProcedureQuery sp = Conection.createEntityManagerFactory()
                 .createEntityManager().createStoredProcedureQuery("ProcedureComprasVentas")
                 .registerStoredProcedureParameter("tiempo", Integer.class, ParameterMode.IN)
@@ -131,8 +182,8 @@ public class AccionesViewController {
                 .registerStoredProcedureParameter("FechaFinal", Date.class, ParameterMode.IN);
 
         sp.setParameter("tiempo", Intervalo.getSelectedIndex());
-        sp.setParameter("FechaInicio", generateDateInicial());
-        sp.setParameter("FechaFinal", generateDateFinal());
+        sp.setParameter("FechaInicio", generateInitialDate());
+        sp.setParameter("FechaFinal", generateEndDate());
 
         List<Object[]> transacciones = sp.getResultList();
 
@@ -151,7 +202,7 @@ public class AccionesViewController {
         Compras.setText(getNumberFormat(compras));
     }
 
-    private Date generateDateInicial() {
+    private Date generateInitialDate() {
         int diaInicio = DiaInicial.getSelectedIndex() + 1;
         int mesInicio = MesInicial.getSelectedIndex();
         int anioInicio = Integer.parseInt(AnioInicial.getSelectedItem().toString());
@@ -159,7 +210,7 @@ public class AccionesViewController {
         return new Date(anioInicio - 1900, mesInicio, diaInicio);
     }
 
-    private Date generateDateFinal() {
+    private Date generateEndDate() {
         int diaFinal = DiaFinal.getSelectedIndex() + 1;
         int mesFinal = MesFinal.getSelectedIndex();
         int anioFinal = Integer.parseInt(AnioFinal.getSelectedItem().toString());
@@ -167,16 +218,7 @@ public class AccionesViewController {
         return new Date(anioFinal - 1900, mesFinal, diaFinal);
     }
 
-    private void setColumnsWidths() {
-        Transacciones.getColumn("No.").setPreferredWidth(10);
-        Transacciones.getColumn("Tipo").setPreferredWidth(80);
-        Transacciones.getColumn("Usuario").setPreferredWidth(100);
-        Transacciones.getColumn("Cliente/Proveedor").setPreferredWidth(120);
-        Transacciones.getColumn("Fecha").setPreferredWidth(80);
-        Transacciones.getColumn("Total").setPreferredWidth(120);
-    }
-
-    public void ShowInfoFactura() {
+    public void showBillInformation() {
         int fila = Transacciones.getSelectedRow();
         if (fila >= 0) {
             int ID = Integer.parseInt(Transacciones.getValueAt(fila, 0).toString());

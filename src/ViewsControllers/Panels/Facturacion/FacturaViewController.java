@@ -14,6 +14,7 @@ import Models.Venta;
 import Models.Ventadetalle;
 import Reports.Reports;
 import Resource.Conection;
+import Resource.LocalDataController;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.awt.Color;
@@ -56,11 +57,15 @@ public class FacturaViewController {
     private JTextField Importe;
     private JTextField ISV;
     private JTextField Total;
-
+    
+    private JLabel dayState;
     private JLabel Cargando;
+    
+    private boolean isDayInit = false;
 
-    public FacturaViewController(JLabel Cargando, JComboBox Clientes, JTextField RTN, JRadioButton Pagado, JRadioButton Pendiente, JTextField Barra, JTextField Cotizacion, JTable Ventas, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total) {
+    public FacturaViewController(JLabel Cargando, JComboBox Clientes, JTextField RTN, JRadioButton Pagado, JRadioButton Pendiente, JTextField Barra, JTextField Cotizacion, JTable Ventas, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total, JLabel dayState) {
         this.Cargando = Cargando;
+        this.dayState = dayState;
         this.Clientes = Clientes;
         this.RTN = RTN;
         this.Pagado = Pagado;
@@ -80,6 +85,9 @@ public class FacturaViewController {
         //Cargando modelo de tabla para factura
         setModelTable();
 
+        //Verificando la inicializacion de dia
+        verifyDayInit();
+        
         //Inicializando carga de datos
         Init();
     }
@@ -111,8 +119,29 @@ public class FacturaViewController {
         Ventas.getColumn("Descuento").setPreferredWidth(120);
         Ventas.getColumn("Subtotal").setPreferredWidth(120);
     }
+    
+    private void verifyDayInit(){
+        LocalDataController ldc = new LocalDataController();
+        if(ldc.validateInitDay()){
+            this.isDayInit = true;
+            dayState.setText("Realizar cierre");
+        } else {
+            this.isDayInit = false;
+            dayState.setText("Iniciar dia");
+        }
+    }
+    
+    public void initDay(){
+        if(!isDayInit){
+            Dialogs.ShowInitDayDialog();
+            verifyDayInit();
+        } else {
+            Dialogs.ShowCloseDayDialog();
+            verifyDayInit();
+        }
+    }
 
-    public void loadClients() {
+    private void loadClients() {
         List<Cliente> clientes = new ClienteJpaController(Conection.createEntityManagerFactory()).findClienteEntities();
         clientes.forEach(Clientes::addItem);
     }
@@ -134,7 +163,6 @@ public class FacturaViewController {
                 Ventas.setValueAt(getNumberFormat(cantidadNew), i, 3);
                 Ventas.setValueAt(getNumberFormat(descuentoNew), i, 5);
                 Ventas.setValueAt(getNumberFormat(SubtotalNew), i, 6);
-
                 NoexistRow = false;
             }
         }
@@ -313,35 +341,42 @@ public class FacturaViewController {
 
     public void InsertSale() {
         if (validate(false)) {
+            if(isDayInit){
+                setLoad(true);
+                Runnable run = () -> {
+                    //Insertando venta
+                    Venta venta = CreateObjectSale();
+                    int VentaID = controller.create(venta);
 
-            setLoad(true);
-            Runnable run = () -> {
-                //Insertando venta
-                Venta venta = CreateObjectSale();
-                int VentaID = controller.create(venta);
+                    //Insertando detalles de la factura
+                    List<Ventadetalle> ventas = createListSaleDetails(VentaID);
+                    VentadetalleJpaController ventadetalleJpaController = new VentadetalleJpaController(Conection.createEntityManagerFactory());
+                    ventas.forEach(ventadetalleJpaController::create);
 
-                //Insertando detalles de la factura
-                List<Ventadetalle> ventas = createListSaleDetails(VentaID);
-                VentadetalleJpaController ventadetalleJpaController = new VentadetalleJpaController(Conection.createEntityManagerFactory());
-                ventas.forEach(ventadetalleJpaController::create);
-                
-                setLoad(false);
-                Dialogs.ShowMessageDialog("La factura ha sido ingresada exitosamente", Dialogs.COMPLETE_ICON);
-                
-                //Enviando a imprimir ticket de venta
-                if (Dialogs.ShowOKCancelDialog("¿Desea enviar a imprimir la factura ahora?", Dialogs.WARNING_ICON)) {
-                    setLoad(true);
-                    Runnable runnable = () ->{
-                        Reports reports = new Reports();
-                        reports.GenerateTickeVenta(VentaID);
-                        setLoad(false);
-                    };
-                    new Thread(runnable).start();
-                }
-                clear();
-                setLoad(false);
-            };
-            new Thread(run).start();
+                    //Agregando informacion de arqueo
+                    float total = Float.parseFloat(Total.getText().replace(",", ""));
+                    float efectivo = Dialogs.ShowArqueoDialog(VentaID, total);
+
+                    setLoad(false);
+                    Dialogs.ShowMessageDialog("La factura ha sido ingresada exitosamente", Dialogs.COMPLETE_ICON);
+
+                    //Enviando a imprimir ticket de venta
+                    if (Dialogs.ShowOKCancelDialog("¿Desea enviar a imprimir la factura ahora?", Dialogs.WARNING_ICON)) {
+                        setLoad(true);
+                        Runnable runnable = () ->{
+                            Reports reports = new Reports();
+                            reports.GenerateTickeVenta(VentaID, efectivo);
+                            setLoad(false);
+                        };
+                        new Thread(runnable).start();
+                    }
+                    clear();
+                    setLoad(false);
+                };
+                new Thread(run).start();
+            } else {
+                Dialogs.ShowMessageDialog("El dia de facturacion aun no ha sido iniciado", Dialogs.ERROR_ICON);
+            }
         }
     }
 

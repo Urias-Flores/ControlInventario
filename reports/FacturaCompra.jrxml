@@ -17,6 +17,7 @@
 	<queryString>
 		<![CDATA[SELECT
 c.CompraID as NoFactura,
+c.NoFactura as NoFacturaReal,
 u.Nombre as Usuario,
 pro.Nombre as Proveedor,
 pro.RTN as RTN,
@@ -38,6 +39,11 @@ WHERE c.CompraID = $P{CompraID}]]>
 	<field name="NoFactura" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="CompraID"/>
 		<property name="com.jaspersoft.studio.field.label" value="NoFactura"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="compra"/>
+	</field>
+	<field name="NoFacturaReal" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NoFactura"/>
+		<property name="com.jaspersoft.studio.field.label" value="NoFacturaReal"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="compra"/>
 	</field>
 	<field name="Usuario" class="java.lang.String">
@@ -133,7 +139,7 @@ WHERE c.CompraID = $P{CompraID}]]>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="105" splitType="Stretch">
+		<band height="125" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField>
 				<reportElement x="-8" y="4" width="202" height="11" uuid="1aca0dea-a790-4e98-b348-baf38c1dfc44">
@@ -173,14 +179,14 @@ WHERE c.CompraID = $P{CompraID}]]>
 				<text><![CDATA[No. Factura:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="37" y="77" width="55" height="11" uuid="fa6ccd33-4b38-418f-a44a-799e2924f790"/>
+				<reportElement x="37" y="77" width="116" height="11" uuid="fa6ccd33-4b38-418f-a44a-799e2924f790"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NoFactura}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="-8" y="88" width="25" height="11" uuid="b20f8eca-807b-47bd-90f9-9704b27e3965">
+				<reportElement x="-6" y="110" width="25" height="11" uuid="b20f8eca-807b-47bd-90f9-9704b27e3965">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -190,14 +196,14 @@ WHERE c.CompraID = $P{CompraID}]]>
 				<text><![CDATA[Fecha:]]></text>
 			</staticText>
 			<textField pattern="M/d/yy">
-				<reportElement x="17" y="88" width="45" height="11" uuid="a89ffeb0-2755-4a6f-857b-981fbd70d5aa"/>
+				<reportElement x="19" y="110" width="45" height="11" uuid="a89ffeb0-2755-4a6f-857b-981fbd70d5aa"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="67" y="88" width="20" height="11" uuid="14cfd71a-e4ec-4243-adfd-c9634afaaf05">
+				<reportElement x="69" y="110" width="20" height="11" uuid="14cfd71a-e4ec-4243-adfd-c9634afaaf05">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -207,7 +213,7 @@ WHERE c.CompraID = $P{CompraID}]]>
 				<text><![CDATA[Hora:]]></text>
 			</staticText>
 			<textField pattern="h:mm a">
-				<reportElement x="87" y="88" width="45" height="11" uuid="efb90520-4018-4f41-8139-cd0451780a9e"/>
+				<reportElement x="89" y="110" width="45" height="11" uuid="efb90520-4018-4f41-8139-cd0451780a9e"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -263,6 +269,23 @@ WHERE c.CompraID = $P{CompraID}]]>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{RTN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-8" y="88" width="61" height="11" uuid="7b988bf2-9015-4869-82e8-57b2f424cd2c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[No. Factura real:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="53" y="88" width="100" height="11" uuid="31fff6b4-4b4a-4b4b-bac6-bc1c6afa1323"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NoFacturaReal}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

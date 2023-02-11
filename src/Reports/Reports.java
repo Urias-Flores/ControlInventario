@@ -1,5 +1,7 @@
 package Reports;
 
+import Controllers.ConfiguracionJpaController;
+import Resource.Conection;
 import Resource.LocalDataController;
 import Resource.NoJpaConection;
 import Views.Dialogs.Dialogs;
@@ -19,7 +21,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 public class Reports {
-    public void GenerateTickeVenta(int VentaID)
+    public void GenerateTickeVenta(int VentaID, float Efectivo)
     {
         try {
             File archivo = new File("reports/FacturaVenta.jasper");
@@ -29,6 +31,7 @@ public class Reports {
                 
                 Map<String, Object> parameters = getCompanyParameters();
                 parameters.put("VentaID", VentaID);
+                parameters.put("Efectivo", Efectivo);
                 parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
                 
                 sendPrintTicket(jr, parameters);
@@ -135,7 +138,14 @@ public class Reports {
         parameters.put("RTN", ldc.getValue("RTN"));
         parameters.put("NumeroTelefono", ldc.getValue("NumberPhone"));
         parameters.put("Direccion", ldc.getValue("Address"));
-        parameters.put("CAI", ldc.getValue("CAI"));
+        
+        ConfiguracionJpaController controllerConfiguracion = new ConfiguracionJpaController(Conection.createEntityManagerFactory());
+        
+        parameters.put("Desde", controllerConfiguracion.findConfiguracion(2).getDato());
+        parameters.put("Hasta", controllerConfiguracion.findConfiguracion(3).getDato());
+        parameters.put("FechaLimite", controllerConfiguracion.findConfiguracion(4).getDato());
+        parameters.put("CAI", controllerConfiguracion.findConfiguracion(5).getDato());
+        parameters.put("Correo", controllerConfiguracion.findConfiguracion(6).getDato());
         
         return parameters;
     }

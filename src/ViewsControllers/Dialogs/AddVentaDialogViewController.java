@@ -102,7 +102,8 @@ public class AddVentaDialogViewController {
         model.setRowCount(0);
         List<Producto> productos = Conection.createEntityManager().createNamedQuery("Producto.findAll").getResultList();
         productos.forEach(producto -> {
-            if(productExistence(producto.getProductoID()) > 0){
+            //Demasiado lento
+            //if(productExistence(producto.getProductoID()) > 0){
                 Object[] row = {
                     producto.getProductoID(),
                     producto.getDescripcion(),
@@ -111,7 +112,7 @@ public class AddVentaDialogViewController {
                     getNumberFormat(producto.getPrecioVenta())
                 };
                 model.addRow(row);
-            }
+            //}
         });
     }
 
@@ -173,8 +174,10 @@ public class AddVentaDialogViewController {
         Query query = Conection.createEntityManagerFactory().createEntityManager()
                         .createNativeQuery("SELECT cantidad FROM inventario WHERE ProductoID = " + ProductoID);
         List values = query.getResultList();
-        float existenciaProducto = Float.parseFloat(values.get(0).toString());
-        
+        float existenciaProducto =  0;
+        if(!values.isEmpty()){
+            existenciaProducto = Float.parseFloat(values.get(0).toString());
+        }
         return existenciaProducto;
     }
 

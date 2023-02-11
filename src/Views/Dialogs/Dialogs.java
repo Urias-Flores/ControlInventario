@@ -290,4 +290,25 @@ public class Dialogs {
         nd.setVisible(true);
         nd.dispose();
     }
+    
+    public static float ShowArqueoDialog(int FacturaID, float Total){
+        AddArqueoDetalleDialog aad = new AddArqueoDetalleDialog(null, true);
+        aad.setBill(FacturaID, Total);
+        aad.setVisible(true);
+        float efectivo = aad.getValue();
+        aad.dispose();
+        return efectivo;
+    }
+    
+    public static void ShowInitDayDialog(){
+        IniciarDiaDialog idd = new IniciarDiaDialog(null, true);
+        idd.setVisible(true);
+        idd.dispose();
+    }
+    
+    public static void ShowCloseDayDialog(){
+        AddCierreDialog acd = new AddCierreDialog(null, true);
+        acd.setVisible(true);
+        acd.dispose();
+    }
 }

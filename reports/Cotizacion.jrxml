@@ -305,7 +305,7 @@ WHERE c.CotizacionID = $P{CotizacionID}]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="11" splitType="Stretch">
+		<band height="9" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField>
 				<reportElement x="17" y="0" width="97" height="8" uuid="9348fbb8-c1bb-48b5-9512-1790efc704cb">

@@ -19,6 +19,7 @@ public class Facturar extends javax.swing.JPanel {
 
         btnAgregar.addMouseListener(Utilities.getMLGeneralButton());
         btnCotizar.addMouseListener(Utilities.getMLGeneralButton());
+        btnIniciarDia.addMouseListener(Utilities.getMLGeneralButton());
 
         txtRTN.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtBarra.addFocusListener(Utilities.getFLPlaceHolderEfect());
@@ -30,7 +31,7 @@ public class Facturar extends javax.swing.JPanel {
         vc = new FacturaViewController(lbCargando, cmbCliente, txtRTN,
                 rbPagada, rbPendiente, txtBarra,
                 txtNoCotizacion, tbVentas, txtSubtotal,
-                txtDescuento, txtImporte, txtISV, txtTotal);
+                txtDescuento, txtImporte, txtISV, txtTotal, btnIniciarDia);
     }
 
     @SuppressWarnings("unchecked")
@@ -70,6 +71,7 @@ public class Facturar extends javax.swing.JPanel {
         btnEditarCarrito = new javax.swing.JLabel();
         btnEliminarTodo = new javax.swing.JLabel();
         lbCargando = new javax.swing.JLabel();
+        btnIniciarDia = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -281,6 +283,19 @@ public class Facturar extends javax.swing.JPanel {
 
         lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
+        btnIniciarDia.setBackground(new java.awt.Color(3, 57, 103));
+        btnIniciarDia.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        btnIniciarDia.setForeground(new java.awt.Color(255, 255, 255));
+        btnIniciarDia.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnIniciarDia.setText("Iniciar dia");
+        btnIniciarDia.setToolTipText("Administrar marcas");
+        btnIniciarDia.setOpaque(true);
+        btnIniciarDia.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnIniciarDiaMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -325,7 +340,9 @@ public class Facturar extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnIniciarDia, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(btnCotizar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -421,7 +438,8 @@ public class Facturar extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCotizar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnIniciarDia, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -473,6 +491,10 @@ public class Facturar extends javax.swing.JPanel {
         vc.deleteAllSales();
     }//GEN-LAST:event_btnEliminarTodoMouseClicked
 
+    private void btnIniciarDiaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIniciarDiaMouseClicked
+        vc.initDay();
+    }//GEN-LAST:event_btnIniciarDiaMouseClicked
+
     private void setEnabledEstado(boolean Estado) {
         rbPagada.setEnabled(Estado);
         rbPendiente.setEnabled(Estado);
@@ -488,6 +510,7 @@ public class Facturar extends javax.swing.JPanel {
     private javax.swing.JLabel btnEditarCarrito;
     private javax.swing.JLabel btnEliminarCarrito;
     private javax.swing.JLabel btnEliminarTodo;
+    private javax.swing.JLabel btnIniciarDia;
     private javax.swing.JComboBox<String> cmbCliente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

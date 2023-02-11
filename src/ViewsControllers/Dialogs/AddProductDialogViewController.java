@@ -120,12 +120,13 @@ public class AddProductDialogViewController {
             Runnable run = () -> {
                 List<Producto> productos = controller.findProductoEntities();
                 if(!validateBarCodeExist(productos)){
-                    if(!validateDescriptioneExist(productos)){
+                    if(!validateDescriptionExist(productos)){
                         Producto producto = createObjectProduct();
                         controller.create(producto);
 
+                        setLoad(false);
                         Instance.setVisible(false);
-                        Dialogs.ShowMessageDialog("¡El producto ha sido agregado exitosamente", Dialogs.COMPLETE_ICON);
+                        Dialogs.ShowMessageDialog("El producto ha sido agregado exitosamente", Dialogs.COMPLETE_ICON);
                     } else {
                         Error.setBackground(new Color(185, 0, 0));
                         Error.setText("La descripción del producto ya ha sido utilizada para otro de la misma marca");
@@ -148,13 +149,13 @@ public class AddProductDialogViewController {
             Runnable run = () ->{
                 List<Producto> productos = controller.findProductoEntities();
                 if(!validateBarCodeExist(productos)){
-                    if(!validateDescriptioneExist(productos)){
+                    if(!validateDescriptionExist(productos)){
                         try {
                             Producto producto = createObjectProduct();
                             controller.edit(producto);
 
                             Instance.setVisible(false);
-                            Dialogs.ShowMessageDialog("", Dialogs.COMPLETE_ICON);
+                            Dialogs.ShowMessageDialog("El producto ha sido modificado exitosamente", Dialogs.COMPLETE_ICON);
                         } catch (NonexistentEntityException | IllegalOrphanException ex) {
                             System.err.println("Error: "+ex.getMessage());
                             setLoad(false);
@@ -281,11 +282,10 @@ public class AddProductDialogViewController {
                 for(Producto producto : productos){
                     if(Barra.getText().equalsIgnoreCase(producto.getBarra())){
                         if(ProductoID == 0){
-                            barcodeExist = true;
+                            return true;
                         }else{
                             if(ProductoID != producto.getProductoID()){
-                                barcodeExist = true;
-                                break;
+                                return true;
                             }
                         }
                     }
@@ -297,14 +297,19 @@ public class AddProductDialogViewController {
     }
     
     //Validacion de descripciones iguales en productos
-    private boolean validateDescriptioneExist(List<Producto> productos){
+    private boolean validateDescriptionExist(List<Producto> productos){
         boolean descriptionExist = false;
-        
         if(!productos.isEmpty()){
             for(Producto producto : productos){
                 if(Descripcion.getText().equalsIgnoreCase(producto.getDescripcion())){
-                    if(Objects.equals(producto.getMarcaID().getMarcaID(), Integer.valueOf(Marca.getName()))){
-                        descriptionExist = true;
+                    int MarcaID = Integer.parseInt(Marca.getName());
+                    if(producto.getMarcaID().getMarcaID() == MarcaID){
+                        if(Descripcion.getName() != null){
+                            int Producto = Integer.parseInt(Descripcion.getName());
+                            if(Producto != producto.getProductoID()){
+                                return true;
+                            }
+                        } else { return true; }
                     }
                 }
             }

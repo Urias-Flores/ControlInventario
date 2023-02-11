@@ -14,8 +14,7 @@ public class Acciones extends javax.swing.JPanel {
         btnFiltros.addMouseListener(Utilities.getMLGeneralButton());
         btnVer.addMouseListener(Utilities.getMLGeneralButton());
         
-        vc = new AccionesViewController(lbVentas, lbCompras, tbTransacciones, cmbUsuarios, cmbClientesProveedores,cmbTipo, cmbIntervalo, cmbDiaInicial, cmbMesInicial, cmbAnioInicial, cmbDiaFinal, cmbMesFinal, cmbAnioFinal);
-        vc.CargarTabla();
+        vc = new AccionesViewController(lbVentas, lbCompras, tbTransacciones, cmbUsuarios, cmbClientesProveedores, lbCargando, cmbTipo, cmbIntervalo, cmbDiaInicial, cmbMesInicial, cmbAnioInicial, cmbDiaFinal, cmbMesFinal, cmbAnioFinal);
     }
 
     @SuppressWarnings("unchecked")
@@ -35,6 +34,7 @@ public class Acciones extends javax.swing.JPanel {
         jLabel13 = new javax.swing.JLabel();
         cmbUsuarios = new javax.swing.JComboBox<>();
         cmbClientesProveedores = new javax.swing.JComboBox<>();
+        lbCargando = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -127,6 +127,8 @@ public class Acciones extends javax.swing.JPanel {
             }
         });
 
+        lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -135,18 +137,20 @@ public class Acciones extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 945, Short.MAX_VALUE)
-                        .addGap(18, 18, 18))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel13)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(cmbUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(cmbClientesProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(cmbClientesProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 945, Short.MAX_VALUE))
+                        .addGap(18, 18, 18))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -158,7 +162,8 @@ public class Acciones extends javax.swing.JPanel {
                         .addComponent(cmbClientesProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
@@ -351,7 +356,7 @@ public class Acciones extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFiltrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFiltrosMouseClicked
-        vc.CargarTabla();
+        vc.updateData();
     }//GEN-LAST:event_btnFiltrosMouseClicked
 
     private void cmbIntervaloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbIntervaloActionPerformed
@@ -363,15 +368,15 @@ public class Acciones extends javax.swing.JPanel {
     }//GEN-LAST:event_cmbIntervaloActionPerformed
 
     private void btnVerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVerMouseClicked
-        vc.ShowInfoFactura();
+        vc.showBillInformation();
     }//GEN-LAST:event_btnVerMouseClicked
 
     private void cmbUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbUsuariosActionPerformed
-        vc.filtrarUsuario();
+        vc.filter();
     }//GEN-LAST:event_cmbUsuariosActionPerformed
 
     private void cmbClientesProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClientesProveedoresActionPerformed
-        vc.filtrarClienteProveedor();
+        vc.filter();
     }//GEN-LAST:event_cmbClientesProveedoresActionPerformed
 
     private void CambiarEstadoFechas(boolean estado){
@@ -410,6 +415,7 @@ public class Acciones extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbCargando;
     private javax.swing.JLabel lbCompras;
     private javax.swing.JLabel lbVentas;
     private javax.swing.JTable tbTransacciones;

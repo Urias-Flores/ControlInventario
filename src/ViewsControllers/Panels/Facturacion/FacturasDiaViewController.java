@@ -140,6 +140,7 @@ public class FacturasDiaViewController {
         VistaPreeliminar.getColumn("Desc.").setPreferredWidth(40);
     }
 
+    //Task
     public void loadBill() {
         int fila = Facturas.getSelectedRow();
         if (fila >= 0) {
@@ -221,7 +222,9 @@ public class FacturasDiaViewController {
             setLoad(true);
             Runnable run = () -> {
                 Reports reports = new Reports();
-                reports.GenerateTickeVenta(Integer.parseInt(Facturas.getValueAt(fila, 0).toString()));
+                reports.GenerateTickeVenta
+                (Integer.parseInt(Facturas.getValueAt(fila, 0).toString()), 
+                Float.parseFloat(Facturas.getValueAt(fila, 4).toString().replace(",", "")));
                 setLoad(false);
             };
             new Thread(run).start();
