@@ -429,7 +429,7 @@ WHERE c.CotizacionID = $P{CotizacionID}]]>
 				<textElement textAlignment="Right">
 					<font size="7"/>
 				</textElement>
-				<text><![CDATA[Importe:]]></text>
+				<text><![CDATA[Importe(15%):]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="81" y="28" width="50" height="9" uuid="d336409d-059a-4044-ba78-8b21ca8ce19c">
@@ -439,7 +439,7 @@ WHERE c.CotizacionID = $P{CotizacionID}]]>
 				<textElement textAlignment="Right">
 					<font size="7"/>
 				</textElement>
-				<text><![CDATA[ISV:]]></text>
+				<text><![CDATA[ISV(15%):]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="81" y="38" width="50" height="9" uuid="927352e5-0788-47d6-981c-860c0103e055">

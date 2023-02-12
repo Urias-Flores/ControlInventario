@@ -124,7 +124,6 @@ public class MarcasDialog extends javax.swing.JDialog {
             }
         });
 
-        tbMarcas.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         tbMarcas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},

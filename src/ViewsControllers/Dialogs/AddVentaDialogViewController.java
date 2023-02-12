@@ -184,9 +184,9 @@ public class AddVentaDialogViewController {
     public void updateSubtotal() {
         if (validate()) {
             Error.setBackground(Color.white);
-            float descuento = Float.parseFloat(DescuentoLempiras.getText().replace(",", ""));
             float precio = Float.parseFloat(Precio.getText().replace(",", ""));
             float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
+            float descuento = Float.parseFloat(DescuentoLempiras.getText().replace(",", "")) * cantidad;
             float subtotal = (precio * cantidad) - descuento;
             Subtotal.setText(getNumberFormat(subtotal));
         } else {
@@ -196,9 +196,9 @@ public class AddVentaDialogViewController {
 
     public void updatePorcentLempiras() {
         if (validate()) {
-            float descuento = Float.parseFloat(DescuentoPorcentaje.getText().replace(",", ""));
             float precio = Float.parseFloat(Precio.getText().replace(",", ""));
             float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
+            float descuento = Float.parseFloat(DescuentoPorcentaje.getText().replace(",", ""));
             float DescuentoEnLempiras = (precio * cantidad) * (descuento * 0.01f);
             DescuentoLempiras.setText(getNumberFormat(DescuentoEnLempiras));
         } else {
@@ -208,9 +208,9 @@ public class AddVentaDialogViewController {
 
     public void updateLempirasPorcent() {
         if (validate()) {
-            float descuento = Float.parseFloat(DescuentoLempiras.getText().replace(",", ""));
             float precio = Float.parseFloat(Precio.getText().replace(",", ""));
             float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
+            float descuento = Float.parseFloat(DescuentoLempiras.getText().replace(",", ""));
             float DescuentoEnPorcentaje = (descuento) / ((precio * cantidad) / 100);
             DescuentoPorcentaje.setText(getNumberFormat(DescuentoEnPorcentaje));
         } else {
@@ -223,7 +223,7 @@ public class AddVentaDialogViewController {
         if (validate()) {
             float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
             float precio = Float.parseFloat(Precio.getText().replace(",", ""));
-            float descuento = Float.parseFloat(DescuentoLempiras.getText().replace(",", ""));
+            float descuento = Float.parseFloat(DescuentoLempiras.getText().replace(",", "")) * cantidad;
             float subtotal = (cantidad * precio) - descuento;
 
             Object[] values = {

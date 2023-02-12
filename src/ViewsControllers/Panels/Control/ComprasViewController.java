@@ -294,7 +294,7 @@ public class ComprasViewController {
                     setLoad(true);
                     Runnable runnable = () -> {
                         Reports reports = new Reports();
-                        reports.GenerateTickeCompra(CompraID);
+                        reports.GenerateTicketCompra(CompraID);
                         setLoad(false);
                     };
                     new Thread(runnable).start();

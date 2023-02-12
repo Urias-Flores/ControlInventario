@@ -203,7 +203,7 @@ public class FacturaViewController {
 
             ProductoJpaController controllerProducto = new ProductoJpaController(Conection.createEntityManagerFactory());
             List<Producto> productos = controllerProducto.findProductoEntities();
-
+            
             productos.forEach(producto -> {
                 if (producto.getBarra() != null) {
                     if (producto.getBarra().equals(Barra.getText())) {
@@ -355,7 +355,7 @@ public class FacturaViewController {
 
                     //Agregando informacion de arqueo
                     float total = Float.parseFloat(Total.getText().replace(",", ""));
-                    float efectivo = Dialogs.ShowArqueoDialog(VentaID, total);
+                    float efectivo = Dialogs.ShowArqueoDialog(VentaID, venta.getEstado().equals("N"), total);
 
                     setLoad(false);
                     Dialogs.ShowMessageDialog("La factura ha sido ingresada exitosamente", Dialogs.COMPLETE_ICON);

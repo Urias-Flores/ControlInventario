@@ -153,11 +153,12 @@ public class InventarioViewController {
     }
 
     public void printReportInventory() {
-        Reports report = new Reports();
-        try {
-            report.GenerateInventarioReport(Utilities.getUsuarioActual().getNombre());
-        } catch (PrinterException ex) {
-            Logger.getLogger(InventarioViewController.class.getName()).log(Level.SEVERE, null, ex);
+        if(Dialogs.ShowOKCancelDialog("¿Desea enviar a imprimir reporte de inventario?", Dialogs.WARNING_ICON)){
+            Runnable run = () -> {
+                Reports report = new Reports();
+                report.GenerateInventarioReport(Utilities.getUsuarioActual().getNombre());
+            };
+            new Thread(run).start();
         }
     }
 

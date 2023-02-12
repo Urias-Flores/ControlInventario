@@ -291,9 +291,9 @@ public class Dialogs {
         nd.dispose();
     }
     
-    public static float ShowArqueoDialog(int FacturaID, float Total){
+    public static float ShowArqueoDialog(int FacturaID, boolean isCredit, float Total){
         AddArqueoDetalleDialog aad = new AddArqueoDetalleDialog(null, true);
-        aad.setBill(FacturaID, Total);
+        aad.setBill(FacturaID, isCredit, Total);
         aad.setVisible(true);
         float efectivo = aad.getValue();
         aad.dispose();

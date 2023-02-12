@@ -19,6 +19,7 @@ public class AddArqueoDetalleDialogViewController {
     private JLabel Cargando;
 
     private int FacturaID = 0;
+    private boolean isCredit = false;
     
     public AddArqueoDetalleDialogViewController(AddArqueoDetalleDialog Instance, JTextField TotalFactura, JTextField TotalEfectivo, JTextField TotalCambio, JLabel Error, JLabel Cargando) {
         this.Instance = Instance;
@@ -27,10 +28,13 @@ public class AddArqueoDetalleDialogViewController {
         this.TotalCambio = TotalCambio;
         this.Error = Error;
         this.Cargando = Cargando;
+        
+        
     }
     
-    public void setBillInformation(int FacturaID, float Total){
+    public void setBillInformation(int FacturaID, boolean isCredit, float Total){
         this.FacturaID = FacturaID;
+        this.isCredit = isCredit;
         TotalFactura.setText(getNumberFormat(Total));
     }
     
@@ -48,6 +52,7 @@ public class AddArqueoDetalleDialogViewController {
     
     public void updateCambio(){
         if(validate()){
+            Error.setBackground(Color.white);
             float totalFactura = Float.parseFloat(TotalFactura.getText().replace(",", ""));
             float totalEfectivo = Float.parseFloat(TotalEfectivo.getText().replace(",", ""));
 
@@ -57,8 +62,8 @@ public class AddArqueoDetalleDialogViewController {
     }
     
     private boolean validate(){
-        float totalFactura = 0f;
-        float totalEfectivo = 0f;
+        float totalFactura;
+        float totalEfectivo;
         if(TotalFactura.getText().isEmpty()){
             Error.setText("El total no puede estar vacio");
             return false;
@@ -80,7 +85,7 @@ public class AddArqueoDetalleDialogViewController {
         }
         try {
             totalEfectivo = Float.parseFloat(TotalEfectivo.getText().replace(",", ""));
-            if(totalEfectivo == 0){
+            if(!isCredit && totalEfectivo == 0){
                 Error.setText("El total debe de ser mayor que cero");
                 return false;
             }

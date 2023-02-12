@@ -32,7 +32,7 @@ public class LocalDataController {
             ps.setString(2, Data);
             ps.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(LocalDataController.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Error al actualizar data: "+ex.getMessage());
         }
     }
     
@@ -53,7 +53,7 @@ public class LocalDataController {
                 updateNotificaciones();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(LocalDataController.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Error al chequear cambios: "+ex.getMessage());
         }
         return false;
     }
@@ -73,7 +73,7 @@ public class LocalDataController {
                 ps.execute();
                 ps.close();
             } catch (SQLException ex) {
-                Logger.getLogger(LocalDataController.class.getName()).log(Level.SEVERE, null, ex);
+                System.err.println("Error al actualizar notificaciones: "+ex.getMessage());
             }
         });
     }
@@ -185,7 +185,7 @@ public class LocalDataController {
             ps.executeUpdate();
             ps.close();
             
-            //clearArqueoDetalle();
+            clearArqueoDetalle();
         } catch (SQLException ex) {
             System.err.print("Error code: "+ex.getErrorCode()+" Error: "+ex.getMessage());
         }

@@ -1,9 +1,9 @@
 package ViewsControllers.Dialogs;
 
+import Reports.Reports;
 import Resource.LocalDataController;
 import Views.Dialogs.AddCierreDialog;
 import Views.Dialogs.Dialogs;
-import java.awt.Dialog;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JTable;
@@ -86,18 +86,22 @@ public class AddCierreDialogViewController {
     public void saveCloseDay(){
         float saldoReal = Float.parseFloat(SaldoReal.getText().replace(",", ""));
         if(validate()){
-            if(!Dialogs.ShowOKCancelDialog("¿Esta seguro de realizar cierre ahora?", Dialogs.WARNING_ICON)){
+            if(Dialogs.ShowOKCancelDialog("¿Esta seguro de realizar cierre ahora?", Dialogs.WARNING_ICON)){
                 LocalDataController ldc = new LocalDataController();
-                ldc.closeDay(saldoReal);
-
-                Instance.setVisible(false);
-                Dialogs.ShowMessageDialog("El cierre se ha guardado exitosamente", Dialogs.COMPLETE_ICON);
                 
-                if(Dialogs.ShowOKCancelDialog("¿Enviar a imprimir cierre de ventas ahora?", 0)){
+                Instance.setVisible(false);
+                if(Dialogs.ShowOKCancelDialog("¿Enviar a imprimir cierre de ventas ahora?", Dialogs.WARNING_ICON)){
                     Runnable run = () -> {
-                        
+                        float saldoInicial = Float.parseFloat(SaldoInicial.getText().replace(",", ""));
+                        Reports reports = new Reports();
+                        reports.GenerateTicketCloseDay(saldoInicial);
+                        ldc.closeDay(saldoReal);
+                        Dialogs.ShowMessageDialog("El cierre se ha guardado exitosamente", Dialogs.COMPLETE_ICON);
                     };
                     new Thread(run).start();
+                }else {
+                    ldc.closeDay(saldoReal);
+                    Dialogs.ShowMessageDialog("El cierre se ha guardado exitosamente", Dialogs.COMPLETE_ICON);
                 }
             }
         }

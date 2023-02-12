@@ -451,13 +451,13 @@ WHERE c.CompraID = $P{CompraID}]]>
 				<text><![CDATA[Descuento:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="95" y="23" width="50" height="11" uuid="fa7924e0-a613-49c2-aad4-56b320034406">
+				<reportElement x="90" y="23" width="55" height="11" uuid="fa7924e0-a613-49c2-aad4-56b320034406">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[Importe:]]></text>
+				<text><![CDATA[Importe(15%):]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="95" y="34" width="50" height="11" uuid="8d01c0e4-20a6-4502-9182-c31cb707fdd7">
@@ -466,7 +466,7 @@ WHERE c.CompraID = $P{CompraID}]]>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[ISV:]]></text>
+				<text><![CDATA[ISV(15%):]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="95" y="45" width="50" height="11" uuid="4a6d94e8-29ea-407b-9eed-43838d64c38a">
@@ -484,7 +484,7 @@ WHERE c.CompraID = $P{CompraID}]]>
 				<reportElement x="-8" y="56" width="202" height="1" forecolor="#B4B4B4" uuid="a28c944f-008f-40bf-a728-8b9556b7a8b5"/>
 			</line>
 			<line>
-				<reportElement x="95" y="0" width="1" height="56" forecolor="#B4B4B4" uuid="b5de90ba-9821-4df2-acbf-77f7c8ee50d8"/>
+				<reportElement x="89" y="0" width="1" height="56" forecolor="#B4B4B4" uuid="b5de90ba-9821-4df2-acbf-77f7c8ee50d8"/>
 			</line>
 			<line>
 				<reportElement x="145" y="0" width="1" height="56" forecolor="#B4B4B4" uuid="6cdc926a-cbd2-413e-9d07-8e49cafbf638"/>
@@ -500,24 +500,6 @@ WHERE c.CompraID = $P{CompraID}]]>
 	<pageFooter>
 		<band height="24" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<staticText>
-				<reportElement x="-8" y="0" width="202" height="12" uuid="b77bfac0-2a23-49e6-b478-4f861c8e950e">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font size="8"/>
-				</textElement>
-				<text><![CDATA[¡Gracias por su preferencia!]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="-8" y="12" width="202" height="12" uuid="be18465c-ae6f-439e-b6ea-f4a1af1078de">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font size="8"/>
-				</textElement>
-				<text><![CDATA[¡La factura es beneficio de todos exijala!]]></text>
-			</staticText>
 		</band>
 	</pageFooter>
 	<summary>

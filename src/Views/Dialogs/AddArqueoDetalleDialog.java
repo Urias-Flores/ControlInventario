@@ -1,5 +1,6 @@
 package Views.Dialogs;
 
+import Resource.Utilities;
 import ViewsControllers.Dialogs.AddArqueoDetalleDialogViewController;
 
 public class AddArqueoDetalleDialog extends javax.swing.JDialog {
@@ -11,7 +12,7 @@ public class AddArqueoDetalleDialog extends javax.swing.JDialog {
     public AddArqueoDetalleDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+        btnPagar.addMouseListener(Utilities.getMLGeneralButton());
         vc = new AddArqueoDetalleDialogViewController(this, txtTotalFactura, txtTotalEfectivo, txtTotalCambio, lbError, lbCargando);
     }
     
@@ -19,8 +20,11 @@ public class AddArqueoDetalleDialog extends javax.swing.JDialog {
         return efectivo;
     }
     
-    public void setBill(int FacturaID, float Total){
-        vc.setBillInformation(FacturaID, Total);
+    public void setBill(int FacturaID, boolean isCredit, float Total){
+        vc.setBillInformation(FacturaID, isCredit, Total);
+        if(isCredit){
+            txtTotalEfectivo.setEditable(false);
+        }
     }
 
     @SuppressWarnings("unchecked")

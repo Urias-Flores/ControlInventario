@@ -2,8 +2,10 @@ package Reports;
 
 import Controllers.ConfiguracionJpaController;
 import Resource.Conection;
+import Resource.LocalConection;
 import Resource.LocalDataController;
 import Resource.NoJpaConection;
+import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.awt.Desktop;
 import java.awt.print.PrinterException;
@@ -12,6 +14,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -66,17 +70,18 @@ public class Reports {
         }
     }
     
-    public void GenerateTickeCompra(int CompraID)
+    public void GenerateTicketCompra(int CompraID)
     {
         try {
             File archivo = new File("reports/FacturaCompra.jasper");
             if(archivo.exists())
             {
                 JasperReport jr = (JasperReport) JRLoader.loadObject(archivo);
-                Map<String, Object> map = getCompanyParameters();
-                map.put("CompraID", CompraID);
+                Map<String, Object> parameters = getCompanyParameters();
+                parameters.put("CompraID", CompraID);
+                parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
                 
-                sendPrintTicket(jr, map);
+                sendPrintTicket(jr, parameters);
             }else
             {
                 Dialogs.ShowMessageDialog("El archivo base de factura no fue encontrado", Dialogs.ERROR_ICON);
@@ -84,6 +89,35 @@ public class Reports {
         } catch (JRException ex) {
             System.err.println("Error: "+ex.getMessage());
             Dialogs.ShowMessageDialog("Ups... Ha ocurrido un error al enviar a imprimir", Dialogs.ERROR_ICON);
+        }
+    }
+    
+    public void GenerateTicketCloseDay(float SaldoInicial){
+        try {
+            File archivo = new File("reports/Arqueo.jasper");
+            if(archivo.exists())
+            {
+                JasperReport jr = (JasperReport) JRLoader.loadObject(archivo);
+                Map<String, Object> parameters = getCompanyParameters();
+                parameters.put("Usuario", Utilities.getUsuarioActual().getNombre());
+                parameters.put("SaldoInicial", SaldoInicial);
+                parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
+                
+                JasperPrint print = JasperFillManager.fillReport(jr, parameters, new LocalConection().getconec());
+                JasperExportManager.exportReportToPdfFile(print, "temp/tempTikect.pdf");
+
+                Desktop desktop = Desktop.getDesktop();
+                desktop.open(new File("temp/tempTikect.pdf"));
+            }else
+            {
+                Dialogs.ShowMessageDialog("El archivo base de factura no fue encontrado", Dialogs.ERROR_ICON);
+            }
+        } catch (JRException ex) {
+            System.err.println("Error: "+ex.getMessage());
+            Dialogs.ShowMessageDialog("Ups... Ha ocurrido un error al enviar a imprimir", Dialogs.ERROR_ICON);
+        } catch (IOException ex) {
+            System.err.println("Error: "+ex.getMessage());
+            Dialogs.ShowMessageDialog("Error al cargar archivo base de cierre", Dialogs.ERROR_ICON);
         }
     }
     
@@ -109,7 +143,7 @@ public class Reports {
         }
     }
     
-    public void GenerateInventarioReport(String Usuario) throws PrinterException
+    public void GenerateInventarioReport(String Usuario)
     {
         try {
             File archivo = new File("reports/Inventario.jasper");

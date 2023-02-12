@@ -1,8 +1,6 @@
 package ViewsControllers.Panels.Control;
 
 import Controllers.ProductoJpaController;
-import Controllers.exceptions.IllegalOrphanException;
-import Controllers.exceptions.NonexistentEntityException;
 import Models.Categoria;
 import Models.Marca;
 import Models.Producto;
@@ -135,7 +133,7 @@ public class ProductoViewController {
     public void filter() {
         RowFilter searchFilter = 
                 RowFilter.regexFilter(
-                        (Buscar.getText().isEmpty() || Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+Buscar.getText()) , 1);
+                        (Buscar.getText().isEmpty() || Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+Buscar.getText()) , 1, 4);
         RowFilter brandFilter = RowFilter.regexFilter(Marcas.getSelectedIndex() > 0 ? Marcas.getSelectedItem().toString() : "", 2);
         RowFilter categoryFilter = RowFilter.regexFilter(Categorias.getSelectedIndex() > 0 ? Categorias.getSelectedItem().toString() : "", 3);
         
