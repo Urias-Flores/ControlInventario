@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LocalDataController {
-        LocalConection localConection = new LocalConection();
+    LocalConection localConection = new LocalConection();
     
     public String getValue(String Data){
         try {

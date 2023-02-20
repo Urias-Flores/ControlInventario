@@ -5,10 +5,15 @@ import Models.Producto;
 import Resource.Conection;
 import Resource.Utilities;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Query;
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -39,6 +44,17 @@ public class AddVentaDialogViewController {
             return false;
         }
     };
+    
+    private KeyListener filterProductsOnKey = new KeyListener() {
+        @Override
+        public void keyTyped(KeyEvent e) {}
+        @Override
+        public void keyPressed(KeyEvent e) {}
+        @Override
+        public void keyReleased(KeyEvent e) { filter(); }
+    };
+    
+    private ActionListener filterProductsOnAction = (ActionEvent e) -> { filter(); };
 
     public AddVentaDialogViewController(JTextField Buscar, JComboBox Marcas, JLabel Cargando, JTable Productos, JTextField Existencia, JTextField DescuentoPorcentaje, JTextField DescuentoLempiras, JTextField Precio, JTextField Cantidad, JTextField Subtotal, JLabel Error) {
         this.Buscar = Buscar;
@@ -114,6 +130,9 @@ public class AddVentaDialogViewController {
                 model.addRow(row);
             //}
         });
+        
+        Buscar.addKeyListener(filterProductsOnKey);
+        Marcas.addActionListener(filterProductsOnAction);
     }
 
     private void loadBrands() {

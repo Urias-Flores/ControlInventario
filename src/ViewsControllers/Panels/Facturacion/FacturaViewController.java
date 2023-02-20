@@ -201,10 +201,15 @@ public class FacturaViewController {
         setLoad(true);
         Runnable run = () -> {
 
-            ProductoJpaController controllerProducto = new ProductoJpaController(Conection.createEntityManagerFactory());
-            List<Producto> productos = controllerProducto.findProductoEntities();
+            //ProductoJpaController controllerProducto = new ProductoJpaController(Conection.createEntityManagerFactory());
+            //List<Producto> productos = controllerProducto.findProductoEntities();
             
-            productos.forEach(producto -> {
+            Producto producto = (Producto) Conection.createEntityManager()
+                    .createNamedQuery("Producto.findByBarra")
+                    .setParameter("barra", Barra.getText())
+                    .getSingleResult();
+            
+            //productos.forEach(producto -> {
                 if (producto.getBarra() != null) {
                     if (producto.getBarra().equals(Barra.getText())) {
                         Object[] row = {
@@ -229,8 +234,7 @@ public class FacturaViewController {
                         }
                     }
                 }
-            });
-
+            //});
             Barra.setText("");
             setLoad(false);
         };
