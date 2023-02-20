@@ -114,6 +114,7 @@ public class LoadDialogWithDownloadOptionViewController {
     
     private boolean testConectionVersion() throws InterruptedException{
         Texto.setText("Comprobando conexión a internet...");
+        System.err.println("Pase por aqui");
         Thread.sleep(1000);
         int result = updateVersion();
         Thread.sleep(1000);
