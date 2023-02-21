@@ -125,10 +125,14 @@ public class AddClienteViewController {
             cliente = controller.findCliente(Integer.valueOf(Nombre.getName()));
         }
         cliente.setNombre(Nombre.getText());
-        cliente.setDocumento(Documento.getText());
-        cliente.setCorreoElectronico(Correo.getText());
-        cliente.setNumeroTelefono(Numero.getText());
-        cliente.setDomicilio(Domicilio.getText());
+        cliente.setDocumento
+        (Documento.getText().isEmpty() || Documento.getForeground().equals(new Color(180, 180, 180)) ? null : Documento.getText());
+        cliente.setCorreoElectronico
+        (Correo.getText().isEmpty() || Correo.getForeground().equals(new Color(180, 180, 180)) ? null : Correo.getText());
+        cliente.setNumeroTelefono
+        (Numero.getText().isEmpty() || Numero.getForeground().equals(new Color(180, 180, 180)) ? null : Numero.getText());
+        cliente.setDomicilio
+        (Domicilio.getText().isEmpty() ? null : Domicilio.getText());
         return cliente;
     }
     
@@ -139,58 +143,57 @@ public class AddClienteViewController {
             return false;
         }
         if(Nombre.getText().length() > 60){
-            Error.setText("El nombre debe tener menos de 60 caracteres");
+            Error.setText("El nombre debe contener menos de 60 caracteres");
             return false;
         }
         
         //Validando campo del documento
-        if(Documento.getText().isEmpty() || Documento.getForeground().equals(new Color(180, 180, 180))){
-            Error.setText("El documento del cliente es obligatorio");
-            return false;
-        }
-        if(Documento.getText().length() > 15 || Documento.getText().length() < 13){
-            Error.setText("El documento debe contener entre 13 y 15 caracteres");
-            return false;
-        }
-        
-        //Validando correo electronico
-        if(Correo.getText().isEmpty() || Correo.getForeground().equals(new Color(180, 180, 180))){
-            Error.setText("El correo electronico del cliente es obligatorio");
-            return false;
-        }
-        if(Correo.getText().length() > 60){
-            Error.setText("El correo electronico debe contener menos de 60 caracteres");
-            return false;
-        }
-        if(!Correo.getText().contains("@") || !Correo.getText().contains(".")){
-            Error.setText("El correo electronico ingresado no es valido");
-            return false;
-        }
-        
-        //Validando numero telfonico
-        if(Numero.getText().isEmpty() || Numero.getForeground().equals(new Color(180, 180, 180))){
-            Error.setText("El numero telefonico del cliente es obligatorio");
-            return false;
-        }
-        if(Numero.getText().length() > 8){
-            Error.setText("El numero telefonico debe contener menos de 8 numeros");
-            return false;
-        }
-        if(Numero.getText().length() < 8){
-            Error.setText("El numero telefonico debe contener al menos 8 numeros");
-            return false;
-        }
-        
-        //Validando campo de domicilio
-        if(Domicilio.getText().isEmpty() || Domicilio.getForeground().equals(new Color(180, 180, 180))){
-            Error.setText("El domicilio del cliente es obligatorio");
-            return false;
-        }
-        if(Domicilio.getText().length() > 150){
-            Error.setText("El domicilio debe contener menos de 150 caracteres");
-            return false;
-        }
-        
+//        if(Documento.getText().isEmpty() || Documento.getForeground().equals(new Color(180, 180, 180))){
+//            Error.setText("El documento del cliente es obligatorio");
+//            return false;
+//        }
+//        if(Documento.getText().length() > 15 || Documento.getText().length() < 13){
+//            Error.setText("El documento debe contener entre 13 y 15 caracteres");
+//            return false;
+//        }
+//        
+//        //Validando correo electronico
+//        if(Correo.getText().isEmpty() || Correo.getForeground().equals(new Color(180, 180, 180))){
+//            Error.setText("El correo electronico del cliente es obligatorio");
+//            return false;
+//        }
+//        if(Correo.getText().length() > 60){
+//            Error.setText("El correo electronico debe contener menos de 60 caracteres");
+//            return false;
+//        }
+//        if(!Correo.getText().contains("@") || !Correo.getText().contains(".")){
+//            Error.setText("El correo electronico ingresado no es valido");
+//            return false;
+//        }
+//        
+//        //Validando numero telfonico
+//        if(Numero.getText().isEmpty() || Numero.getForeground().equals(new Color(180, 180, 180))){
+//            Error.setText("El numero telefonico del cliente es obligatorio");
+//            return false;
+//        }
+//        if(Numero.getText().length() > 8){
+//            Error.setText("El numero telefonico debe contener menos de 8 numeros");
+//            return false;
+//        }
+//        if(Numero.getText().length() < 8){
+//            Error.setText("El numero telefonico debe contener al menos 8 numeros");
+//            return false;
+//        }
+//        
+//        //Validando campo de domicilio
+//        if(Domicilio.getText().isEmpty() || Domicilio.getForeground().equals(new Color(180, 180, 180))){
+//            Error.setText("El domicilio del cliente es obligatorio");
+//            return false;
+//        }
+//        if(Domicilio.getText().length() > 150){
+//            Error.setText("El domicilio debe contener menos de 150 caracteres");
+//            return false;
+//        }
         return true;
     }
     

@@ -142,8 +142,15 @@ public class FacturaViewController {
     }
 
     private void loadClients() {
-        List<Cliente> clientes = new ClienteJpaController(Conection.createEntityManagerFactory()).findClienteEntities();
-        clientes.forEach(Clientes::addItem);
+        Cliente ConsumidorFinal = new ClienteJpaController(Conection.createEntityManagerFactory()).findCliente(1);
+        Clientes.addItem(ConsumidorFinal);
+        
+        List<Cliente> clientes = Conection.createEntityManager().createNamedQuery("Cliente.findAll").getResultList();
+        clientes.forEach(cliente -> {
+            if(cliente.getClienteID() != 1){
+                Clientes.addItem(cliente);
+            }
+        });
     }
 
     public void addClient() {

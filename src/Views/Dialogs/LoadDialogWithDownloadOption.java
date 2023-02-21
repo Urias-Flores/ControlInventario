@@ -10,10 +10,9 @@ public class LoadDialogWithDownloadOption extends javax.swing.JDialog {
     public LoadDialogWithDownloadOption(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
-        vc = new LoadDialogWithDownloadOptionViewController(this, lbIcons, lbTexto, pbCarga);
+        vc = new LoadDialogWithDownloadOptionViewController(this, lbIcons, lbTexto, pbCarga, lbVersion);
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -22,7 +21,7 @@ public class LoadDialogWithDownloadOption extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        lbVersion = new javax.swing.JLabel();
         pbCarga = new javax.swing.JProgressBar();
         lbTexto = new javax.swing.JLabel();
         lbIcons = new javax.swing.JLabel();
@@ -45,10 +44,9 @@ public class LoadDialogWithDownloadOption extends javax.swing.JDialog {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Titulo.png"))); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel1.setText("Version 1.0");
+        lbVersion.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        lbVersion.setForeground(new java.awt.Color(255, 255, 255));
+        lbVersion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -59,7 +57,7 @@ public class LoadDialogWithDownloadOption extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lbVersion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18))
         );
         jPanel2Layout.setVerticalGroup(
@@ -69,8 +67,8 @@ public class LoadDialogWithDownloadOption extends javax.swing.JDialog {
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addComponent(lbVersion, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
         );
 
@@ -139,13 +137,13 @@ public class LoadDialogWithDownloadOption extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lbIcons;
     private javax.swing.JLabel lbTexto;
+    private javax.swing.JLabel lbVersion;
     private javax.swing.JProgressBar pbCarga;
     // End of variables declaration//GEN-END:variables
 }

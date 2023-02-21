@@ -147,7 +147,12 @@ public class AddVentaDialogViewController {
     public void filter(){
         TableRowSorter rowSorter = new TableRowSorter(Productos.getModel());
         List<RowFilter<TableModel, String>> filters = new LinkedList<>();
-        filters.add(RowFilter.regexFilter(Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+Buscar.getText(), 1));
+        if(!Buscar.getForeground().equals(new Color(180, 180, 180))){
+            String[] words = Buscar.getText().split(" ");
+            for(String word : words) {
+                filters.add(RowFilter.regexFilter(Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)" + word, 0, 1));
+            }
+        }
         filters.add(RowFilter.regexFilter(Marcas.getSelectedIndex() <= 0 ? "" : Marcas.getSelectedItem().toString(), 2));
         rowSorter.setRowFilter(RowFilter.andFilter(filters));
         Productos.setRowSorter(rowSorter);

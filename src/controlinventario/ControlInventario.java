@@ -1,6 +1,5 @@
 package controlinventario;
 
-//import Resource.NoJpaConection;
 import Views.Dialogs.Dialogs;
 import Views.Login;
 import main.Theme;

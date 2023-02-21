@@ -11,7 +11,7 @@ public class UpdateDataController {
     public ArrayList<String[]> getValues() {
         ArrayList<String[]> updates = new ArrayList<>();
         try {
-            ResultSet rs = conec.getStatement().executeQuery("SELECT * FROM Update");
+            ResultSet rs = conec.getStatement().executeQuery("SELECT * FROM updates");
             
             while(rs.next()){
                 String[] row = {

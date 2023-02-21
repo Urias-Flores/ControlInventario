@@ -8,7 +8,7 @@ public class Dialogs {
     public static int COMPLETE_ICON = 1;
     
     public static void ShowConectionDialog(){
-        LoadDialog ld = new LoadDialog(null, true);
+        LoadDialogWithDownloadOption ld = new LoadDialogWithDownloadOption(null, true);
         ld.setVisible(true);
         ld.dispose();
     }

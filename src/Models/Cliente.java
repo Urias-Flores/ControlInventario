@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c"),
+    @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c ORDER BY c.nombre"),
     @NamedQuery(name = "Cliente.findByClienteID", query = "SELECT c FROM Cliente c WHERE c.clienteID = :clienteID"),
     @NamedQuery(name = "Cliente.findByNombre", query = "SELECT c FROM Cliente c WHERE c.nombre = :nombre"),
     @NamedQuery(name = "Cliente.findByDocumento", query = "SELECT c FROM Cliente c WHERE c.documento = :documento"),
@@ -33,13 +33,9 @@ public class Cliente implements Serializable {
     private Integer clienteID;
     @Basic(optional = false)
     private String nombre;
-    @Basic(optional = false)
     private String documento;
-    @Basic(optional = false)
     private String correoElectronico;
-    @Basic(optional = false)
     private String numeroTelefono;
-    @Basic(optional = false)
     private String domicilio;
     @Basic(optional = false)
     private float saldo;

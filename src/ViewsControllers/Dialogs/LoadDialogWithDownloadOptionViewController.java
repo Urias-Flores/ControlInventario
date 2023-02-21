@@ -6,21 +6,21 @@ import Resource.NoJpaConection;
 import Resource.UpdateDataController;
 import Views.Dialogs.LoadDialogWithDownloadOption;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -31,14 +31,27 @@ public class LoadDialogWithDownloadOptionViewController {
     private JLabel Icons;
     private JLabel Texto;
     private JProgressBar Barra;
+    private JLabel Version;
     
-    public LoadDialogWithDownloadOptionViewController(LoadDialogWithDownloadOption Instance, JLabel Icons, JLabel Texto, JProgressBar Barra) {
+    public LoadDialogWithDownloadOptionViewController(LoadDialogWithDownloadOption Instance, JLabel Icons, JLabel Texto, JProgressBar Barra, JLabel Version) {
         this.Instance = Instance;
         this.Icons = Icons;
         this.Texto = Texto;
         this.Barra = Barra;
-      
+        this.Version = Version;
+        
+        loadVersion();
         testConections();
+    }
+    
+    private void loadVersion(){
+        try {
+            Scanner s = new Scanner(new File("version.txt"));
+            s.hasNextLine();
+            Version.setText("version "+s.nextLine());
+        } catch (FileNotFoundException ex) {
+            Texto.setText("No se encontro el archivo de version");
+        }
     }
     
     private void testConections(){
@@ -114,9 +127,9 @@ public class LoadDialogWithDownloadOptionViewController {
     
     private boolean testConectionVersion() throws InterruptedException{
         Texto.setText("Comprobando conexión a internet...");
-        System.err.println("Pase por aqui");
         Thread.sleep(1000);
         int result = updateVersion();
+        System.err.println("Resultado: "+result);
         Thread.sleep(1000);
         if(result == 0){
             if(existNewVersion()){
@@ -128,7 +141,7 @@ public class LoadDialogWithDownloadOptionViewController {
         return true;
     }
     
-    private int updateVersion(){
+    private int updateVersion() throws InterruptedException{
         try {
             String url = "https://raw.githubusercontent.com/Urias-Flores/UnventoryInstaller/main/version_.txt";
             String file = "version_.txt";
@@ -159,33 +172,39 @@ public class LoadDialogWithDownloadOptionViewController {
     
     private boolean existNewVersion(){
         try {
-            InputStream actualVersion = new FileInputStream("version.txt");
-            InputStream newVersion = new FileInputStream("version_.txt");
-            
-            Scanner actual = new Scanner(actualVersion);
-            Scanner newV = new Scanner(newVersion);
-            
-            actualVersion.close();
-            newVersion.close();
+            Scanner actual = new Scanner(new File("version.txt"));
+            Scanner newV = new Scanner(new File("version_.txt"));
             
             Texto.setText("Comprobando nueva version...");
-            if(actual.hasNextLine()){
-                if(newV.hasNextLine()){
-                    String versionActual = actual.nextLine();
-                    String versionRecurrente = newV.nextLine();
-                    if(!versionActual.equalsIgnoreCase(versionRecurrente)){
-                        FileWriter escritor = new FileWriter(new File("version.txt"), true);
-                        escritor.write(versionRecurrente);
-                        escritor.close();
-                        return true;
+            actual.hasNextLine();
+            newV.hasNext();
+            
+            String versionActual = actual.nextLine();
+            String versionRecurrente = newV.nextLine();
+
+            System.out.println(versionActual + " < - > "+versionRecurrente);
+
+            if(!versionActual.equalsIgnoreCase(versionRecurrente)){
+                File versionFile = new File("version.txt");
+                File currentVersionFile = new File("version_.txt");
+                
+                InputStream in = new FileInputStream(currentVersionFile);
+                OutputStream out = new FileOutputStream(versionFile);
+                int b = 0;
+                while(b != -1){
+                    b = in.read();
+                    if(b != -1){
+                        out.write(b);
                     }
                 }
+                return true;
             }
         } catch (FileNotFoundException ex) {
             Texto.setText("Archivos de versiones no encontrados");
             return false;
         } catch (IOException ex) {
-            Logger.getLogger(LoadDialogWithDownloadOptionViewController.class.getName()).log(Level.SEVERE, null, ex);
+            Texto.setText("Error al escribir archivo de version");
+            return false;
         }
         return false;
     }
@@ -223,19 +242,30 @@ public class LoadDialogWithDownloadOptionViewController {
         ArrayList<String[]> updates = new UpdateDataController().getValues();
         if(updates != null){
             if(!updates.isEmpty()){
-                updates.forEach(update -> {
+                
+                int contador = 1;
+                for(String[] update : updates){
+                    Texto.setText("Descargando... ("+contador+"/"+updates.size()+")");
                     if(update[0].equals("File")){
                         updateFile(update[1], update[2]);
                     }else{
                         executeQuery(update[2]);
                     }
-                });
+                    contador += 1;
+                }
                 
                 updates.forEach(update -> {
                     if (update[1].equalsIgnoreCase("Unventory.exe")) {
+                        Texto.setText("Reiniciando...");
+                        try {
+                            Desktop desktop = Desktop.getDesktop();
+                            desktop.open(new File("Unventory.exe"));
+                            Thread.sleep(1000);
+                        } catch (InterruptedException | IOException ex) {}
                         System.exit(0);
                     }
                 });
+                
                 new File("update.db").delete();
             }
         }
@@ -253,7 +283,6 @@ public class LoadDialogWithDownloadOptionViewController {
             initDownload(in, out);
             updatePorcent(tamanoArchivo, Name);
             
-            
         } catch (MalformedURLException ex) {
             Texto.setText("Archivo "+Name+" no pudo ser descargado, url no valido");
             return -2;
@@ -265,7 +294,14 @@ public class LoadDialogWithDownloadOptionViewController {
     }
     
     private void executeQuery(String Query){
-        
+        try {
+            PreparedStatement ps = new NoJpaConection().getconec().prepareStatement(Query);
+            ps.execute();
+            System.out.println("Executando: "+Query);
+        } catch (SQLException ex) {
+            System.err.println("Error: "+ex.getMessage());
+            Texto.setText("Error al ejecutar comando en base de datos");
+        }
     }
     
     private void initDownload(InputStream in, OutputStream out){
@@ -292,9 +328,9 @@ public class LoadDialogWithDownloadOptionViewController {
         File file = new File(path);
         while( file.length() < tamano ){
             int porcent = (int) ((100 * file.length()) / tamano);
-            System.out.println("Porcentaje: "+porcent);
             try {
-                Thread.sleep(100);
+                Barra.setValue(porcent);
+                Thread.sleep(15);
             } catch (InterruptedException ex) {
 
             }
