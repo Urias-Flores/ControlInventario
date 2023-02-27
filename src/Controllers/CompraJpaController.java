@@ -17,10 +17,6 @@ import Models.Compra;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Dell
- */
 public class CompraJpaController implements Serializable {
 
     public CompraJpaController(EntityManagerFactory emf) {

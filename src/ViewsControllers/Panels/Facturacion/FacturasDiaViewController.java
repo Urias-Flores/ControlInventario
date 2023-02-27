@@ -185,7 +185,6 @@ public class FacturasDiaViewController {
 
     private void updateTotalSales() {
         float totalSales = 0;
-        
         int counter = 0;
         while(counter < Facturas.getRowCount()){
             totalSales += Float.parseFloat(Facturas.getValueAt(counter, 4).toString().replace(",", ""));
@@ -196,9 +195,16 @@ public class FacturasDiaViewController {
     }
 
     private void loadClients() {
-        List<Cliente> clientes = new ClienteJpaController(Conection.createEntityManagerFactory()).findClienteEntities();
+        Clientes.removeAllItems();
+        Clientes.addItem(new Cliente(0, "-- Todos los clientes --", 0));
+        Cliente consumidorFinal = new ClienteJpaController(Conection.createEntityManagerFactory()).findCliente(1);
+        Clientes.addItem(consumidorFinal);
+        
+        List<Cliente> clientes = Conection.createEntityManager().createNamedQuery("Cliente.findAll").getResultList();
         clientes.forEach(cliente -> {
-            Clientes.addItem(cliente);
+            if(cliente.getClienteID() != 1){
+                Clientes.addItem(cliente);
+            }
         });
     }
 

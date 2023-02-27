@@ -20,6 +20,11 @@
     <class>Models.Notificacion</class>
     <class>Models.Inventariodetalleacciones</class>
     <class>Models.Abono</class>
+    <class>Models.Arqueo</class>
+    <class>Models.Solicituddetalle</class>
+    <class>Models.Gasto</class>
+    <class>Models.Arqueodetalle</class>
+    <class>Models.Solicitud</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/inventario?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

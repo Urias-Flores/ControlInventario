@@ -58,6 +58,8 @@ public class Venta implements Serializable {
     @JoinColumn(name = "UsuarioID", referencedColumnName = "UsuarioID")
     @ManyToOne(optional = false)
     private Usuario usuarioID;
+    @OneToMany(mappedBy = "facturaID")
+    private List<Arqueodetalle> arqueodetalleList;
     @OneToMany(mappedBy = "ventaID")
     private List<Abono> abonoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ventaID")
@@ -131,6 +133,15 @@ public class Venta implements Serializable {
 
     public void setUsuarioID(Usuario usuarioID) {
         this.usuarioID = usuarioID;
+    }
+
+    @XmlTransient
+    public List<Arqueodetalle> getArqueodetalleList() {
+        return arqueodetalleList;
+    }
+
+    public void setArqueodetalleList(List<Arqueodetalle> arqueodetalleList) {
+        this.arqueodetalleList = arqueodetalleList;
     }
 
     @XmlTransient

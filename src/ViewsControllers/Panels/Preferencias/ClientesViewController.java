@@ -1,6 +1,7 @@
 package ViewsControllers.Panels.Preferencias;
 
 import Controllers.ClienteJpaController;
+import Controllers.exceptions.IllegalOrphanException;
 import Controllers.exceptions.NonexistentEntityException;
 import Models.Cliente;
 import Resource.Conection;
@@ -9,6 +10,8 @@ import Views.Dialogs.Dialogs;
 import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -156,8 +159,9 @@ public class ClientesViewController {
                         Init();
                         setLoad(false);
                         Dialogs.ShowMessageDialog("El cliente ha sido eliminado exitosamente", Dialogs.COMPLETE_ICON);
-                    } catch (NonexistentEntityException ex) {
+                    } catch (NonexistentEntityException | IllegalOrphanException ex) {
                         setLoad(false);
+                        System.out.println("Error al eliminar cliente: "+ex.getMessage());
                         Dialogs.ShowMessageDialog("Ya existen datos enlazados a este cliente, no se pudo eliminar", Dialogs.ERROR_ICON);
                     }
                 };

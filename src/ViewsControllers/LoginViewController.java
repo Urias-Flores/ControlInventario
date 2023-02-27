@@ -16,17 +16,13 @@ public class LoginViewController {
     private JPasswordField Contrasena;
     private JCheckBox Recordarme;
     private JLabel Error;
-    private JLabel IniciarSesion;
-    private JLabel Olvidaste;
 
-    public LoginViewController(JFrame Instance, JTextField Nombre, JPasswordField Contrasena, JCheckBox Recordarme, JLabel Error, JLabel IniciarSesion, JLabel Olvidaste) {
+    public LoginViewController(JFrame Instance, JTextField Nombre, JPasswordField Contrasena, JCheckBox Recordarme, JLabel Error) {
         this.Instance = Instance;
         this.Nombre = Nombre;
         this.Contrasena = Contrasena;
         this.Recordarme = Recordarme;
         this.Error = Error;
-        this.IniciarSesion = IniciarSesion;
-        this.Olvidaste = Olvidaste;
     }
     
     public void CargarUsuario(){
@@ -40,7 +36,7 @@ public class LoginViewController {
     
     public void IniciarSesion(){
         if(valite()){
-            ActualizarRecordarme();
+            updateRemenber();
             int resultado = Utilities.IniciarSesion(Nombre.getText(), String.valueOf(Contrasena.getPassword()));
             switch (resultado) {
                 case -2:
@@ -58,14 +54,13 @@ public class LoginViewController {
                 default:
                     Main m = new Main();
                     m.setVisible(true);
-                    m.Cargar(Instance, Nombre.getText());
                     Instance.setVisible(false);
                     break;
             }
         }
     }
     
-    private void ActualizarRecordarme(){
+    private void updateRemenber(){
         LocalDataController ldc = new LocalDataController();
         if(Recordarme.isSelected()){
             ldc.UpdateData("User", Nombre.getText());

@@ -49,10 +49,16 @@ public class Usuario implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioID")
     private List<Abono> abonoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioID")
+    private List<Gasto> gastoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioID")
     private List<Cotizacion> cotizacionList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioID")
+    private List<Solicitud> solicitudList;
     @JoinColumn(name = "EmpleadoID", referencedColumnName = "EmpleadoID")
     @ManyToOne(optional = false)
     private Empleado empleadoID;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioID")
+    private List<Arqueo> arqueoList;
 
     public Usuario() {
     }
@@ -61,10 +67,9 @@ public class Usuario implements Serializable {
         this.usuarioID = usuarioID;
     }
 
-    public Usuario(Integer usuarioID, String nombre, String contrasena, String cargo) {
+    public Usuario(Integer usuarioID, String nombre, String cargo) {
         this.usuarioID = usuarioID;
         this.nombre = nombre;
-        this.contrasena = contrasena;
         this.cargo = cargo;
     }
 
@@ -153,6 +158,15 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    public List<Gasto> getGastoList() {
+        return gastoList;
+    }
+
+    public void setGastoList(List<Gasto> gastoList) {
+        this.gastoList = gastoList;
+    }
+
+    @XmlTransient
     public List<Cotizacion> getCotizacionList() {
         return cotizacionList;
     }
@@ -161,12 +175,30 @@ public class Usuario implements Serializable {
         this.cotizacionList = cotizacionList;
     }
 
+    @XmlTransient
+    public List<Solicitud> getSolicitudList() {
+        return solicitudList;
+    }
+
+    public void setSolicitudList(List<Solicitud> solicitudList) {
+        this.solicitudList = solicitudList;
+    }
+
     public Empleado getEmpleadoID() {
         return empleadoID;
     }
 
     public void setEmpleadoID(Empleado empleadoID) {
         this.empleadoID = empleadoID;
+    }
+
+    @XmlTransient
+    public List<Arqueo> getArqueoList() {
+        return arqueoList;
+    }
+
+    public void setArqueoList(List<Arqueo> arqueoList) {
+        this.arqueoList = arqueoList;
     }
 
     @Override

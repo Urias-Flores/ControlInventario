@@ -125,16 +125,22 @@ public class LoadDialogWithDownloadOptionViewController {
         return false;
     }
     
+    //Comprobando existencia de nuevaversion
     private boolean testConectionVersion() throws InterruptedException{
         Texto.setText("Comprobando conexión a internet...");
         Thread.sleep(1000);
-        int result = updateVersion();
+        
+        int result = updateVersion(); //<- Enviando a actualizar archivo que contiene el numero de la ultima version
         System.err.println("Resultado: "+result);
         Thread.sleep(1000);
-        if(result == 0){
-            if(existNewVersion()){
-                if(getUpdateFile() == 0){
-                    updateAll();
+        if(result == 0){ //<- En caso de que se alla podido descargar archivo que contiene la ultima verion retorna 0
+            if(existNewVersion()){ //<- comparando version de archivo de descargado con archivo de version en sistema
+                
+                //Si la version del sistema es distintan a la version descargada mandar a actualizar archivo de actualizacion
+                if(getUpdateFile() == 0){ 
+                    // Se envia actualizar archivo que contiene informacion de la actualizacion
+                    //(archivos que se actualizaran o nuevos archivos que agregar)
+                    updateAll(); //<-Este metodo los leera del archivo de actualizacion
                 }
             }
         }
@@ -239,21 +245,26 @@ public class LoadDialogWithDownloadOptionViewController {
     }
     
     private void updateAll(){
-        ArrayList<String[]> updates = new UpdateDataController().getValues();
-        if(updates != null){
-            if(!updates.isEmpty()){
-                
-                int contador = 1;
-                for(String[] update : updates){
-                    Texto.setText("Descargando... ("+contador+"/"+updates.size()+")");
-                    if(update[0].equals("File")){
-                        updateFile(update[1], update[2]);
-                    }else{
-                        executeQuery(update[2]);
+        ArrayList<String[]> updates = new UpdateDataController().getValues(); //<- este metodo devuelve arreglo con informacion de cambio
+        //Ejemplo: update[0] = "File"  o "Query" en caso de que se deseen hacer cambios en base de datos
+        //update[1] = "reports/abono.jasper" o "actualizandoCliente" este contendria la ruta del archivo a modificar o agregar
+        //update[2] = "www.github.com/Urias...." o "Alter table clientes..." contendria la direccion de descarga del archivo o query a ejecutar
+        
+        
+        if(updates != null){ //<- Comporbando que realmente existan actualizaciones
+            if(!updates.isEmpty()){ //<- Comporbando de nuevo por si acaso
+                int contador = 1; //El contador es unicamente para saber por que numero de descarga va, en caso de ser varios
+                for(String[] update : updates){ //Recorriendo lista de arreglos que contiene la informacion detallada arriba
+                    Texto.setText("Descargando... ("+contador+"/"+updates.size()+")"); //Muestra el mensaje ejemp:  Descargando... (2/5) 
+                    if(update[0].equals("File")){ //Comprobando que sea un archivo de actualizacion
+                        updateFile(update[1], update[2]);//Este metodo recibe el nombre o direccion del archivo, y url de descarga
+                    }else{//En el caso de que no sea un archivo seria un Query
+                        executeQuery(update[2]); //Aqui enviamos a executar el Query enviando el query obtenido del archivo de actualizacion
                     }
                     contador += 1;
                 }
                 
+                //Esto simplemente iterara para ver si se actualizo el programa como tal, para reiniciar con las actualizaciones aplicadas 
                 updates.forEach(update -> {
                     if (update[1].equalsIgnoreCase("Unventory.exe")) {
                         Texto.setText("Reiniciando...");
@@ -266,6 +277,7 @@ public class LoadDialogWithDownloadOptionViewController {
                     }
                 });
                 
+                //Se envia a eliminar archivo de informacion de actualizacion
                 new File("update.db").delete();
             }
         }
@@ -273,14 +285,19 @@ public class LoadDialogWithDownloadOptionViewController {
     
     private int updateFile(String Name, String URL){
         try {
+            //Aqui cargo el url de descarga
             URLConnection conec = new URL(URL).openConnection();
-
+            
             conec.connect();
             InputStream in = conec.getInputStream();
             OutputStream out = new FileOutputStream(Name);
             int tamanoArchivo = conec.getContentLength();
             
+            //Aqui envio a actualizar en otro hilo
             initDownload(in, out);
+            
+            //Aqui actualizo el oprcentaje de descarga tomando el tamaño del archivo y relacionandolo al tamaño descargado 
+            //hasta el momento obtengo el porcentaje
             updatePorcent(tamanoArchivo, Name);
             
         } catch (MalformedURLException ex) {
@@ -305,8 +322,10 @@ public class LoadDialogWithDownloadOptionViewController {
     }
     
     private void initDownload(InputStream in, OutputStream out){
-        Runnable run = () -> {
+        //Este runnable demarca la apertura de un nuevo hilo en java
+        Runnable run = () -> { //Aqui se crea todo lo que se enviara a ejecutar en segundo plano
             try {
+                //Aqui es donde se comienza a escribi el archivo descargado
                 int b = 0;
                 while (b != -1) {
                     b = in.read();
@@ -321,19 +340,19 @@ public class LoadDialogWithDownloadOptionViewController {
                 Texto.setText("Error al almacenar archivo descargado");
             }
         };
-        new Thread(run).start();
+        new Thread(run).start(); // y aqui se envia a ejecutar ese hilo
     }
     
     private void updatePorcent(int tamano, String path){
         File file = new File(path);
+        //Este ira actualizando el porcentaje descargado y saldra del while una vez que el tamaño del archivo descargando alcanze 
+        //el tamaño esperado
         while( file.length() < tamano ){
             int porcent = (int) ((100 * file.length()) / tamano);
             try {
                 Barra.setValue(porcent);
-                Thread.sleep(15);
-            } catch (InterruptedException ex) {
-
-            }
+                Thread.sleep(15); //Este ira actualizando el porcentaje cada 15 milisegundos
+            } catch (InterruptedException ex) { }
         }
     }
     

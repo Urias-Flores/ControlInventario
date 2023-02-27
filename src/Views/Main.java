@@ -7,11 +7,10 @@ import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import ViewsControllers.MainViewController;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 
 public class Main extends javax.swing.JFrame {
 
-    private MainViewController MainVC;
+    private MainViewController vc;
     
     public Main() {
         initComponents();
@@ -20,14 +19,12 @@ public class Main extends javax.swing.JFrame {
         if(!Utilities.getUsuarioActual().getCargo().equals("A")){
             btnEstadisticas.setVisible(false);
         }
-    }
-    
-    public void Cargar(JFrame Login, String user){
-        MainVC = new MainViewController(this, Login, txtUsuarioActual, lbNotificaciones,btnFacturacion, btnControl, btnEstadisticas, btnCuetas, btnAjustes, btnCerrarSesion, tbpPrincipal);
-        MainVC.cargarUsuario(user);
-        MainVC.CargarPanel(1);
-        MainVC.activarBoton(btnFacturacion);
-        MainVC.updateNotificaciones();
+        
+        vc = new MainViewController(this, txtUsuarioActual, lbNotificaciones,btnFacturacion, btnControl, btnEstadisticas, btnCuetas, btnAjustes, btnCerrarSesion, tbpPrincipal);
+        vc.cargarUsuario(Utilities.getUsuarioActual().getNombre());
+        vc.CargarPanel(1);
+        vc.activarBoton(btnFacturacion);
+        vc.updateNotifications();
     }
 
     @SuppressWarnings("unchecked")
@@ -54,7 +51,8 @@ public class Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Principal");
-        setPreferredSize(new java.awt.Dimension(1800, 970));
+        setMinimumSize(new java.awt.Dimension(1900, 1000));
+        setPreferredSize(new java.awt.Dimension(1900, 1000));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -211,7 +209,7 @@ public class Main extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tbpPrincipal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1377, Short.MAX_VALUE)
+            .addComponent(tbpPrincipal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1401, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jLabel2)
@@ -264,32 +262,32 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFacturacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFacturacionMouseClicked
-        MainVC.CargarPanel(1);
-        MainVC.activarBoton(btnFacturacion);
+        vc.CargarPanel(1);
+        vc.activarBoton(btnFacturacion);
     }//GEN-LAST:event_btnFacturacionMouseClicked
 
     private void btnControlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnControlMouseClicked
-        MainVC.CargarPanel(2);
-        MainVC.activarBoton(btnControl);
+        vc.CargarPanel(2);
+        vc.activarBoton(btnControl);
     }//GEN-LAST:event_btnControlMouseClicked
 
     private void btnEstadisticasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEstadisticasMouseClicked
-        MainVC.CargarPanel(3);
-        MainVC.activarBoton(btnEstadisticas);
+        vc.CargarPanel(3);
+        vc.activarBoton(btnEstadisticas);
     }//GEN-LAST:event_btnEstadisticasMouseClicked
 
     private void btnCuetasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCuetasMouseClicked
-        MainVC.CargarPanel(4);
-        MainVC.activarBoton(btnCuetas);
+        vc.CargarPanel(4);
+        vc.activarBoton(btnCuetas);
     }//GEN-LAST:event_btnCuetasMouseClicked
 
     private void btnAjustesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAjustesMouseClicked
-        MainVC.CargarPanel(5);
-        MainVC.activarBoton(btnAjustes);
+        vc.CargarPanel(5);
+        vc.activarBoton(btnAjustes);
     }//GEN-LAST:event_btnAjustesMouseClicked
 
     private void btnCerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseClicked
-        MainVC.cerrasSesion();
+        vc.cerrasSesion();
     }//GEN-LAST:event_btnCerrarSesionMouseClicked
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -302,7 +300,7 @@ public class Main extends javax.swing.JFrame {
             new NoJpaConection().closeConec();
             new LocalConection().closeConection();
             this.setVisible(false);
-            MainVC.waitCloseProcess();
+            vc.waitCloseProcess();
         }
     }//GEN-LAST:event_formWindowClosing
 

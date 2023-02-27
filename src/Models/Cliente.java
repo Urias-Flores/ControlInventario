@@ -3,6 +3,7 @@ package Models;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -45,6 +46,8 @@ public class Cliente implements Serializable {
     private List<Abono> abonoList;
     @OneToMany(mappedBy = "clienteID")
     private List<Cotizacion> cotizacionList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteID")
+    private List<Solicitud> solicitudList;
 
     public Cliente() {
     }
@@ -53,13 +56,9 @@ public class Cliente implements Serializable {
         this.clienteID = clienteID;
     }
 
-    public Cliente(Integer clienteID, String nombre, String documento, String correoElectronico, String numeroTelefono, String domicilio, float saldo) {
+    public Cliente(Integer clienteID, String nombre, float saldo) {
         this.clienteID = clienteID;
         this.nombre = nombre;
-        this.documento = documento;
-        this.correoElectronico = correoElectronico;
-        this.numeroTelefono = numeroTelefono;
-        this.domicilio = domicilio;
         this.saldo = saldo;
     }
 
@@ -144,6 +143,15 @@ public class Cliente implements Serializable {
 
     public void setCotizacionList(List<Cotizacion> cotizacionList) {
         this.cotizacionList = cotizacionList;
+    }
+
+    @XmlTransient
+    public List<Solicitud> getSolicitudList() {
+        return solicitudList;
+    }
+
+    public void setSolicitudList(List<Solicitud> solicitudList) {
+        this.solicitudList = solicitudList;
     }
 
     @Override

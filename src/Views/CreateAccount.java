@@ -2,6 +2,7 @@ package Views;
 
 import Resource.Conection;
 import Resource.LocalConection;
+import Resource.NoJpaConection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import ViewsControllers.CreateAccountViewController;
@@ -315,7 +316,11 @@ public class CreateAccount extends javax.swing.JFrame {
     }//GEN-LAST:event_lbCrearMouseClicked
 
     private void btnCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseClicked
-        Conection.Disconnect(Conection.createEntityManagerFactory().createEntityManager());
+        Utilities.setRunProcess(false);
+        if(Conection.createEntityManagerFactory().isOpen()){
+            Conection.Disconnect(Conection.createEntityManagerFactory().createEntityManager());
+        }
+        new NoJpaConection().closeConec();
         new LocalConection().closeConection();
         System.exit(0);
     }//GEN-LAST:event_btnCloseMouseClicked

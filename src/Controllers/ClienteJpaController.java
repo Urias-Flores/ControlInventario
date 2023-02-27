@@ -1,5 +1,10 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Controllers;
 
+import Controllers.exceptions.IllegalOrphanException;
 import Controllers.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -12,9 +17,14 @@ import java.util.List;
 import Models.Abono;
 import Models.Cliente;
 import Models.Cotizacion;
+import Models.Solicitud;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+/**
+ *
+ * @author Dell
+ */
 public class ClienteJpaController implements Serializable {
 
     public ClienteJpaController(EntityManagerFactory emf) {
@@ -35,6 +45,9 @@ public class ClienteJpaController implements Serializable {
         }
         if (cliente.getCotizacionList() == null) {
             cliente.setCotizacionList(new ArrayList<Cotizacion>());
+        }
+        if (cliente.getSolicitudList() == null) {
+            cliente.setSolicitudList(new ArrayList<Solicitud>());
         }
         EntityManager em = null;
         try {
@@ -58,6 +71,12 @@ public class ClienteJpaController implements Serializable {
                 attachedCotizacionList.add(cotizacionListCotizacionToAttach);
             }
             cliente.setCotizacionList(attachedCotizacionList);
+            List<Solicitud> attachedSolicitudList = new ArrayList<Solicitud>();
+            for (Solicitud solicitudListSolicitudToAttach : cliente.getSolicitudList()) {
+                solicitudListSolicitudToAttach = em.getReference(solicitudListSolicitudToAttach.getClass(), solicitudListSolicitudToAttach.getSolicitudID());
+                attachedSolicitudList.add(solicitudListSolicitudToAttach);
+            }
+            cliente.setSolicitudList(attachedSolicitudList);
             em.persist(cliente);
             for (Venta ventaListVenta : cliente.getVentaList()) {
                 Cliente oldClienteIDOfVentaListVenta = ventaListVenta.getClienteID();
@@ -86,6 +105,15 @@ public class ClienteJpaController implements Serializable {
                     oldClienteIDOfCotizacionListCotizacion = em.merge(oldClienteIDOfCotizacionListCotizacion);
                 }
             }
+            for (Solicitud solicitudListSolicitud : cliente.getSolicitudList()) {
+                Cliente oldClienteIDOfSolicitudListSolicitud = solicitudListSolicitud.getClienteID();
+                solicitudListSolicitud.setClienteID(cliente);
+                solicitudListSolicitud = em.merge(solicitudListSolicitud);
+                if (oldClienteIDOfSolicitudListSolicitud != null) {
+                    oldClienteIDOfSolicitudListSolicitud.getSolicitudList().remove(solicitudListSolicitud);
+                    oldClienteIDOfSolicitudListSolicitud = em.merge(oldClienteIDOfSolicitudListSolicitud);
+                }
+            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -94,7 +122,7 @@ public class ClienteJpaController implements Serializable {
         }
     }
 
-    public void edit(Cliente cliente) throws NonexistentEntityException, Exception {
+    public void edit(Cliente cliente) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -106,94 +134,108 @@ public class ClienteJpaController implements Serializable {
             List<Abono> abonoListNew = cliente.getAbonoList();
             List<Cotizacion> cotizacionListOld = persistentCliente.getCotizacionList();
             List<Cotizacion> cotizacionListNew = cliente.getCotizacionList();
-            List<Venta> attachedVentaListNew = new ArrayList<>();
-            if(ventaListNew != null && !ventaListNew.isEmpty()){
-                for (Venta ventaListNewVentaToAttach : ventaListNew) {
-                    ventaListNewVentaToAttach = em.getReference(ventaListNewVentaToAttach.getClass(), ventaListNewVentaToAttach.getVentaID());
-                    attachedVentaListNew.add(ventaListNewVentaToAttach);
+            List<Solicitud> solicitudListOld = persistentCliente.getSolicitudList();
+            List<Solicitud> solicitudListNew = cliente.getSolicitudList();
+            List<String> illegalOrphanMessages = null;
+            for (Solicitud solicitudListOldSolicitud : solicitudListOld) {
+                if (!solicitudListNew.contains(solicitudListOldSolicitud)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Solicitud " + solicitudListOldSolicitud + " since its clienteID field is not nullable.");
                 }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            List<Venta> attachedVentaListNew = new ArrayList<Venta>();
+            for (Venta ventaListNewVentaToAttach : ventaListNew) {
+                ventaListNewVentaToAttach = em.getReference(ventaListNewVentaToAttach.getClass(), ventaListNewVentaToAttach.getVentaID());
+                attachedVentaListNew.add(ventaListNewVentaToAttach);
             }
             ventaListNew = attachedVentaListNew;
             cliente.setVentaList(ventaListNew);
-            List<Abono> attachedAbonoListNew = new ArrayList<>();
-            if(abonoListNew != null && !abonoListNew.isEmpty()){
-                for (Abono abonoListNewAbonoToAttach : abonoListNew) {
-                    abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
-                    attachedAbonoListNew.add(abonoListNewAbonoToAttach);
-                }
+            List<Abono> attachedAbonoListNew = new ArrayList<Abono>();
+            for (Abono abonoListNewAbonoToAttach : abonoListNew) {
+                abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
+                attachedAbonoListNew.add(abonoListNewAbonoToAttach);
             }
             abonoListNew = attachedAbonoListNew;
             cliente.setAbonoList(abonoListNew);
-            List<Cotizacion> attachedCotizacionListNew = new ArrayList<>();
-            if(cotizacionListNew != null && !cotizacionListNew.isEmpty()){
-                for (Cotizacion cotizacionListNewCotizacionToAttach : cotizacionListNew) {
-                    cotizacionListNewCotizacionToAttach = em.getReference(cotizacionListNewCotizacionToAttach.getClass(), cotizacionListNewCotizacionToAttach.getCotizacionID());
-                    attachedCotizacionListNew.add(cotizacionListNewCotizacionToAttach);
-                }
+            List<Cotizacion> attachedCotizacionListNew = new ArrayList<Cotizacion>();
+            for (Cotizacion cotizacionListNewCotizacionToAttach : cotizacionListNew) {
+                cotizacionListNewCotizacionToAttach = em.getReference(cotizacionListNewCotizacionToAttach.getClass(), cotizacionListNewCotizacionToAttach.getCotizacionID());
+                attachedCotizacionListNew.add(cotizacionListNewCotizacionToAttach);
             }
             cotizacionListNew = attachedCotizacionListNew;
             cliente.setCotizacionList(cotizacionListNew);
+            List<Solicitud> attachedSolicitudListNew = new ArrayList<Solicitud>();
+            for (Solicitud solicitudListNewSolicitudToAttach : solicitudListNew) {
+                solicitudListNewSolicitudToAttach = em.getReference(solicitudListNewSolicitudToAttach.getClass(), solicitudListNewSolicitudToAttach.getSolicitudID());
+                attachedSolicitudListNew.add(solicitudListNewSolicitudToAttach);
+            }
+            solicitudListNew = attachedSolicitudListNew;
+            cliente.setSolicitudList(solicitudListNew);
             cliente = em.merge(cliente);
-            if(ventaListOld != null && !ventaListOld.isEmpty()){
-                for (Venta ventaListOldVenta : ventaListOld) {
-                    if (!ventaListNew.contains(ventaListOldVenta)) {
-                        ventaListOldVenta.setClienteID(null);
-                        ventaListOldVenta = em.merge(ventaListOldVenta);
-                    }
-                } 
+            for (Venta ventaListOldVenta : ventaListOld) {
+                if (!ventaListNew.contains(ventaListOldVenta)) {
+                    ventaListOldVenta.setClienteID(null);
+                    ventaListOldVenta = em.merge(ventaListOldVenta);
+                }
             }
-            if(ventaListNew != null && !ventaListNew.isEmpty()){
-                for (Venta ventaListNewVenta : ventaListNew) {
-                    if (!ventaListOld.contains(ventaListNewVenta)) {
-                        Cliente oldClienteIDOfVentaListNewVenta = ventaListNewVenta.getClienteID();
-                        ventaListNewVenta.setClienteID(cliente);
-                        ventaListNewVenta = em.merge(ventaListNewVenta);
-                        if (oldClienteIDOfVentaListNewVenta != null && !oldClienteIDOfVentaListNewVenta.equals(cliente)) {
-                            oldClienteIDOfVentaListNewVenta.getVentaList().remove(ventaListNewVenta);
-                            oldClienteIDOfVentaListNewVenta = em.merge(oldClienteIDOfVentaListNewVenta);
-                        }
+            for (Venta ventaListNewVenta : ventaListNew) {
+                if (!ventaListOld.contains(ventaListNewVenta)) {
+                    Cliente oldClienteIDOfVentaListNewVenta = ventaListNewVenta.getClienteID();
+                    ventaListNewVenta.setClienteID(cliente);
+                    ventaListNewVenta = em.merge(ventaListNewVenta);
+                    if (oldClienteIDOfVentaListNewVenta != null && !oldClienteIDOfVentaListNewVenta.equals(cliente)) {
+                        oldClienteIDOfVentaListNewVenta.getVentaList().remove(ventaListNewVenta);
+                        oldClienteIDOfVentaListNewVenta = em.merge(oldClienteIDOfVentaListNewVenta);
                     }
                 }
             }
-            if(abonoListOld != null && !abonoListOld.isEmpty()){
-                for (Abono abonoListOldAbono : abonoListOld) {
-                    if (!abonoListNew.contains(abonoListOldAbono)) {
-                        abonoListOldAbono.setClienteID(null);
-                        abonoListOldAbono = em.merge(abonoListOldAbono);
+            for (Abono abonoListOldAbono : abonoListOld) {
+                if (!abonoListNew.contains(abonoListOldAbono)) {
+                    abonoListOldAbono.setClienteID(null);
+                    abonoListOldAbono = em.merge(abonoListOldAbono);
+                }
+            }
+            for (Abono abonoListNewAbono : abonoListNew) {
+                if (!abonoListOld.contains(abonoListNewAbono)) {
+                    Cliente oldClienteIDOfAbonoListNewAbono = abonoListNewAbono.getClienteID();
+                    abonoListNewAbono.setClienteID(cliente);
+                    abonoListNewAbono = em.merge(abonoListNewAbono);
+                    if (oldClienteIDOfAbonoListNewAbono != null && !oldClienteIDOfAbonoListNewAbono.equals(cliente)) {
+                        oldClienteIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
+                        oldClienteIDOfAbonoListNewAbono = em.merge(oldClienteIDOfAbonoListNewAbono);
                     }
                 }
             }
-            if(abonoListNew != null && !abonoListNew.isEmpty()){
-                for (Abono abonoListNewAbono : abonoListNew) {
-                    if (!abonoListOld.contains(abonoListNewAbono)) {
-                        Cliente oldClienteIDOfAbonoListNewAbono = abonoListNewAbono.getClienteID();
-                        abonoListNewAbono.setClienteID(cliente);
-                        abonoListNewAbono = em.merge(abonoListNewAbono);
-                        if (oldClienteIDOfAbonoListNewAbono != null && !oldClienteIDOfAbonoListNewAbono.equals(cliente)) {
-                            oldClienteIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
-                            oldClienteIDOfAbonoListNewAbono = em.merge(oldClienteIDOfAbonoListNewAbono);
-                        }
+            for (Cotizacion cotizacionListOldCotizacion : cotizacionListOld) {
+                if (!cotizacionListNew.contains(cotizacionListOldCotizacion)) {
+                    cotizacionListOldCotizacion.setClienteID(null);
+                    cotizacionListOldCotizacion = em.merge(cotizacionListOldCotizacion);
+                }
+            }
+            for (Cotizacion cotizacionListNewCotizacion : cotizacionListNew) {
+                if (!cotizacionListOld.contains(cotizacionListNewCotizacion)) {
+                    Cliente oldClienteIDOfCotizacionListNewCotizacion = cotizacionListNewCotizacion.getClienteID();
+                    cotizacionListNewCotizacion.setClienteID(cliente);
+                    cotizacionListNewCotizacion = em.merge(cotizacionListNewCotizacion);
+                    if (oldClienteIDOfCotizacionListNewCotizacion != null && !oldClienteIDOfCotizacionListNewCotizacion.equals(cliente)) {
+                        oldClienteIDOfCotizacionListNewCotizacion.getCotizacionList().remove(cotizacionListNewCotizacion);
+                        oldClienteIDOfCotizacionListNewCotizacion = em.merge(oldClienteIDOfCotizacionListNewCotizacion);
                     }
                 }
             }
-            if(abonoListOld != null && !abonoListOld.isEmpty()){
-                for (Cotizacion cotizacionListOldCotizacion : cotizacionListOld) {
-                    if (!cotizacionListNew.contains(cotizacionListOldCotizacion)) {
-                        cotizacionListOldCotizacion.setClienteID(null);
-                        cotizacionListOldCotizacion = em.merge(cotizacionListOldCotizacion);
-                    }
-                }
-            }
-            if(abonoListNew != null && !cotizacionListNew.isEmpty()){
-                for (Cotizacion cotizacionListNewCotizacion : cotizacionListNew) {
-                    if (!cotizacionListOld.contains(cotizacionListNewCotizacion)) {
-                        Cliente oldClienteIDOfCotizacionListNewCotizacion = cotizacionListNewCotizacion.getClienteID();
-                        cotizacionListNewCotizacion.setClienteID(cliente);
-                        cotizacionListNewCotizacion = em.merge(cotizacionListNewCotizacion);
-                        if (oldClienteIDOfCotizacionListNewCotizacion != null && !oldClienteIDOfCotizacionListNewCotizacion.equals(cliente)) {
-                            oldClienteIDOfCotizacionListNewCotizacion.getCotizacionList().remove(cotizacionListNewCotizacion);
-                            oldClienteIDOfCotizacionListNewCotizacion = em.merge(oldClienteIDOfCotizacionListNewCotizacion);
-                        }
+            for (Solicitud solicitudListNewSolicitud : solicitudListNew) {
+                if (!solicitudListOld.contains(solicitudListNewSolicitud)) {
+                    Cliente oldClienteIDOfSolicitudListNewSolicitud = solicitudListNewSolicitud.getClienteID();
+                    solicitudListNewSolicitud.setClienteID(cliente);
+                    solicitudListNewSolicitud = em.merge(solicitudListNewSolicitud);
+                    if (oldClienteIDOfSolicitudListNewSolicitud != null && !oldClienteIDOfSolicitudListNewSolicitud.equals(cliente)) {
+                        oldClienteIDOfSolicitudListNewSolicitud.getSolicitudList().remove(solicitudListNewSolicitud);
+                        oldClienteIDOfSolicitudListNewSolicitud = em.merge(oldClienteIDOfSolicitudListNewSolicitud);
                     }
                 }
             }
@@ -214,7 +256,7 @@ public class ClienteJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -225,6 +267,17 @@ public class ClienteJpaController implements Serializable {
                 cliente.getClienteID();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The cliente with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            List<Solicitud> solicitudListOrphanCheck = cliente.getSolicitudList();
+            for (Solicitud solicitudListOrphanCheckSolicitud : solicitudListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Cliente (" + cliente + ") cannot be destroyed since the Solicitud " + solicitudListOrphanCheckSolicitud + " in its solicitudList field has a non-nullable clienteID field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             List<Venta> ventaList = cliente.getVentaList();
             for (Venta ventaListVenta : ventaList) {

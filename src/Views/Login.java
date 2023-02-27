@@ -2,6 +2,7 @@ package Views;
 
 import Resource.Conection;
 import Resource.LocalConection;
+import Resource.NoJpaConection;
 import Resource.Utilities;
 import ViewsControllers.LoginViewController;
 import javax.swing.ImageIcon;
@@ -18,7 +19,7 @@ public class Login extends javax.swing.JFrame {
         btnClose.addMouseListener(Utilities.getMLButtonClose());
         btnIniciarSesion.addMouseListener(Utilities.getMLGeneralButton());
         txtNombre.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        loginVC = new LoginViewController(this, txtNombre, txtContrasena, cbRecordarme, lbError, btnIniciarSesion, lbOlvidaste);
+        loginVC = new LoginViewController(this, txtNombre, txtContrasena, cbRecordarme, lbError);
         loginVC.CargarUsuario();
     }
 
@@ -257,7 +258,11 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_pnBarraMouseDragged
 
     private void btnCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseClicked
-        Conection.Disconnect(Conection.createEntityManagerFactory().createEntityManager());
+        Utilities.setRunProcess(false);
+        if(Conection.createEntityManagerFactory().isOpen()){
+            Conection.Disconnect(Conection.createEntityManagerFactory().createEntityManager());
+        }
+        new NoJpaConection().closeConec();
         new LocalConection().closeConection();
         System.exit(0);
     }//GEN-LAST:event_btnCloseMouseClicked

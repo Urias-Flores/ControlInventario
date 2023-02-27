@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Controllers;
 
 import Controllers.exceptions.IllegalOrphanException;
@@ -14,7 +18,10 @@ import java.util.List;
 import Models.Compra;
 import Models.Venta;
 import Models.Abono;
+import Models.Gasto;
 import Models.Cotizacion;
+import Models.Solicitud;
+import Models.Arqueo;
 import Models.Usuario;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -47,8 +54,17 @@ public class UsuarioJpaController implements Serializable {
         if (usuario.getAbonoList() == null) {
             usuario.setAbonoList(new ArrayList<Abono>());
         }
+        if (usuario.getGastoList() == null) {
+            usuario.setGastoList(new ArrayList<Gasto>());
+        }
         if (usuario.getCotizacionList() == null) {
             usuario.setCotizacionList(new ArrayList<Cotizacion>());
+        }
+        if (usuario.getSolicitudList() == null) {
+            usuario.setSolicitudList(new ArrayList<Solicitud>());
+        }
+        if (usuario.getArqueoList() == null) {
+            usuario.setArqueoList(new ArrayList<Arqueo>());
         }
         EntityManager em = null;
         try {
@@ -83,12 +99,30 @@ public class UsuarioJpaController implements Serializable {
                 attachedAbonoList.add(abonoListAbonoToAttach);
             }
             usuario.setAbonoList(attachedAbonoList);
+            List<Gasto> attachedGastoList = new ArrayList<Gasto>();
+            for (Gasto gastoListGastoToAttach : usuario.getGastoList()) {
+                gastoListGastoToAttach = em.getReference(gastoListGastoToAttach.getClass(), gastoListGastoToAttach.getGastoID());
+                attachedGastoList.add(gastoListGastoToAttach);
+            }
+            usuario.setGastoList(attachedGastoList);
             List<Cotizacion> attachedCotizacionList = new ArrayList<Cotizacion>();
             for (Cotizacion cotizacionListCotizacionToAttach : usuario.getCotizacionList()) {
                 cotizacionListCotizacionToAttach = em.getReference(cotizacionListCotizacionToAttach.getClass(), cotizacionListCotizacionToAttach.getCotizacionID());
                 attachedCotizacionList.add(cotizacionListCotizacionToAttach);
             }
             usuario.setCotizacionList(attachedCotizacionList);
+            List<Solicitud> attachedSolicitudList = new ArrayList<Solicitud>();
+            for (Solicitud solicitudListSolicitudToAttach : usuario.getSolicitudList()) {
+                solicitudListSolicitudToAttach = em.getReference(solicitudListSolicitudToAttach.getClass(), solicitudListSolicitudToAttach.getSolicitudID());
+                attachedSolicitudList.add(solicitudListSolicitudToAttach);
+            }
+            usuario.setSolicitudList(attachedSolicitudList);
+            List<Arqueo> attachedArqueoList = new ArrayList<Arqueo>();
+            for (Arqueo arqueoListArqueoToAttach : usuario.getArqueoList()) {
+                arqueoListArqueoToAttach = em.getReference(arqueoListArqueoToAttach.getClass(), arqueoListArqueoToAttach.getArqueoID());
+                attachedArqueoList.add(arqueoListArqueoToAttach);
+            }
+            usuario.setArqueoList(attachedArqueoList);
             em.persist(usuario);
             if (empleadoID != null) {
                 empleadoID.getUsuarioList().add(usuario);
@@ -130,6 +164,15 @@ public class UsuarioJpaController implements Serializable {
                     oldUsuarioIDOfAbonoListAbono = em.merge(oldUsuarioIDOfAbonoListAbono);
                 }
             }
+            for (Gasto gastoListGasto : usuario.getGastoList()) {
+                Usuario oldUsuarioIDOfGastoListGasto = gastoListGasto.getUsuarioID();
+                gastoListGasto.setUsuarioID(usuario);
+                gastoListGasto = em.merge(gastoListGasto);
+                if (oldUsuarioIDOfGastoListGasto != null) {
+                    oldUsuarioIDOfGastoListGasto.getGastoList().remove(gastoListGasto);
+                    oldUsuarioIDOfGastoListGasto = em.merge(oldUsuarioIDOfGastoListGasto);
+                }
+            }
             for (Cotizacion cotizacionListCotizacion : usuario.getCotizacionList()) {
                 Usuario oldUsuarioIDOfCotizacionListCotizacion = cotizacionListCotizacion.getUsuarioID();
                 cotizacionListCotizacion.setUsuarioID(usuario);
@@ -137,6 +180,24 @@ public class UsuarioJpaController implements Serializable {
                 if (oldUsuarioIDOfCotizacionListCotizacion != null) {
                     oldUsuarioIDOfCotizacionListCotizacion.getCotizacionList().remove(cotizacionListCotizacion);
                     oldUsuarioIDOfCotizacionListCotizacion = em.merge(oldUsuarioIDOfCotizacionListCotizacion);
+                }
+            }
+            for (Solicitud solicitudListSolicitud : usuario.getSolicitudList()) {
+                Usuario oldUsuarioIDOfSolicitudListSolicitud = solicitudListSolicitud.getUsuarioID();
+                solicitudListSolicitud.setUsuarioID(usuario);
+                solicitudListSolicitud = em.merge(solicitudListSolicitud);
+                if (oldUsuarioIDOfSolicitudListSolicitud != null) {
+                    oldUsuarioIDOfSolicitudListSolicitud.getSolicitudList().remove(solicitudListSolicitud);
+                    oldUsuarioIDOfSolicitudListSolicitud = em.merge(oldUsuarioIDOfSolicitudListSolicitud);
+                }
+            }
+            for (Arqueo arqueoListArqueo : usuario.getArqueoList()) {
+                Usuario oldUsuarioIDOfArqueoListArqueo = arqueoListArqueo.getUsuarioID();
+                arqueoListArqueo.setUsuarioID(usuario);
+                arqueoListArqueo = em.merge(arqueoListArqueo);
+                if (oldUsuarioIDOfArqueoListArqueo != null) {
+                    oldUsuarioIDOfArqueoListArqueo.getArqueoList().remove(arqueoListArqueo);
+                    oldUsuarioIDOfArqueoListArqueo = em.merge(oldUsuarioIDOfArqueoListArqueo);
                 }
             }
             em.getTransaction().commit();
@@ -163,8 +224,14 @@ public class UsuarioJpaController implements Serializable {
             List<Venta> ventaListNew = usuario.getVentaList();
             List<Abono> abonoListOld = persistentUsuario.getAbonoList();
             List<Abono> abonoListNew = usuario.getAbonoList();
+            List<Gasto> gastoListOld = persistentUsuario.getGastoList();
+            List<Gasto> gastoListNew = usuario.getGastoList();
             List<Cotizacion> cotizacionListOld = persistentUsuario.getCotizacionList();
             List<Cotizacion> cotizacionListNew = usuario.getCotizacionList();
+            List<Solicitud> solicitudListOld = persistentUsuario.getSolicitudList();
+            List<Solicitud> solicitudListNew = usuario.getSolicitudList();
+            List<Arqueo> arqueoListOld = persistentUsuario.getArqueoList();
+            List<Arqueo> arqueoListNew = usuario.getArqueoList();
             List<String> illegalOrphanMessages = null;
             for (Inventariodetalleacciones inventariodetalleaccionesListOldInventariodetalleacciones : inventariodetalleaccionesListOld) {
                 if (!inventariodetalleaccionesListNew.contains(inventariodetalleaccionesListOldInventariodetalleacciones)) {
@@ -198,12 +265,36 @@ public class UsuarioJpaController implements Serializable {
                     illegalOrphanMessages.add("You must retain Abono " + abonoListOldAbono + " since its usuarioID field is not nullable.");
                 }
             }
+            for (Gasto gastoListOldGasto : gastoListOld) {
+                if (!gastoListNew.contains(gastoListOldGasto)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Gasto " + gastoListOldGasto + " since its usuarioID field is not nullable.");
+                }
+            }
             for (Cotizacion cotizacionListOldCotizacion : cotizacionListOld) {
                 if (!cotizacionListNew.contains(cotizacionListOldCotizacion)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain Cotizacion " + cotizacionListOldCotizacion + " since its usuarioID field is not nullable.");
+                }
+            }
+            for (Solicitud solicitudListOldSolicitud : solicitudListOld) {
+                if (!solicitudListNew.contains(solicitudListOldSolicitud)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Solicitud " + solicitudListOldSolicitud + " since its usuarioID field is not nullable.");
+                }
+            }
+            for (Arqueo arqueoListOldArqueo : arqueoListOld) {
+                if (!arqueoListNew.contains(arqueoListOldArqueo)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Arqueo " + arqueoListOldArqueo + " since its usuarioID field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -241,6 +332,13 @@ public class UsuarioJpaController implements Serializable {
             }
             abonoListNew = attachedAbonoListNew;
             usuario.setAbonoList(abonoListNew);
+            List<Gasto> attachedGastoListNew = new ArrayList<Gasto>();
+            for (Gasto gastoListNewGastoToAttach : gastoListNew) {
+                gastoListNewGastoToAttach = em.getReference(gastoListNewGastoToAttach.getClass(), gastoListNewGastoToAttach.getGastoID());
+                attachedGastoListNew.add(gastoListNewGastoToAttach);
+            }
+            gastoListNew = attachedGastoListNew;
+            usuario.setGastoList(gastoListNew);
             List<Cotizacion> attachedCotizacionListNew = new ArrayList<Cotizacion>();
             for (Cotizacion cotizacionListNewCotizacionToAttach : cotizacionListNew) {
                 cotizacionListNewCotizacionToAttach = em.getReference(cotizacionListNewCotizacionToAttach.getClass(), cotizacionListNewCotizacionToAttach.getCotizacionID());
@@ -248,6 +346,20 @@ public class UsuarioJpaController implements Serializable {
             }
             cotizacionListNew = attachedCotizacionListNew;
             usuario.setCotizacionList(cotizacionListNew);
+            List<Solicitud> attachedSolicitudListNew = new ArrayList<Solicitud>();
+            for (Solicitud solicitudListNewSolicitudToAttach : solicitudListNew) {
+                solicitudListNewSolicitudToAttach = em.getReference(solicitudListNewSolicitudToAttach.getClass(), solicitudListNewSolicitudToAttach.getSolicitudID());
+                attachedSolicitudListNew.add(solicitudListNewSolicitudToAttach);
+            }
+            solicitudListNew = attachedSolicitudListNew;
+            usuario.setSolicitudList(solicitudListNew);
+            List<Arqueo> attachedArqueoListNew = new ArrayList<Arqueo>();
+            for (Arqueo arqueoListNewArqueoToAttach : arqueoListNew) {
+                arqueoListNewArqueoToAttach = em.getReference(arqueoListNewArqueoToAttach.getClass(), arqueoListNewArqueoToAttach.getArqueoID());
+                attachedArqueoListNew.add(arqueoListNewArqueoToAttach);
+            }
+            arqueoListNew = attachedArqueoListNew;
+            usuario.setArqueoList(arqueoListNew);
             usuario = em.merge(usuario);
             if (empleadoIDOld != null && !empleadoIDOld.equals(empleadoIDNew)) {
                 empleadoIDOld.getUsuarioList().remove(usuario);
@@ -301,6 +413,17 @@ public class UsuarioJpaController implements Serializable {
                     }
                 }
             }
+            for (Gasto gastoListNewGasto : gastoListNew) {
+                if (!gastoListOld.contains(gastoListNewGasto)) {
+                    Usuario oldUsuarioIDOfGastoListNewGasto = gastoListNewGasto.getUsuarioID();
+                    gastoListNewGasto.setUsuarioID(usuario);
+                    gastoListNewGasto = em.merge(gastoListNewGasto);
+                    if (oldUsuarioIDOfGastoListNewGasto != null && !oldUsuarioIDOfGastoListNewGasto.equals(usuario)) {
+                        oldUsuarioIDOfGastoListNewGasto.getGastoList().remove(gastoListNewGasto);
+                        oldUsuarioIDOfGastoListNewGasto = em.merge(oldUsuarioIDOfGastoListNewGasto);
+                    }
+                }
+            }
             for (Cotizacion cotizacionListNewCotizacion : cotizacionListNew) {
                 if (!cotizacionListOld.contains(cotizacionListNewCotizacion)) {
                     Usuario oldUsuarioIDOfCotizacionListNewCotizacion = cotizacionListNewCotizacion.getUsuarioID();
@@ -309,6 +432,28 @@ public class UsuarioJpaController implements Serializable {
                     if (oldUsuarioIDOfCotizacionListNewCotizacion != null && !oldUsuarioIDOfCotizacionListNewCotizacion.equals(usuario)) {
                         oldUsuarioIDOfCotizacionListNewCotizacion.getCotizacionList().remove(cotizacionListNewCotizacion);
                         oldUsuarioIDOfCotizacionListNewCotizacion = em.merge(oldUsuarioIDOfCotizacionListNewCotizacion);
+                    }
+                }
+            }
+            for (Solicitud solicitudListNewSolicitud : solicitudListNew) {
+                if (!solicitudListOld.contains(solicitudListNewSolicitud)) {
+                    Usuario oldUsuarioIDOfSolicitudListNewSolicitud = solicitudListNewSolicitud.getUsuarioID();
+                    solicitudListNewSolicitud.setUsuarioID(usuario);
+                    solicitudListNewSolicitud = em.merge(solicitudListNewSolicitud);
+                    if (oldUsuarioIDOfSolicitudListNewSolicitud != null && !oldUsuarioIDOfSolicitudListNewSolicitud.equals(usuario)) {
+                        oldUsuarioIDOfSolicitudListNewSolicitud.getSolicitudList().remove(solicitudListNewSolicitud);
+                        oldUsuarioIDOfSolicitudListNewSolicitud = em.merge(oldUsuarioIDOfSolicitudListNewSolicitud);
+                    }
+                }
+            }
+            for (Arqueo arqueoListNewArqueo : arqueoListNew) {
+                if (!arqueoListOld.contains(arqueoListNewArqueo)) {
+                    Usuario oldUsuarioIDOfArqueoListNewArqueo = arqueoListNewArqueo.getUsuarioID();
+                    arqueoListNewArqueo.setUsuarioID(usuario);
+                    arqueoListNewArqueo = em.merge(arqueoListNewArqueo);
+                    if (oldUsuarioIDOfArqueoListNewArqueo != null && !oldUsuarioIDOfArqueoListNewArqueo.equals(usuario)) {
+                        oldUsuarioIDOfArqueoListNewArqueo.getArqueoList().remove(arqueoListNewArqueo);
+                        oldUsuarioIDOfArqueoListNewArqueo = em.merge(oldUsuarioIDOfArqueoListNewArqueo);
                     }
                 }
             }
@@ -370,12 +515,33 @@ public class UsuarioJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Abono " + abonoListOrphanCheckAbono + " in its abonoList field has a non-nullable usuarioID field.");
             }
+            List<Gasto> gastoListOrphanCheck = usuario.getGastoList();
+            for (Gasto gastoListOrphanCheckGasto : gastoListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Gasto " + gastoListOrphanCheckGasto + " in its gastoList field has a non-nullable usuarioID field.");
+            }
             List<Cotizacion> cotizacionListOrphanCheck = usuario.getCotizacionList();
             for (Cotizacion cotizacionListOrphanCheckCotizacion : cotizacionListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Cotizacion " + cotizacionListOrphanCheckCotizacion + " in its cotizacionList field has a non-nullable usuarioID field.");
+            }
+            List<Solicitud> solicitudListOrphanCheck = usuario.getSolicitudList();
+            for (Solicitud solicitudListOrphanCheckSolicitud : solicitudListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Solicitud " + solicitudListOrphanCheckSolicitud + " in its solicitudList field has a non-nullable usuarioID field.");
+            }
+            List<Arqueo> arqueoListOrphanCheck = usuario.getArqueoList();
+            for (Arqueo arqueoListOrphanCheckArqueo : arqueoListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Arqueo " + arqueoListOrphanCheckArqueo + " in its arqueoList field has a non-nullable usuarioID field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

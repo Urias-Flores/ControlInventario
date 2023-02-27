@@ -8,7 +8,9 @@ import Resource.Conection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.awt.Color;
+import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -22,12 +24,13 @@ import javax.swing.table.TableRowSorter;
 
 public class ProductoViewController {
 
-    private ProductoJpaController controller;
-
     private JTextField Buscar;
     private JComboBox Marcas;
     private JComboBox Categorias;
     private JTable Productos;
+    private JLabel TotalProductos;
+    private JLabel TotalMarcas;
+    private JLabel TotalCategorias;
     private JLabel Cargando;
     
     private TableRowSorter rowSorter = new TableRowSorter();
@@ -36,15 +39,15 @@ public class ProductoViewController {
         public boolean isCellEditable(int row, int column){ return false; }
     };
 
-    public ProductoViewController(JTextField Buscar, JComboBox Marcas, JComboBox Categorias, JTable Productos, JLabel Cargando) {
+    public ProductoViewController(JTextField Buscar, JComboBox Marcas, JComboBox Categorias, JTable Productos, JLabel TotalProcutos, JLabel TotalMarcas, JLabel TotalCategorias, JLabel Cargando) {
         this.Buscar = Buscar;
         this.Marcas = Marcas;
         this.Categorias = Categorias;
         this.Productos = Productos;
+        this.TotalProductos = TotalProcutos;
+        this.TotalMarcas = TotalMarcas;
+        this.TotalCategorias = TotalCategorias;
         this.Cargando = Cargando;
-        
-        //Intanciando controllador para manejo de accion sobre productos
-        controller = new ProductoJpaController(Conection.createEntityManagerFactory());
         
         //Cargando model de tabla en tabla de productos
         setModelTableProductos();
@@ -114,6 +117,7 @@ public class ProductoViewController {
             };
             model.addRow(row);
         });
+        TotalProductos.setText(getNumberFormat(model.getRowCount()));
     }
     
     public void loadBrands() {
@@ -121,6 +125,7 @@ public class ProductoViewController {
         Marcas.addItem(new Marca(0, "-- Todas las marcas --"));
         List<Marca> marcas = Conection.createEntityManager().createNamedQuery("Marca.findAll").getResultList();
         marcas.forEach(Marcas::addItem);
+        TotalMarcas.setText(String.valueOf(marcas.size()));
     }
 
     public void loadCategories() {
@@ -128,12 +133,19 @@ public class ProductoViewController {
         Categorias.addItem(new Categoria(0, "-- Todas las categorias --"));
         List<Categoria> categorias = Conection.createEntityManager().createNamedQuery("Categoria.findAll").getResultList();
         categorias.forEach(Categorias::addItem);
+        TotalCategorias.setText(String.valueOf(categorias.size()));
     }
     
     public void filter() {
-        RowFilter searchFilter = 
-                RowFilter.regexFilter(
-                        (Buscar.getText().isEmpty() || Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+Buscar.getText()) , 1, 4);
+        List<RowFilter<TableModel, String>> wordsFilter = new LinkedList<>();
+        if(!Buscar.getText().isEmpty() || !Buscar.getForeground().equals(new Color(180, 180, 180))){
+            String[] words = Buscar.getText().split(" ");
+            for(String word : words){
+                wordsFilter.add(RowFilter.regexFilter(Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+word, 1, 4));
+            }
+        }
+ 
+        RowFilter searchFilter = RowFilter.andFilter(wordsFilter);
         RowFilter brandFilter = RowFilter.regexFilter(Marcas.getSelectedIndex() > 0 ? Marcas.getSelectedItem().toString() : "", 2);
         RowFilter categoryFilter = RowFilter.regexFilter(Categorias.getSelectedIndex() > 0 ? Categorias.getSelectedItem().toString() : "", 3);
         
@@ -159,5 +171,10 @@ public class ProductoViewController {
         }else{
             Dialogs.ShowMessageDialog("Seleccione un producto de la lista", Dialogs.ERROR_ICON);
         }
+    }
+    
+    private String getNumberFormat(float Value) {
+        DecimalFormat format = new DecimalFormat("#,##0.00");
+        return format.format(Value);
     }
 }

@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.NoResultException;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -232,41 +233,23 @@ public class Utilities {
     }
 
     public static int IniciarSesion(String Nombre, String Contrasena) {
-        UsuarioJpaController usuarioJpaController = new UsuarioJpaController(Conection.createEntityManagerFactory());
-        List<Usuario> usuarios = usuarioJpaController.findUsuarioEntities();
-        Usuario user = new Usuario();
-        usuarios.forEach((usuario) -> {
-            if (usuario.getNombre().equals(Nombre)) {
-                user.setNombre(usuario.getNombre());
-                if (Security.validatePassword(Contrasena, usuario.getContrasena())) {
-                    
-                    user.setUsuarioID(usuario.getUsuarioID());
-                    user.setContrasena(usuario.getContrasena());
-                    user.setEstado(usuario.getEstado());
-                    user.setCargo(usuario.getCargo());
-                }
-                
-            }
-        });
-
-        if (user.getNombre() != null) {
-            
-            if (user.getContrasena() != null) {
-                
+        try{
+            Usuario user = (Usuario) Conection.createEntityManager().createNamedQuery("Usuario.findByNombre")
+                    .setParameter("nombre", Nombre)
+                    .getSingleResult();
+            if(Security.validatePassword(Contrasena, user.getContrasena())){
                 if(user.getEstado() == 1){
                     UsuarioActual = user;
                     return user.getUsuarioID();
                 }else{
                     return -2;
                 }
-                
-            } else {
-                
+            }else{
                 return 0;
-                
             }
+        } catch (NoResultException ex ){
+            return -1;
         }
-        return -1;
     }
     
     public static Usuario getUsuarioActual(){

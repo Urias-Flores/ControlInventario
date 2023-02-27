@@ -26,7 +26,6 @@ import javax.swing.JTabbedPane;
 
 public class MainViewController {
     private JFrame Instance;
-    private JFrame Login;
     private JLabel UsuarioActual;
     private JLabel Notificaciones;
     private JLabel Facturacion;
@@ -38,9 +37,8 @@ public class MainViewController {
     private JTabbedPane Principal;
     private int PanelActivo = 0;
 
-    public MainViewController(JFrame Instance, JFrame Login, JLabel UsuarioActual, JLabel Notificaciones,JLabel Facturacion, JLabel Control, JLabel Estadisticas, JLabel Preferencias, JLabel Ajustes, JLabel CerrarSesion, JTabbedPane Principal) {
+    public MainViewController(JFrame Instance, JLabel UsuarioActual, JLabel Notificaciones,JLabel Facturacion, JLabel Control, JLabel Estadisticas, JLabel Preferencias, JLabel Ajustes, JLabel CerrarSesion, JTabbedPane Principal) {
         this.Instance = Instance;
-        this.Login = Login;
         this.UsuarioActual = UsuarioActual;
         this.Notificaciones = Notificaciones;
         this.Facturacion = Facturacion;
@@ -67,9 +65,11 @@ public class MainViewController {
                     
                     Icon FacturarIcon = new ImageIcon(getClass().getResource("/Icons/factura.png"));
                     Icon FacturaDiaIcon = new ImageIcon(getClass().getResource("/Icons/facturaDia.png"));
-
+                    Icon ArqueoIcon = new ImageIcon(getClass().getResource("/Icons/arqueo.png"));
+                    
                     Principal.addTab("Facturar", FacturarIcon, facturar);
                     Principal.addTab("Facturas del dia", FacturaDiaIcon, facturasDia);
+                    Principal.addTab("Arqueos", ArqueoIcon, null);
                     break;
                 case 2:
                     
@@ -162,7 +162,7 @@ public class MainViewController {
         label.setEnabled(true);
     }
     
-    public void updateNotificaciones(){
+    public void updateNotifications(){
         Utilities.setRunProcess(true);
         Runnable run = ()->{
             while(Utilities.isRunProcess()){

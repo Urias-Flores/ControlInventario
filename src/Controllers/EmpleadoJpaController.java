@@ -74,45 +74,38 @@ public class EmpleadoJpaController implements Serializable {
             List<Usuario> usuarioListOld = persistentEmpleado.getUsuarioList();
             List<Usuario> usuarioListNew = empleado.getUsuarioList();
             List<String> illegalOrphanMessages = null;
-            if(usuarioListOld != null){
-                for (Usuario usuarioListOldUsuario : usuarioListOld) {
-                    if (!usuarioListNew.contains(usuarioListOldUsuario)) {
-                        if (illegalOrphanMessages == null) {
-                            illegalOrphanMessages = new ArrayList<String>();
-                        }
-                        illegalOrphanMessages.add("You must retain Usuario " + usuarioListOldUsuario + " since its empleadoID field is not nullable.");
+            for (Usuario usuarioListOldUsuario : usuarioListOld) {
+                if (!usuarioListNew.contains(usuarioListOldUsuario)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
                     }
+                    illegalOrphanMessages.add("You must retain Usuario " + usuarioListOldUsuario + " since its empleadoID field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             List<Usuario> attachedUsuarioListNew = new ArrayList<Usuario>();
-            if(usuarioListNew != null){
-                for (Usuario usuarioListNewUsuarioToAttach : usuarioListNew) {
-                    usuarioListNewUsuarioToAttach = em.getReference(usuarioListNewUsuarioToAttach.getClass(), usuarioListNewUsuarioToAttach.getUsuarioID());
-                    attachedUsuarioListNew.add(usuarioListNewUsuarioToAttach);
-                }
+            for (Usuario usuarioListNewUsuarioToAttach : usuarioListNew) {
+                usuarioListNewUsuarioToAttach = em.getReference(usuarioListNewUsuarioToAttach.getClass(), usuarioListNewUsuarioToAttach.getUsuarioID());
+                attachedUsuarioListNew.add(usuarioListNewUsuarioToAttach);
             }
-            
             usuarioListNew = attachedUsuarioListNew;
             empleado.setUsuarioList(usuarioListNew);
             empleado = em.merge(empleado);
-            if(usuarioListNew != null){
-                for (Usuario usuarioListNewUsuario : usuarioListNew) {
-                    if (!usuarioListOld.contains(usuarioListNewUsuario)) {
-                        Empleado oldEmpleadoIDOfUsuarioListNewUsuario = usuarioListNewUsuario.getEmpleadoID();
-                        usuarioListNewUsuario.setEmpleadoID(empleado);
-                        usuarioListNewUsuario = em.merge(usuarioListNewUsuario);
-                        if (oldEmpleadoIDOfUsuarioListNewUsuario != null && !oldEmpleadoIDOfUsuarioListNewUsuario.equals(empleado)) {
-                            oldEmpleadoIDOfUsuarioListNewUsuario.getUsuarioList().remove(usuarioListNewUsuario);
-                            oldEmpleadoIDOfUsuarioListNewUsuario = em.merge(oldEmpleadoIDOfUsuarioListNewUsuario);
-                        }
+            for (Usuario usuarioListNewUsuario : usuarioListNew) {
+                if (!usuarioListOld.contains(usuarioListNewUsuario)) {
+                    Empleado oldEmpleadoIDOfUsuarioListNewUsuario = usuarioListNewUsuario.getEmpleadoID();
+                    usuarioListNewUsuario.setEmpleadoID(empleado);
+                    usuarioListNewUsuario = em.merge(usuarioListNewUsuario);
+                    if (oldEmpleadoIDOfUsuarioListNewUsuario != null && !oldEmpleadoIDOfUsuarioListNewUsuario.equals(empleado)) {
+                        oldEmpleadoIDOfUsuarioListNewUsuario.getUsuarioList().remove(usuarioListNewUsuario);
+                        oldEmpleadoIDOfUsuarioListNewUsuario = em.merge(oldEmpleadoIDOfUsuarioListNewUsuario);
                     }
                 }
             }
             em.getTransaction().commit();
-        } catch (IllegalOrphanException ex) {
+        } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = empleado.getEmpleadoID();

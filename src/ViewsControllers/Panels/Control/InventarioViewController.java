@@ -7,12 +7,10 @@ import Resource.Conection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.awt.Color;
-import java.awt.print.PrinterException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -29,7 +27,8 @@ public class InventarioViewController {
     private JTable Inventario;
     private JComboBox<Marca> Marcas;
     private JComboBox<Categoria> Categorias;
-    private JLabel Total;
+    private JLabel CostoTotal;
+    private JLabel ValorTotal;
     private JLabel CantidadTotal;
     
     private JLabel Cargando;
@@ -41,12 +40,13 @@ public class InventarioViewController {
         { return false; }
     };
 
-    public InventarioViewController(JTextField Buscar, JTable Inventario, JComboBox Marcas, JComboBox Categorias, JLabel Total, JLabel CantidadTotal, JLabel Cargando) {
+    public InventarioViewController(JTextField Buscar, JTable Inventario, JComboBox Marcas, JComboBox Categorias, JLabel CostoTotal, JLabel ValorTotal, JLabel CantidadTotal, JLabel Cargando) {
         this.Buscar = Buscar;
         this.Inventario = Inventario;
         this.Marcas = Marcas;
         this.Categorias = Categorias;
-        this.Total = Total;
+        this.CostoTotal = CostoTotal;
+        this.ValorTotal = ValorTotal;
         this.CantidadTotal = CantidadTotal;
         this.Cargando = Cargando;
         
@@ -91,16 +91,16 @@ public class InventarioViewController {
     }
     
     private void setModelTableInventory(){
-        String[] columns = {"No. Inventario", "Cd.", "Descripcion", "Marca", "Categoria", "Precio/Compra", "Existencia"};
+        String[] columns = {"Cd.", "Descripcion", "Marca", "Categoria", "Precio/Compra", "Precio/Venta", "Existencia"};
         model.setColumnIdentifiers(columns);
         
         Inventario.setModel(model);
-        Inventario.getColumn("No. Inventario").setPreferredWidth(70);
         Inventario.getColumn("Cd.").setPreferredWidth(30);
         Inventario.getColumn("Descripcion").setPreferredWidth(450);
         Inventario.getColumn("Marca").setPreferredWidth(100);
         Inventario.getColumn("Categoria").setPreferredWidth(130);
         Inventario.getColumn("Precio/Compra").setPreferredWidth(80);
+        Inventario.getColumn("Precio/Venta").setPreferredWidth(80);
         Inventario.getColumn("Existencia").setPreferredWidth(40);
     }
 
@@ -112,18 +112,25 @@ public class InventarioViewController {
     }
 
     private void updateTotales() {
-        float total = 0;
+        float costoTotal = 0;
+        float valorTotal = 0;
         float cantidadTotal = 0;
 
         int counter = 0;
         while (counter < Inventario.getRowCount()) {
-            total += (Float.parseFloat(Inventario.getValueAt(counter, 5).toString()) * Float.parseFloat(Inventario.getValueAt(counter, 6).toString()));
-            cantidadTotal += Float.parseFloat(Inventario.getValueAt(counter, 6).toString());
+            float precioCompra = Float.parseFloat(Inventario.getValueAt(counter, 4).toString());
+            float precioVenta = Float.parseFloat(Inventario.getValueAt(counter, 5).toString());
+            float cantidad = Float.parseFloat(Inventario.getValueAt(counter, 6).toString());
+            
+            costoTotal += precioCompra * cantidad;
+            valorTotal += precioVenta * cantidad;
+            cantidadTotal += cantidad;
             counter++;
         }
 
-        Total.setText(getNumberFormat(total));
-        CantidadTotal.setText(String.valueOf(cantidadTotal));
+        CostoTotal.setText(getNumberFormat(costoTotal));
+        ValorTotal.setText(getNumberFormat(valorTotal));
+        CantidadTotal.setText(getNumberFormat(cantidadTotal));
     }
 
     public void loadBrands() {
@@ -141,19 +148,24 @@ public class InventarioViewController {
     }
 
     public void filter(){
-        RowFilter searchFilter = 
-                RowFilter.regexFilter(
-                        (Buscar.getText().isEmpty() || Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+Buscar.getText()) , 2);
-        RowFilter brandFilter = RowFilter.regexFilter(Marcas.getSelectedIndex() > 0 ? Marcas.getSelectedItem().toString() : "", 3);
-        RowFilter categoryFilter = RowFilter.regexFilter(Categorias.getSelectedIndex() > 0 ? Categorias.getSelectedItem().toString() : "", 4);
+        List<RowFilter<TableModel, String>> searchfilters = new LinkedList<>();
+        if(!Buscar.getText().isEmpty() || !Buscar.getForeground().equals(new Color(180, 180, 180))){
+            String[] words = Buscar.getText().split(" ");
+            for(String word : words){
+                searchfilters.add(RowFilter.regexFilter(Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+word, 1, 2));
+            }
+        }
+        RowFilter wordsFilter = RowFilter.andFilter(searchfilters);
+        RowFilter brandsFilter = RowFilter.regexFilter(Marcas.getSelectedIndex() > 0 ? Marcas.getSelectedItem().toString() : "", 2);
+        RowFilter categoryFilter = RowFilter.regexFilter(Categorias.getSelectedIndex() > 0 ? Categorias.getSelectedItem().toString() : "", 2);
         
-        List<RowFilter<TableModel, String>> filters = Arrays.asList(searchFilter, brandFilter, categoryFilter);
+        List<RowFilter<TableModel, String>> filters = Arrays.asList(wordsFilter, brandsFilter, categoryFilter);
         rowSorter.setRowFilter(RowFilter.andFilter(filters));
         Inventario.setRowSorter(rowSorter);
     }
 
     public void printReportInventory() {
-        if(Dialogs.ShowOKCancelDialog("¿Desea enviar a imprimir reporte de inventario?", Dialogs.WARNING_ICON)){
+        if(Dialogs.ShowOKCancelDialog("¿Desea imprimir el reporte de inventario ahora?", Dialogs.WARNING_ICON)){
             Runnable run = () -> {
                 Reports report = new Reports();
                 report.GenerateInventarioReport(Utilities.getUsuarioActual().getNombre());
@@ -169,7 +181,7 @@ public class InventarioViewController {
             Dialogs.ShowAddInventarioDetalle(InventarioID);
             loadInventory();
         } else {
-            Dialogs.ShowMessageDialog("Seleccione una elemento de la lista", Dialogs.ERROR_ICON);
+            Dialogs.ShowMessageDialog("Seleccione un elemento de la lista", Dialogs.ERROR_ICON);
         }
     }
 

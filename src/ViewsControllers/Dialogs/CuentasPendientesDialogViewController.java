@@ -17,6 +17,8 @@ import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
 import javax.swing.ImageIcon;
@@ -239,8 +241,8 @@ public class CuentasPendientesDialogViewController {
                             };
                             new Thread(runnable).start();
                         }
-                    } catch (NonexistentEntityException | IllegalOrphanException ex) {
-                        System.err.println("Error: "+ex.getMessage());
+                    } catch (IllegalOrphanException | NonexistentEntityException | NumberFormatException ex) {
+                        System.err.println("Error al enviar a pagar factura: "+ex.getMessage());
                         Dialogs.ShowMessageDialog("Ups... Ha ocurrido un error, no se pudo pagar", Dialogs.ERROR_ICON);
                     }
                 };

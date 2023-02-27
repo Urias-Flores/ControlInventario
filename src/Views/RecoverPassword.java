@@ -2,6 +2,7 @@ package Views;
 
 import Resource.Conection;
 import Resource.LocalConection;
+import Resource.NoJpaConection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import ViewsControllers.RecoverPasswordViewController;
@@ -259,7 +260,11 @@ public class RecoverPassword extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseClicked
-        Conection.Disconnect(Conection.createEntityManagerFactory().createEntityManager());
+        Utilities.setRunProcess(false);
+        if(Conection.createEntityManagerFactory().isOpen()){
+            Conection.Disconnect(Conection.createEntityManagerFactory().createEntityManager());
+        }
+        new NoJpaConection().closeConec();
         new LocalConection().closeConection();
         System.exit(0);
     }//GEN-LAST:event_btnCloseMouseClicked
@@ -334,15 +339,11 @@ public class RecoverPassword extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RecoverPassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RecoverPassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RecoverPassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(RecoverPassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        
         //</editor-fold>
 
         /* Create and display the form */

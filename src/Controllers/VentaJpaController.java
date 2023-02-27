@@ -9,18 +9,15 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import Models.Cliente;
 import Models.Usuario;
-import Models.Abono;
-import Models.Venta;
+import Models.Arqueodetalle;
 import java.util.ArrayList;
 import java.util.List;
+import Models.Abono;
+import Models.Venta;
 import Models.Ventadetalle;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Dell
- */
 public class VentaJpaController implements Serializable {
 
     public VentaJpaController(EntityManagerFactory emf) {
@@ -33,6 +30,9 @@ public class VentaJpaController implements Serializable {
     }
 
     public int create(Venta venta) {
+        if (venta.getArqueodetalleList() == null) {
+            venta.setArqueodetalleList(new ArrayList<Arqueodetalle>());
+        }
         if (venta.getAbonoList() == null) {
             venta.setAbonoList(new ArrayList<Abono>());
         }
@@ -53,6 +53,12 @@ public class VentaJpaController implements Serializable {
                 usuarioID = em.getReference(usuarioID.getClass(), usuarioID.getUsuarioID());
                 venta.setUsuarioID(usuarioID);
             }
+            List<Arqueodetalle> attachedArqueodetalleList = new ArrayList<Arqueodetalle>();
+            for (Arqueodetalle arqueodetalleListArqueodetalleToAttach : venta.getArqueodetalleList()) {
+                arqueodetalleListArqueodetalleToAttach = em.getReference(arqueodetalleListArqueodetalleToAttach.getClass(), arqueodetalleListArqueodetalleToAttach.getArqueoDetalleID());
+                attachedArqueodetalleList.add(arqueodetalleListArqueodetalleToAttach);
+            }
+            venta.setArqueodetalleList(attachedArqueodetalleList);
             List<Abono> attachedAbonoList = new ArrayList<Abono>();
             for (Abono abonoListAbonoToAttach : venta.getAbonoList()) {
                 abonoListAbonoToAttach = em.getReference(abonoListAbonoToAttach.getClass(), abonoListAbonoToAttach.getAbonoID());
@@ -73,6 +79,15 @@ public class VentaJpaController implements Serializable {
             if (usuarioID != null) {
                 usuarioID.getVentaList().add(venta);
                 usuarioID = em.merge(usuarioID);
+            }
+            for (Arqueodetalle arqueodetalleListArqueodetalle : venta.getArqueodetalleList()) {
+                Venta oldFacturaIDOfArqueodetalleListArqueodetalle = arqueodetalleListArqueodetalle.getFacturaID();
+                arqueodetalleListArqueodetalle.setFacturaID(venta);
+                arqueodetalleListArqueodetalle = em.merge(arqueodetalleListArqueodetalle);
+                if (oldFacturaIDOfArqueodetalleListArqueodetalle != null) {
+                    oldFacturaIDOfArqueodetalleListArqueodetalle.getArqueodetalleList().remove(arqueodetalleListArqueodetalle);
+                    oldFacturaIDOfArqueodetalleListArqueodetalle = em.merge(oldFacturaIDOfArqueodetalleListArqueodetalle);
+                }
             }
             for (Abono abonoListAbono : venta.getAbonoList()) {
                 Venta oldVentaIDOfAbonoListAbono = abonoListAbono.getVentaID();
@@ -112,6 +127,8 @@ public class VentaJpaController implements Serializable {
             Cliente clienteIDNew = venta.getClienteID();
             Usuario usuarioIDOld = persistentVenta.getUsuarioID();
             Usuario usuarioIDNew = venta.getUsuarioID();
+            List<Arqueodetalle> arqueodetalleListOld = persistentVenta.getArqueodetalleList();
+            List<Arqueodetalle> arqueodetalleListNew = venta.getArqueodetalleList();
             List<Abono> abonoListOld = persistentVenta.getAbonoList();
             List<Abono> abonoListNew = venta.getAbonoList();
             List<Ventadetalle> ventadetalleListOld = persistentVenta.getVentadetalleList();
@@ -136,6 +153,13 @@ public class VentaJpaController implements Serializable {
                 usuarioIDNew = em.getReference(usuarioIDNew.getClass(), usuarioIDNew.getUsuarioID());
                 venta.setUsuarioID(usuarioIDNew);
             }
+            List<Arqueodetalle> attachedArqueodetalleListNew = new ArrayList<Arqueodetalle>();
+            for (Arqueodetalle arqueodetalleListNewArqueodetalleToAttach : arqueodetalleListNew) {
+                arqueodetalleListNewArqueodetalleToAttach = em.getReference(arqueodetalleListNewArqueodetalleToAttach.getClass(), arqueodetalleListNewArqueodetalleToAttach.getArqueoDetalleID());
+                attachedArqueodetalleListNew.add(arqueodetalleListNewArqueodetalleToAttach);
+            }
+            arqueodetalleListNew = attachedArqueodetalleListNew;
+            venta.setArqueodetalleList(arqueodetalleListNew);
             List<Abono> attachedAbonoListNew = new ArrayList<Abono>();
             for (Abono abonoListNewAbonoToAttach : abonoListNew) {
                 abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
@@ -166,6 +190,23 @@ public class VentaJpaController implements Serializable {
             if (usuarioIDNew != null && !usuarioIDNew.equals(usuarioIDOld)) {
                 usuarioIDNew.getVentaList().add(venta);
                 usuarioIDNew = em.merge(usuarioIDNew);
+            }
+            for (Arqueodetalle arqueodetalleListOldArqueodetalle : arqueodetalleListOld) {
+                if (!arqueodetalleListNew.contains(arqueodetalleListOldArqueodetalle)) {
+                    arqueodetalleListOldArqueodetalle.setFacturaID(null);
+                    arqueodetalleListOldArqueodetalle = em.merge(arqueodetalleListOldArqueodetalle);
+                }
+            }
+            for (Arqueodetalle arqueodetalleListNewArqueodetalle : arqueodetalleListNew) {
+                if (!arqueodetalleListOld.contains(arqueodetalleListNewArqueodetalle)) {
+                    Venta oldFacturaIDOfArqueodetalleListNewArqueodetalle = arqueodetalleListNewArqueodetalle.getFacturaID();
+                    arqueodetalleListNewArqueodetalle.setFacturaID(venta);
+                    arqueodetalleListNewArqueodetalle = em.merge(arqueodetalleListNewArqueodetalle);
+                    if (oldFacturaIDOfArqueodetalleListNewArqueodetalle != null && !oldFacturaIDOfArqueodetalleListNewArqueodetalle.equals(venta)) {
+                        oldFacturaIDOfArqueodetalleListNewArqueodetalle.getArqueodetalleList().remove(arqueodetalleListNewArqueodetalle);
+                        oldFacturaIDOfArqueodetalleListNewArqueodetalle = em.merge(oldFacturaIDOfArqueodetalleListNewArqueodetalle);
+                    }
+                }
             }
             for (Abono abonoListOldAbono : abonoListOld) {
                 if (!abonoListNew.contains(abonoListOldAbono)) {
@@ -244,6 +285,11 @@ public class VentaJpaController implements Serializable {
             if (usuarioID != null) {
                 usuarioID.getVentaList().remove(venta);
                 usuarioID = em.merge(usuarioID);
+            }
+            List<Arqueodetalle> arqueodetalleList = venta.getArqueodetalleList();
+            for (Arqueodetalle arqueodetalleListArqueodetalle : arqueodetalleList) {
+                arqueodetalleListArqueodetalle.setFacturaID(null);
+                arqueodetalleListArqueodetalle = em.merge(arqueodetalleListArqueodetalle);
             }
             List<Abono> abonoList = venta.getAbonoList();
             for (Abono abonoListAbono : abonoList) {

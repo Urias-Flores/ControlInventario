@@ -156,7 +156,7 @@ public class FacturaViewController {
     public void addClient() {
         Dialogs.ShowAddClienteDialog();
         Clientes.removeAllItems();
-        Clientes.addItem(new Cliente(0, "-- Seleccione cliente --", "", "", "", "", 0));
+        Clientes.addItem(new Cliente(0, "-- Seleccione cliente --", 0));
         Init();
     }
 

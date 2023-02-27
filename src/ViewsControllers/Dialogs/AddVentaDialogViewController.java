@@ -13,7 +13,6 @@ import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Query;
-import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
