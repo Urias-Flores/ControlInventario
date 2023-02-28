@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Models;
 
 import java.io.Serializable;
@@ -23,10 +19,6 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author Dell
- */
 @Entity
 @XmlRootElement
 @NamedQueries({
@@ -50,7 +42,7 @@ public class Solicitud implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fecha;
     @Basic(optional = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIME)
     private Date hora;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "solicitudID")
     private List<Solicituddetalle> solicituddetalleList;

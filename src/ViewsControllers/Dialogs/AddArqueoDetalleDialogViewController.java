@@ -28,8 +28,6 @@ public class AddArqueoDetalleDialogViewController {
         this.TotalCambio = TotalCambio;
         this.Error = Error;
         this.Cargando = Cargando;
-        
-        
     }
     
     public void setBillInformation(int FacturaID, boolean isCredit, float Total){

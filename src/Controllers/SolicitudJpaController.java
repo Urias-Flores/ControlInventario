@@ -28,7 +28,7 @@ public class SolicitudJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Solicitud solicitud) {
+    public int create(Solicitud solicitud) {
         if (solicitud.getSolicituddetalleList() == null) {
             solicitud.setSolicituddetalleList(new ArrayList<>());
         }
@@ -88,7 +88,9 @@ public class SolicitudJpaController implements Serializable {
                     oldSolicitudIDOfArqueodetalleListArqueodetalle = em.merge(oldSolicitudIDOfArqueodetalleListArqueodetalle);
                 }
             }
+            em.flush();
             em.getTransaction().commit();
+            return solicitud.getSolicitudID();
         } finally {
             if (em != null) {
                 em.close();
