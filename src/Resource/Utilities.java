@@ -1,6 +1,5 @@
 package Resource;
 
-import Controllers.UsuarioJpaController;
 import Models.Usuario;
 import java.awt.Color;
 import java.awt.Font;
@@ -12,7 +11,6 @@ import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.persistence.NoResultException;
 import javax.swing.ImageIcon;
@@ -175,10 +173,10 @@ public class Utilities {
         return "/Icons/cargando32px.gif";
     }
     
-    public static void CargarAnios(JComboBox cmb){
+    public static void CargarAnios(JComboBox cmb, int Increment){
         Calendar FechaActual = Calendar.getInstance();
         int AnioActual = FechaActual.get(Calendar.YEAR);
-        for(int i = AnioActual; i >= 1920; i--){
+        for(int i = AnioActual + Increment; i >= 1920; i--){
             cmb.addItem(i+"");
         }
     }

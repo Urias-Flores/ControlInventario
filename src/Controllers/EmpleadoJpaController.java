@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controllers;
 
 import Controllers.exceptions.IllegalOrphanException;
@@ -18,10 +14,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Dell
- */
 public class EmpleadoJpaController implements Serializable {
 
     public EmpleadoJpaController(EntityManagerFactory emf) {
@@ -35,13 +27,13 @@ public class EmpleadoJpaController implements Serializable {
 
     public void create(Empleado empleado) {
         if (empleado.getUsuarioList() == null) {
-            empleado.setUsuarioList(new ArrayList<Usuario>());
+            empleado.setUsuarioList(new ArrayList<>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Usuario> attachedUsuarioList = new ArrayList<Usuario>();
+            List<Usuario> attachedUsuarioList = new ArrayList<>();
             for (Usuario usuarioListUsuarioToAttach : empleado.getUsuarioList()) {
                 usuarioListUsuarioToAttach = em.getReference(usuarioListUsuarioToAttach.getClass(), usuarioListUsuarioToAttach.getUsuarioID());
                 attachedUsuarioList.add(usuarioListUsuarioToAttach);
@@ -65,7 +57,7 @@ public class EmpleadoJpaController implements Serializable {
         }
     }
 
-    public void edit(Empleado empleado) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Empleado empleado) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -77,7 +69,7 @@ public class EmpleadoJpaController implements Serializable {
             for (Usuario usuarioListOldUsuario : usuarioListOld) {
                 if (!usuarioListNew.contains(usuarioListOldUsuario)) {
                     if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+                        illegalOrphanMessages = new ArrayList<>();
                     }
                     illegalOrphanMessages.add("You must retain Usuario " + usuarioListOldUsuario + " since its empleadoID field is not nullable.");
                 }
@@ -85,27 +77,32 @@ public class EmpleadoJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            List<Usuario> attachedUsuarioListNew = new ArrayList<Usuario>();
-            for (Usuario usuarioListNewUsuarioToAttach : usuarioListNew) {
-                usuarioListNewUsuarioToAttach = em.getReference(usuarioListNewUsuarioToAttach.getClass(), usuarioListNewUsuarioToAttach.getUsuarioID());
-                attachedUsuarioListNew.add(usuarioListNewUsuarioToAttach);
+            List<Usuario> attachedUsuarioListNew = new ArrayList<>();
+            if(usuarioListNew != null){
+                for (Usuario usuarioListNewUsuarioToAttach : usuarioListNew) {
+                    usuarioListNewUsuarioToAttach = em.getReference(usuarioListNewUsuarioToAttach.getClass(), usuarioListNewUsuarioToAttach.getUsuarioID());
+                    attachedUsuarioListNew.add(usuarioListNewUsuarioToAttach);
+                }
             }
+            
             usuarioListNew = attachedUsuarioListNew;
             empleado.setUsuarioList(usuarioListNew);
             empleado = em.merge(empleado);
-            for (Usuario usuarioListNewUsuario : usuarioListNew) {
-                if (!usuarioListOld.contains(usuarioListNewUsuario)) {
-                    Empleado oldEmpleadoIDOfUsuarioListNewUsuario = usuarioListNewUsuario.getEmpleadoID();
-                    usuarioListNewUsuario.setEmpleadoID(empleado);
-                    usuarioListNewUsuario = em.merge(usuarioListNewUsuario);
-                    if (oldEmpleadoIDOfUsuarioListNewUsuario != null && !oldEmpleadoIDOfUsuarioListNewUsuario.equals(empleado)) {
-                        oldEmpleadoIDOfUsuarioListNewUsuario.getUsuarioList().remove(usuarioListNewUsuario);
-                        oldEmpleadoIDOfUsuarioListNewUsuario = em.merge(oldEmpleadoIDOfUsuarioListNewUsuario);
+            if(usuarioListNew != null){
+                for (Usuario usuarioListNewUsuario : usuarioListNew) {
+                    if (!usuarioListOld.contains(usuarioListNewUsuario)) {
+                        Empleado oldEmpleadoIDOfUsuarioListNewUsuario = usuarioListNewUsuario.getEmpleadoID();
+                        usuarioListNewUsuario.setEmpleadoID(empleado);
+                        usuarioListNewUsuario = em.merge(usuarioListNewUsuario);
+                        if (oldEmpleadoIDOfUsuarioListNewUsuario != null && !oldEmpleadoIDOfUsuarioListNewUsuario.equals(empleado)) {
+                            oldEmpleadoIDOfUsuarioListNewUsuario.getUsuarioList().remove(usuarioListNewUsuario);
+                            oldEmpleadoIDOfUsuarioListNewUsuario = em.merge(oldEmpleadoIDOfUsuarioListNewUsuario);
+                        }
                     }
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
+        } catch (IllegalOrphanException ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = empleado.getEmpleadoID();
@@ -137,7 +134,7 @@ public class EmpleadoJpaController implements Serializable {
             List<Usuario> usuarioListOrphanCheck = empleado.getUsuarioList();
             for (Usuario usuarioListOrphanCheckUsuario : usuarioListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+                    illegalOrphanMessages = new ArrayList<>();
                 }
                 illegalOrphanMessages.add("This Empleado (" + empleado + ") cannot be destroyed since the Usuario " + usuarioListOrphanCheckUsuario + " in its usuarioList field has a non-nullable empleadoID field.");
             }

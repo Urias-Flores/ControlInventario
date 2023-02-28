@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controllers;
 
 import Controllers.exceptions.IllegalOrphanException;
@@ -18,10 +14,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Dell
- */
 public class CategoriaJpaController implements Serializable {
 
     public CategoriaJpaController(EntityManagerFactory emf) {
@@ -65,7 +57,7 @@ public class CategoriaJpaController implements Serializable {
         }
     }
 
-    public void edit(Categoria categoria) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Categoria categoria) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -74,38 +66,44 @@ public class CategoriaJpaController implements Serializable {
             List<Producto> productoListOld = persistentCategoria.getProductoList();
             List<Producto> productoListNew = categoria.getProductoList();
             List<String> illegalOrphanMessages = null;
-            for (Producto productoListOldProducto : productoListOld) {
-                if (!productoListNew.contains(productoListOldProducto)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+            if(productoListOld != null){
+                for (Producto productoListOldProducto : productoListOld) {
+                    if (!productoListNew.contains(productoListOldProducto)) {
+                        if (illegalOrphanMessages == null) {
+                            illegalOrphanMessages = new ArrayList<>();
+                        }
+                        illegalOrphanMessages.add("You must retain Producto " + productoListOldProducto + " since its categoriaID field is not nullable.");
                     }
-                    illegalOrphanMessages.add("You must retain Producto " + productoListOldProducto + " since its categoriaID field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            List<Producto> attachedProductoListNew = new ArrayList<Producto>();
-            for (Producto productoListNewProductoToAttach : productoListNew) {
-                productoListNewProductoToAttach = em.getReference(productoListNewProductoToAttach.getClass(), productoListNewProductoToAttach.getProductoID());
-                attachedProductoListNew.add(productoListNewProductoToAttach);
+            List<Producto> attachedProductoListNew = new ArrayList<>();
+            if(productoListNew != null){
+                for (Producto productoListNewProductoToAttach : productoListNew) {
+                    productoListNewProductoToAttach = em.getReference(productoListNewProductoToAttach.getClass(), productoListNewProductoToAttach.getProductoID());
+                    attachedProductoListNew.add(productoListNewProductoToAttach);
+                }
             }
             productoListNew = attachedProductoListNew;
             categoria.setProductoList(productoListNew);
             categoria = em.merge(categoria);
-            for (Producto productoListNewProducto : productoListNew) {
-                if (!productoListOld.contains(productoListNewProducto)) {
-                    Categoria oldCategoriaIDOfProductoListNewProducto = productoListNewProducto.getCategoriaID();
-                    productoListNewProducto.setCategoriaID(categoria);
-                    productoListNewProducto = em.merge(productoListNewProducto);
-                    if (oldCategoriaIDOfProductoListNewProducto != null && !oldCategoriaIDOfProductoListNewProducto.equals(categoria)) {
-                        oldCategoriaIDOfProductoListNewProducto.getProductoList().remove(productoListNewProducto);
-                        oldCategoriaIDOfProductoListNewProducto = em.merge(oldCategoriaIDOfProductoListNewProducto);
+            if(productoListNew != null){
+                for (Producto productoListNewProducto : productoListNew) {
+                    if (!productoListOld.contains(productoListNewProducto)) {
+                        Categoria oldCategoriaIDOfProductoListNewProducto = productoListNewProducto.getCategoriaID();
+                        productoListNewProducto.setCategoriaID(categoria);
+                        productoListNewProducto = em.merge(productoListNewProducto);
+                        if (oldCategoriaIDOfProductoListNewProducto != null && !oldCategoriaIDOfProductoListNewProducto.equals(categoria)) {
+                            oldCategoriaIDOfProductoListNewProducto.getProductoList().remove(productoListNewProducto);
+                            oldCategoriaIDOfProductoListNewProducto = em.merge(oldCategoriaIDOfProductoListNewProducto);
+                        }
                     }
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
+        } catch (IllegalOrphanException ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = categoria.getCategoriaID();

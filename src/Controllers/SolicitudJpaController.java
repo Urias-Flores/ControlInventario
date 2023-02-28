@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controllers;
 
 import Controllers.exceptions.IllegalOrphanException;
@@ -21,10 +17,6 @@ import Models.Solicitud;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Dell
- */
 public class SolicitudJpaController implements Serializable {
 
     public SolicitudJpaController(EntityManagerFactory emf) {
@@ -38,10 +30,10 @@ public class SolicitudJpaController implements Serializable {
 
     public void create(Solicitud solicitud) {
         if (solicitud.getSolicituddetalleList() == null) {
-            solicitud.setSolicituddetalleList(new ArrayList<Solicituddetalle>());
+            solicitud.setSolicituddetalleList(new ArrayList<>());
         }
         if (solicitud.getArqueodetalleList() == null) {
-            solicitud.setArqueodetalleList(new ArrayList<Arqueodetalle>());
+            solicitud.setArqueodetalleList(new ArrayList<>());
         }
         EntityManager em = null;
         try {
@@ -57,13 +49,13 @@ public class SolicitudJpaController implements Serializable {
                 usuarioID = em.getReference(usuarioID.getClass(), usuarioID.getUsuarioID());
                 solicitud.setUsuarioID(usuarioID);
             }
-            List<Solicituddetalle> attachedSolicituddetalleList = new ArrayList<Solicituddetalle>();
+            List<Solicituddetalle> attachedSolicituddetalleList = new ArrayList<>();
             for (Solicituddetalle solicituddetalleListSolicituddetalleToAttach : solicitud.getSolicituddetalleList()) {
                 solicituddetalleListSolicituddetalleToAttach = em.getReference(solicituddetalleListSolicituddetalleToAttach.getClass(), solicituddetalleListSolicituddetalleToAttach.getSolicitudDetalleID());
                 attachedSolicituddetalleList.add(solicituddetalleListSolicituddetalleToAttach);
             }
             solicitud.setSolicituddetalleList(attachedSolicituddetalleList);
-            List<Arqueodetalle> attachedArqueodetalleList = new ArrayList<Arqueodetalle>();
+            List<Arqueodetalle> attachedArqueodetalleList = new ArrayList<>();
             for (Arqueodetalle arqueodetalleListArqueodetalleToAttach : solicitud.getArqueodetalleList()) {
                 arqueodetalleListArqueodetalleToAttach = em.getReference(arqueodetalleListArqueodetalleToAttach.getClass(), arqueodetalleListArqueodetalleToAttach.getArqueoDetalleID());
                 attachedArqueodetalleList.add(arqueodetalleListArqueodetalleToAttach);
@@ -104,7 +96,7 @@ public class SolicitudJpaController implements Serializable {
         }
     }
 
-    public void edit(Solicitud solicitud) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Solicitud solicitud) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -119,12 +111,14 @@ public class SolicitudJpaController implements Serializable {
             List<Arqueodetalle> arqueodetalleListOld = persistentSolicitud.getArqueodetalleList();
             List<Arqueodetalle> arqueodetalleListNew = solicitud.getArqueodetalleList();
             List<String> illegalOrphanMessages = null;
-            for (Solicituddetalle solicituddetalleListOldSolicituddetalle : solicituddetalleListOld) {
-                if (!solicituddetalleListNew.contains(solicituddetalleListOldSolicituddetalle)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+            if(solicituddetalleListOld != null){
+                for (Solicituddetalle solicituddetalleListOldSolicituddetalle : solicituddetalleListOld) {
+                    if (!solicituddetalleListNew.contains(solicituddetalleListOldSolicituddetalle)) {
+                        if (illegalOrphanMessages == null) {
+                            illegalOrphanMessages = new ArrayList<>();
+                        }
+                        illegalOrphanMessages.add("You must retain Solicituddetalle " + solicituddetalleListOldSolicituddetalle + " since its solicitudID field is not nullable.");
                     }
-                    illegalOrphanMessages.add("You must retain Solicituddetalle " + solicituddetalleListOldSolicituddetalle + " since its solicitudID field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -138,17 +132,21 @@ public class SolicitudJpaController implements Serializable {
                 usuarioIDNew = em.getReference(usuarioIDNew.getClass(), usuarioIDNew.getUsuarioID());
                 solicitud.setUsuarioID(usuarioIDNew);
             }
-            List<Solicituddetalle> attachedSolicituddetalleListNew = new ArrayList<Solicituddetalle>();
-            for (Solicituddetalle solicituddetalleListNewSolicituddetalleToAttach : solicituddetalleListNew) {
-                solicituddetalleListNewSolicituddetalleToAttach = em.getReference(solicituddetalleListNewSolicituddetalleToAttach.getClass(), solicituddetalleListNewSolicituddetalleToAttach.getSolicitudDetalleID());
-                attachedSolicituddetalleListNew.add(solicituddetalleListNewSolicituddetalleToAttach);
+            List<Solicituddetalle> attachedSolicituddetalleListNew = new ArrayList<>();
+            if(solicituddetalleListNew != null){
+                for (Solicituddetalle solicituddetalleListNewSolicituddetalleToAttach : solicituddetalleListNew) {
+                    solicituddetalleListNewSolicituddetalleToAttach = em.getReference(solicituddetalleListNewSolicituddetalleToAttach.getClass(), solicituddetalleListNewSolicituddetalleToAttach.getSolicitudDetalleID());
+                    attachedSolicituddetalleListNew.add(solicituddetalleListNewSolicituddetalleToAttach);
+                }
             }
             solicituddetalleListNew = attachedSolicituddetalleListNew;
             solicitud.setSolicituddetalleList(solicituddetalleListNew);
-            List<Arqueodetalle> attachedArqueodetalleListNew = new ArrayList<Arqueodetalle>();
-            for (Arqueodetalle arqueodetalleListNewArqueodetalleToAttach : arqueodetalleListNew) {
-                arqueodetalleListNewArqueodetalleToAttach = em.getReference(arqueodetalleListNewArqueodetalleToAttach.getClass(), arqueodetalleListNewArqueodetalleToAttach.getArqueoDetalleID());
-                attachedArqueodetalleListNew.add(arqueodetalleListNewArqueodetalleToAttach);
+            List<Arqueodetalle> attachedArqueodetalleListNew = new ArrayList<>();
+            if(arqueodetalleListNew != null){
+                for (Arqueodetalle arqueodetalleListNewArqueodetalleToAttach : arqueodetalleListNew) {
+                    arqueodetalleListNewArqueodetalleToAttach = em.getReference(arqueodetalleListNewArqueodetalleToAttach.getClass(), arqueodetalleListNewArqueodetalleToAttach.getArqueoDetalleID());
+                    attachedArqueodetalleListNew.add(arqueodetalleListNewArqueodetalleToAttach);
+                }
             }
             arqueodetalleListNew = attachedArqueodetalleListNew;
             solicitud.setArqueodetalleList(arqueodetalleListNew);
@@ -169,36 +167,42 @@ public class SolicitudJpaController implements Serializable {
                 usuarioIDNew.getSolicitudList().add(solicitud);
                 usuarioIDNew = em.merge(usuarioIDNew);
             }
-            for (Solicituddetalle solicituddetalleListNewSolicituddetalle : solicituddetalleListNew) {
-                if (!solicituddetalleListOld.contains(solicituddetalleListNewSolicituddetalle)) {
-                    Solicitud oldSolicitudIDOfSolicituddetalleListNewSolicituddetalle = solicituddetalleListNewSolicituddetalle.getSolicitudID();
-                    solicituddetalleListNewSolicituddetalle.setSolicitudID(solicitud);
-                    solicituddetalleListNewSolicituddetalle = em.merge(solicituddetalleListNewSolicituddetalle);
-                    if (oldSolicitudIDOfSolicituddetalleListNewSolicituddetalle != null && !oldSolicitudIDOfSolicituddetalleListNewSolicituddetalle.equals(solicitud)) {
-                        oldSolicitudIDOfSolicituddetalleListNewSolicituddetalle.getSolicituddetalleList().remove(solicituddetalleListNewSolicituddetalle);
-                        oldSolicitudIDOfSolicituddetalleListNewSolicituddetalle = em.merge(oldSolicitudIDOfSolicituddetalleListNewSolicituddetalle);
+            if(solicituddetalleListNew != null){
+                for (Solicituddetalle solicituddetalleListNewSolicituddetalle : solicituddetalleListNew) {
+                    if (!solicituddetalleListOld.contains(solicituddetalleListNewSolicituddetalle)) {
+                        Solicitud oldSolicitudIDOfSolicituddetalleListNewSolicituddetalle = solicituddetalleListNewSolicituddetalle.getSolicitudID();
+                        solicituddetalleListNewSolicituddetalle.setSolicitudID(solicitud);
+                        solicituddetalleListNewSolicituddetalle = em.merge(solicituddetalleListNewSolicituddetalle);
+                        if (oldSolicitudIDOfSolicituddetalleListNewSolicituddetalle != null && !oldSolicitudIDOfSolicituddetalleListNewSolicituddetalle.equals(solicitud)) {
+                            oldSolicitudIDOfSolicituddetalleListNewSolicituddetalle.getSolicituddetalleList().remove(solicituddetalleListNewSolicituddetalle);
+                            oldSolicitudIDOfSolicituddetalleListNewSolicituddetalle = em.merge(oldSolicitudIDOfSolicituddetalleListNewSolicituddetalle);
+                        }
                     }
                 }
             }
-            for (Arqueodetalle arqueodetalleListOldArqueodetalle : arqueodetalleListOld) {
-                if (!arqueodetalleListNew.contains(arqueodetalleListOldArqueodetalle)) {
-                    arqueodetalleListOldArqueodetalle.setSolicitudID(null);
-                    arqueodetalleListOldArqueodetalle = em.merge(arqueodetalleListOldArqueodetalle);
+            if(arqueodetalleListOld != null){
+                for (Arqueodetalle arqueodetalleListOldArqueodetalle : arqueodetalleListOld) {
+                    if (!arqueodetalleListNew.contains(arqueodetalleListOldArqueodetalle)) {
+                        arqueodetalleListOldArqueodetalle.setSolicitudID(null);
+                        arqueodetalleListOldArqueodetalle = em.merge(arqueodetalleListOldArqueodetalle);
+                    }
                 }
             }
-            for (Arqueodetalle arqueodetalleListNewArqueodetalle : arqueodetalleListNew) {
-                if (!arqueodetalleListOld.contains(arqueodetalleListNewArqueodetalle)) {
-                    Solicitud oldSolicitudIDOfArqueodetalleListNewArqueodetalle = arqueodetalleListNewArqueodetalle.getSolicitudID();
-                    arqueodetalleListNewArqueodetalle.setSolicitudID(solicitud);
-                    arqueodetalleListNewArqueodetalle = em.merge(arqueodetalleListNewArqueodetalle);
-                    if (oldSolicitudIDOfArqueodetalleListNewArqueodetalle != null && !oldSolicitudIDOfArqueodetalleListNewArqueodetalle.equals(solicitud)) {
-                        oldSolicitudIDOfArqueodetalleListNewArqueodetalle.getArqueodetalleList().remove(arqueodetalleListNewArqueodetalle);
-                        oldSolicitudIDOfArqueodetalleListNewArqueodetalle = em.merge(oldSolicitudIDOfArqueodetalleListNewArqueodetalle);
+            if(arqueodetalleListNew != null){
+                for (Arqueodetalle arqueodetalleListNewArqueodetalle : arqueodetalleListNew) {
+                    if (!arqueodetalleListOld.contains(arqueodetalleListNewArqueodetalle)) {
+                        Solicitud oldSolicitudIDOfArqueodetalleListNewArqueodetalle = arqueodetalleListNewArqueodetalle.getSolicitudID();
+                        arqueodetalleListNewArqueodetalle.setSolicitudID(solicitud);
+                        arqueodetalleListNewArqueodetalle = em.merge(arqueodetalleListNewArqueodetalle);
+                        if (oldSolicitudIDOfArqueodetalleListNewArqueodetalle != null && !oldSolicitudIDOfArqueodetalleListNewArqueodetalle.equals(solicitud)) {
+                            oldSolicitudIDOfArqueodetalleListNewArqueodetalle.getArqueodetalleList().remove(arqueodetalleListNewArqueodetalle);
+                            oldSolicitudIDOfArqueodetalleListNewArqueodetalle = em.merge(oldSolicitudIDOfArqueodetalleListNewArqueodetalle);
+                        }
                     }
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
+        } catch (IllegalOrphanException ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = solicitud.getSolicitudID();
@@ -230,7 +234,7 @@ public class SolicitudJpaController implements Serializable {
             List<Solicituddetalle> solicituddetalleListOrphanCheck = solicitud.getSolicituddetalleList();
             for (Solicituddetalle solicituddetalleListOrphanCheckSolicituddetalle : solicituddetalleListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+                    illegalOrphanMessages = new ArrayList<>();
                 }
                 illegalOrphanMessages.add("This Solicitud (" + solicitud + ") cannot be destroyed since the Solicituddetalle " + solicituddetalleListOrphanCheckSolicituddetalle + " in its solicituddetalleList field has a non-nullable solicitudID field.");
             }

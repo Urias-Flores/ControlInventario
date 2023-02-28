@@ -113,12 +113,14 @@ public class CompraJpaController implements Serializable {
             List<Abono> abonoListOld = persistentCompra.getAbonoList();
             List<Abono> abonoListNew = compra.getAbonoList();
             List<String> illegalOrphanMessages = null;
-            for (Compradetalle compradetalleListOldCompradetalle : compradetalleListOld) {
-                if (!compradetalleListNew.contains(compradetalleListOldCompradetalle)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+            if(compradetalleListOld != null){
+                for (Compradetalle compradetalleListOldCompradetalle : compradetalleListOld) {
+                    if (!compradetalleListNew.contains(compradetalleListOldCompradetalle)) {
+                        if (illegalOrphanMessages == null) {
+                            illegalOrphanMessages = new ArrayList<>();
+                        }
+                        illegalOrphanMessages.add("You must retain Compradetalle " + compradetalleListOldCompradetalle + " since its compraID field is not nullable.");
                     }
-                    illegalOrphanMessages.add("You must retain Compradetalle " + compradetalleListOldCompradetalle + " since its compraID field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -132,18 +134,23 @@ public class CompraJpaController implements Serializable {
                 usuarioIDNew = em.getReference(usuarioIDNew.getClass(), usuarioIDNew.getUsuarioID());
                 compra.setUsuarioID(usuarioIDNew);
             }
-            List<Compradetalle> attachedCompradetalleListNew = new ArrayList<Compradetalle>();
-            for (Compradetalle compradetalleListNewCompradetalleToAttach : compradetalleListNew) {
-                compradetalleListNewCompradetalleToAttach = em.getReference(compradetalleListNewCompradetalleToAttach.getClass(), compradetalleListNewCompradetalleToAttach.getCompraDetalleID());
-                attachedCompradetalleListNew.add(compradetalleListNewCompradetalleToAttach);
+            List<Compradetalle> attachedCompradetalleListNew = new ArrayList<>();
+            if(compradetalleListNew != null){
+                for (Compradetalle compradetalleListNewCompradetalleToAttach : compradetalleListNew) {
+                    compradetalleListNewCompradetalleToAttach = em.getReference(compradetalleListNewCompradetalleToAttach.getClass(), compradetalleListNewCompradetalleToAttach.getCompraDetalleID());
+                    attachedCompradetalleListNew.add(compradetalleListNewCompradetalleToAttach);
+                }
             }
             compradetalleListNew = attachedCompradetalleListNew;
             compra.setCompradetalleList(compradetalleListNew);
-            List<Abono> attachedAbonoListNew = new ArrayList<Abono>();
-            for (Abono abonoListNewAbonoToAttach : abonoListNew) {
-                abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
-                attachedAbonoListNew.add(abonoListNewAbonoToAttach);
+            List<Abono> attachedAbonoListNew = new ArrayList<>();
+            if(abonoListNew != null){
+                for (Abono abonoListNewAbonoToAttach : abonoListNew) {
+                    abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
+                    attachedAbonoListNew.add(abonoListNewAbonoToAttach);
+                }     
             }
+            
             abonoListNew = attachedAbonoListNew;
             compra.setAbonoList(abonoListNew);
             compra = em.merge(compra);
@@ -163,31 +170,40 @@ public class CompraJpaController implements Serializable {
                 usuarioIDNew.getCompraList().add(compra);
                 usuarioIDNew = em.merge(usuarioIDNew);
             }
-            for (Compradetalle compradetalleListNewCompradetalle : compradetalleListNew) {
-                if (!compradetalleListOld.contains(compradetalleListNewCompradetalle)) {
-                    Compra oldCompraIDOfCompradetalleListNewCompradetalle = compradetalleListNewCompradetalle.getCompraID();
-                    compradetalleListNewCompradetalle.setCompraID(compra);
-                    compradetalleListNewCompradetalle = em.merge(compradetalleListNewCompradetalle);
-                    if (oldCompraIDOfCompradetalleListNewCompradetalle != null && !oldCompraIDOfCompradetalleListNewCompradetalle.equals(compra)) {
-                        oldCompraIDOfCompradetalleListNewCompradetalle.getCompradetalleList().remove(compradetalleListNewCompradetalle);
-                        oldCompraIDOfCompradetalleListNewCompradetalle = em.merge(oldCompraIDOfCompradetalleListNewCompradetalle);
+            
+            if(compradetalleListNew != null){
+                for (Compradetalle compradetalleListNewCompradetalle : compradetalleListNew) {
+                    if (!compradetalleListOld.contains(compradetalleListNewCompradetalle)) {
+                        Compra oldCompraIDOfCompradetalleListNewCompradetalle = compradetalleListNewCompradetalle.getCompraID();
+                        compradetalleListNewCompradetalle.setCompraID(compra);
+                        compradetalleListNewCompradetalle = em.merge(compradetalleListNewCompradetalle);
+                        if (oldCompraIDOfCompradetalleListNewCompradetalle != null && !oldCompraIDOfCompradetalleListNewCompradetalle.equals(compra)) {
+                            oldCompraIDOfCompradetalleListNewCompradetalle.getCompradetalleList().remove(compradetalleListNewCompradetalle);
+                            oldCompraIDOfCompradetalleListNewCompradetalle = em.merge(oldCompraIDOfCompradetalleListNewCompradetalle);
+                        }
                     }
                 }
             }
-            for (Abono abonoListOldAbono : abonoListOld) {
-                if (!abonoListNew.contains(abonoListOldAbono)) {
-                    abonoListOldAbono.setCompraID(null);
-                    abonoListOldAbono = em.merge(abonoListOldAbono);
-                }
+            
+            if(abonoListOld != null){
+                for (Abono abonoListOldAbono : abonoListOld) {
+                    if (!abonoListNew.contains(abonoListOldAbono)) {
+                        abonoListOldAbono.setCompraID(null);
+                        abonoListOldAbono = em.merge(abonoListOldAbono);
+                    }
+                } 
             }
-            for (Abono abonoListNewAbono : abonoListNew) {
-                if (!abonoListOld.contains(abonoListNewAbono)) {
-                    Compra oldCompraIDOfAbonoListNewAbono = abonoListNewAbono.getCompraID();
-                    abonoListNewAbono.setCompraID(compra);
-                    abonoListNewAbono = em.merge(abonoListNewAbono);
-                    if (oldCompraIDOfAbonoListNewAbono != null && !oldCompraIDOfAbonoListNewAbono.equals(compra)) {
-                        oldCompraIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
-                        oldCompraIDOfAbonoListNewAbono = em.merge(oldCompraIDOfAbonoListNewAbono);
+            
+            if(abonoListNew != null){
+                for (Abono abonoListNewAbono : abonoListNew) {
+                    if (!abonoListOld.contains(abonoListNewAbono)) {
+                        Compra oldCompraIDOfAbonoListNewAbono = abonoListNewAbono.getCompraID();
+                        abonoListNewAbono.setCompraID(compra);
+                        abonoListNewAbono = em.merge(abonoListNewAbono);
+                        if (oldCompraIDOfAbonoListNewAbono != null && !oldCompraIDOfAbonoListNewAbono.equals(compra)) {
+                            oldCompraIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
+                            oldCompraIDOfAbonoListNewAbono = em.merge(oldCompraIDOfAbonoListNewAbono);
+                        }
                     }
                 }
             }

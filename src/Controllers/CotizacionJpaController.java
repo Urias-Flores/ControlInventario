@@ -29,7 +29,7 @@ public class CotizacionJpaController implements Serializable {
 
     public int create(Cotizacion cotizacion) {
         if (cotizacion.getCotizaciondetalleList() == null) {
-            cotizacion.setCotizaciondetalleList(new ArrayList<Cotizaciondetalle>());
+            cotizacion.setCotizaciondetalleList(new ArrayList<>());
         }
         EntityManager em = null;
         try {
@@ -45,7 +45,7 @@ public class CotizacionJpaController implements Serializable {
                 usuarioID = em.getReference(usuarioID.getClass(), usuarioID.getUsuarioID());
                 cotizacion.setUsuarioID(usuarioID);
             }
-            List<Cotizaciondetalle> attachedCotizaciondetalleList = new ArrayList<Cotizaciondetalle>();
+            List<Cotizaciondetalle> attachedCotizaciondetalleList = new ArrayList<>();
             for (Cotizaciondetalle cotizaciondetalleListCotizaciondetalleToAttach : cotizacion.getCotizaciondetalleList()) {
                 cotizaciondetalleListCotizaciondetalleToAttach = em.getReference(cotizaciondetalleListCotizaciondetalleToAttach.getClass(), cotizaciondetalleListCotizaciondetalleToAttach.getCotizacionDetalleID());
                 attachedCotizaciondetalleList.add(cotizaciondetalleListCotizaciondetalleToAttach);
@@ -79,7 +79,7 @@ public class CotizacionJpaController implements Serializable {
         }
     }
 
-    public void edit(Cotizacion cotizacion) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Cotizacion cotizacion) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -92,12 +92,14 @@ public class CotizacionJpaController implements Serializable {
             List<Cotizaciondetalle> cotizaciondetalleListOld = persistentCotizacion.getCotizaciondetalleList();
             List<Cotizaciondetalle> cotizaciondetalleListNew = cotizacion.getCotizaciondetalleList();
             List<String> illegalOrphanMessages = null;
-            for (Cotizaciondetalle cotizaciondetalleListOldCotizaciondetalle : cotizaciondetalleListOld) {
-                if (!cotizaciondetalleListNew.contains(cotizaciondetalleListOldCotizaciondetalle)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+            if(cotizaciondetalleListOld != null){
+                for (Cotizaciondetalle cotizaciondetalleListOldCotizaciondetalle : cotizaciondetalleListOld) {
+                    if (!cotizaciondetalleListNew.contains(cotizaciondetalleListOldCotizaciondetalle)) {
+                        if (illegalOrphanMessages == null) {
+                            illegalOrphanMessages = new ArrayList<>();
+                        }
+                        illegalOrphanMessages.add("You must retain Cotizaciondetalle " + cotizaciondetalleListOldCotizaciondetalle + " since its cotizacionID field is not nullable.");
                     }
-                    illegalOrphanMessages.add("You must retain Cotizaciondetalle " + cotizaciondetalleListOldCotizaciondetalle + " since its cotizacionID field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -111,11 +113,14 @@ public class CotizacionJpaController implements Serializable {
                 usuarioIDNew = em.getReference(usuarioIDNew.getClass(), usuarioIDNew.getUsuarioID());
                 cotizacion.setUsuarioID(usuarioIDNew);
             }
-            List<Cotizaciondetalle> attachedCotizaciondetalleListNew = new ArrayList<Cotizaciondetalle>();
-            for (Cotizaciondetalle cotizaciondetalleListNewCotizaciondetalleToAttach : cotizaciondetalleListNew) {
-                cotizaciondetalleListNewCotizaciondetalleToAttach = em.getReference(cotizaciondetalleListNewCotizaciondetalleToAttach.getClass(), cotizaciondetalleListNewCotizaciondetalleToAttach.getCotizacionDetalleID());
-                attachedCotizaciondetalleListNew.add(cotizaciondetalleListNewCotizaciondetalleToAttach);
+            List<Cotizaciondetalle> attachedCotizaciondetalleListNew = new ArrayList<>();
+            if(cotizaciondetalleListNew != null){
+                for (Cotizaciondetalle cotizaciondetalleListNewCotizaciondetalleToAttach : cotizaciondetalleListNew) {
+                    cotizaciondetalleListNewCotizaciondetalleToAttach = em.getReference(cotizaciondetalleListNewCotizaciondetalleToAttach.getClass(), cotizaciondetalleListNewCotizaciondetalleToAttach.getCotizacionDetalleID());
+                    attachedCotizaciondetalleListNew.add(cotizaciondetalleListNewCotizaciondetalleToAttach);
+                }   
             }
+            
             cotizaciondetalleListNew = attachedCotizaciondetalleListNew;
             cotizacion.setCotizaciondetalleList(cotizaciondetalleListNew);
             cotizacion = em.merge(cotizacion);
@@ -135,19 +140,22 @@ public class CotizacionJpaController implements Serializable {
                 usuarioIDNew.getCotizacionList().add(cotizacion);
                 usuarioIDNew = em.merge(usuarioIDNew);
             }
-            for (Cotizaciondetalle cotizaciondetalleListNewCotizaciondetalle : cotizaciondetalleListNew) {
-                if (!cotizaciondetalleListOld.contains(cotizaciondetalleListNewCotizaciondetalle)) {
-                    Cotizacion oldCotizacionIDOfCotizaciondetalleListNewCotizaciondetalle = cotizaciondetalleListNewCotizaciondetalle.getCotizacionID();
-                    cotizaciondetalleListNewCotizaciondetalle.setCotizacionID(cotizacion);
-                    cotizaciondetalleListNewCotizaciondetalle = em.merge(cotizaciondetalleListNewCotizaciondetalle);
-                    if (oldCotizacionIDOfCotizaciondetalleListNewCotizaciondetalle != null && !oldCotizacionIDOfCotizaciondetalleListNewCotizaciondetalle.equals(cotizacion)) {
-                        oldCotizacionIDOfCotizaciondetalleListNewCotizaciondetalle.getCotizaciondetalleList().remove(cotizaciondetalleListNewCotizaciondetalle);
-                        oldCotizacionIDOfCotizaciondetalleListNewCotizaciondetalle = em.merge(oldCotizacionIDOfCotizaciondetalleListNewCotizaciondetalle);
+            if(cotizaciondetalleListNew != null){
+                for (Cotizaciondetalle cotizaciondetalleListNewCotizaciondetalle : cotizaciondetalleListNew) {
+                    if (!cotizaciondetalleListOld.contains(cotizaciondetalleListNewCotizaciondetalle)) {
+                        Cotizacion oldCotizacionIDOfCotizaciondetalleListNewCotizaciondetalle = cotizaciondetalleListNewCotizaciondetalle.getCotizacionID();
+                        cotizaciondetalleListNewCotizaciondetalle.setCotizacionID(cotizacion);
+                        cotizaciondetalleListNewCotizaciondetalle = em.merge(cotizaciondetalleListNewCotizaciondetalle);
+                        if (oldCotizacionIDOfCotizaciondetalleListNewCotizaciondetalle != null && !oldCotizacionIDOfCotizaciondetalleListNewCotizaciondetalle.equals(cotizacion)) {
+                            oldCotizacionIDOfCotizaciondetalleListNewCotizaciondetalle.getCotizaciondetalleList().remove(cotizaciondetalleListNewCotizaciondetalle);
+                            oldCotizacionIDOfCotizaciondetalleListNewCotizaciondetalle = em.merge(oldCotizacionIDOfCotizaciondetalleListNewCotizaciondetalle);
+                        }
                     }
                 }
             }
+            
             em.getTransaction().commit();
-        } catch (Exception ex) {
+        } catch (IllegalOrphanException ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = cotizacion.getCotizacionID();

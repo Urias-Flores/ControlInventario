@@ -9,8 +9,8 @@ public class Acciones extends javax.swing.JPanel {
     
     public Acciones() {
         initComponents();
-        Utilities.CargarAnios(cmbAnioInicial);
-        Utilities.CargarAnios(cmbAnioFinal);
+        Utilities.CargarAnios(cmbAnioInicial, 0);
+        Utilities.CargarAnios(cmbAnioFinal, 0);
         btnFiltros.addMouseListener(Utilities.getMLGeneralButton());
         btnVer.addMouseListener(Utilities.getMLGeneralButton());
         

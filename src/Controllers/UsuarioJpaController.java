@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controllers;
 
 import Controllers.exceptions.IllegalOrphanException;
@@ -26,10 +22,6 @@ import Models.Usuario;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Dell
- */
 public class UsuarioJpaController implements Serializable {
 
     public UsuarioJpaController(EntityManagerFactory emf) {
@@ -43,28 +35,28 @@ public class UsuarioJpaController implements Serializable {
 
     public void create(Usuario usuario) {
         if (usuario.getInventariodetalleaccionesList() == null) {
-            usuario.setInventariodetalleaccionesList(new ArrayList<Inventariodetalleacciones>());
+            usuario.setInventariodetalleaccionesList(new ArrayList<>());
         }
         if (usuario.getCompraList() == null) {
-            usuario.setCompraList(new ArrayList<Compra>());
+            usuario.setCompraList(new ArrayList<>());
         }
         if (usuario.getVentaList() == null) {
-            usuario.setVentaList(new ArrayList<Venta>());
+            usuario.setVentaList(new ArrayList<>());
         }
         if (usuario.getAbonoList() == null) {
-            usuario.setAbonoList(new ArrayList<Abono>());
+            usuario.setAbonoList(new ArrayList<>());
         }
         if (usuario.getGastoList() == null) {
-            usuario.setGastoList(new ArrayList<Gasto>());
+            usuario.setGastoList(new ArrayList<>());
         }
         if (usuario.getCotizacionList() == null) {
-            usuario.setCotizacionList(new ArrayList<Cotizacion>());
+            usuario.setCotizacionList(new ArrayList<>());
         }
         if (usuario.getSolicitudList() == null) {
-            usuario.setSolicitudList(new ArrayList<Solicitud>());
+            usuario.setSolicitudList(new ArrayList<>());
         }
         if (usuario.getArqueoList() == null) {
-            usuario.setArqueoList(new ArrayList<Arqueo>());
+            usuario.setArqueoList(new ArrayList<>());
         }
         EntityManager em = null;
         try {
@@ -75,49 +67,49 @@ public class UsuarioJpaController implements Serializable {
                 empleadoID = em.getReference(empleadoID.getClass(), empleadoID.getEmpleadoID());
                 usuario.setEmpleadoID(empleadoID);
             }
-            List<Inventariodetalleacciones> attachedInventariodetalleaccionesList = new ArrayList<Inventariodetalleacciones>();
+            List<Inventariodetalleacciones> attachedInventariodetalleaccionesList = new ArrayList<>();
             for (Inventariodetalleacciones inventariodetalleaccionesListInventariodetalleaccionesToAttach : usuario.getInventariodetalleaccionesList()) {
                 inventariodetalleaccionesListInventariodetalleaccionesToAttach = em.getReference(inventariodetalleaccionesListInventariodetalleaccionesToAttach.getClass(), inventariodetalleaccionesListInventariodetalleaccionesToAttach.getInventarioDetalleAccionesID());
                 attachedInventariodetalleaccionesList.add(inventariodetalleaccionesListInventariodetalleaccionesToAttach);
             }
             usuario.setInventariodetalleaccionesList(attachedInventariodetalleaccionesList);
-            List<Compra> attachedCompraList = new ArrayList<Compra>();
+            List<Compra> attachedCompraList = new ArrayList<>();
             for (Compra compraListCompraToAttach : usuario.getCompraList()) {
                 compraListCompraToAttach = em.getReference(compraListCompraToAttach.getClass(), compraListCompraToAttach.getCompraID());
                 attachedCompraList.add(compraListCompraToAttach);
             }
             usuario.setCompraList(attachedCompraList);
-            List<Venta> attachedVentaList = new ArrayList<Venta>();
+            List<Venta> attachedVentaList = new ArrayList<>();
             for (Venta ventaListVentaToAttach : usuario.getVentaList()) {
                 ventaListVentaToAttach = em.getReference(ventaListVentaToAttach.getClass(), ventaListVentaToAttach.getVentaID());
                 attachedVentaList.add(ventaListVentaToAttach);
             }
             usuario.setVentaList(attachedVentaList);
-            List<Abono> attachedAbonoList = new ArrayList<Abono>();
+            List<Abono> attachedAbonoList = new ArrayList<>();
             for (Abono abonoListAbonoToAttach : usuario.getAbonoList()) {
                 abonoListAbonoToAttach = em.getReference(abonoListAbonoToAttach.getClass(), abonoListAbonoToAttach.getAbonoID());
                 attachedAbonoList.add(abonoListAbonoToAttach);
             }
             usuario.setAbonoList(attachedAbonoList);
-            List<Gasto> attachedGastoList = new ArrayList<Gasto>();
+            List<Gasto> attachedGastoList = new ArrayList<>();
             for (Gasto gastoListGastoToAttach : usuario.getGastoList()) {
                 gastoListGastoToAttach = em.getReference(gastoListGastoToAttach.getClass(), gastoListGastoToAttach.getGastoID());
                 attachedGastoList.add(gastoListGastoToAttach);
             }
             usuario.setGastoList(attachedGastoList);
-            List<Cotizacion> attachedCotizacionList = new ArrayList<Cotizacion>();
+            List<Cotizacion> attachedCotizacionList = new ArrayList<>();
             for (Cotizacion cotizacionListCotizacionToAttach : usuario.getCotizacionList()) {
                 cotizacionListCotizacionToAttach = em.getReference(cotizacionListCotizacionToAttach.getClass(), cotizacionListCotizacionToAttach.getCotizacionID());
                 attachedCotizacionList.add(cotizacionListCotizacionToAttach);
             }
             usuario.setCotizacionList(attachedCotizacionList);
-            List<Solicitud> attachedSolicitudList = new ArrayList<Solicitud>();
+            List<Solicitud> attachedSolicitudList = new ArrayList<>();
             for (Solicitud solicitudListSolicitudToAttach : usuario.getSolicitudList()) {
                 solicitudListSolicitudToAttach = em.getReference(solicitudListSolicitudToAttach.getClass(), solicitudListSolicitudToAttach.getSolicitudID());
                 attachedSolicitudList.add(solicitudListSolicitudToAttach);
             }
             usuario.setSolicitudList(attachedSolicitudList);
-            List<Arqueo> attachedArqueoList = new ArrayList<Arqueo>();
+            List<Arqueo> attachedArqueoList = new ArrayList<>();
             for (Arqueo arqueoListArqueoToAttach : usuario.getArqueoList()) {
                 arqueoListArqueoToAttach = em.getReference(arqueoListArqueoToAttach.getClass(), arqueoListArqueoToAttach.getArqueoID());
                 attachedArqueoList.add(arqueoListArqueoToAttach);
@@ -208,7 +200,7 @@ public class UsuarioJpaController implements Serializable {
         }
     }
 
-    public void edit(Usuario usuario) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Usuario usuario) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -236,7 +228,7 @@ public class UsuarioJpaController implements Serializable {
             for (Inventariodetalleacciones inventariodetalleaccionesListOldInventariodetalleacciones : inventariodetalleaccionesListOld) {
                 if (!inventariodetalleaccionesListNew.contains(inventariodetalleaccionesListOldInventariodetalleacciones)) {
                     if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+                        illegalOrphanMessages = new ArrayList<>();
                     }
                     illegalOrphanMessages.add("You must retain Inventariodetalleacciones " + inventariodetalleaccionesListOldInventariodetalleacciones + " since its usuarioID field is not nullable.");
                 }
@@ -244,7 +236,7 @@ public class UsuarioJpaController implements Serializable {
             for (Compra compraListOldCompra : compraListOld) {
                 if (!compraListNew.contains(compraListOldCompra)) {
                     if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+                        illegalOrphanMessages = new ArrayList<>();
                     }
                     illegalOrphanMessages.add("You must retain Compra " + compraListOldCompra + " since its usuarioID field is not nullable.");
                 }
@@ -252,7 +244,7 @@ public class UsuarioJpaController implements Serializable {
             for (Venta ventaListOldVenta : ventaListOld) {
                 if (!ventaListNew.contains(ventaListOldVenta)) {
                     if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+                        illegalOrphanMessages = new ArrayList<>();
                     }
                     illegalOrphanMessages.add("You must retain Venta " + ventaListOldVenta + " since its usuarioID field is not nullable.");
                 }
@@ -260,7 +252,7 @@ public class UsuarioJpaController implements Serializable {
             for (Abono abonoListOldAbono : abonoListOld) {
                 if (!abonoListNew.contains(abonoListOldAbono)) {
                     if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+                        illegalOrphanMessages = new ArrayList<>();
                     }
                     illegalOrphanMessages.add("You must retain Abono " + abonoListOldAbono + " since its usuarioID field is not nullable.");
                 }
@@ -268,7 +260,7 @@ public class UsuarioJpaController implements Serializable {
             for (Gasto gastoListOldGasto : gastoListOld) {
                 if (!gastoListNew.contains(gastoListOldGasto)) {
                     if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+                        illegalOrphanMessages = new ArrayList<>();
                     }
                     illegalOrphanMessages.add("You must retain Gasto " + gastoListOldGasto + " since its usuarioID field is not nullable.");
                 }
@@ -276,7 +268,7 @@ public class UsuarioJpaController implements Serializable {
             for (Cotizacion cotizacionListOldCotizacion : cotizacionListOld) {
                 if (!cotizacionListNew.contains(cotizacionListOldCotizacion)) {
                     if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+                        illegalOrphanMessages = new ArrayList<>();
                     }
                     illegalOrphanMessages.add("You must retain Cotizacion " + cotizacionListOldCotizacion + " since its usuarioID field is not nullable.");
                 }
@@ -284,7 +276,7 @@ public class UsuarioJpaController implements Serializable {
             for (Solicitud solicitudListOldSolicitud : solicitudListOld) {
                 if (!solicitudListNew.contains(solicitudListOldSolicitud)) {
                     if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+                        illegalOrphanMessages = new ArrayList<>();
                     }
                     illegalOrphanMessages.add("You must retain Solicitud " + solicitudListOldSolicitud + " since its usuarioID field is not nullable.");
                 }
@@ -292,7 +284,7 @@ public class UsuarioJpaController implements Serializable {
             for (Arqueo arqueoListOldArqueo : arqueoListOld) {
                 if (!arqueoListNew.contains(arqueoListOldArqueo)) {
                     if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+                        illegalOrphanMessages = new ArrayList<>();
                     }
                     illegalOrphanMessages.add("You must retain Arqueo " + arqueoListOldArqueo + " since its usuarioID field is not nullable.");
                 }
@@ -304,56 +296,56 @@ public class UsuarioJpaController implements Serializable {
                 empleadoIDNew = em.getReference(empleadoIDNew.getClass(), empleadoIDNew.getEmpleadoID());
                 usuario.setEmpleadoID(empleadoIDNew);
             }
-            List<Inventariodetalleacciones> attachedInventariodetalleaccionesListNew = new ArrayList<Inventariodetalleacciones>();
+            List<Inventariodetalleacciones> attachedInventariodetalleaccionesListNew = new ArrayList<>();
             for (Inventariodetalleacciones inventariodetalleaccionesListNewInventariodetalleaccionesToAttach : inventariodetalleaccionesListNew) {
                 inventariodetalleaccionesListNewInventariodetalleaccionesToAttach = em.getReference(inventariodetalleaccionesListNewInventariodetalleaccionesToAttach.getClass(), inventariodetalleaccionesListNewInventariodetalleaccionesToAttach.getInventarioDetalleAccionesID());
                 attachedInventariodetalleaccionesListNew.add(inventariodetalleaccionesListNewInventariodetalleaccionesToAttach);
             }
             inventariodetalleaccionesListNew = attachedInventariodetalleaccionesListNew;
             usuario.setInventariodetalleaccionesList(inventariodetalleaccionesListNew);
-            List<Compra> attachedCompraListNew = new ArrayList<Compra>();
+            List<Compra> attachedCompraListNew = new ArrayList<>();
             for (Compra compraListNewCompraToAttach : compraListNew) {
                 compraListNewCompraToAttach = em.getReference(compraListNewCompraToAttach.getClass(), compraListNewCompraToAttach.getCompraID());
                 attachedCompraListNew.add(compraListNewCompraToAttach);
             }
             compraListNew = attachedCompraListNew;
             usuario.setCompraList(compraListNew);
-            List<Venta> attachedVentaListNew = new ArrayList<Venta>();
+            List<Venta> attachedVentaListNew = new ArrayList<>();
             for (Venta ventaListNewVentaToAttach : ventaListNew) {
                 ventaListNewVentaToAttach = em.getReference(ventaListNewVentaToAttach.getClass(), ventaListNewVentaToAttach.getVentaID());
                 attachedVentaListNew.add(ventaListNewVentaToAttach);
             }
             ventaListNew = attachedVentaListNew;
             usuario.setVentaList(ventaListNew);
-            List<Abono> attachedAbonoListNew = new ArrayList<Abono>();
+            List<Abono> attachedAbonoListNew = new ArrayList<>();
             for (Abono abonoListNewAbonoToAttach : abonoListNew) {
                 abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
                 attachedAbonoListNew.add(abonoListNewAbonoToAttach);
             }
             abonoListNew = attachedAbonoListNew;
             usuario.setAbonoList(abonoListNew);
-            List<Gasto> attachedGastoListNew = new ArrayList<Gasto>();
+            List<Gasto> attachedGastoListNew = new ArrayList<>();
             for (Gasto gastoListNewGastoToAttach : gastoListNew) {
                 gastoListNewGastoToAttach = em.getReference(gastoListNewGastoToAttach.getClass(), gastoListNewGastoToAttach.getGastoID());
                 attachedGastoListNew.add(gastoListNewGastoToAttach);
             }
             gastoListNew = attachedGastoListNew;
             usuario.setGastoList(gastoListNew);
-            List<Cotizacion> attachedCotizacionListNew = new ArrayList<Cotizacion>();
+            List<Cotizacion> attachedCotizacionListNew = new ArrayList<>();
             for (Cotizacion cotizacionListNewCotizacionToAttach : cotizacionListNew) {
                 cotizacionListNewCotizacionToAttach = em.getReference(cotizacionListNewCotizacionToAttach.getClass(), cotizacionListNewCotizacionToAttach.getCotizacionID());
                 attachedCotizacionListNew.add(cotizacionListNewCotizacionToAttach);
             }
             cotizacionListNew = attachedCotizacionListNew;
             usuario.setCotizacionList(cotizacionListNew);
-            List<Solicitud> attachedSolicitudListNew = new ArrayList<Solicitud>();
+            List<Solicitud> attachedSolicitudListNew = new ArrayList<>();
             for (Solicitud solicitudListNewSolicitudToAttach : solicitudListNew) {
                 solicitudListNewSolicitudToAttach = em.getReference(solicitudListNewSolicitudToAttach.getClass(), solicitudListNewSolicitudToAttach.getSolicitudID());
                 attachedSolicitudListNew.add(solicitudListNewSolicitudToAttach);
             }
             solicitudListNew = attachedSolicitudListNew;
             usuario.setSolicitudList(solicitudListNew);
-            List<Arqueo> attachedArqueoListNew = new ArrayList<Arqueo>();
+            List<Arqueo> attachedArqueoListNew = new ArrayList<>();
             for (Arqueo arqueoListNewArqueoToAttach : arqueoListNew) {
                 arqueoListNewArqueoToAttach = em.getReference(arqueoListNewArqueoToAttach.getClass(), arqueoListNewArqueoToAttach.getArqueoID());
                 attachedArqueoListNew.add(arqueoListNewArqueoToAttach);
@@ -458,7 +450,7 @@ public class UsuarioJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
+        } catch (IllegalOrphanException ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = usuario.getUsuarioID();
@@ -490,56 +482,56 @@ public class UsuarioJpaController implements Serializable {
             List<Inventariodetalleacciones> inventariodetalleaccionesListOrphanCheck = usuario.getInventariodetalleaccionesList();
             for (Inventariodetalleacciones inventariodetalleaccionesListOrphanCheckInventariodetalleacciones : inventariodetalleaccionesListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+                    illegalOrphanMessages = new ArrayList<>();
                 }
                 illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Inventariodetalleacciones " + inventariodetalleaccionesListOrphanCheckInventariodetalleacciones + " in its inventariodetalleaccionesList field has a non-nullable usuarioID field.");
             }
             List<Compra> compraListOrphanCheck = usuario.getCompraList();
             for (Compra compraListOrphanCheckCompra : compraListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+                    illegalOrphanMessages = new ArrayList<>();
                 }
                 illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Compra " + compraListOrphanCheckCompra + " in its compraList field has a non-nullable usuarioID field.");
             }
             List<Venta> ventaListOrphanCheck = usuario.getVentaList();
             for (Venta ventaListOrphanCheckVenta : ventaListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+                    illegalOrphanMessages = new ArrayList<>();
                 }
                 illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Venta " + ventaListOrphanCheckVenta + " in its ventaList field has a non-nullable usuarioID field.");
             }
             List<Abono> abonoListOrphanCheck = usuario.getAbonoList();
             for (Abono abonoListOrphanCheckAbono : abonoListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+                    illegalOrphanMessages = new ArrayList<>();
                 }
                 illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Abono " + abonoListOrphanCheckAbono + " in its abonoList field has a non-nullable usuarioID field.");
             }
             List<Gasto> gastoListOrphanCheck = usuario.getGastoList();
             for (Gasto gastoListOrphanCheckGasto : gastoListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+                    illegalOrphanMessages = new ArrayList<>();
                 }
                 illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Gasto " + gastoListOrphanCheckGasto + " in its gastoList field has a non-nullable usuarioID field.");
             }
             List<Cotizacion> cotizacionListOrphanCheck = usuario.getCotizacionList();
             for (Cotizacion cotizacionListOrphanCheckCotizacion : cotizacionListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+                    illegalOrphanMessages = new ArrayList<>();
                 }
                 illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Cotizacion " + cotizacionListOrphanCheckCotizacion + " in its cotizacionList field has a non-nullable usuarioID field.");
             }
             List<Solicitud> solicitudListOrphanCheck = usuario.getSolicitudList();
             for (Solicitud solicitudListOrphanCheckSolicitud : solicitudListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+                    illegalOrphanMessages = new ArrayList<>();
                 }
                 illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Solicitud " + solicitudListOrphanCheckSolicitud + " in its solicitudList field has a non-nullable usuarioID field.");
             }
             List<Arqueo> arqueoListOrphanCheck = usuario.getArqueoList();
             for (Arqueo arqueoListOrphanCheckArqueo : arqueoListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+                    illegalOrphanMessages = new ArrayList<>();
                 }
                 illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Arqueo " + arqueoListOrphanCheckArqueo + " in its arqueoList field has a non-nullable usuarioID field.");
             }

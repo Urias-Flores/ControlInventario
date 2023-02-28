@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controllers;
 
 import Controllers.exceptions.IllegalOrphanException;
@@ -18,10 +14,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Dell
- */
 public class MarcaJpaController implements Serializable {
 
     public MarcaJpaController(EntityManagerFactory emf) {
@@ -35,13 +27,13 @@ public class MarcaJpaController implements Serializable {
 
     public void create(Marca marca) {
         if (marca.getProductoList() == null) {
-            marca.setProductoList(new ArrayList<Producto>());
+            marca.setProductoList(new ArrayList<>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Producto> attachedProductoList = new ArrayList<Producto>();
+            List<Producto> attachedProductoList = new ArrayList<>();
             for (Producto productoListProductoToAttach : marca.getProductoList()) {
                 productoListProductoToAttach = em.getReference(productoListProductoToAttach.getClass(), productoListProductoToAttach.getProductoID());
                 attachedProductoList.add(productoListProductoToAttach);
@@ -65,7 +57,7 @@ public class MarcaJpaController implements Serializable {
         }
     }
 
-    public void edit(Marca marca) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Marca marca) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -74,38 +66,44 @@ public class MarcaJpaController implements Serializable {
             List<Producto> productoListOld = persistentMarca.getProductoList();
             List<Producto> productoListNew = marca.getProductoList();
             List<String> illegalOrphanMessages = null;
-            for (Producto productoListOldProducto : productoListOld) {
-                if (!productoListNew.contains(productoListOldProducto)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+            if(productoListOld != null){
+                for (Producto productoListOldProducto : productoListOld) {
+                    if (!productoListNew.contains(productoListOldProducto)) {
+                        if (illegalOrphanMessages == null) {
+                            illegalOrphanMessages = new ArrayList<>();
+                        }
+                        illegalOrphanMessages.add("You must retain Producto " + productoListOldProducto + " since its marcaID field is not nullable.");
                     }
-                    illegalOrphanMessages.add("You must retain Producto " + productoListOldProducto + " since its marcaID field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            List<Producto> attachedProductoListNew = new ArrayList<Producto>();
-            for (Producto productoListNewProductoToAttach : productoListNew) {
-                productoListNewProductoToAttach = em.getReference(productoListNewProductoToAttach.getClass(), productoListNewProductoToAttach.getProductoID());
-                attachedProductoListNew.add(productoListNewProductoToAttach);
+            List<Producto> attachedProductoListNew = new ArrayList<>();
+            if(productoListNew != null){
+                for (Producto productoListNewProductoToAttach : productoListNew) {
+                    productoListNewProductoToAttach = em.getReference(productoListNewProductoToAttach.getClass(), productoListNewProductoToAttach.getProductoID());
+                    attachedProductoListNew.add(productoListNewProductoToAttach);
+                }
             }
             productoListNew = attachedProductoListNew;
             marca.setProductoList(productoListNew);
             marca = em.merge(marca);
-            for (Producto productoListNewProducto : productoListNew) {
-                if (!productoListOld.contains(productoListNewProducto)) {
-                    Marca oldMarcaIDOfProductoListNewProducto = productoListNewProducto.getMarcaID();
-                    productoListNewProducto.setMarcaID(marca);
-                    productoListNewProducto = em.merge(productoListNewProducto);
-                    if (oldMarcaIDOfProductoListNewProducto != null && !oldMarcaIDOfProductoListNewProducto.equals(marca)) {
-                        oldMarcaIDOfProductoListNewProducto.getProductoList().remove(productoListNewProducto);
-                        oldMarcaIDOfProductoListNewProducto = em.merge(oldMarcaIDOfProductoListNewProducto);
+            if(productoListNew != null){
+                for (Producto productoListNewProducto : productoListNew) {
+                    if (!productoListOld.contains(productoListNewProducto)) {
+                        Marca oldMarcaIDOfProductoListNewProducto = productoListNewProducto.getMarcaID();
+                        productoListNewProducto.setMarcaID(marca);
+                        productoListNewProducto = em.merge(productoListNewProducto);
+                        if (oldMarcaIDOfProductoListNewProducto != null && !oldMarcaIDOfProductoListNewProducto.equals(marca)) {
+                            oldMarcaIDOfProductoListNewProducto.getProductoList().remove(productoListNewProducto);
+                            oldMarcaIDOfProductoListNewProducto = em.merge(oldMarcaIDOfProductoListNewProducto);
+                        }
                     }
-                }
+                }    
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
+        } catch (IllegalOrphanException ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = marca.getMarcaID();
@@ -137,7 +135,7 @@ public class MarcaJpaController implements Serializable {
             List<Producto> productoListOrphanCheck = marca.getProductoList();
             for (Producto productoListOrphanCheckProducto : productoListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+                    illegalOrphanMessages = new ArrayList<>();
                 }
                 illegalOrphanMessages.add("This Marca (" + marca + ") cannot be destroyed since the Producto " + productoListOrphanCheckProducto + " in its productoList field has a non-nullable marcaID field.");
             }

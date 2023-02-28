@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controllers;
 
 import Controllers.exceptions.NonexistentEntityException;
@@ -18,10 +14,6 @@ import Models.Proveedor;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Dell
- */
 public class ProveedorJpaController implements Serializable {
 
     public ProveedorJpaController(EntityManagerFactory emf) {
@@ -35,22 +27,22 @@ public class ProveedorJpaController implements Serializable {
 
     public void create(Proveedor proveedor) {
         if (proveedor.getCompraList() == null) {
-            proveedor.setCompraList(new ArrayList<Compra>());
+            proveedor.setCompraList(new ArrayList<>());
         }
         if (proveedor.getAbonoList() == null) {
-            proveedor.setAbonoList(new ArrayList<Abono>());
+            proveedor.setAbonoList(new ArrayList<>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Compra> attachedCompraList = new ArrayList<Compra>();
+            List<Compra> attachedCompraList = new ArrayList<>();
             for (Compra compraListCompraToAttach : proveedor.getCompraList()) {
                 compraListCompraToAttach = em.getReference(compraListCompraToAttach.getClass(), compraListCompraToAttach.getCompraID());
                 attachedCompraList.add(compraListCompraToAttach);
             }
             proveedor.setCompraList(attachedCompraList);
-            List<Abono> attachedAbonoList = new ArrayList<Abono>();
+            List<Abono> attachedAbonoList = new ArrayList<>();
             for (Abono abonoListAbonoToAttach : proveedor.getAbonoList()) {
                 abonoListAbonoToAttach = em.getReference(abonoListAbonoToAttach.getClass(), abonoListAbonoToAttach.getAbonoID());
                 attachedAbonoList.add(abonoListAbonoToAttach);
@@ -93,52 +85,64 @@ public class ProveedorJpaController implements Serializable {
             List<Compra> compraListNew = proveedor.getCompraList();
             List<Abono> abonoListOld = persistentProveedor.getAbonoList();
             List<Abono> abonoListNew = proveedor.getAbonoList();
-            List<Compra> attachedCompraListNew = new ArrayList<Compra>();
-            for (Compra compraListNewCompraToAttach : compraListNew) {
-                compraListNewCompraToAttach = em.getReference(compraListNewCompraToAttach.getClass(), compraListNewCompraToAttach.getCompraID());
-                attachedCompraListNew.add(compraListNewCompraToAttach);
+            List<Compra> attachedCompraListNew = new ArrayList<>();
+            if(compraListNew != null){
+                for (Compra compraListNewCompraToAttach : compraListNew) {
+                    compraListNewCompraToAttach = em.getReference(compraListNewCompraToAttach.getClass(), compraListNewCompraToAttach.getCompraID());
+                    attachedCompraListNew.add(compraListNewCompraToAttach);
+                }
             }
             compraListNew = attachedCompraListNew;
             proveedor.setCompraList(compraListNew);
-            List<Abono> attachedAbonoListNew = new ArrayList<Abono>();
-            for (Abono abonoListNewAbonoToAttach : abonoListNew) {
-                abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
-                attachedAbonoListNew.add(abonoListNewAbonoToAttach);
+            List<Abono> attachedAbonoListNew = new ArrayList<>();
+            if(abonoListNew != null){
+                for (Abono abonoListNewAbonoToAttach : abonoListNew) {
+                    abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
+                    attachedAbonoListNew.add(abonoListNewAbonoToAttach);
+                }
             }
             abonoListNew = attachedAbonoListNew;
             proveedor.setAbonoList(abonoListNew);
             proveedor = em.merge(proveedor);
-            for (Compra compraListOldCompra : compraListOld) {
-                if (!compraListNew.contains(compraListOldCompra)) {
-                    compraListOldCompra.setProveedorID(null);
-                    compraListOldCompra = em.merge(compraListOldCompra);
-                }
-            }
-            for (Compra compraListNewCompra : compraListNew) {
-                if (!compraListOld.contains(compraListNewCompra)) {
-                    Proveedor oldProveedorIDOfCompraListNewCompra = compraListNewCompra.getProveedorID();
-                    compraListNewCompra.setProveedorID(proveedor);
-                    compraListNewCompra = em.merge(compraListNewCompra);
-                    if (oldProveedorIDOfCompraListNewCompra != null && !oldProveedorIDOfCompraListNewCompra.equals(proveedor)) {
-                        oldProveedorIDOfCompraListNewCompra.getCompraList().remove(compraListNewCompra);
-                        oldProveedorIDOfCompraListNewCompra = em.merge(oldProveedorIDOfCompraListNewCompra);
+            if(compraListOld != null){
+                for (Compra compraListOldCompra : compraListOld) {
+                    if (!compraListNew.contains(compraListOldCompra)) {
+                        compraListOldCompra.setProveedorID(null);
+                        compraListOldCompra = em.merge(compraListOldCompra);
                     }
                 }
             }
-            for (Abono abonoListOldAbono : abonoListOld) {
-                if (!abonoListNew.contains(abonoListOldAbono)) {
-                    abonoListOldAbono.setProveedorID(null);
-                    abonoListOldAbono = em.merge(abonoListOldAbono);
+            if(compraListNew != null){
+                for (Compra compraListNewCompra : compraListNew) {
+                    if (!compraListOld.contains(compraListNewCompra)) {
+                        Proveedor oldProveedorIDOfCompraListNewCompra = compraListNewCompra.getProveedorID();
+                        compraListNewCompra.setProveedorID(proveedor);
+                        compraListNewCompra = em.merge(compraListNewCompra);
+                        if (oldProveedorIDOfCompraListNewCompra != null && !oldProveedorIDOfCompraListNewCompra.equals(proveedor)) {
+                            oldProveedorIDOfCompraListNewCompra.getCompraList().remove(compraListNewCompra);
+                            oldProveedorIDOfCompraListNewCompra = em.merge(oldProveedorIDOfCompraListNewCompra);
+                        }
+                    }
                 }
             }
-            for (Abono abonoListNewAbono : abonoListNew) {
-                if (!abonoListOld.contains(abonoListNewAbono)) {
-                    Proveedor oldProveedorIDOfAbonoListNewAbono = abonoListNewAbono.getProveedorID();
-                    abonoListNewAbono.setProveedorID(proveedor);
-                    abonoListNewAbono = em.merge(abonoListNewAbono);
-                    if (oldProveedorIDOfAbonoListNewAbono != null && !oldProveedorIDOfAbonoListNewAbono.equals(proveedor)) {
-                        oldProveedorIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
-                        oldProveedorIDOfAbonoListNewAbono = em.merge(oldProveedorIDOfAbonoListNewAbono);
+            if(abonoListOld != null){
+                for (Abono abonoListOldAbono : abonoListOld) {
+                    if (!abonoListNew.contains(abonoListOldAbono)) {
+                        abonoListOldAbono.setProveedorID(null);
+                        abonoListOldAbono = em.merge(abonoListOldAbono);
+                    }
+                }
+            }
+            if(abonoListNew != null){
+                for (Abono abonoListNewAbono : abonoListNew) {
+                    if (!abonoListOld.contains(abonoListNewAbono)) {
+                        Proveedor oldProveedorIDOfAbonoListNewAbono = abonoListNewAbono.getProveedorID();
+                        abonoListNewAbono.setProveedorID(proveedor);
+                        abonoListNewAbono = em.merge(abonoListNewAbono);
+                        if (oldProveedorIDOfAbonoListNewAbono != null && !oldProveedorIDOfAbonoListNewAbono.equals(proveedor)) {
+                            oldProveedorIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
+                            oldProveedorIDOfAbonoListNewAbono = em.merge(oldProveedorIDOfAbonoListNewAbono);
+                        }
                     }
                 }
             }

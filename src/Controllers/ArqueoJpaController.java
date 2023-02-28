@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controllers;
 
 import Controllers.exceptions.IllegalOrphanException;
@@ -19,10 +15,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Dell
- */
 public class ArqueoJpaController implements Serializable {
 
     public ArqueoJpaController(EntityManagerFactory emf) {
@@ -75,7 +67,7 @@ public class ArqueoJpaController implements Serializable {
         }
     }
 
-    public void edit(Arqueo arqueo) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Arqueo arqueo) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -86,12 +78,14 @@ public class ArqueoJpaController implements Serializable {
             List<Arqueodetalle> arqueodetalleListOld = persistentArqueo.getArqueodetalleList();
             List<Arqueodetalle> arqueodetalleListNew = arqueo.getArqueodetalleList();
             List<String> illegalOrphanMessages = null;
-            for (Arqueodetalle arqueodetalleListOldArqueodetalle : arqueodetalleListOld) {
-                if (!arqueodetalleListNew.contains(arqueodetalleListOldArqueodetalle)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+            if(arqueodetalleListOld != null){
+                for (Arqueodetalle arqueodetalleListOldArqueodetalle : arqueodetalleListOld) {
+                    if (!arqueodetalleListNew.contains(arqueodetalleListOldArqueodetalle)) {
+                        if (illegalOrphanMessages == null) {
+                            illegalOrphanMessages = new ArrayList<String>();
+                        }
+                        illegalOrphanMessages.add("You must retain Arqueodetalle " + arqueodetalleListOldArqueodetalle + " since its arqueoID field is not nullable.");
                     }
-                    illegalOrphanMessages.add("You must retain Arqueodetalle " + arqueodetalleListOldArqueodetalle + " since its arqueoID field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -102,9 +96,11 @@ public class ArqueoJpaController implements Serializable {
                 arqueo.setUsuarioID(usuarioIDNew);
             }
             List<Arqueodetalle> attachedArqueodetalleListNew = new ArrayList<Arqueodetalle>();
-            for (Arqueodetalle arqueodetalleListNewArqueodetalleToAttach : arqueodetalleListNew) {
-                arqueodetalleListNewArqueodetalleToAttach = em.getReference(arqueodetalleListNewArqueodetalleToAttach.getClass(), arqueodetalleListNewArqueodetalleToAttach.getArqueoDetalleID());
-                attachedArqueodetalleListNew.add(arqueodetalleListNewArqueodetalleToAttach);
+            if(arqueodetalleListNew != null){
+                for (Arqueodetalle arqueodetalleListNewArqueodetalleToAttach : arqueodetalleListNew) {
+                    arqueodetalleListNewArqueodetalleToAttach = em.getReference(arqueodetalleListNewArqueodetalleToAttach.getClass(), arqueodetalleListNewArqueodetalleToAttach.getArqueoDetalleID());
+                    attachedArqueodetalleListNew.add(arqueodetalleListNewArqueodetalleToAttach);
+                }
             }
             arqueodetalleListNew = attachedArqueodetalleListNew;
             arqueo.setArqueodetalleList(arqueodetalleListNew);
@@ -117,19 +113,21 @@ public class ArqueoJpaController implements Serializable {
                 usuarioIDNew.getArqueoList().add(arqueo);
                 usuarioIDNew = em.merge(usuarioIDNew);
             }
-            for (Arqueodetalle arqueodetalleListNewArqueodetalle : arqueodetalleListNew) {
-                if (!arqueodetalleListOld.contains(arqueodetalleListNewArqueodetalle)) {
-                    Arqueo oldArqueoIDOfArqueodetalleListNewArqueodetalle = arqueodetalleListNewArqueodetalle.getArqueoID();
-                    arqueodetalleListNewArqueodetalle.setArqueoID(arqueo);
-                    arqueodetalleListNewArqueodetalle = em.merge(arqueodetalleListNewArqueodetalle);
-                    if (oldArqueoIDOfArqueodetalleListNewArqueodetalle != null && !oldArqueoIDOfArqueodetalleListNewArqueodetalle.equals(arqueo)) {
-                        oldArqueoIDOfArqueodetalleListNewArqueodetalle.getArqueodetalleList().remove(arqueodetalleListNewArqueodetalle);
-                        oldArqueoIDOfArqueodetalleListNewArqueodetalle = em.merge(oldArqueoIDOfArqueodetalleListNewArqueodetalle);
+            if(arqueodetalleListNew != null){
+                for (Arqueodetalle arqueodetalleListNewArqueodetalle : arqueodetalleListNew) {
+                    if (!arqueodetalleListOld.contains(arqueodetalleListNewArqueodetalle)) {
+                        Arqueo oldArqueoIDOfArqueodetalleListNewArqueodetalle = arqueodetalleListNewArqueodetalle.getArqueoID();
+                        arqueodetalleListNewArqueodetalle.setArqueoID(arqueo);
+                        arqueodetalleListNewArqueodetalle = em.merge(arqueodetalleListNewArqueodetalle);
+                        if (oldArqueoIDOfArqueodetalleListNewArqueodetalle != null && !oldArqueoIDOfArqueodetalleListNewArqueodetalle.equals(arqueo)) {
+                            oldArqueoIDOfArqueodetalleListNewArqueodetalle.getArqueodetalleList().remove(arqueodetalleListNewArqueodetalle);
+                            oldArqueoIDOfArqueodetalleListNewArqueodetalle = em.merge(oldArqueoIDOfArqueodetalleListNewArqueodetalle);
+                        }
                     }
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
+        } catch (IllegalOrphanException ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = arqueo.getArqueoID();

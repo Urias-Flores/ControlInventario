@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Controllers;
 
 import Controllers.exceptions.NonexistentEntityException;
@@ -18,10 +14,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-/**
- *
- * @author Dell
- */
 public class GastoJpaController implements Serializable {
 
     public GastoJpaController(EntityManagerFactory emf) {
@@ -35,7 +27,7 @@ public class GastoJpaController implements Serializable {
 
     public void create(Gasto gasto) {
         if (gasto.getArqueodetalleList() == null) {
-            gasto.setArqueodetalleList(new ArrayList<Arqueodetalle>());
+            gasto.setArqueodetalleList(new ArrayList<>());
         }
         EntityManager em = null;
         try {
@@ -46,7 +38,7 @@ public class GastoJpaController implements Serializable {
                 usuarioID = em.getReference(usuarioID.getClass(), usuarioID.getUsuarioID());
                 gasto.setUsuarioID(usuarioID);
             }
-            List<Arqueodetalle> attachedArqueodetalleList = new ArrayList<Arqueodetalle>();
+            List<Arqueodetalle> attachedArqueodetalleList = new ArrayList<>();
             for (Arqueodetalle arqueodetalleListArqueodetalleToAttach : gasto.getArqueodetalleList()) {
                 arqueodetalleListArqueodetalleToAttach = em.getReference(arqueodetalleListArqueodetalleToAttach.getClass(), arqueodetalleListArqueodetalleToAttach.getArqueoDetalleID());
                 attachedArqueodetalleList.add(arqueodetalleListArqueodetalleToAttach);
@@ -88,10 +80,12 @@ public class GastoJpaController implements Serializable {
                 usuarioIDNew = em.getReference(usuarioIDNew.getClass(), usuarioIDNew.getUsuarioID());
                 gasto.setUsuarioID(usuarioIDNew);
             }
-            List<Arqueodetalle> attachedArqueodetalleListNew = new ArrayList<Arqueodetalle>();
-            for (Arqueodetalle arqueodetalleListNewArqueodetalleToAttach : arqueodetalleListNew) {
-                arqueodetalleListNewArqueodetalleToAttach = em.getReference(arqueodetalleListNewArqueodetalleToAttach.getClass(), arqueodetalleListNewArqueodetalleToAttach.getArqueoDetalleID());
-                attachedArqueodetalleListNew.add(arqueodetalleListNewArqueodetalleToAttach);
+            List<Arqueodetalle> attachedArqueodetalleListNew = new ArrayList<>();
+            if(arqueodetalleListNew != null){
+                for (Arqueodetalle arqueodetalleListNewArqueodetalleToAttach : arqueodetalleListNew) {
+                    arqueodetalleListNewArqueodetalleToAttach = em.getReference(arqueodetalleListNewArqueodetalleToAttach.getClass(), arqueodetalleListNewArqueodetalleToAttach.getArqueoDetalleID());
+                    attachedArqueodetalleListNew.add(arqueodetalleListNewArqueodetalleToAttach);
+                }
             }
             arqueodetalleListNew = attachedArqueodetalleListNew;
             gasto.setArqueodetalleList(arqueodetalleListNew);
@@ -104,20 +98,24 @@ public class GastoJpaController implements Serializable {
                 usuarioIDNew.getGastoList().add(gasto);
                 usuarioIDNew = em.merge(usuarioIDNew);
             }
-            for (Arqueodetalle arqueodetalleListOldArqueodetalle : arqueodetalleListOld) {
-                if (!arqueodetalleListNew.contains(arqueodetalleListOldArqueodetalle)) {
-                    arqueodetalleListOldArqueodetalle.setGastoID(null);
-                    arqueodetalleListOldArqueodetalle = em.merge(arqueodetalleListOldArqueodetalle);
+            if(arqueodetalleListOld != null){
+                for (Arqueodetalle arqueodetalleListOldArqueodetalle : arqueodetalleListOld) {
+                    if (!arqueodetalleListNew.contains(arqueodetalleListOldArqueodetalle)) {
+                        arqueodetalleListOldArqueodetalle.setGastoID(null);
+                        arqueodetalleListOldArqueodetalle = em.merge(arqueodetalleListOldArqueodetalle);
+                    }
                 }
             }
-            for (Arqueodetalle arqueodetalleListNewArqueodetalle : arqueodetalleListNew) {
-                if (!arqueodetalleListOld.contains(arqueodetalleListNewArqueodetalle)) {
-                    Gasto oldGastoIDOfArqueodetalleListNewArqueodetalle = arqueodetalleListNewArqueodetalle.getGastoID();
-                    arqueodetalleListNewArqueodetalle.setGastoID(gasto);
-                    arqueodetalleListNewArqueodetalle = em.merge(arqueodetalleListNewArqueodetalle);
-                    if (oldGastoIDOfArqueodetalleListNewArqueodetalle != null && !oldGastoIDOfArqueodetalleListNewArqueodetalle.equals(gasto)) {
-                        oldGastoIDOfArqueodetalleListNewArqueodetalle.getArqueodetalleList().remove(arqueodetalleListNewArqueodetalle);
-                        oldGastoIDOfArqueodetalleListNewArqueodetalle = em.merge(oldGastoIDOfArqueodetalleListNewArqueodetalle);
+            if(arqueodetalleListNew != null){
+                for (Arqueodetalle arqueodetalleListNewArqueodetalle : arqueodetalleListNew) {
+                    if (!arqueodetalleListOld.contains(arqueodetalleListNewArqueodetalle)) {
+                        Gasto oldGastoIDOfArqueodetalleListNewArqueodetalle = arqueodetalleListNewArqueodetalle.getGastoID();
+                        arqueodetalleListNewArqueodetalle.setGastoID(gasto);
+                        arqueodetalleListNewArqueodetalle = em.merge(arqueodetalleListNewArqueodetalle);
+                        if (oldGastoIDOfArqueodetalleListNewArqueodetalle != null && !oldGastoIDOfArqueodetalleListNewArqueodetalle.equals(gasto)) {
+                            oldGastoIDOfArqueodetalleListNewArqueodetalle.getArqueodetalleList().remove(arqueodetalleListNewArqueodetalle);
+                            oldGastoIDOfArqueodetalleListNewArqueodetalle = em.merge(oldGastoIDOfArqueodetalleListNewArqueodetalle);
+                        }
                     }
                 }
             }

@@ -81,8 +81,8 @@ public class ComprasViewController {
         controller = new CompraJpaController(Conection.createEntityManagerFactory());
         
         //Cargando años en combobox de fechas
-        Utilities.CargarAnios(AnioCompra);
-        Utilities.CargarAnios(AnioVencimiento);
+        Utilities.CargarAnios(AnioCompra, 0);
+        Utilities.CargarAnios(AnioVencimiento, 0);
             
         //Cargando fecha actual
         loadCurrentDate();

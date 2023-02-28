@@ -1,7 +1,6 @@
 package Views.Panels.Ajustes;
 
 import Resource.Utilities;
-import Views.Dialogs.Dialogs;
 import ViewsControllers.Panels.Ajustes.EmpresaViewController;
 import java.awt.Color;
 
@@ -14,14 +13,17 @@ public class Empresa extends javax.swing.JPanel {
         txtNombre.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtRTN.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtTelefono.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        txtDireccion.addFocusListener(Utilities.getFLPlaceHolderEfect());
+        txtCAI.addFocusListener(Utilities.getFLPlaceHolderEfect());
+        txtCorreo.addFocusListener(Utilities.getFLPlaceHolderEfect());
+        txtRangoDesde.addFocusListener(Utilities.getFLPlaceHolderEfect());
+        txtRangoHasta.addFocusListener(Utilities.getFLPlaceHolderEfect());
+        Utilities.CargarAnios(cmbAnio, 4);
         
         btnGuardar.addMouseListener(Utilities.getMLGeneralButton());
         lbError.setBackground(Color.white);
         vc = new EmpresaViewController(txtNombre, txtRTN, txtTelefono, txtDireccion, 
                 txtCAI, txtCorreo, txtRangoDesde, txtRangoHasta, cmbDia, cmbMes, cmbAnio,
-                lbNombre, lbRTN, lbNumero, lbDireccion, lbError);
-        vc.loadActualInformation();
+                lbError, lbCargando);
     }
 
     @SuppressWarnings("unchecked")
@@ -41,21 +43,9 @@ public class Empresa extends javax.swing.JPanel {
         txtRTN = new javax.swing.JTextField();
         txtTelefono = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        txtDireccion = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        txtCAI = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        txtCorreo = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        lbNombre = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        lbRTN = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        lbNumero = new javax.swing.JLabel();
-        lbDireccion = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtDireccion = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         txtRangoDesde = new javax.swing.JTextField();
@@ -66,6 +56,10 @@ public class Empresa extends javax.swing.JPanel {
         cmbAnio = new javax.swing.JComboBox<>();
         cmbDia = new javax.swing.JComboBox<>();
         cmbMes = new javax.swing.JComboBox<>();
+        txtCAI = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        txtCorreo = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -113,31 +107,20 @@ public class Empresa extends javax.swing.JPanel {
 
         txtTelefono.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtTelefono.setForeground(new java.awt.Color(180, 180, 180));
-        txtTelefono.setText("Escribe el numero de telefono de la empresa...");
+        txtTelefono.setText("Escribe el número de teléfono de la empresa...");
 
         jLabel7.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel7.setText("Numero de telefono");
 
-        txtDireccion.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtDireccion.setForeground(new java.awt.Color(180, 180, 180));
-        txtDireccion.setText("Escribe el direccion principal de la empresa...");
-
         jLabel8.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel8.setText("Direccion principal de la empresa");
 
-        txtCAI.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtCAI.setForeground(new java.awt.Color(180, 180, 180));
-        txtCAI.setText("Escribe el direccion principal de la empresa...");
-
-        jLabel10.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel10.setText("CAI de la empresa");
-
-        txtCorreo.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtCorreo.setForeground(new java.awt.Color(180, 180, 180));
-        txtCorreo.setText("Escribe el direccion principal de la empresa...");
-
-        jLabel13.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel13.setText("Correo electronico de la empresa");
+        txtDireccion.setColumns(20);
+        txtDireccion.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        txtDireccion.setLineWrap(true);
+        txtDireccion.setRows(5);
+        txtDireccion.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(txtDireccion);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -147,12 +130,13 @@ public class Empresa extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lbError, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -160,12 +144,7 @@ public class Empresa extends javax.swing.JPanel {
                             .addComponent(txtRTN, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtTelefono, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtDireccion, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtCAI, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtCorreo, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18))))
         );
         jPanel3Layout.setVerticalGroup(
@@ -186,16 +165,8 @@ public class Empresa extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCAI, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 197, Short.MAX_VALUE)
                 .addComponent(lbError, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -203,33 +174,6 @@ public class Empresa extends javax.swing.JPanel {
                     .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18))
         );
-
-        jLabel1.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
-        jLabel1.setText("Informacion de la empresa actual");
-
-        jLabel3.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        jLabel3.setText("Nombre");
-
-        lbNombre.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
-        lbNombre.setText("Nombre");
-
-        jLabel9.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        jLabel9.setText("RNT");
-
-        lbRTN.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
-        lbRTN.setText("rnt");
-
-        jLabel11.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        jLabel11.setText("Numero telefonico");
-
-        lbNumero.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
-        lbNumero.setText("Numero telefonico");
-
-        lbDireccion.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
-        lbDireccion.setText("Direccion principal");
-
-        jLabel14.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        jLabel14.setText("Direccion principal");
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(220, 220, 220)));
@@ -240,14 +184,14 @@ public class Empresa extends javax.swing.JPanel {
 
         txtRangoDesde.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtRangoDesde.setForeground(new java.awt.Color(180, 180, 180));
-        txtRangoDesde.setText("Escriba el numero inicial de rango de facturacion...");
+        txtRangoDesde.setText("Escriba el número inicial de rango de facturación...");
 
         jLabel12.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel12.setText("Desde");
 
         txtRangoHasta.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtRangoHasta.setForeground(new java.awt.Color(180, 180, 180));
-        txtRangoHasta.setText("Escriba el numero final de rango de facturacion..");
+        txtRangoHasta.setText("Escriba el número final de rango de facturación..");
 
         jLabel15.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel15.setText("Hasta");
@@ -263,6 +207,20 @@ public class Empresa extends javax.swing.JPanel {
         cmbMes.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         cmbMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
 
+        txtCAI.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        txtCAI.setForeground(new java.awt.Color(180, 180, 180));
+        txtCAI.setText("Escriba el numero CAI de la empresa...");
+
+        jLabel10.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel10.setText("CAI de la empresa");
+
+        txtCorreo.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        txtCorreo.setForeground(new java.awt.Color(180, 180, 180));
+        txtCorreo.setText("Escriba el correo eléctronico de la emprasa...");
+
+        jLabel13.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel13.setText("Correo electronico de la empresa");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -276,15 +234,19 @@ public class Empresa extends javax.swing.JPanel {
                         .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbAnio, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtRangoDesde)
-                            .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtRangoHasta)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE))
+                        .addGap(72, 72, 72))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtCorreo, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCAI, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtRangoDesde, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtRangoHasta, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE))
                         .addGap(18, 18, 18))))
         );
         jPanel4Layout.setVerticalGroup(
@@ -300,6 +262,14 @@ public class Empresa extends javax.swing.JPanel {
                 .addComponent(jLabel15)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtRangoHasta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtCAI, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel16)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -318,42 +288,11 @@ public class Empresa extends javax.swing.JPanel {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lbNumero, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lbRTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lbNombre, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
-                    .addComponent(lbDireccion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18))
+                .addContainerGap(367, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbNombre)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbRTN)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbNumero)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel14)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbDireccion)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -389,10 +328,7 @@ public class Empresa extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseClicked
-        if(vc.saveLocalInformation()){
-            vc.loadActualInformation();
-            Dialogs.ShowMessageDialog("La informacion ha sido actualizada correctamente", Dialogs.COMPLETE_ICON);
-        }
+        vc.saveInformation();
     }//GEN-LAST:event_btnGuardarMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -400,35 +336,27 @@ public class Empresa extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cmbAnio;
     private javax.swing.JComboBox<String> cmbDia;
     private javax.swing.JComboBox<String> cmbMes;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbCargando;
-    private javax.swing.JLabel lbDireccion;
     private javax.swing.JLabel lbError;
-    private javax.swing.JLabel lbNombre;
-    private javax.swing.JLabel lbNumero;
-    private javax.swing.JLabel lbRTN;
     private javax.swing.JTextField txtCAI;
     private javax.swing.JTextField txtCorreo;
-    private javax.swing.JTextField txtDireccion;
+    private javax.swing.JTextArea txtDireccion;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtRTN;
     private javax.swing.JTextField txtRangoDesde;

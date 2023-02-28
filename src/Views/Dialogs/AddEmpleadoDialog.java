@@ -25,7 +25,7 @@ public class AddEmpleadoDialog extends javax.swing.JDialog {
         btnClose.addMouseListener(Utilities.getMLButtonCloseBlue());
         btnAgregar.addMouseListener(Utilities.getMLGeneralButton());
         txtError.setBackground(Color.white);
-        Utilities.CargarAnios(cmbAnio);
+        Utilities.CargarAnios(cmbAnio, 0);
         
         FieldsList.forEach(field -> {
             field.addFocusListener(Utilities.getFLPlaceHolderEfect());
