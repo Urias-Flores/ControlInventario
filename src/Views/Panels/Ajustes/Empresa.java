@@ -18,8 +18,10 @@ public class Empresa extends javax.swing.JPanel {
         
         btnGuardar.addMouseListener(Utilities.getMLGeneralButton());
         lbError.setBackground(Color.white);
-        vc = new EmpresaViewController(txtNombre, txtRTN, txtTelefono, txtDireccion, lbNombre, lbRTN, lbNumero, lbDireccion, lbError);
-        vc.cargarInformacionActual();
+        vc = new EmpresaViewController(txtNombre, txtRTN, txtTelefono, txtDireccion, 
+                txtCAI, txtCorreo, txtRangoDesde, txtRangoHasta, cmbDia, cmbMes, cmbAnio,
+                lbNombre, lbRTN, lbNumero, lbDireccion, lbError);
+        vc.loadActualInformation();
     }
 
     @SuppressWarnings("unchecked")
@@ -41,9 +43,9 @@ public class Empresa extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         txtDireccion = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        txtDireccion1 = new javax.swing.JTextField();
+        txtCAI = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        txtDireccion2 = new javax.swing.JTextField();
+        txtCorreo = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -56,9 +58,9 @@ public class Empresa extends javax.swing.JPanel {
         jLabel14 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        txtNombre1 = new javax.swing.JTextField();
+        txtRangoDesde = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        txtNombre3 = new javax.swing.JTextField();
+        txtRangoHasta = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         cmbAnio = new javax.swing.JComboBox<>();
@@ -123,16 +125,16 @@ public class Empresa extends javax.swing.JPanel {
         jLabel8.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel8.setText("Direccion principal de la empresa");
 
-        txtDireccion1.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtDireccion1.setForeground(new java.awt.Color(180, 180, 180));
-        txtDireccion1.setText("Escribe el direccion principal de la empresa...");
+        txtCAI.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        txtCAI.setForeground(new java.awt.Color(180, 180, 180));
+        txtCAI.setText("Escribe el direccion principal de la empresa...");
 
         jLabel10.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel10.setText("CAI de la empresa");
 
-        txtDireccion2.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtDireccion2.setForeground(new java.awt.Color(180, 180, 180));
-        txtDireccion2.setText("Escribe el direccion principal de la empresa...");
+        txtCorreo.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        txtCorreo.setForeground(new java.awt.Color(180, 180, 180));
+        txtCorreo.setText("Escribe el direccion principal de la empresa...");
 
         jLabel13.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel13.setText("Correo electronico de la empresa");
@@ -160,9 +162,9 @@ public class Empresa extends javax.swing.JPanel {
                             .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtDireccion, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtDireccion1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCAI, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtDireccion2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCorreo, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18))))
         );
@@ -188,11 +190,11 @@ public class Empresa extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtDireccion1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCAI, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtDireccion2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
                 .addComponent(lbError, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -236,16 +238,16 @@ public class Empresa extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel5.setText("Rango de facturacion");
 
-        txtNombre1.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtNombre1.setForeground(new java.awt.Color(180, 180, 180));
-        txtNombre1.setText("Escriba el numero inicial de rango de facturacion...");
+        txtRangoDesde.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        txtRangoDesde.setForeground(new java.awt.Color(180, 180, 180));
+        txtRangoDesde.setText("Escriba el numero inicial de rango de facturacion...");
 
         jLabel12.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel12.setText("Desde");
 
-        txtNombre3.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtNombre3.setForeground(new java.awt.Color(180, 180, 180));
-        txtNombre3.setText("Escriba el numero final de rango de facturacion..");
+        txtRangoHasta.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        txtRangoHasta.setForeground(new java.awt.Color(180, 180, 180));
+        txtRangoHasta.setText("Escriba el numero final de rango de facturacion..");
 
         jLabel15.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel15.setText("Hasta");
@@ -279,9 +281,9 @@ public class Empresa extends javax.swing.JPanel {
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtNombre1)
+                            .addComponent(txtRangoDesde)
                             .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtNombre3)
+                            .addComponent(txtRangoHasta)
                             .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE))
                         .addGap(18, 18, 18))))
         );
@@ -293,11 +295,11 @@ public class Empresa extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNombre1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtRangoDesde, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel15)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNombre3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtRangoHasta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel16)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -387,8 +389,8 @@ public class Empresa extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseClicked
-        if(vc.guardarInformacion()){
-            vc.cargarInformacionActual();
+        if(vc.saveLocalInformation()){
+            vc.loadActualInformation();
             Dialogs.ShowMessageDialog("La informacion ha sido actualizada correctamente", Dialogs.COMPLETE_ICON);
         }
     }//GEN-LAST:event_btnGuardarMouseClicked
@@ -424,13 +426,13 @@ public class Empresa extends javax.swing.JPanel {
     private javax.swing.JLabel lbNombre;
     private javax.swing.JLabel lbNumero;
     private javax.swing.JLabel lbRTN;
+    private javax.swing.JTextField txtCAI;
+    private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDireccion;
-    private javax.swing.JTextField txtDireccion1;
-    private javax.swing.JTextField txtDireccion2;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtNombre1;
-    private javax.swing.JTextField txtNombre3;
     private javax.swing.JTextField txtRTN;
+    private javax.swing.JTextField txtRangoDesde;
+    private javax.swing.JTextField txtRangoHasta;
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

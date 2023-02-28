@@ -2,6 +2,7 @@ package ViewsControllers.Panels.Ajustes;
 
 import Resource.LocalDataController;
 import java.awt.Color;
+import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
@@ -11,6 +12,13 @@ public class EmpresaViewController {
     private JTextField RTN;
     private JTextField Telefono;
     private JTextField Direccion;
+    private JTextField CAI;
+    private JTextField Correo;
+    private JTextField Desde;
+    private JTextField Hasta;
+    private JComboBox Dia;
+    private JComboBox Mes;
+    private JComboBox Anio;
     
     private JLabel lbNombre;
     private JLabel lbRTN;
@@ -19,11 +27,21 @@ public class EmpresaViewController {
     
     private JLabel Error;
 
-    public EmpresaViewController(JTextField Nombre, JTextField RTN, JTextField Telefono, JTextField Direccion, JLabel lbNombre, JLabel lbRTN, JLabel lbTelefono, JLabel lbDireccion, JLabel Error) {
+    public EmpresaViewController(JTextField Nombre, JTextField RTN, JTextField Telefono, JTextField Direccion, 
+            JTextField CAI, JTextField Correo, JTextField Desde, JTextField Hasta, JComboBox Dia, JComboBox Mes, JComboBox Anio,
+            JLabel lbNombre, JLabel lbRTN, JLabel lbTelefono, JLabel lbDireccion, JLabel Error) {
         this.Nombre = Nombre;
         this.RTN = RTN;
         this.Telefono = Telefono;
         this.Direccion = Direccion;
+        this.CAI = CAI;
+        this.Correo = Correo;
+        this.Desde = Desde;
+        this.Hasta = Hasta;
+        this.Dia = Dia;
+        this.Mes = Mes;
+        this.Anio = Anio;
+        
         this.lbNombre = lbNombre;
         this.lbRTN = lbRTN;
         this.lbTelefono = lbTelefono;
@@ -31,7 +49,7 @@ public class EmpresaViewController {
         this.Error = Error;
     }
     
-    public void cargarInformacionActual(){
+    public void loadActualInformation(){
         LocalDataController ldc = new LocalDataController();
         
         lbNombre.setText(ldc.getValue("Company"));
@@ -40,8 +58,8 @@ public class EmpresaViewController {
         lbDireccion.setText(ldc.getValue("Address"));
     }
 
-    public boolean guardarInformacion(){
-        if(validate()){
+    public boolean saveLocalInformation(){
+        if(validateLocalInformation()){
             LocalDataController ldc = new LocalDataController();
             
             ldc.UpdateData("Company", Nombre.getText());
@@ -55,7 +73,11 @@ public class EmpresaViewController {
         return false;
     }
     
-    private boolean validate(){
+    public void saveDBInformation(){
+        
+    }
+    
+    private boolean validateLocalInformation(){
         Color emptyColor = new Color(180, 180, 180);
         if(Nombre.getText().isEmpty() || Nombre.getForeground().equals(emptyColor)){
             Error.setText("El nombre de la empresa es obligatorio");
@@ -66,13 +88,18 @@ public class EmpresaViewController {
             return false;
         }
         if(Telefono.getText().isEmpty() || Telefono.getForeground().equals(emptyColor)){
-            Error.setText("El Numero telefonico de la empresa es obligatorio");
+            Error.setText("El Número teléfonico de la empresa es obligatorio");
             return false;
         }
         if(Direccion.getText().isEmpty() || Direccion.getForeground().equals(emptyColor)){
-            Error.setText("El Direccion de la empresa es obligatorio");
+            Error.setText("El Dirección de la empresa es obligatorio");
             return false;
         }
+        return true;
+    }
+    
+    private boolean validateDBInformation(){
+        
         return true;
     }
     
@@ -82,9 +109,9 @@ public class EmpresaViewController {
         Nombre.setForeground(emptyColor);
         RTN.setText("Escribe el RTN de la empresa...");
         RTN.setForeground(emptyColor);
-        Telefono.setText("Escribe el numero de telefono de la empresa...");
+        Telefono.setText("Escribe el número de teléfono de la empresa...");
         Telefono.setForeground(emptyColor);
-        Direccion.setText("Escribe el direccion principal de la empresa...");
+        Direccion.setText("Escribe el dirección principal de la empresa...");
         Direccion.setForeground(emptyColor);
         Error.setBackground(Color.white);
     }

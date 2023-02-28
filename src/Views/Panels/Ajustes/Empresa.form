@@ -167,9 +167,9 @@
                                       <Component id="jLabel7" alignment="0" max="32767" attributes="0"/>
                                       <Component id="txtDireccion" alignment="0" max="32767" attributes="0"/>
                                       <Component id="jLabel8" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="txtDireccion1" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="txtCAI" alignment="0" max="32767" attributes="0"/>
                                       <Component id="jLabel10" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="txtDireccion2" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="txtCorreo" alignment="0" max="32767" attributes="0"/>
                                       <Component id="jLabel13" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
@@ -200,11 +200,11 @@
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtDireccion1" min="-2" pref="38" max="-2" attributes="0"/>
+                          <Component id="txtCAI" min="-2" pref="38" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtDireccion2" min="-2" pref="38" max="-2" attributes="0"/>
+                          <Component id="txtCorreo" min="-2" pref="38" max="-2" attributes="0"/>
                           <EmptySpace pref="105" max="32767" attributes="0"/>
                           <Component id="lbError" min="-2" pref="34" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -331,7 +331,7 @@
                     <Property name="text" type="java.lang.String" value="Direccion principal de la empresa"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtDireccion1">
+                <Component class="javax.swing.JTextField" name="txtCAI">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Roboto" size="18" style="0"/>
@@ -350,7 +350,7 @@
                     <Property name="text" type="java.lang.String" value="CAI de la empresa"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtDireccion2">
+                <Component class="javax.swing.JTextField" name="txtCorreo">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Roboto" size="18" style="0"/>
@@ -478,9 +478,9 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel5" max="32767" attributes="0"/>
                                       <Component id="jLabel12" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="txtNombre1" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="txtRangoDesde" alignment="0" max="32767" attributes="0"/>
                                       <Component id="jLabel16" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="txtNombre3" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="txtRangoHasta" alignment="0" max="32767" attributes="0"/>
                                       <Component id="jLabel15" alignment="0" pref="428" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
@@ -497,11 +497,11 @@
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtNombre1" min="-2" pref="38" max="-2" attributes="0"/>
+                          <Component id="txtRangoDesde" min="-2" pref="38" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtNombre3" min="-2" pref="38" max="-2" attributes="0"/>
+                          <Component id="txtRangoHasta" min="-2" pref="38" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -524,7 +524,7 @@
                     <Property name="text" type="java.lang.String" value="Rango de facturacion"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtNombre1">
+                <Component class="javax.swing.JTextField" name="txtRangoDesde">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Roboto" size="18" style="0"/>
@@ -543,7 +543,7 @@
                     <Property name="text" type="java.lang.String" value="Desde"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtNombre3">
+                <Component class="javax.swing.JTextField" name="txtRangoHasta">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Roboto" size="18" style="0"/>
