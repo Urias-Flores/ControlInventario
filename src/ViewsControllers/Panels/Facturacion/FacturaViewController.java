@@ -24,7 +24,10 @@ import Views.Dialogs.Dialogs;
 import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -50,8 +53,7 @@ public class FacturaViewController {
     private JComboBox<Cliente> Clientes;
     private JTextField RTN;
 
-    private JRadioButton Pagado;
-    private JRadioButton Pendiente;
+    private JComboBox FormaPago;
 
     private JTextField Barra;
     private JTextField Cotizacion;
@@ -68,13 +70,12 @@ public class FacturaViewController {
 
     private boolean isDayInit = false;
 
-    public FacturaViewController(JLabel Cargando, JComboBox Clientes, JTextField RTN, JRadioButton Pagado, JRadioButton Pendiente, JTextField Barra, JTextField Cotizacion, JTable Ventas, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total, JLabel dayState) {
+    public FacturaViewController(JLabel Cargando, JComboBox Clientes, JTextField RTN, JComboBox FormaPago, JTextField Barra, JTextField Cotizacion, JTable Ventas, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total, JLabel dayState) {
         this.Cargando = Cargando;
         this.dayState = dayState;
         this.Clientes = Clientes;
         this.RTN = RTN;
-        this.Pagado = Pagado;
-        this.Pendiente = Pendiente;
+        this.FormaPago = FormaPago;
         this.Barra = Barra;
         this.Cotizacion = Cotizacion;
         this.Ventas = Ventas;
@@ -165,6 +166,14 @@ public class FacturaViewController {
         Clientes.addItem(new Cliente(0, "-- Seleccione cliente --", 0));
         Init();
     }
+    
+    public void setRTN(){
+        if(Clientes.getSelectedIndex() >= 2 ){
+            Cliente cliente = (Cliente) Clientes.getSelectedItem();
+            RTN.setText(cliente.getRtn() != null ? cliente.getRtn() : "Cliente sin RTN");
+            RTN.setForeground(cliente.getRtn() != null ? Color.black : new Color(180, 180, 180));
+        }
+    }
 
     public void loadProduct(Object[] values) {
         boolean NoexistRow = true;
@@ -213,40 +222,40 @@ public class FacturaViewController {
     public void loadProductByBarCode() {
         setLoad(true);
         Runnable run = () -> {
-
-            //ProductoJpaController controllerProducto = new ProductoJpaController(Conection.createEntityManagerFactory());
-            //List<Producto> productos = controllerProducto.findProductoEntities();
-            Producto producto = (Producto) Conection.createEntityManager()
+            try {
+                Producto producto = (Producto) Conection.createEntityManager()
                     .createNamedQuery("Producto.findByBarra")
                     .setParameter("barra", Barra.getText())
                     .getSingleResult();
+                
+                if (producto.getBarra() != null) {
+                    if (producto.getBarra().equals(Barra.getText())) {
+                        Object[] row = {
+                            producto.getProductoID(),
+                            producto.getDescripcion(),
+                            producto.getUnidad(),
+                            getNumberFormat(1f),
+                            getNumberFormat(producto.getPrecioVenta()),
+                            getNumberFormat(0f),
+                            getNumberFormat(producto.getPrecioVenta())
+                        };
 
-            //productos.forEach(producto -> {
-            if (producto.getBarra() != null) {
-                if (producto.getBarra().equals(Barra.getText())) {
-                    Object[] row = {
-                        producto.getProductoID(),
-                        producto.getDescripcion(),
-                        producto.getUnidad(),
-                        getNumberFormat(1f),
-                        getNumberFormat(producto.getPrecioVenta()),
-                        getNumberFormat(0f),
-                        getNumberFormat(producto.getPrecioVenta())
-                    };
+                        Query query = Conection.createEntityManager()
+                                .createNativeQuery("SELECT cantidad FROM inventario WHERE ProductoID = " + producto.getProductoID());
+                        List values = query.getResultList();
 
-                    Query query = Conection.createEntityManager()
-                            .createNativeQuery("SELECT cantidad FROM inventario WHERE ProductoID = " + producto.getProductoID());
-                    List values = query.getResultList();
-
-                    float existenciaProducto = Float.parseFloat(values.get(0).toString());
-                    if (existenciaProducto <= 0) {
-                        Dialogs.ShowMessageDialog("El producto no cuenta con existencia en inventario", Dialogs.ERROR_ICON);
-                    } else {
-                        loadProduct(row);
+                        float existenciaProducto = Float.parseFloat(values.get(0).toString());
+                        if (existenciaProducto <= 0) {
+                            Dialogs.ShowMessageDialog("El producto no cuenta con existencia en inventario", Dialogs.ERROR_ICON);
+                        } else {
+                            loadProduct(row);
+                        }
                     }
                 }
+            } catch (NoResultException e) {
+                System.err.println("Error al cargar producto por codigo de barra: "+e.getMessage());
+                Dialogs.ShowMessageDialog("El codigo de barra ingresado no pertenece a ningún producto", Dialogs.ERROR_ICON);
             }
-            //});
             Barra.setText("");
             setLoad(false);
         };
@@ -256,10 +265,8 @@ public class FacturaViewController {
     //Task
     public void loadQuote() {
         if (validateQuote()) {
-
             setLoad(true);
             Runnable run = () -> {
-
                 List<Cotizaciondetalle> cotizacionDetalles = new CotizaciondetalleJpaController(Conection.createEntityManagerFactory()).findCotizaciondetalleEntities();
                 int currentCotizacionID = Integer.parseInt(Cotizacion.getText());
 
@@ -371,7 +378,11 @@ public class FacturaViewController {
 
                     //Agregando informacion de arqueo
                     float total = Float.parseFloat(Total.getText().replace(",", ""));
-                    float efectivo = Dialogs.ShowArqueoDialog(VentaID, venta.getEstado().equals("N"), total);
+                    Map<Integer, String> formaPago = new HashMap<>();
+                    formaPago.put(0, "CN");
+                    formaPago.put(1, "CR");
+                    formaPago.put(2, "TD");
+                    float efectivo = Dialogs.ShowArqueoDialog(VentaID, formaPago.get(FormaPago.getSelectedIndex()), "O",total);
 
                     setLoad(false);
                     Dialogs.ShowMessageDialog("La factura ha sido ingresada exitosamente", Dialogs.COMPLETE_ICON);
@@ -412,20 +423,24 @@ public class FacturaViewController {
 
                     //Agregando informacion de arqueo
                     float total = Float.parseFloat(Total.getText().replace(",", ""));
-                    float efectivo = Dialogs.ShowArqueoDialog(SolicitudID, solicitud.getEstado().equals("N"), total);
+                    Map<Integer, String> formaPago = new HashMap<>();
+                    formaPago.put(0, "CN");
+                    formaPago.put(1, "CR");
+                    formaPago.put(2, "TD");
+                    float efectivo = Dialogs.ShowArqueoDialog(SolicitudID, formaPago.get(FormaPago.getSelectedIndex()), "N", total);
 
                     setLoad(false);
                     Dialogs.ShowMessageDialog("La factura ha sido ingresada exitosamente", Dialogs.COMPLETE_ICON);
 
                     //Enviando a imprimir ticket de solicitud
                     if (Dialogs.ShowOKCancelDialog("¿Desea enviar a imprimir la factura ahora?", Dialogs.WARNING_ICON)) {
-//                        setLoad(true);
-//                        Runnable runnable = () -> {
-//                            Reports reports = new Reports();
-//                            reports.GenerateTickeVenta(VentaID, efectivo);
-//                            setLoad(false);
-//                        };
-//                        new Thread(runnable).start();
+                        setLoad(true);
+                        Runnable runnable = () -> {
+                            Reports reports = new Reports();
+                            reports.GenerateTicketSolicitud(SolicitudID, efectivo);
+                            setLoad(false);
+                        };
+                        new Thread(runnable).start();
                     }
                     clear();
                     setLoad(false);
@@ -471,7 +486,7 @@ public class FacturaViewController {
         if (Clientes.getSelectedIndex() < 2) {
             venta.setEstado("P");
         } else {
-            venta.setEstado(Pagado.isSelected() ? "P" : "N");
+            venta.setEstado(FormaPago.getSelectedIndex() == 0 || FormaPago.getSelectedIndex() == 2 ? "P" : "N");
         }
         venta.setUsuarioID(Utilities.getUsuarioActual());
         venta.setFecha(Utilities.getDate());
@@ -505,7 +520,7 @@ public class FacturaViewController {
         if (Clientes.getSelectedIndex() < 2) {
             solicitud.setEstado("P");
         } else {
-            solicitud.setEstado(Pagado.isSelected() ? "P" : "N");
+            solicitud.setEstado(FormaPago.getSelectedIndex() == 0 || FormaPago.getSelectedIndex() == 2 ? "P" : "N");
         }
         solicitud.setRtn(RTN.getForeground().equals(Color.BLACK) && !RTN.getText().isEmpty() ? RTN.getText() : null);
         solicitud.setUsuarioID(Utilities.getUsuarioActual());
@@ -572,14 +587,6 @@ public class FacturaViewController {
         if (Clientes.getSelectedIndex() == 0) {
             Dialogs.ShowMessageDialog("Para " + action + " la " + type + " debe seleccionar un cliente", Dialogs.ERROR_ICON);
             return false;
-        }
-        if (!isQuote) {
-            if (Clientes.getSelectedIndex() > 1) {
-                if (!Pagado.isSelected() && !Pendiente.isSelected()) {
-                    Dialogs.ShowMessageDialog("Para agregar la venta debe seleccionar la forma de pago", Dialogs.ERROR_ICON);
-                    return false;
-                }
-            }
         }
 
         return true;

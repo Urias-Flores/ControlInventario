@@ -17,8 +17,6 @@ import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
 import javax.swing.ImageIcon;
@@ -82,7 +80,6 @@ public class CuentasPendientesDialogViewController {
         model.setRowCount(0);
         
         Runnable run = () -> {
-            System.err.println("Entre al loadClient con No Cliente: "+Cliente);
             Cliente cliente = new ClienteJpaController(Conection.createEntityManagerFactory()).findCliente(Cliente);
             if(cliente != null){
                 Nombre.setText(cliente.getNombre());

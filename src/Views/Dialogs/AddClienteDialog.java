@@ -19,15 +19,16 @@ public class AddClienteDialog extends javax.swing.JDialog {
         
         txtNombre.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtDocumento.addFocusListener(Utilities.getFLPlaceHolderEfect());
+        txtRTN.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtCorreo.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtNumero.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtError.setBackground(Color.white);
         
-        vc = new AddClienteViewController(this, txtNombre, txtDocumento, txtCorreo, txtNumero, txtDomicilio, txtError, lbCargando);
+        vc = new AddClienteViewController(this, txtNombre, txtDocumento, txtRTN, txtCorreo, txtNumero, txtDomicilio, txtError, lbCargando);
     }
     
     public void EditingMode(int ClienteID){
-        btnAgregar.setText("Guardar");
+        btnAgregar.setText("Guardar cambios");
         lbTitulo.setText("Editar cliente");
         vc.setEditCliente(ClienteID);
         Editing = true;
@@ -56,6 +57,8 @@ public class AddClienteDialog extends javax.swing.JDialog {
         btnAgregar = new javax.swing.JLabel();
         txtError = new javax.swing.JLabel();
         lbCargando = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        txtRTN = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -103,35 +106,35 @@ public class AddClienteDialog extends javax.swing.JDialog {
         lbTitulo.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
         lbTitulo.setText("Agregar cliente");
 
-        jLabel2.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel2.setText("Nombre:");
 
         txtNombre.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtNombre.setForeground(new java.awt.Color(180, 180, 180));
         txtNombre.setText("Ingrese el nombre del cliente...");
 
-        jLabel3.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel3.setText("Documento:");
 
         txtDocumento.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtDocumento.setForeground(new java.awt.Color(180, 180, 180));
         txtDocumento.setText("Ingrese el numero de documento del cliente...");
 
-        jLabel4.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel4.setText("Correo Electronico:");
 
         txtCorreo.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtCorreo.setForeground(new java.awt.Color(180, 180, 180));
         txtCorreo.setText("Ingrese el correo electronico del cliente...");
 
-        jLabel5.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel5.setText("Numero telefonico:");
 
         txtNumero.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtNumero.setForeground(new java.awt.Color(180, 180, 180));
         txtNumero.setText("Ingrese el numero telefonico del cliente...");
 
-        jLabel6.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel6.setText("Domicilio:");
 
         txtDomicilio.setColumns(20);
@@ -162,6 +165,13 @@ public class AddClienteDialog extends javax.swing.JDialog {
 
         lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
+        jLabel7.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel7.setText("RTN:");
+
+        txtRTN.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        txtRTN.setForeground(new java.awt.Color(180, 180, 180));
+        txtRTN.setText("Ingrese el RTN del cliente...");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -188,7 +198,9 @@ public class AddClienteDialog extends javax.swing.JDialog {
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtNumero)
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtError, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(txtError, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtRTN))))
                 .addGap(18, 18, 18))
         );
         jPanel1Layout.setVerticalGroup(
@@ -206,6 +218,10 @@ public class AddClienteDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtRTN, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -219,7 +235,7 @@ public class AddClienteDialog extends javax.swing.JDialog {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txtError, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
                     .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -309,6 +325,7 @@ public class AddClienteDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbCargando;
@@ -320,5 +337,6 @@ public class AddClienteDialog extends javax.swing.JDialog {
     private javax.swing.JLabel txtError;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtNumero;
+    private javax.swing.JTextField txtRTN;
     // End of variables declaration//GEN-END:variables
 }

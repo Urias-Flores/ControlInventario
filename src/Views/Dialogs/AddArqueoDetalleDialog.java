@@ -13,16 +13,16 @@ public class AddArqueoDetalleDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         btnPagar.addMouseListener(Utilities.getMLGeneralButton());
-        vc = new AddArqueoDetalleDialogViewController(this, txtTotalFactura, txtTotalEfectivo, txtTotalCambio, lbError, lbCargando);
+        vc = new AddArqueoDetalleDialogViewController(txtTotalFactura, txtTotalEfectivo, txtTotalCambio, lbError, lbCargando);
     }
     
     public float getValue(){
         return efectivo;
     }
     
-    public void setBill(int FacturaID, boolean isCredit, float Total){
-        vc.setBillInformation(FacturaID, isCredit, Total);
-        if(isCredit){
+    public void setBill(int FacturaID, String Type, String TransactionType, float Total){
+        vc.setBillInformation(FacturaID, Type, Total, TransactionType);
+        if(Type.equals("CR") || Type.equals("TD")){
             txtTotalEfectivo.setEditable(false);
         }
     }
@@ -213,7 +213,7 @@ public class AddArqueoDetalleDialog extends javax.swing.JDialog {
 
     private void btnPagarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPagarMouseClicked
         float value = vc.addPayBill();
-        if(value != 0){
+        if(value != 0 || !txtTotalEfectivo.isEditable()){
             this.efectivo = value;
             this.setVisible(false);
         }

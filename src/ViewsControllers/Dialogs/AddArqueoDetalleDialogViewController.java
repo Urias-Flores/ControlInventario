@@ -1,15 +1,15 @@
 package ViewsControllers.Dialogs;
 
 import Resource.LocalDataController;
-import Views.Dialogs.AddArqueoDetalleDialog;
+import Resource.Utilities;
 import java.awt.Color;
 import java.text.DecimalFormat;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class AddArqueoDetalleDialogViewController {
-    
-    private AddArqueoDetalleDialog Instance;
     
     private JTextField TotalFactura;
     private JTextField TotalEfectivo;
@@ -19,10 +19,11 @@ public class AddArqueoDetalleDialogViewController {
     private JLabel Cargando;
 
     private int FacturaID = 0;
-    private boolean isCredit = false;
+    private String payType = "";
+    private String transactionType = "";
     
-    public AddArqueoDetalleDialogViewController(AddArqueoDetalleDialog Instance, JTextField TotalFactura, JTextField TotalEfectivo, JTextField TotalCambio, JLabel Error, JLabel Cargando) {
-        this.Instance = Instance;
+    public AddArqueoDetalleDialogViewController(JTextField TotalFactura, JTextField TotalEfectivo, JTextField TotalCambio, 
+                                                JLabel Error, JLabel Cargando) {
         this.TotalFactura = TotalFactura;
         this.TotalEfectivo = TotalEfectivo;
         this.TotalCambio = TotalCambio;
@@ -30,9 +31,15 @@ public class AddArqueoDetalleDialogViewController {
         this.Cargando = Cargando;
     }
     
-    public void setBillInformation(int FacturaID, boolean isCredit, float Total){
+    private void setLoad(boolean state){
+        Icon icon = new ImageIcon(getClass().getResource(Utilities.getLoadingImage()));
+        Cargando.setIcon(state ? icon : null);
+    }
+    
+    public void setBillInformation(int FacturaID, String Type, float Total, String TransactionType){
         this.FacturaID = FacturaID;
-        this.isCredit = isCredit;
+        this.payType = Type;
+        this.transactionType = TransactionType;
         TotalFactura.setText(getNumberFormat(Total));
     }
     
@@ -42,10 +49,9 @@ public class AddArqueoDetalleDialogViewController {
             float totalFactura = Float.parseFloat(TotalFactura.getText().replace(",", ""));
             float totalEfectivo = Float.parseFloat(TotalEfectivo.getText().replace(",", ""));
             float totalCambio = Float.parseFloat(TotalCambio.getText().replace(",", ""));
-            ldc.insertArqueoDetalle(FacturaID, totalFactura, totalEfectivo, totalCambio);
+            ldc.insertArqueoDetalle(FacturaID, totalFactura, totalEfectivo, totalCambio, transactionType);
             return totalEfectivo;
-        }
-        return 0;
+        } else { Error.setBackground(new Color(185, 0, 0)); return 0;}
     }
     
     public void updateCambio(){
@@ -68,7 +74,7 @@ public class AddArqueoDetalleDialogViewController {
         }
         try {
             totalFactura = Float.parseFloat(TotalFactura.getText().replace(",", ""));
-            if(totalFactura == 0){
+            if(totalFactura == 0 && payType.equals("CN")){
                 Error.setText("El total debe de ser mayor que cero");
                 return false;
             }
@@ -83,7 +89,7 @@ public class AddArqueoDetalleDialogViewController {
         }
         try {
             totalEfectivo = Float.parseFloat(TotalEfectivo.getText().replace(",", ""));
-            if(!isCredit && totalEfectivo == 0){
+            if(payType.equals("CN") && totalEfectivo == 0){
                 Error.setText("El total debe de ser mayor que cero");
                 return false;
             }
@@ -91,7 +97,7 @@ public class AddArqueoDetalleDialogViewController {
             Error.setText("El total de efectivo debe de ser un numero");
             return false;
         }
-        if(totalEfectivo < totalFactura){
+        if(totalEfectivo < totalFactura && payType.equals("CN")){
             Error.setText("El efectivo ingresado no pueder menor que el total de factura");
             return false;    
         }

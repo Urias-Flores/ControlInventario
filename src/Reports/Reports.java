@@ -8,14 +8,11 @@ import Resource.NoJpaConection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.awt.Desktop;
-import java.awt.print.PrinterException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -41,6 +38,29 @@ public class Reports {
                 sendPrintTicket(jr, parameters);
             }else{
                 Dialogs.ShowMessageDialog("El archivo base para creacion de factura no fue encontrado", Dialogs.ERROR_ICON);
+            }
+        } catch (JRException ex) {
+            System.err.println("Error: "+ex.getMessage());
+            Dialogs.ShowMessageDialog("Ups... Ha ocurrido un error al enviar a imprimir", Dialogs.ERROR_ICON);
+        }
+    }
+    
+    public void GenerateTicketSolicitud(int SolicitudID, float Efectivo)
+    {
+        try {
+            File archivo = new File("reports/FacturaSolicitud.jasper");
+            if(archivo.exists())
+            {
+                JasperReport jr = (JasperReport) JRLoader.loadObject(archivo);
+                
+                Map<String, Object> parameters = getCompanyParameters();
+                parameters.put("SolicitudID", SolicitudID);
+                parameters.put("Efectivo", Efectivo);
+                parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
+                
+                sendPrintTicket(jr, parameters);
+            }else{
+                Dialogs.ShowMessageDialog("El archivo base para creacion de solicitud no fue encontrado", Dialogs.ERROR_ICON);
             }
         } catch (JRException ex) {
             System.err.println("Error: "+ex.getMessage());

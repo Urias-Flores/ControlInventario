@@ -14,6 +14,10 @@ import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ *
+ * @author Dell
+ */
 @Entity
 @XmlRootElement
 @NamedQueries({
@@ -21,6 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Cliente.findByClienteID", query = "SELECT c FROM Cliente c WHERE c.clienteID = :clienteID"),
     @NamedQuery(name = "Cliente.findByNombre", query = "SELECT c FROM Cliente c WHERE c.nombre = :nombre"),
     @NamedQuery(name = "Cliente.findByDocumento", query = "SELECT c FROM Cliente c WHERE c.documento = :documento"),
+    @NamedQuery(name = "Cliente.findByRtn", query = "SELECT c FROM Cliente c WHERE c.rtn = :rtn"),
     @NamedQuery(name = "Cliente.findByCorreoElectronico", query = "SELECT c FROM Cliente c WHERE c.correoElectronico = :correoElectronico"),
     @NamedQuery(name = "Cliente.findByNumeroTelefono", query = "SELECT c FROM Cliente c WHERE c.numeroTelefono = :numeroTelefono"),
     @NamedQuery(name = "Cliente.findByDomicilio", query = "SELECT c FROM Cliente c WHERE c.domicilio = :domicilio"),
@@ -35,6 +40,7 @@ public class Cliente implements Serializable {
     @Basic(optional = false)
     private String nombre;
     private String documento;
+    private String rtn;
     private String correoElectronico;
     private String numeroTelefono;
     private String domicilio;
@@ -84,6 +90,14 @@ public class Cliente implements Serializable {
 
     public void setDocumento(String documento) {
         this.documento = documento;
+    }
+
+    public String getRtn() {
+        return rtn;
+    }
+
+    public void setRtn(String rtn) {
+        this.rtn = rtn;
     }
 
     public String getCorreoElectronico() {

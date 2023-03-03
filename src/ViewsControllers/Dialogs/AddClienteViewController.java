@@ -9,6 +9,7 @@ import Views.Dialogs.AddClienteDialog;
 import Views.Dialogs.Dialogs;
 import java.awt.Color;
 import java.util.List;
+import javax.persistence.NoResultException;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
@@ -21,16 +22,18 @@ public class AddClienteViewController {
     private AddClienteDialog Instance;
     private JTextField Nombre;
     private JTextField Documento;
+    private JTextField RTN;
     private JTextField Correo;
     private JTextField Numero;
     private JTextArea Domicilio;
     private JLabel Error;
     private JLabel Cargando;
 
-    public AddClienteViewController(AddClienteDialog Instance, JTextField Nombre, JTextField Documento, JTextField Correo, JTextField Numero, JTextArea Domicilio, JLabel Error, JLabel Cargando) {
+    public AddClienteViewController(AddClienteDialog Instance, JTextField Nombre, JTextField Documento, JTextField RTN, JTextField Correo, JTextField Numero, JTextArea Domicilio, JLabel Error, JLabel Cargando) {
         this.Instance = Instance;
         this.Nombre = Nombre;
         this.Documento = Documento;
+        this.RTN = RTN;
         this.Correo = Correo;
         this.Numero = Numero;
         this.Domicilio = Domicilio;
@@ -125,12 +128,19 @@ public class AddClienteViewController {
             cliente = controller.findCliente(Integer.valueOf(Nombre.getName()));
         }
         cliente.setNombre(Nombre.getText());
+        
         cliente.setDocumento
         (Documento.getText().isEmpty() || Documento.getForeground().equals(new Color(180, 180, 180)) ? null : Documento.getText());
+        
+        cliente.setRtn
+        (RTN.getText().isEmpty() || RTN.getForeground().equals(new Color(180, 180, 180)) ? null : RTN.getText());
+        
         cliente.setCorreoElectronico
         (Correo.getText().isEmpty() || Correo.getForeground().equals(new Color(180, 180, 180)) ? null : Correo.getText());
+        
         cliente.setNumeroTelefono
         (Numero.getText().isEmpty() || Numero.getForeground().equals(new Color(180, 180, 180)) ? null : Numero.getText());
+        
         cliente.setDomicilio
         (Domicilio.getText().isEmpty() ? null : Domicilio.getText());
         return cliente;
@@ -146,7 +156,7 @@ public class AddClienteViewController {
             Error.setText("El nombre debe contener menos de 60 caracteres");
             return false;
         }
-        
+        //Cancenlando uso de validaciones para ingreso de datos
         //Validando campo del documento
 //        if(Documento.getText().isEmpty() || Documento.getForeground().equals(new Color(180, 180, 180))){
 //            Error.setText("El documento del cliente es obligatorio");
@@ -199,15 +209,19 @@ public class AddClienteViewController {
     
     //Insiede Task
     private boolean validateRepitData(List<Cliente> clientes){
-        if(existDocument(clientes)){
+        if(existDocument()){
             Error.setText("Ya existe un cliente con el numero de documento ingresado");
             return false;
         }
-        if(existEmail(clientes)){
+        if(existRTN()){
+            Error.setText("Ya existe un cliente con el RTN ingresado");
+            return false;
+        }
+        if(existEmail()){
             Error.setText("Ya existe un cliente con el correo electronico ingresado");
             return false;
         }
-        if(exisNumberPhone(clientes)){
+        if(exisNumberPhone()){
             Error.setText("Ya existe un cliente con el numero telefonico ingresado");
             return false;
         }
@@ -215,55 +229,64 @@ public class AddClienteViewController {
     }
     
     //Inside Task
-    private boolean existDocument(List<Cliente> clientes){
-        if(!clientes.isEmpty()){
-            for(Cliente cliente : clientes){
-                if(Documento.getText().equalsIgnoreCase(cliente.getDocumento())){
-                    if(Nombre.getName() != null){
-                        int ClienteID = Integer.parseInt(Nombre.getName());
-                        
-                        if(ClienteID != cliente.getClienteID()){
-                            return true;
-                        }
-                    } else { return true; }
-                }
+    private boolean existDocument(){
+        if(Documento.getForeground().equals(Color.black) && !Documento.getText().isEmpty()){
+            try {
+                Cliente cliente = (Cliente) Conection.createEntityManager().createNamedQuery("Cliente.findByDocumento")
+                    .setParameter("documento", Documento.getText())
+                    .getSingleResult();
+                
+                return cliente != null;
+            } catch (NoResultException ex) {
+                return false;
+            }
+        }
+        return false;
+    }
+    
+    private boolean existRTN(){
+        if(RTN.getForeground().equals(Color.black) && !RTN.getText().isEmpty()){
+            try {
+                Cliente cliente = (Cliente) Conection.createEntityManager().createNamedQuery("Cliente.findByRtn")
+                    .setParameter("rtn", RTN.getText())
+                    .getSingleResult();
+                
+                return cliente != null;
+            } catch (NoResultException ex) {
+                return false;
             }
         }
         return false;
     }
     
     //Inside Task
-    private boolean existEmail(List<Cliente> clientes){
-        if(!clientes.isEmpty()){
-            for(Cliente cliente : clientes){
-                if(Correo.getText().equalsIgnoreCase(cliente.getCorreoElectronico())){
-                    if(Nombre.getName() != null){
-                        int ClienteID = Integer.parseInt(Nombre.getName());
-                        
-                        if(ClienteID != cliente.getClienteID()){
-                            return true;
-                        } 
-                    } else { return true; }
-                }
-            }    
+    private boolean existEmail(){
+        if(Correo.getForeground().equals(Color.black) && !Correo.getText().isEmpty()){
+            try {
+                Cliente cliente = (Cliente) Conection.createEntityManager().createNamedQuery("Cliente.findByCorreoElectronico")
+                    .setParameter("correoElectronico", Correo.getText())
+                    .getSingleResult();
+                
+                return cliente != null;
+            } catch (NoResultException ex) {
+                return false;
+            }
         }
         return false;
     }
     
     //Inside Task
-    private boolean exisNumberPhone(List<Cliente> clientes){
-        if(!clientes.isEmpty()){
-            for(Cliente cliente : clientes){
-                if(Numero.getText().equalsIgnoreCase(cliente.getNumeroTelefono())){
-                    if(Nombre.getName() != null){
-                        int ClienteID = Integer.parseInt(Nombre.getName());
-                        
-                        if(ClienteID != cliente.getClienteID()){
-                            return true;
-                        } 
-                    } else { return true; }
-                }
-            }   
+    private boolean exisNumberPhone(){
+        if(Numero.getForeground().equals(Color.black) && !Numero.getText().isEmpty()){
+            try {
+                Cliente cliente = (Cliente) Conection.createEntityManager().createNamedQuery("Cliente.findByNumeroTelefono")
+                    .setParameter("numeroTelefono", Numero.getText())
+                    .getSingleResult();
+                
+                return cliente != null;
+            } catch (NoResultException ex) {
+                return false;
+            }
         }
         return false;
     }

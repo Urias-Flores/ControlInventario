@@ -11,8 +11,10 @@ import Views.Panels.Control.Inventario;
 import Views.Panels.Control.Productos;
 import Views.Panels.Estadisticas.Resumenes;
 import Views.Panels.Estadisticas.Acciones;
+import Views.Panels.Facturacion.Arqueo;
 import Views.Panels.Facturacion.Facturar;
 import Views.Panels.Facturacion.FacturasDia;
+import Views.Panels.Facturacion.Gasto;
 import Views.Panels.Preferencias.Clientes;
 import Views.Panels.Preferencias.Empleados;
 import Views.Panels.Preferencias.Proveedores;
@@ -62,14 +64,18 @@ public class MainViewController {
 
                     Facturar facturar = new Facturar();
                     FacturasDia facturasDia = new FacturasDia();
+                    Gasto gastos = new Gasto();
+                    Arqueo arqueos = new Arqueo();
                     
                     Icon FacturarIcon = new ImageIcon(getClass().getResource("/Icons/factura.png"));
                     Icon FacturaDiaIcon = new ImageIcon(getClass().getResource("/Icons/facturaDia.png"));
                     Icon ArqueoIcon = new ImageIcon(getClass().getResource("/Icons/arqueo.png"));
+                    Icon GastoIcon = new ImageIcon(getClass().getResource("/Icons/gasto.png"));
                     
                     Principal.addTab("Facturar", FacturarIcon, facturar);
                     Principal.addTab("Facturas del dia", FacturaDiaIcon, facturasDia);
-                    Principal.addTab("Arqueos", ArqueoIcon, null);
+                    Principal.addTab("Gastos", GastoIcon, gastos);
+                    Principal.addTab("Arqueos", ArqueoIcon, arqueos);
                     break;
                 case 2:
                     

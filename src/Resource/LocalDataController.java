@@ -141,15 +141,15 @@ public class LocalDataController {
         }
     }
     
-    public void insertArqueoDetalle(int FacturaID, float TotalFactura, float TotalEfectivo, float TotalCambio){
+    public void insertArqueoDetalle(int FacturaID, float TotalFactura, float TotalEfectivo, float TotalCambio, String Tipo){
         try {
             PreparedStatement ps = localConection.getconec()
-                    .prepareStatement("INSERT INTO ArqueoDetalle VALUES(?, ?, ?, ?)");
+                    .prepareStatement("INSERT INTO ArqueoDetalle VALUES(?, ?, ?, ?, ?)");
             ps.setInt(1, FacturaID);
             ps.setFloat(2, TotalFactura);
             ps.setFloat(3, TotalEfectivo);
             ps.setFloat(4, TotalCambio);
-            
+            ps.setString(5, Tipo);
             ps.execute();
             ps.close();
         } catch (SQLException ex) {

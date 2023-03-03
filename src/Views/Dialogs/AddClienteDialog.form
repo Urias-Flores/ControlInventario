@@ -79,6 +79,8 @@
                               <Component id="txtNumero" max="32767" attributes="0"/>
                               <Component id="jLabel6" max="32767" attributes="0"/>
                               <Component id="txtError" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jLabel7" alignment="1" max="32767" attributes="0"/>
+                              <Component id="txtRTN" alignment="1" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -100,7 +102,11 @@
                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Component id="txtDocumento" min="-2" pref="38" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="txtRTN" min="-2" pref="38" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Component id="txtCorreo" min="-2" pref="38" max="-2" attributes="0"/>
@@ -114,7 +120,7 @@
                   <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="txtError" min="-2" pref="35" max="-2" attributes="0"/>
-                  <EmptySpace pref="16" max="32767" attributes="0"/>
+                  <EmptySpace pref="22" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="btnAgregar" pref="38" max="32767" attributes="0"/>
                       <Component id="lbCargando" max="32767" attributes="0"/>
@@ -180,7 +186,7 @@
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Roboto" size="20" style="0"/>
+              <Font name="Roboto" size="20" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Nombre:"/>
           </Properties>
@@ -199,7 +205,7 @@
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Roboto" size="20" style="0"/>
+              <Font name="Roboto" size="20" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Documento:"/>
           </Properties>
@@ -218,7 +224,7 @@
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Roboto" size="20" style="0"/>
+              <Font name="Roboto" size="20" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Correo Electronico:"/>
           </Properties>
@@ -237,7 +243,7 @@
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Roboto" size="20" style="0"/>
+              <Font name="Roboto" size="20" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Numero telefonico:"/>
           </Properties>
@@ -256,7 +262,7 @@
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Roboto" size="20" style="0"/>
+              <Font name="Roboto" size="20" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Domicilio:"/>
           </Properties>
@@ -319,6 +325,25 @@
         <Component class="javax.swing.JLabel" name="lbCargando">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel7">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Roboto" size="20" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="RTN:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtRTN">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Roboto" size="18" style="0"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="b4" green="b4" red="b4" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Ingrese el RTN del cliente..."/>
           </Properties>
         </Component>
       </SubComponents>
