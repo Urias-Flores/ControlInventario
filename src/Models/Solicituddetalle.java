@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Models;
 
 import java.io.Serializable;
@@ -16,14 +12,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author Dell
- */
 @Entity
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Solicituddetalle.findAll", query = "SELECT s FROM Solicituddetalle s"),
+    @NamedQuery(name = "Solicituddetalle.findBySolicitudID", query = "SELECT s FROM Solicituddetalle s WHERE s.solicitudID = :solicitudID"),
     @NamedQuery(name = "Solicituddetalle.findBySolicitudDetalleID", query = "SELECT s FROM Solicituddetalle s WHERE s.solicitudDetalleID = :solicitudDetalleID"),
     @NamedQuery(name = "Solicituddetalle.findByCantidad", query = "SELECT s FROM Solicituddetalle s WHERE s.cantidad = :cantidad"),
     @NamedQuery(name = "Solicituddetalle.findByPrecio", query = "SELECT s FROM Solicituddetalle s WHERE s.precio = :precio"),

@@ -49,14 +49,20 @@ public class MainViewController {
         this.Preferencias = Preferencias;
         this.Ajustes = Ajustes;
         this.CerrarSesion = CerrarSesion;
-        this.Principal = Principal;    
+        this.Principal = Principal;
+        
+        //Cargando nombre del usuario actual en la barra lateral
+        loadUser(Utilities.getUsuarioActual().getNombre());
+        
+        //Activando tarea para el chequeo de cambios en la notificaciones
+        updateNotifications();
     }
     
-    public void cargarUsuario(String Usuario){
+    private void loadUser(String Usuario){
         UsuarioActual.setText(Usuario);
     }
     
-    public void CargarPanel(int Panel){
+    public void loadPanel(int Panel){
         if(Panel != PanelActivo){
             Principal.removeAll();
             switch(Panel){
@@ -74,8 +80,8 @@ public class MainViewController {
                     
                     Principal.addTab("Facturar", FacturarIcon, facturar);
                     Principal.addTab("Facturas del dia", FacturaDiaIcon, facturasDia);
-                    Principal.addTab("Gastos", GastoIcon, gastos);
-                    Principal.addTab("Arqueos", ArqueoIcon, arqueos);
+                    //Principal.addTab("Gastos", GastoIcon, gastos);
+                    //Principal.addTab("Arqueos", ArqueoIcon, arqueos);
                     break;
                 case 2:
                     
@@ -163,12 +169,12 @@ public class MainViewController {
         CerrarSesion.setEnabled(false); CerrarSesion.setForeground(new Color(230, 230, 230));
     }
     
-    public void activarBoton(JLabel label){
+    public void enableButton(JLabel label){
         desactivarBotones();
         label.setEnabled(true);
     }
     
-    public void updateNotifications(){
+    private void updateNotifications(){
         Utilities.setRunProcess(true);
         Runnable run = ()->{
             while(Utilities.isRunProcess()){

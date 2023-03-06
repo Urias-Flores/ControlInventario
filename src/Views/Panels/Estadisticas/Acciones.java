@@ -11,7 +11,9 @@ public class Acciones extends javax.swing.JPanel {
         initComponents();
         Utilities.CargarAnios(cmbAnioInicial, 0);
         Utilities.CargarAnios(cmbAnioFinal, 0);
+        
         btnFiltros.addMouseListener(Utilities.getMLGeneralButton());
+        btnImprimir.addMouseListener(Utilities.getMLGeneralButton());
         btnVer.addMouseListener(Utilities.getMLGeneralButton());
         
         vc = new AccionesViewController(lbVentas, lbCompras, tbTransacciones, cmbUsuarios, cmbClientesProveedores, lbCargando, cmbTipo, cmbIntervalo, cmbDiaInicial, cmbMesInicial, cmbAnioInicial, cmbDiaFinal, cmbMesFinal, cmbAnioFinal);
@@ -35,6 +37,7 @@ public class Acciones extends javax.swing.JPanel {
         cmbUsuarios = new javax.swing.JComboBox<>();
         cmbClientesProveedores = new javax.swing.JComboBox<>();
         lbCargando = new javax.swing.JLabel();
+        btnImprimir = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -129,6 +132,19 @@ public class Acciones extends javax.swing.JPanel {
 
         lbCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
+        btnImprimir.setBackground(new java.awt.Color(3, 57, 103));
+        btnImprimir.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        btnImprimir.setForeground(new java.awt.Color(255, 255, 255));
+        btnImprimir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnImprimir.setText("Imprimir");
+        btnImprimir.setToolTipText("Administrar marcas");
+        btnImprimir.setOpaque(true);
+        btnImprimir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnImprimirMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -138,6 +154,8 @@ public class Acciones extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -167,7 +185,9 @@ public class Acciones extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18))
         );
 
@@ -379,6 +399,10 @@ public class Acciones extends javax.swing.JPanel {
         vc.filter();
     }//GEN-LAST:event_cmbClientesProveedoresActionPerformed
 
+    private void btnImprimirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnImprimirMouseClicked
+        vc.printBillInformation();
+    }//GEN-LAST:event_btnImprimirMouseClicked
+
     private void CambiarEstadoFechas(boolean estado){
         cmbDiaInicial.setEnabled(estado);
         cmbMesInicial.setEnabled(estado);
@@ -390,6 +414,7 @@ public class Acciones extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnFiltros;
+    private javax.swing.JLabel btnImprimir;
     private javax.swing.JLabel btnVer;
     private javax.swing.JComboBox<String> cmbAnioFinal;
     private javax.swing.JComboBox<String> cmbAnioInicial;

@@ -18,7 +18,8 @@
 	<parameter name="Usuario" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
-FacturaID as NoFactura,
+TransaccionID as NoFactura,
+Tipo,
 Total,
 Efectivo,
 Cambio
@@ -29,17 +30,22 @@ FROM ArqueoDetalle]]>
 		<property name="com.jaspersoft.studio.field.label" value="NoFactura"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ArqueoDetalle"/>
 	</field>
-	<field name="Total" class="java.lang.Float">
+	<field name="Tipo" class="java.lang.Object">
+		<property name="com.jaspersoft.studio.field.name" value="Tipo"/>
+		<property name="com.jaspersoft.studio.field.label" value="Tipo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="ArqueoDetalle"/>
+	</field>
+	<field name="Total" class="java.lang.Object">
 		<property name="com.jaspersoft.studio.field.name" value="Total"/>
 		<property name="com.jaspersoft.studio.field.label" value="Total"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ArqueoDetalle"/>
 	</field>
-	<field name="Efectivo" class="java.lang.Float">
+	<field name="Efectivo" class="java.lang.Object">
 		<property name="com.jaspersoft.studio.field.name" value="Efectivo"/>
 		<property name="com.jaspersoft.studio.field.label" value="Efectivo"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ArqueoDetalle"/>
 	</field>
-	<field name="Cambio" class="java.lang.Float">
+	<field name="Cambio" class="java.lang.Object">
 		<property name="com.jaspersoft.studio.field.name" value="Cambio"/>
 		<property name="com.jaspersoft.studio.field.label" value="Cambio"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ArqueoDetalle"/>
@@ -194,7 +200,7 @@ FROM ArqueoDetalle]]>
 				<reportElement x="-6" y="9" width="186" height="1" forecolor="#B4B4B4" uuid="30f720e4-25c6-4127-a54e-a5bac4ebfbca"/>
 			</line>
 			<staticText>
-				<reportElement x="34" y="1" width="47" height="8" uuid="64d0a4a0-2be4-4e61-b5a8-1f538edc1abb">
+				<reportElement x="70" y="1" width="40" height="8" uuid="64d0a4a0-2be4-4e61-b5a8-1f538edc1abb">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4fcd8b89-7fb3-4ae3-93be-caef3c8fad24"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -204,7 +210,7 @@ FROM ArqueoDetalle]]>
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="-6" y="1" width="40" height="8" uuid="24236191-13dc-44d7-be9f-63e518ec03f1">
+				<reportElement x="-6" y="1" width="47" height="8" uuid="24236191-13dc-44d7-be9f-63e518ec03f1">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3f493944-81f0-4187-a16f-2871bb90bc87"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -215,7 +221,7 @@ FROM ArqueoDetalle]]>
 				<text><![CDATA[No Factura]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="81" y="1" width="59" height="8" uuid="fdd48afc-c2c5-40ac-885e-4093c3146245">
+				<reportElement x="110" y="1" width="38" height="8" uuid="fdd48afc-c2c5-40ac-885e-4093c3146245">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="41cc497f-06cc-4092-a1e3-a338033c197b"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -225,7 +231,7 @@ FROM ArqueoDetalle]]>
 				<text><![CDATA[Efectivo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="140" y="1" width="40" height="8" uuid="692682ed-ae38-43eb-9650-01f9bb1f1222">
+				<reportElement x="148" y="1" width="32" height="8" uuid="692682ed-ae38-43eb-9650-01f9bb1f1222">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8dfb4d88-7c1f-4cf5-a93a-4be5d5d2f6ca"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -234,14 +240,24 @@ FROM ArqueoDetalle]]>
 				</textElement>
 				<text><![CDATA[Cambio]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="41" y="1" width="29" height="8" uuid="4f74fede-00b4-493b-9d5e-a271ec86c1a4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4fcd8b89-7fb3-4ae3-93be-caef3c8fad24"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="11" splitType="Prevent">
+		<band height="10" splitType="Prevent">
 			<property name="com.jaspersoft.studio.layout"/>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField pattern="00000000">
-				<reportElement x="-6" y="0" width="40" height="10" uuid="51b2d640-4579-4018-9327-1a6d8b1d1cc8">
+				<reportElement x="-6" y="0" width="47" height="10" uuid="51b2d640-4579-4018-9327-1a6d8b1d1cc8">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f12483ad-702c-408a-8843-64f4e578044d"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -251,7 +267,7 @@ FROM ArqueoDetalle]]>
 				<textFieldExpression><![CDATA[$F{NoFactura}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="34" y="0" width="47" height="10" uuid="be7552e5-e112-41b8-8711-40c01152f6d1">
+				<reportElement x="70" y="0" width="40" height="10" uuid="be7552e5-e112-41b8-8711-40c01152f6d1">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="72f7f62b-bf69-49c3-867d-c59e03bc8321"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -260,8 +276,9 @@ FROM ArqueoDetalle]]>
 				<textFieldExpression><![CDATA[$F{Total}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="81" y="0" width="59" height="10" uuid="8750197e-f225-4bc2-b7e9-a7ba76c14886">
+				<reportElement x="110" y="0" width="38" height="10" uuid="8750197e-f225-4bc2-b7e9-a7ba76c14886">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ec2b1b11-cd5f-457c-bf67-0ee6fbe20939"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
@@ -269,13 +286,23 @@ FROM ArqueoDetalle]]>
 				<textFieldExpression><![CDATA[$F{Efectivo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="140" y="0" width="40" height="10" uuid="b74af842-4e56-4ed1-9df6-d344da055b8f">
+				<reportElement x="148" y="0" width="32" height="10" uuid="b74af842-4e56-4ed1-9df6-d344da055b8f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="02ff8ffd-c9ea-4e39-9df6-af0d8d97d9ca"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Cambio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="41" y="0" width="29" height="10" uuid="a86f0548-46ff-42f2-b067-8b11ad0f2f50">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="62d9c7b6-602e-4c3f-8d9d-b58b2313e810"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Tipo}.equals( "O" ) ? "Oficial" : "No oficial"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

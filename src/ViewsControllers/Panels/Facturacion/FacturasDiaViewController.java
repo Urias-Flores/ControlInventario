@@ -1,18 +1,23 @@
 package ViewsControllers.Panels.Facturacion;
 
 import Controllers.ClienteJpaController;
+import Controllers.SolicitudJpaController;
 import Controllers.VentaJpaController;
 import Controllers.VentadetalleJpaController;
 import Controllers.exceptions.IllegalOrphanException;
 import Controllers.exceptions.NonexistentEntityException;
 import Models.Cliente;
+import Models.Solicitud;
+import Models.Solicituddetalle;
 import Models.Venta;
 import Models.Ventadetalle;
 import Reports.Reports;
 import Resource.Conection;
+import Resource.LocalDataController;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.text.DecimalFormat;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -25,13 +30,16 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 public class FacturasDiaViewController {
 
     private JComboBox<Cliente> Clientes;
+    private JComboBox Tipo;
     private JTable Facturas;
     private JLabel TotalVentas;
+    private JLabel Ganancias;
     private JTable VistaPreeliminar;
     private JTextField Subtotal;
     private JTextField Descuento;
@@ -53,10 +61,12 @@ public class FacturasDiaViewController {
         }
     };
 
-    public FacturasDiaViewController(JComboBox Clientes, JTable Facturas, JLabel TotalVentas, JTable VistaPreeliminar, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total, JLabel Cargando) {
+    public FacturasDiaViewController(JComboBox Clientes, JComboBox Tipo, JTable Facturas, JLabel TotalVentas, JLabel Ganancias,JTable VistaPreeliminar, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total, JLabel Cargando) {
         this.Clientes = Clientes;
+        this.Tipo = Tipo;
         this.Facturas = Facturas;
         this.TotalVentas = TotalVentas;
+        this.Ganancias = Ganancias;
         this.VistaPreeliminar = VistaPreeliminar;
         this.Subtotal = Subtotal;
         this.Descuento = Descuento;
@@ -89,10 +99,10 @@ public class FacturasDiaViewController {
 
             //Actualizando total de ventas
             updateTotalSales();
-            
+
             //Cargando clientes en combobox
             loadClients();
-            
+
             //Limpiando datos de vista previa en caso de recarga
             clear();
 
@@ -107,26 +117,52 @@ public class FacturasDiaViewController {
     }
 
     private void setModelTableBills() {
-        String[] columns = {"No.", "Cliente", "Usuario", "Hora", "Total"};
+        String[] columns = {"No.", "Tipo", "Cliente", "Usuario", "Hora", "Total"};
         model.setColumnIdentifiers(columns);
 
         Facturas.setModel(model);
 
-        Facturas.getColumn("No.").setPreferredWidth(30);
-        Facturas.getColumn("Cliente").setPreferredWidth(250);
-        Facturas.getColumn("Usuario").setPreferredWidth(250);
-        Facturas.getColumn("Hora").setPreferredWidth(70);
+        Facturas.getColumn("No.").setPreferredWidth(100);
+        Facturas.getColumn("Tipo").setPreferredWidth(80);
+        Facturas.getColumn("Cliente").setPreferredWidth(220);
+        Facturas.getColumn("Usuario").setPreferredWidth(220);
+        Facturas.getColumn("Hora").setPreferredWidth(90);
         Facturas.getColumn("Total").setPreferredWidth(90);
     }
 
     private void loadBills() {
         model.setRowCount(0);
-        Query query = Conection.createEntityManagerFactory().createEntityManager().createNativeQuery("SELECT *  FROM ViewFacturasDia");
+        Query query = Conection.createEntityManagerFactory().createEntityManager().createNativeQuery("SELECT *  FROM ViewFacturasDia ORDER BY Hora desc");
         List<Object[]> facturas = query.getResultList();
-        facturas.forEach(factura -> {
-            factura[4] = getNumberFormat(Float.parseFloat(factura[4].toString()));
-            model.addRow(factura);
-        });
+        float ganancia = 0;
+        if(facturas != null){
+            for( Object[] factura : facturas ){
+                factura[5] = getNumberFormat(Float.parseFloat(factura[5].toString()));
+                model.addRow(factura);
+                
+                if(factura[1].toString().equals("Venta")){
+                    List<Ventadetalle> ventadetalles = Conection.createEntityManager().createNamedQuery("Ventadetalle.findByVentaID")
+                        .setParameter("ventaID", new Venta(Integer.valueOf(factura[0].toString())))
+                        .getResultList();
+                    if(ventadetalles != null){
+                        for(Ventadetalle ventadetalle : ventadetalles){
+                            ganancia += (ventadetalle.getPrecio() - ventadetalle.getProductoID().getPrecioCompra()) * ventadetalle.getCantidad();
+                        }
+                    }
+                }else{
+                    List<Solicituddetalle> solicituddetalles = Conection.createEntityManager().createNamedQuery("Solicituddetalle.findBySolicitudID")
+                        .setParameter("solicitudID", new Solicitud(Integer.valueOf(factura[0].toString())))
+                        .getResultList();
+                    if(solicituddetalles != null){
+                        for(Solicituddetalle solicituddetalle : solicituddetalles){
+                            ganancia += (solicituddetalle.getPrecio() - solicituddetalle.getProductoID().getPrecioCompra()) * solicituddetalle.getCantidad();
+                        }
+                    }
+                }
+            }
+        }
+
+        Ganancias.setText(getNumberFormat(ganancia));
     }
 
     private void setModelTablePreview() {
@@ -150,22 +186,44 @@ public class FacturasDiaViewController {
             Runnable run = () -> {
                 float subtotal = 0;
                 float descuento = 0;
-
-                Venta venta = new VentaJpaController(Conection.createEntityManagerFactory())
+                if(Facturas.getValueAt(fila, 1).toString().equals("Venta")){
+                    Venta venta = new VentaJpaController(Conection.createEntityManagerFactory())
                         .findVenta(Integer.valueOf(Facturas.getValueAt(fila, 0).toString()));
 
-                List<Ventadetalle> ventadetalles = venta.getVentadetalleList();
-                for (int i = 0; i < ventadetalles.size(); i++) {
-                    Object[] row = {
-                        ventadetalles.get(i).getProductoID().getDescripcion(),
-                        ventadetalles.get(i).getCantidad(),
-                        getNumberFormat(ventadetalles.get(i).getPrecio()),
-                        getNumberFormat(ventadetalles.get(i).getDescuento()),};
-                    modelPrevia.addRow(row);
+                    List<Ventadetalle> ventadetalles = venta.getVentadetalleList();
+                    if(ventadetalles != null){
+                        for (Ventadetalle ventadetalle : ventadetalles) {
+                            Object[] row = {
+                                ventadetalle.getProductoID().getDescripcion(),
+                                ventadetalle.getCantidad(),
+                                getNumberFormat(ventadetalle.getPrecio()),
+                                getNumberFormat(ventadetalle.getDescuento()),};
+                            modelPrevia.addRow(row);
 
-                    subtotal += ventadetalles.get(i).getCantidad() * ventadetalles.get(i).getPrecio();
-                    descuento += ventadetalles.get(i).getDescuento();
+                            subtotal += ventadetalle.getCantidad() * ventadetalle.getPrecio();
+                            descuento += ventadetalle.getDescuento();
+                        }  
+                    }
+                } else {
+                    Solicitud solicitud = new SolicitudJpaController(Conection.createEntityManagerFactory())
+                        .findSolicitud(Integer.valueOf(Facturas.getValueAt(fila, 0).toString()));
+
+                    List<Solicituddetalle> solicituddetalles = solicitud.getSolicituddetalleList();
+                    if(solicituddetalles != null){
+                        for (Solicituddetalle solicituddetalle : solicituddetalles) {
+                            Object[] row = {
+                                solicituddetalle.getProductoID().getDescripcion(),
+                                solicituddetalle.getCantidad(),
+                                getNumberFormat(solicituddetalle.getPrecio()),
+                                getNumberFormat(solicituddetalle.getDescuento()),};
+                            modelPrevia.addRow(row);
+
+                            subtotal += solicituddetalle.getCantidad() * solicituddetalle.getPrecio();
+                            descuento += solicituddetalle.getDescuento();
+                        }
+                    }
                 }
+                
                 float importe = (subtotal - descuento) / 1.15f;
                 float isv = importe * 0.15f;
                 float total = importe + isv;
@@ -182,15 +240,15 @@ public class FacturasDiaViewController {
 
         }
     }
-
+    
     private void updateTotalSales() {
         float totalSales = 0;
         int counter = 0;
-        while(counter < Facturas.getRowCount()){
-            totalSales += Float.parseFloat(Facturas.getValueAt(counter, 4).toString().replace(",", ""));
+        while (counter < Facturas.getRowCount()) {
+            totalSales += Float.parseFloat(Facturas.getValueAt(counter, 5).toString().replace(",", ""));
             counter++;
         }
-        
+
         TotalVentas.setText(getNumberFormat(totalSales));
     }
 
@@ -199,42 +257,45 @@ public class FacturasDiaViewController {
         Clientes.addItem(new Cliente(0, "-- Todos los clientes --", 0));
         Cliente consumidorFinal = new ClienteJpaController(Conection.createEntityManagerFactory()).findCliente(1);
         Clientes.addItem(consumidorFinal);
-        
+
         List<Cliente> clientes = Conection.createEntityManager().createNamedQuery("Cliente.findAll").getResultList();
         clientes.forEach(cliente -> {
-            if(cliente.getClienteID() != 1){
+            if (cliente.getClienteID() != 1) {
                 Clientes.addItem(cliente);
             }
         });
     }
 
-    public void filterClients() {
-        if (Clientes.getSelectedIndex() > 0) {
-            TableRowSorter s = new TableRowSorter(Facturas.getModel());
-            s.setRowFilter(RowFilter.regexFilter(Clientes.getSelectedItem().toString(), 1));
-            Facturas.setRowSorter(s);
-        } else {
-            TableRowSorter s = new TableRowSorter(Facturas.getModel());
-            s.setRowFilter(RowFilter.regexFilter("", 1));
-            Facturas.setRowSorter(s);
-        }
+    public void filter() {
+        List<RowFilter<TableModel, String>> filters = new LinkedList<>();
+        filters.add(RowFilter.regexFilter(Clientes.getSelectedIndex() == 0 || Clientes.getSelectedIndex() == -1 ? "" :Clientes.getSelectedItem().toString(), 2));
+        filters.add(RowFilter.regexFilter(Tipo.getSelectedIndex() == 0 ? "" : Tipo.getSelectedItem().toString() , 1));
+        
+        TableRowSorter s = new TableRowSorter(Facturas.getModel());
+        s.setRowFilter(RowFilter.andFilter(filters));
+        Facturas.setRowSorter(s);
     }
 
     //Task
     public void printBill() {
         int fila = Facturas.getSelectedRow();
         if (fila >= 0) {
+            if(Dialogs.ShowOKCancelDialog("¿Esta seguro de querer reimprimir la factura seleccionada?", Dialogs.WARNING_ICON)){
+                setLoad(true);
+                Runnable run = () -> {
+                    Reports reports = new Reports();
+                    LocalDataController ldc = new LocalDataController();
 
-            setLoad(true);
-            Runnable run = () -> {
-                Reports reports = new Reports();
-                reports.GenerateTickeVenta
-                (Integer.parseInt(Facturas.getValueAt(fila, 0).toString()), 
-                Float.parseFloat(Facturas.getValueAt(fila, 4).toString().replace(",", "")));
-                setLoad(false);
-            };
-            new Thread(run).start();
-
+                    int transaccionID = Integer.parseInt(Facturas.getValueAt(fila, 0).toString());
+                    if(Facturas.getValueAt(fila, 1).toString().equals("Venta")){
+                        reports.GenerateTickeVenta(transaccionID, ldc.getTotal(transaccionID, "O"));
+                    }else{
+                        reports.GenerateTicketSolicitud(transaccionID, ldc.getTotal(transaccionID, "N"));
+                    }
+                    setLoad(false);
+                };
+                new Thread(run).start();
+            }
         } else {
             Dialogs.ShowMessageDialog("Seleccione una factura de la lista", Dialogs.ERROR_ICON);
         }

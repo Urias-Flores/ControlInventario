@@ -25,7 +25,10 @@ public class DetalleFacturaDialogViewController {
     private JTextField ISV;
     private JTextField Total;
     
-    private DefaultTableModel model = new DefaultTableModel();
+    private DefaultTableModel model = new DefaultTableModel(){
+        @Override
+        public boolean isCellEditable(int row, int column){ return false; }
+    };
 
     public DetalleFacturaDialogViewController(JLabel NoFactura, JLabel Entidad, JLabel Usuario, JLabel Hora, JLabel Fecha, JTable Detalles, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total) {
         this.NoFactura = NoFactura;

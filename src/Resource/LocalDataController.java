@@ -163,7 +163,8 @@ public class LocalDataController {
             ResultSet rs = localConection.getStatement().executeQuery("SELECT * FROM ArqueoDetalle");
             while(rs.next()){
                 Object[] row = {
-                    rs.getInt("FacturaID"),
+                    rs.getInt("TransaccionID"),
+                    rs.getString("Tipo").equals("O") ? "Oficial" : "No Oficial",
                     rs.getFloat("Total"),
                     rs.getFloat("Efectivo"),
                     rs.getFloat("Cambio")
@@ -199,5 +200,23 @@ public class LocalDataController {
         } catch (SQLException ex) {
             System.err.print("Error code: "+ex.getErrorCode()+" Error: "+ex.getMessage());
         }
+    }
+    
+    public float getTotal(int transaccionID, String type){
+        try {
+            String query = "SELECT Efectivo from ArqueoDetalle where TransaccionID = ? and Tipo = ?";
+            PreparedStatement ps = localConection.getconec().prepareStatement(query);
+            ps.setInt(1, transaccionID);
+            ps.setString(2, type);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                return rs.getFloat("Efectivo");
+            }
+        } catch (SQLException ex) {
+            System.err.print("Error code: "+ex.getErrorCode()+" Error: "+ex.getMessage());
+        }
+        
+        return 0;
     }
 }

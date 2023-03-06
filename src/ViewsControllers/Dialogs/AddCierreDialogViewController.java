@@ -45,9 +45,8 @@ public class AddCierreDialogViewController {
     }
     
     private void setModelTable(){
-        String[] column = { "No. Factura", "Total", "Efectivo", "Cambio" };
+        String[] column = { "No. Factura", "Tipo","Total", "Efectivo", "Cambio" };
         model.setColumnIdentifiers(column);
-        
         Arqueos.setModel(model);
     }
     
@@ -61,13 +60,13 @@ public class AddCierreDialogViewController {
         ArrayList<Object[]> arqueos = ldc.getArqueos();
         if(!arqueos.isEmpty()){
             for(Object[] arqueo : arqueos){
-                float total = Float.parseFloat(arqueo[1].toString());
-                float efectivo = Float.parseFloat(arqueo[2].toString());
-                float cambio = Float.parseFloat(arqueo[3].toString());
+                float total = Float.parseFloat(arqueo[2].toString());
+                float efectivo = Float.parseFloat(arqueo[3].toString());
+                float cambio = Float.parseFloat(arqueo[4].toString());
                 
-                arqueo[1] = getNumberFormat(total);
-                arqueo[2] = getNumberFormat(efectivo);
-                arqueo[3] = getNumberFormat(cambio);
+                arqueo[2] = getNumberFormat(total);
+                arqueo[3] = getNumberFormat(efectivo);
+                arqueo[4] = getNumberFormat(cambio);
                 
                 model.addRow(arqueo);
                 

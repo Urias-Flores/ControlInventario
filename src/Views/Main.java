@@ -21,10 +21,9 @@ public class Main extends javax.swing.JFrame {
         }
         
         vc = new MainViewController(this, txtUsuarioActual, lbNotificaciones,btnFacturacion, btnControl, btnEstadisticas, btnCuetas, btnAjustes, btnCerrarSesion, tbpPrincipal);
-        vc.cargarUsuario(Utilities.getUsuarioActual().getNombre());
-        vc.CargarPanel(1);
-        vc.activarBoton(btnFacturacion);
-        vc.updateNotifications();
+        vc.loadPanel(1);
+        vc.enableButton(btnFacturacion);
+        //vc.updateNotifications();
     }
 
     @SuppressWarnings("unchecked")
@@ -262,28 +261,28 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFacturacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFacturacionMouseClicked
-        vc.CargarPanel(1);
-        vc.activarBoton(btnFacturacion);
+        vc.loadPanel(1);
+        vc.enableButton(btnFacturacion);
     }//GEN-LAST:event_btnFacturacionMouseClicked
 
     private void btnControlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnControlMouseClicked
-        vc.CargarPanel(2);
-        vc.activarBoton(btnControl);
+        vc.loadPanel(2);
+        vc.enableButton(btnControl);
     }//GEN-LAST:event_btnControlMouseClicked
 
     private void btnEstadisticasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEstadisticasMouseClicked
-        vc.CargarPanel(3);
-        vc.activarBoton(btnEstadisticas);
+        vc.loadPanel(3);
+        vc.enableButton(btnEstadisticas);
     }//GEN-LAST:event_btnEstadisticasMouseClicked
 
     private void btnCuetasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCuetasMouseClicked
-        vc.CargarPanel(4);
-        vc.activarBoton(btnCuetas);
+        vc.loadPanel(4);
+        vc.enableButton(btnCuetas);
     }//GEN-LAST:event_btnCuetasMouseClicked
 
     private void btnAjustesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAjustesMouseClicked
-        vc.CargarPanel(5);
-        vc.activarBoton(btnAjustes);
+        vc.loadPanel(5);
+        vc.enableButton(btnAjustes);
     }//GEN-LAST:event_btnAjustesMouseClicked
 
     private void btnCerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseClicked

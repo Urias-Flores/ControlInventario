@@ -269,7 +269,7 @@ WHERE v.VentaID = $P{VentaID}]]>
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[Saldo inicial]]></text>
+				<text><![CDATA[Saldo anterior]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -284,36 +284,6 @@ WHERE v.VentaID = $P{VentaID}]]>
 			<line>
 				<reportElement x="-8" y="0" width="202" height="1" forecolor="#B4B4B4" uuid="830c79d5-0416-42d3-9e95-57fc4369df81"/>
 			</line>
-			<textField pattern="#,##0.00">
-				<reportElement x="146" y="1" width="46" height="11" uuid="0c14807e-d48b-4c87-bf16-36fbc867913d">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Right">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{Subtotal}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement x="146" y="12" width="46" height="11" uuid="5a0742c8-db21-4d97-af2a-9e9743ff107f">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Right">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{Descuento}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement x="146" y="23" width="46" height="11" uuid="d62e4714-ed54-441f-8459-38775d179a0c">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Right">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{Importe}]]></textFieldExpression>
-			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="146" y="34" width="46" height="11" uuid="e82f7201-0f85-46e9-83fb-35681dbc905f">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>

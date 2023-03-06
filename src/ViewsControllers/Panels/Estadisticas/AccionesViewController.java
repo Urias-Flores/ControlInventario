@@ -1,6 +1,7 @@
 package ViewsControllers.Panels.Estadisticas;
 
 import Models.Usuario;
+import Reports.Reports;
 import Resource.Conection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
@@ -230,6 +231,37 @@ public class AccionesViewController {
             }
         } else {
             Dialogs.ShowMessageDialog("Seleccione una transaccion de la lista", fila);
+        }
+    }
+    
+    public void printBillInformation(){
+        int fila = Transacciones.getSelectedRow();
+        if(fila >= 0){
+            String tipo = Transacciones.getValueAt(fila, 1).toString();
+            if(Dialogs.ShowOKCancelDialog("¿Desea imprimir la "+tipo.toLowerCase()+" seleccionada?", Dialogs.WARNING_ICON)){
+                int TransactionID = Integer.parseInt(Transacciones.getValueAt(fila, 0).toString());
+                String type = Transacciones.getValueAt(fila, 1).toString();
+     
+                if(type.equalsIgnoreCase("Venta")){
+                    setLoad(true);
+                    Runnable run = () ->{
+                        Reports report = new Reports();
+                        report.GenerateTickeVenta(TransactionID, 0);
+                        setLoad(false);
+                    };
+                    new Thread(run).start();
+                } else{
+                    setLoad(true);
+                    Runnable run = () ->{
+                        Reports report = new Reports();
+                        report.GenerateTicketCompra(TransactionID);
+                        setLoad(false);
+                    };
+                    new Thread(run).start();
+                }
+            }
+        } else {
+            Dialogs.ShowMessageDialog("Seleccione una factura de la lista", Dialogs.ERROR_ICON);
         }
     }
 
