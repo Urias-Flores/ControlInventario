@@ -10,6 +10,7 @@ import Models.Compra;
 import Models.Compradetalle;
 import Models.Venta;
 import Models.Ventadetalle;
+import Reports.Reports;
 import Resource.Conection;
 import Resource.Utilities;
 import Views.Dialogs.AddAbonoDialog;
@@ -174,7 +175,7 @@ public class AddAbonoDialogViewController {
                 //Enviando a insertar abono
                 AbonoJpaController controller = new AbonoJpaController(Conection.createEntityManagerFactory());
                 Abono abono = createAbonoObject();
-                controller.create(abono);
+                int AbonoID = controller.create(abono);
 
                 //Actualizando estado factura en caso de que ya se alla pagado por completa
                 updateFactura(abono);
@@ -186,7 +187,8 @@ public class AddAbonoDialogViewController {
                 if(Dialogs.ShowOKCancelDialog("¿Desea enviar a imprimir recibo de abono a cuenta?", Dialogs.WARNING_ICON)){
                     setLoad(true);
                     Runnable runnable = () ->{
-                        //Codigo para enviar a imprimir el tikect de abono
+                        Reports reports = new Reports();
+                        reports.GenerateTicketAbono(AbonoID);
                         setLoad(false);
                     };
                     new Thread(runnable).start();

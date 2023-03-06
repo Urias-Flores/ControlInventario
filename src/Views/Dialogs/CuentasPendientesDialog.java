@@ -45,13 +45,14 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
         lbNombre = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbCuentas = new javax.swing.JTable();
-        lbTotal = new javax.swing.JLabel();
-        lbTituloTotal = new javax.swing.JLabel();
         btnPagar = new javax.swing.JLabel();
         btnPagarFactura = new javax.swing.JLabel();
         btnDetalles = new javax.swing.JLabel();
         btnAbono = new javax.swing.JLabel();
         lbCargando = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        lbTituloTotal = new javax.swing.JLabel();
+        lbTotal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setModal(true);
@@ -119,17 +120,6 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(tbCuentas);
 
-        lbTotal.setFont(new java.awt.Font("Roboto", 0, 60)); // NOI18N
-        lbTotal.setForeground(new java.awt.Color(10, 150, 50));
-        lbTotal.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        lbTotal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/transaccionVerde.png"))); // NOI18N
-        lbTotal.setText("0.00");
-
-        lbTituloTotal.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        lbTituloTotal.setForeground(new java.awt.Color(10, 150, 50));
-        lbTituloTotal.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        lbTituloTotal.setText("Total por cobrar");
-
         btnPagar.setBackground(new java.awt.Color(3, 57, 103));
         btnPagar.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         btnPagar.setForeground(new java.awt.Color(255, 255, 255));
@@ -192,6 +182,41 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
             }
         });
 
+        jPanel2.setBackground(new java.awt.Color(250, 250, 250));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(220, 220, 220)));
+
+        lbTituloTotal.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        lbTituloTotal.setForeground(new java.awt.Color(10, 150, 50));
+        lbTituloTotal.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lbTituloTotal.setText("Total por cobrar");
+
+        lbTotal.setFont(new java.awt.Font("Roboto", 0, 60)); // NOI18N
+        lbTotal.setForeground(new java.awt.Color(10, 150, 50));
+        lbTotal.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lbTotal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/flechaDiagonalArriba.png"))); // NOI18N
+        lbTotal.setText("0.00");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbTituloTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbTituloTotal)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(7, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -214,17 +239,15 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
                             .addComponent(lbTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(200, 200, 200)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lbTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lbTituloTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnAbono, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnPagarFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btnAbono, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnPagarFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(18, 18, 18))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -241,12 +264,10 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
                     .addComponent(btnDetalles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(lbTituloTotal)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnPagarFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -317,9 +338,9 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_lbCargandoMouseClicked
 
     public void setCompraState(){
-        lbTituloTotal.setForeground(new Color(150, 30, 10));
-        lbTotal.setForeground(new Color(150, 30, 10));
-        lbTotal.setIcon(new ImageIcon(getClass().getResource("/Icons/transaccionRojo.png")));
+        lbTituloTotal.setForeground(new Color(185, 0, 0));
+        lbTotal.setForeground(new Color(185, 0, 0));
+        lbTotal.setIcon(new ImageIcon(getClass().getResource("/Icons/flechaDiagonalAbajo.png")));
         lbTitulo.setText("Compras pendientes");
         lbEntidad.setText("Proveedor:");
         lbTotal.setText("Total por pagar");
@@ -373,6 +394,7 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
     private javax.swing.JLabel btnPagar;
     private javax.swing.JLabel btnPagarFactura;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbCargando;
     private javax.swing.JLabel lbEntidad;

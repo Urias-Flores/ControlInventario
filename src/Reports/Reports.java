@@ -68,6 +68,28 @@ public class Reports {
         }
     }
     
+    public void GenerateTicketAbono(int AbonoID)
+    {
+        try {
+            File archivo = new File("reports/Abono.jasper");
+            if(archivo.exists())
+            {
+                JasperReport jr = (JasperReport) JRLoader.loadObject(archivo);
+                
+                Map<String, Object> parameters = getCompanyParameters();
+                parameters.put("AbonoID", AbonoID);
+                parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
+                
+                sendPrintTicket(jr, parameters);
+            }else{
+                Dialogs.ShowMessageDialog("El archivo base para creacion de solicitud no fue encontrado", Dialogs.ERROR_ICON);
+            }
+        } catch (JRException ex) {
+            System.err.println("Error: "+ex.getMessage());
+            Dialogs.ShowMessageDialog("Ups... Ha ocurrido un error al enviar a imprimir", Dialogs.ERROR_ICON);
+        }
+    }
+    
     public void GenerateTicketCotizacion(int CotizacionID)
     {
         try {

@@ -27,7 +27,7 @@ public class AbonoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Abono abono) {
+    public int create(Abono abono) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -78,7 +78,9 @@ public class AbonoJpaController implements Serializable {
                 ventaID.getAbonoList().add(abono);
                 ventaID = em.merge(ventaID);
             }
+            em.flush();
             em.getTransaction().commit();
+            return abono.getAbonoID();
         } finally {
             if (em != null) {
                 em.close();
