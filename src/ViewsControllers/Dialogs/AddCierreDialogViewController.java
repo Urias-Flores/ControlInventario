@@ -94,14 +94,11 @@ public class AddCierreDialogViewController {
                         float saldoInicial = Float.parseFloat(SaldoInicial.getText().replace(",", ""));
                         Reports reports = new Reports();
                         reports.GenerateTicketCloseDay(saldoInicial);
-                        ldc.closeDay(saldoReal);
-                        Dialogs.ShowMessageDialog("El cierre se ha guardado exitosamente", Dialogs.COMPLETE_ICON);
                     };
                     new Thread(run).start();
-                }else {
-                    ldc.closeDay(saldoReal);
-                    Dialogs.ShowMessageDialog("El cierre se ha guardado exitosamente", Dialogs.COMPLETE_ICON);
                 }
+                ldc.closeDay(saldoReal);
+                Dialogs.ShowMessageDialog("El cierre se ha guardado exitosamente", Dialogs.COMPLETE_ICON);
             }
         }
     }

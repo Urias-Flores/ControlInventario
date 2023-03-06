@@ -121,7 +121,6 @@ public class FacturasDiaViewController {
         model.setColumnIdentifiers(columns);
 
         Facturas.setModel(model);
-
         Facturas.getColumn("No.").setPreferredWidth(100);
         Facturas.getColumn("Tipo").setPreferredWidth(80);
         Facturas.getColumn("Cliente").setPreferredWidth(220);

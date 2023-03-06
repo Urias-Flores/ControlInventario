@@ -251,18 +251,26 @@ public class LoadDialogWithDownloadOptionViewController {
         //update[1] = "reports/abono.jasper" o "actualizandoCliente" este contendria la ruta del archivo a modificar o agregar
         //update[2] = "www.github.com/Urias...." o "Alter table clientes..." contendria la direccion de descarga del archivo o query a ejecutar
         
-        
         if(updates != null){ //<- Comporbando que realmente existan actualizaciones
             if(!updates.isEmpty()){ //<- Comporbando de nuevo por si acaso
                 int contador = 1; //El contador es unicamente para saber por que numero de descarga va, en caso de ser varios
                 for(String[] update : updates){ //Recorriendo lista de arreglos que contiene la informacion detallada arriba
                     Texto.setText("Descargando... ("+contador+"/"+updates.size()+")"); //Muestra el mensaje ejemp:  Descargando... (2/5) 
-                    if(update[0].equals("File")){ //Comprobando que sea un archivo de actualizacion
-                        updateFile(update[1], update[2]);//Este metodo recibe el nombre o direccion del archivo, y url de descarga
-                    }else if(update[0].equals("Query")){//En el caso de que no sea un archivo seria un Query
-                        executeQuery(update[2]); //Aqui enviamos a executar el Query enviando el query obtenido del archivo de actualizacion
-                    } else {
-                        executeLocalQuery(update[2]);
+                    switch (update[0]) {
+                        case "File":
+                            //Comprobando que sea un archivo de actualizacion
+                            updateFile(update[1], update[2]);//Este metodo recibe el nombre o direccion del archivo, y url de descarga
+                            break;
+                        case "Query":
+                            //En el caso de que querer modificar la estructura de la base de datos
+                            executeQuery(update[2]); //Aqui enviamos a executar el Query enviando el query obtenido del archivo de actualizacion
+                            break;
+                        case "LocalQuery":
+                            //En el caso de que querer modificar la estructura de la base de datos local
+                            executeLocalQuery(update[2]);
+                            break;
+                        default:
+                            break;
                     }
                     contador += 1;
                 }

@@ -137,6 +137,7 @@ public class Reports {
     public void GenerateTicketCloseDay(float SaldoInicial){
         try {
             File archivo = new File("reports/Arqueo.jasper");
+            
             if(archivo.exists())
             {
                 JasperReport jr = (JasperReport) JRLoader.loadObject(archivo);

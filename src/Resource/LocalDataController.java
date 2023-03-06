@@ -92,7 +92,7 @@ public class LocalDataController {
         try {
             ResultSet rs = localConection.getStatement().executeQuery("SELECT * FROM Arqueo WHERE SaldoFinal = 0");
             if(rs.next()){
-                System.err.println(rs.getString("SaldoFinal"));
+                System.err.println("Saldo final: "+rs.getString("SaldoFinal"));
                 float saldoFinal  = Float.parseFloat(rs.getString("SaldoFinal"));
                 if(saldoFinal == 0){
                     return true;
