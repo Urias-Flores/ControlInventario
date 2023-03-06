@@ -1,6 +1,7 @@
 package ViewsControllers.Dialogs;
 
 import Resource.Conection;
+import Resource.LocalConection;
 import Resource.LocalDataController;
 import Resource.NoJpaConection;
 import Resource.UpdateDataController;
@@ -258,8 +259,10 @@ public class LoadDialogWithDownloadOptionViewController {
                     Texto.setText("Descargando... ("+contador+"/"+updates.size()+")"); //Muestra el mensaje ejemp:  Descargando... (2/5) 
                     if(update[0].equals("File")){ //Comprobando que sea un archivo de actualizacion
                         updateFile(update[1], update[2]);//Este metodo recibe el nombre o direccion del archivo, y url de descarga
-                    }else{//En el caso de que no sea un archivo seria un Query
+                    }else if(update[0].equals("Query")){//En el caso de que no sea un archivo seria un Query
                         executeQuery(update[2]); //Aqui enviamos a executar el Query enviando el query obtenido del archivo de actualizacion
+                    } else {
+                        executeLocalQuery(update[2]);
                     }
                     contador += 1;
                 }
@@ -313,6 +316,17 @@ public class LoadDialogWithDownloadOptionViewController {
     private void executeQuery(String Query){
         try {
             PreparedStatement ps = new NoJpaConection().getconec().prepareStatement(Query);
+            ps.execute();
+            System.out.println("Executando: "+Query);
+        } catch (SQLException ex) {
+            System.err.println("Error: "+ex.getMessage());
+            Texto.setText("Error al ejecutar comando en base de datos");
+        }
+    }
+    
+    private void executeLocalQuery(String Query){
+        try {
+            PreparedStatement ps = new LocalConection().getconec().prepareStatement(Query);
             ps.execute();
             System.out.println("Executando: "+Query);
         } catch (SQLException ex) {

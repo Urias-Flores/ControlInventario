@@ -174,7 +174,7 @@ public class Inventario extends javax.swing.JPanel {
         jPanel1.setPreferredSize(new java.awt.Dimension(302, 102));
 
         jLabel6.setBackground(new java.awt.Color(250, 250, 250));
-        jLabel6.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(10, 150, 50));
         jLabel6.setText("Numero total de articulos");
         jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
@@ -218,7 +218,7 @@ public class Inventario extends javax.swing.JPanel {
         lbCostoTotal.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         lbCostoTotal.setIconTextGap(10);
 
-        jLabel5.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(10, 150, 50));
         jLabel5.setText("Costo total de inventario");
         jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
@@ -249,7 +249,7 @@ public class Inventario extends javax.swing.JPanel {
         jPanel3.setPreferredSize(new java.awt.Dimension(302, 102));
 
         jLabel7.setBackground(new java.awt.Color(250, 250, 250));
-        jLabel7.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(10, 150, 50));
         jLabel7.setText("Valor total de inventario");
         jLabel7.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);

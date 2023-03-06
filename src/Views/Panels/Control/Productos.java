@@ -195,7 +195,7 @@ public class Productos extends javax.swing.JPanel {
         jPanel1.setPreferredSize(new java.awt.Dimension(302, 102));
 
         jLabel6.setBackground(new java.awt.Color(250, 250, 250));
-        jLabel6.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(10, 150, 50));
         jLabel6.setText("Numero total de productos");
         jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
@@ -234,7 +234,7 @@ public class Productos extends javax.swing.JPanel {
         jPanel3.setPreferredSize(new java.awt.Dimension(302, 102));
 
         jLabel7.setBackground(new java.awt.Color(250, 250, 250));
-        jLabel7.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(10, 150, 50));
         jLabel7.setText("Numero total de marcas");
         jLabel7.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
@@ -273,7 +273,7 @@ public class Productos extends javax.swing.JPanel {
         jPanel4.setPreferredSize(new java.awt.Dimension(302, 102));
 
         jLabel8.setBackground(new java.awt.Color(250, 250, 250));
-        jLabel8.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(10, 150, 50));
         jLabel8.setText("Numero total de categorias");
         jLabel8.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
