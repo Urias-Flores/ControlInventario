@@ -42,8 +42,6 @@ public class Proveedor implements Serializable {
     private float saldo;
     @OneToMany(mappedBy = "proveedorID")
     private List<Compra> compraList;
-    @OneToMany(mappedBy = "proveedorID")
-    private List<Abono> abonoList;
 
     public Proveedor() {
     }
@@ -116,15 +114,6 @@ public class Proveedor implements Serializable {
 
     public void setCompraList(List<Compra> compraList) {
         this.compraList = compraList;
-    }
-
-    @XmlTransient
-    public List<Abono> getAbonoList() {
-        return abonoList;
-    }
-
-    public void setAbonoList(List<Abono> abonoList) {
-        this.abonoList = abonoList;
     }
 
     @Override

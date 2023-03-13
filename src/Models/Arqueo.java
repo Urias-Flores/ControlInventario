@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Models;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -17,18 +14,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author Dell
- */
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Arqueo.findAll", query = "SELECT a FROM Arqueo a"),
+    @NamedQuery(name = "Arqueo.findAll", query = "SELECT a FROM Arqueo a ORDER BY a.fecha DESC"),
     @NamedQuery(name = "Arqueo.findByArqueoID", query = "SELECT a FROM Arqueo a WHERE a.arqueoID = :arqueoID"),
+    @NamedQuery(name = "Arqueo.findByFecha", query = "SELECT a FROM Arqueo a WHERE a.fecha = :fecha"),
+    @NamedQuery(name = "Arqueo.findByHora", query = "SELECT a FROM Arqueo a WHERE a.hora = :hora"),
     @NamedQuery(name = "Arqueo.findBySaldoInicial", query = "SELECT a FROM Arqueo a WHERE a.saldoInicial = :saldoInicial"),
     @NamedQuery(name = "Arqueo.findBySaldoFinalSistema", query = "SELECT a FROM Arqueo a WHERE a.saldoFinalSistema = :saldoFinalSistema"),
     @NamedQuery(name = "Arqueo.findBySaldoFinalUsuario", query = "SELECT a FROM Arqueo a WHERE a.saldoFinalUsuario = :saldoFinalUsuario")})
@@ -39,6 +36,10 @@ public class Arqueo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer arqueoID;
+    @Temporal(TemporalType.DATE)
+    private Date fecha;
+    @Temporal(TemporalType.TIME)
+    private Date hora;
     @Basic(optional = false)
     private float saldoInicial;
     @Basic(optional = false)
@@ -71,6 +72,22 @@ public class Arqueo implements Serializable {
 
     public void setArqueoID(Integer arqueoID) {
         this.arqueoID = arqueoID;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public Date getHora() {
+        return hora;
+    }
+
+    public void setHora(Date hora) {
+        this.hora = hora;
     }
 
     public float getSaldoInicial() {
@@ -136,7 +153,7 @@ public class Arqueo implements Serializable {
 
     @Override
     public String toString() {
-        return "Models.Arqueo[ arqueoID=" + arqueoID + " ]";
+        return "ModelTest.Arqueo[ arqueoID=" + arqueoID + " ]";
     }
     
 }

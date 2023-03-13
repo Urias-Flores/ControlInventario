@@ -7,9 +7,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import Models.Cliente;
 import Models.Compra;
-import Models.Proveedor;
 import Models.Usuario;
 import Models.Venta;
 import java.util.List;
@@ -32,20 +30,10 @@ public class AbonoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Cliente clienteID = abono.getClienteID();
-            if (clienteID != null) {
-                clienteID = em.getReference(clienteID.getClass(), clienteID.getClienteID());
-                abono.setClienteID(clienteID);
-            }
             Compra compraID = abono.getCompraID();
             if (compraID != null) {
                 compraID = em.getReference(compraID.getClass(), compraID.getCompraID());
                 abono.setCompraID(compraID);
-            }
-            Proveedor proveedorID = abono.getProveedorID();
-            if (proveedorID != null) {
-                proveedorID = em.getReference(proveedorID.getClass(), proveedorID.getProveedorID());
-                abono.setProveedorID(proveedorID);
             }
             Usuario usuarioID = abono.getUsuarioID();
             if (usuarioID != null) {
@@ -58,17 +46,9 @@ public class AbonoJpaController implements Serializable {
                 abono.setVentaID(ventaID);
             }
             em.persist(abono);
-            if (clienteID != null) {
-                clienteID.getAbonoList().add(abono);
-                clienteID = em.merge(clienteID);
-            }
             if (compraID != null) {
                 compraID.getAbonoList().add(abono);
                 compraID = em.merge(compraID);
-            }
-            if (proveedorID != null) {
-                proveedorID.getAbonoList().add(abono);
-                proveedorID = em.merge(proveedorID);
             }
             if (usuarioID != null) {
                 usuarioID.getAbonoList().add(abono);
@@ -94,27 +74,15 @@ public class AbonoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Abono persistentAbono = em.find(Abono.class, abono.getAbonoID());
-            Cliente clienteIDOld = persistentAbono.getClienteID();
-            Cliente clienteIDNew = abono.getClienteID();
             Compra compraIDOld = persistentAbono.getCompraID();
             Compra compraIDNew = abono.getCompraID();
-            Proveedor proveedorIDOld = persistentAbono.getProveedorID();
-            Proveedor proveedorIDNew = abono.getProveedorID();
             Usuario usuarioIDOld = persistentAbono.getUsuarioID();
             Usuario usuarioIDNew = abono.getUsuarioID();
             Venta ventaIDOld = persistentAbono.getVentaID();
             Venta ventaIDNew = abono.getVentaID();
-            if (clienteIDNew != null) {
-                clienteIDNew = em.getReference(clienteIDNew.getClass(), clienteIDNew.getClienteID());
-                abono.setClienteID(clienteIDNew);
-            }
             if (compraIDNew != null) {
                 compraIDNew = em.getReference(compraIDNew.getClass(), compraIDNew.getCompraID());
                 abono.setCompraID(compraIDNew);
-            }
-            if (proveedorIDNew != null) {
-                proveedorIDNew = em.getReference(proveedorIDNew.getClass(), proveedorIDNew.getProveedorID());
-                abono.setProveedorID(proveedorIDNew);
             }
             if (usuarioIDNew != null) {
                 usuarioIDNew = em.getReference(usuarioIDNew.getClass(), usuarioIDNew.getUsuarioID());
@@ -125,14 +93,6 @@ public class AbonoJpaController implements Serializable {
                 abono.setVentaID(ventaIDNew);
             }
             abono = em.merge(abono);
-            if (clienteIDOld != null && !clienteIDOld.equals(clienteIDNew)) {
-                clienteIDOld.getAbonoList().remove(abono);
-                clienteIDOld = em.merge(clienteIDOld);
-            }
-            if (clienteIDNew != null && !clienteIDNew.equals(clienteIDOld)) {
-                clienteIDNew.getAbonoList().add(abono);
-                clienteIDNew = em.merge(clienteIDNew);
-            }
             if (compraIDOld != null && !compraIDOld.equals(compraIDNew)) {
                 compraIDOld.getAbonoList().remove(abono);
                 compraIDOld = em.merge(compraIDOld);
@@ -140,14 +100,6 @@ public class AbonoJpaController implements Serializable {
             if (compraIDNew != null && !compraIDNew.equals(compraIDOld)) {
                 compraIDNew.getAbonoList().add(abono);
                 compraIDNew = em.merge(compraIDNew);
-            }
-            if (proveedorIDOld != null && !proveedorIDOld.equals(proveedorIDNew)) {
-                proveedorIDOld.getAbonoList().remove(abono);
-                proveedorIDOld = em.merge(proveedorIDOld);
-            }
-            if (proveedorIDNew != null && !proveedorIDNew.equals(proveedorIDOld)) {
-                proveedorIDNew.getAbonoList().add(abono);
-                proveedorIDNew = em.merge(proveedorIDNew);
             }
             if (usuarioIDOld != null && !usuarioIDOld.equals(usuarioIDNew)) {
                 usuarioIDOld.getAbonoList().remove(abono);
@@ -194,20 +146,10 @@ public class AbonoJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The abono with id " + id + " no longer exists.", enfe);
             }
-            Cliente clienteID = abono.getClienteID();
-            if (clienteID != null) {
-                clienteID.getAbonoList().remove(abono);
-                clienteID = em.merge(clienteID);
-            }
             Compra compraID = abono.getCompraID();
             if (compraID != null) {
                 compraID.getAbonoList().remove(abono);
                 compraID = em.merge(compraID);
-            }
-            Proveedor proveedorID = abono.getProveedorID();
-            if (proveedorID != null) {
-                proveedorID.getAbonoList().remove(abono);
-                proveedorID = em.merge(proveedorID);
             }
             Usuario usuarioID = abono.getUsuarioID();
             if (usuarioID != null) {

@@ -21,6 +21,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Abono.findAll", query = "SELECT a FROM Abono a"),
     @NamedQuery(name = "Abono.findByAbonoID", query = "SELECT a FROM Abono a WHERE a.abonoID = :abonoID"),
     @NamedQuery(name = "Abono.findByVentaID", query = "SELECT a FROM Abono a WHERE a.ventaID = :ventaID"),
+    @NamedQuery(name = "Abono.findBySolicitudID", query = "SELECT a FROM Abono a WHERE a.solicitudID = :solicitudID"),
+    @NamedQuery(name = "Abono.findByCompraID", query = "SELECT a FROM Abono a WHERE a.compraID = :compraID"),
     @NamedQuery(name = "Abono.findByFecha", query = "SELECT a FROM Abono a WHERE a.fecha = :fecha"),
     @NamedQuery(name = "Abono.findByHora", query = "SELECT a FROM Abono a WHERE a.hora = :hora"),
     @NamedQuery(name = "Abono.findByTipo", query = "SELECT a FROM Abono a WHERE a.tipo = :tipo"),
@@ -42,21 +44,18 @@ public class Abono implements Serializable {
     private String tipo;
     @Basic(optional = false)
     private float total;
-    @JoinColumn(name = "ClienteID", referencedColumnName = "ClienteID")
-    @ManyToOne
-    private Cliente clienteID;
     @JoinColumn(name = "CompraID", referencedColumnName = "CompraID")
     @ManyToOne
     private Compra compraID;
-    @JoinColumn(name = "ProveedorID", referencedColumnName = "ProveedorID")
-    @ManyToOne
-    private Proveedor proveedorID;
     @JoinColumn(name = "UsuarioID", referencedColumnName = "UsuarioID")
     @ManyToOne(optional = false)
     private Usuario usuarioID;
     @JoinColumn(name = "VentaID", referencedColumnName = "VentaID")
     @ManyToOne
     private Venta ventaID;
+    @JoinColumn(name = "SolicitudID", referencedColumnName = "SolicitudID")
+    @ManyToOne
+    private Solicitud solicitudID;
 
     public Abono() {
     }
@@ -113,28 +112,12 @@ public class Abono implements Serializable {
         this.total = total;
     }
 
-    public Cliente getClienteID() {
-        return clienteID;
-    }
-
-    public void setClienteID(Cliente clienteID) {
-        this.clienteID = clienteID;
-    }
-
     public Compra getCompraID() {
         return compraID;
     }
 
     public void setCompraID(Compra compraID) {
         this.compraID = compraID;
-    }
-
-    public Proveedor getProveedorID() {
-        return proveedorID;
-    }
-
-    public void setProveedorID(Proveedor proveedorID) {
-        this.proveedorID = proveedorID;
     }
 
     public Usuario getUsuarioID() {
@@ -151,6 +134,14 @@ public class Abono implements Serializable {
 
     public void setVentaID(Venta ventaID) {
         this.ventaID = ventaID;
+    }
+    
+    public Solicitud getSolicitudID() {
+        return solicitudID;
+    }
+
+    public void setSolicitudID(Solicitud solicitudID) {
+        this.solicitudID = solicitudID;
     }
 
     @Override

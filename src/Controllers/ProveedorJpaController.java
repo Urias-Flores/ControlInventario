@@ -29,9 +29,6 @@ public class ProveedorJpaController implements Serializable {
         if (proveedor.getCompraList() == null) {
             proveedor.setCompraList(new ArrayList<>());
         }
-        if (proveedor.getAbonoList() == null) {
-            proveedor.setAbonoList(new ArrayList<>());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -42,12 +39,6 @@ public class ProveedorJpaController implements Serializable {
                 attachedCompraList.add(compraListCompraToAttach);
             }
             proveedor.setCompraList(attachedCompraList);
-            List<Abono> attachedAbonoList = new ArrayList<>();
-            for (Abono abonoListAbonoToAttach : proveedor.getAbonoList()) {
-                abonoListAbonoToAttach = em.getReference(abonoListAbonoToAttach.getClass(), abonoListAbonoToAttach.getAbonoID());
-                attachedAbonoList.add(abonoListAbonoToAttach);
-            }
-            proveedor.setAbonoList(attachedAbonoList);
             em.persist(proveedor);
             for (Compra compraListCompra : proveedor.getCompraList()) {
                 Proveedor oldProveedorIDOfCompraListCompra = compraListCompra.getProveedorID();
@@ -56,15 +47,6 @@ public class ProveedorJpaController implements Serializable {
                 if (oldProveedorIDOfCompraListCompra != null) {
                     oldProveedorIDOfCompraListCompra.getCompraList().remove(compraListCompra);
                     oldProveedorIDOfCompraListCompra = em.merge(oldProveedorIDOfCompraListCompra);
-                }
-            }
-            for (Abono abonoListAbono : proveedor.getAbonoList()) {
-                Proveedor oldProveedorIDOfAbonoListAbono = abonoListAbono.getProveedorID();
-                abonoListAbono.setProveedorID(proveedor);
-                abonoListAbono = em.merge(abonoListAbono);
-                if (oldProveedorIDOfAbonoListAbono != null) {
-                    oldProveedorIDOfAbonoListAbono.getAbonoList().remove(abonoListAbono);
-                    oldProveedorIDOfAbonoListAbono = em.merge(oldProveedorIDOfAbonoListAbono);
                 }
             }
             em.getTransaction().commit();
@@ -83,8 +65,6 @@ public class ProveedorJpaController implements Serializable {
             Proveedor persistentProveedor = em.find(Proveedor.class, proveedor.getProveedorID());
             List<Compra> compraListOld = persistentProveedor.getCompraList();
             List<Compra> compraListNew = proveedor.getCompraList();
-            List<Abono> abonoListOld = persistentProveedor.getAbonoList();
-            List<Abono> abonoListNew = proveedor.getAbonoList();
             List<Compra> attachedCompraListNew = new ArrayList<>();
             if(compraListNew != null){
                 for (Compra compraListNewCompraToAttach : compraListNew) {
@@ -94,15 +74,6 @@ public class ProveedorJpaController implements Serializable {
             }
             compraListNew = attachedCompraListNew;
             proveedor.setCompraList(compraListNew);
-            List<Abono> attachedAbonoListNew = new ArrayList<>();
-            if(abonoListNew != null){
-                for (Abono abonoListNewAbonoToAttach : abonoListNew) {
-                    abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
-                    attachedAbonoListNew.add(abonoListNewAbonoToAttach);
-                }
-            }
-            abonoListNew = attachedAbonoListNew;
-            proveedor.setAbonoList(abonoListNew);
             proveedor = em.merge(proveedor);
             if(compraListOld != null){
                 for (Compra compraListOldCompra : compraListOld) {
@@ -121,27 +92,6 @@ public class ProveedorJpaController implements Serializable {
                         if (oldProveedorIDOfCompraListNewCompra != null && !oldProveedorIDOfCompraListNewCompra.equals(proveedor)) {
                             oldProveedorIDOfCompraListNewCompra.getCompraList().remove(compraListNewCompra);
                             oldProveedorIDOfCompraListNewCompra = em.merge(oldProveedorIDOfCompraListNewCompra);
-                        }
-                    }
-                }
-            }
-            if(abonoListOld != null){
-                for (Abono abonoListOldAbono : abonoListOld) {
-                    if (!abonoListNew.contains(abonoListOldAbono)) {
-                        abonoListOldAbono.setProveedorID(null);
-                        abonoListOldAbono = em.merge(abonoListOldAbono);
-                    }
-                }
-            }
-            if(abonoListNew != null){
-                for (Abono abonoListNewAbono : abonoListNew) {
-                    if (!abonoListOld.contains(abonoListNewAbono)) {
-                        Proveedor oldProveedorIDOfAbonoListNewAbono = abonoListNewAbono.getProveedorID();
-                        abonoListNewAbono.setProveedorID(proveedor);
-                        abonoListNewAbono = em.merge(abonoListNewAbono);
-                        if (oldProveedorIDOfAbonoListNewAbono != null && !oldProveedorIDOfAbonoListNewAbono.equals(proveedor)) {
-                            oldProveedorIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
-                            oldProveedorIDOfAbonoListNewAbono = em.merge(oldProveedorIDOfAbonoListNewAbono);
                         }
                     }
                 }
@@ -179,11 +129,6 @@ public class ProveedorJpaController implements Serializable {
             for (Compra compraListCompra : compraList) {
                 compraListCompra.setProveedorID(null);
                 compraListCompra = em.merge(compraListCompra);
-            }
-            List<Abono> abonoList = proveedor.getAbonoList();
-            for (Abono abonoListAbono : abonoList) {
-                abonoListAbono.setProveedorID(null);
-                abonoListAbono = em.merge(abonoListAbono);
             }
             em.remove(proveedor);
             em.getTransaction().commit();

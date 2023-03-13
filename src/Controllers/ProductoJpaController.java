@@ -206,70 +206,17 @@ public class ProductoJpaController implements Serializable {
             Categoria categoriaIDNew = producto.getCategoriaID();
             Marca marcaIDOld = persistentProducto.getMarcaID();
             Marca marcaIDNew = producto.getMarcaID();
-            List<Inventariodetalleacciones> inventariodetalleaccionesListOld = persistentProducto.getInventariodetalleaccionesList();
-            List<Inventariodetalleacciones> inventariodetalleaccionesListNew = producto.getInventariodetalleaccionesList();
-            List<Compradetalle> compradetalleListOld = persistentProducto.getCompradetalleList();
-            List<Compradetalle> compradetalleListNew = producto.getCompradetalleList();
-            List<Cotizaciondetalle> cotizaciondetalleListOld = persistentProducto.getCotizaciondetalleList();
-            List<Cotizaciondetalle> cotizaciondetalleListNew = producto.getCotizaciondetalleList();
-            List<Solicituddetalle> solicituddetalleListOld = persistentProducto.getSolicituddetalleList();
-            List<Solicituddetalle> solicituddetalleListNew = producto.getSolicituddetalleList();
-            List<Ventadetalle> ventadetalleListOld = persistentProducto.getVentadetalleList();
-            List<Ventadetalle> ventadetalleListNew = producto.getVentadetalleList();
-            List<Inventario> inventarioListOld = persistentProducto.getInventarioList();
-            List<Inventario> inventarioListNew = producto.getInventarioList();
+            
             List<String> illegalOrphanMessages = null;
-            for (Inventariodetalleacciones inventariodetalleaccionesListOldInventariodetalleacciones : inventariodetalleaccionesListOld) {
-                if (!inventariodetalleaccionesListNew.contains(inventariodetalleaccionesListOldInventariodetalleacciones)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Inventariodetalleacciones " + inventariodetalleaccionesListOldInventariodetalleacciones + " since its productoID field is not nullable.");
-                }
+
+            if(persistentProducto == null){
+                illegalOrphanMessages.add("Producto no encontrado");
             }
-            for (Compradetalle compradetalleListOldCompradetalle : compradetalleListOld) {
-                if (!compradetalleListNew.contains(compradetalleListOldCompradetalle)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Compradetalle " + compradetalleListOldCompradetalle + " since its productoID field is not nullable.");
-                }
-            }
-            for (Cotizaciondetalle cotizaciondetalleListOldCotizaciondetalle : cotizaciondetalleListOld) {
-                if (!cotizaciondetalleListNew.contains(cotizaciondetalleListOldCotizaciondetalle)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Cotizaciondetalle " + cotizaciondetalleListOldCotizaciondetalle + " since its productoID field is not nullable.");
-                }
-            }
-            for (Solicituddetalle solicituddetalleListOldSolicituddetalle : solicituddetalleListOld) {
-                if (!solicituddetalleListNew.contains(solicituddetalleListOldSolicituddetalle)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Solicituddetalle " + solicituddetalleListOldSolicituddetalle + " since its productoID field is not nullable.");
-                }
-            }
-            for (Ventadetalle ventadetalleListOldVentadetalle : ventadetalleListOld) {
-                if (!ventadetalleListNew.contains(ventadetalleListOldVentadetalle)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Ventadetalle " + ventadetalleListOldVentadetalle + " since its productoID field is not nullable.");
-                }
-            }
-            for (Inventario inventarioListOldInventario : inventarioListOld) {
-                if (!inventarioListNew.contains(inventarioListOldInventario)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Inventario " + inventarioListOldInventario + " since its productoID field is not nullable.");
-                }
-            }
+            
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
+            
             if (categoriaIDNew != null) {
                 categoriaIDNew = em.getReference(categoriaIDNew.getClass(), categoriaIDNew.getCategoriaID());
                 producto.setCategoriaID(categoriaIDNew);
@@ -278,48 +225,7 @@ public class ProductoJpaController implements Serializable {
                 marcaIDNew = em.getReference(marcaIDNew.getClass(), marcaIDNew.getMarcaID());
                 producto.setMarcaID(marcaIDNew);
             }
-            List<Inventariodetalleacciones> attachedInventariodetalleaccionesListNew = new ArrayList<Inventariodetalleacciones>();
-            for (Inventariodetalleacciones inventariodetalleaccionesListNewInventariodetalleaccionesToAttach : inventariodetalleaccionesListNew) {
-                inventariodetalleaccionesListNewInventariodetalleaccionesToAttach = em.getReference(inventariodetalleaccionesListNewInventariodetalleaccionesToAttach.getClass(), inventariodetalleaccionesListNewInventariodetalleaccionesToAttach.getInventarioDetalleAccionesID());
-                attachedInventariodetalleaccionesListNew.add(inventariodetalleaccionesListNewInventariodetalleaccionesToAttach);
-            }
-            inventariodetalleaccionesListNew = attachedInventariodetalleaccionesListNew;
-            producto.setInventariodetalleaccionesList(inventariodetalleaccionesListNew);
-            List<Compradetalle> attachedCompradetalleListNew = new ArrayList<Compradetalle>();
-            for (Compradetalle compradetalleListNewCompradetalleToAttach : compradetalleListNew) {
-                compradetalleListNewCompradetalleToAttach = em.getReference(compradetalleListNewCompradetalleToAttach.getClass(), compradetalleListNewCompradetalleToAttach.getCompraDetalleID());
-                attachedCompradetalleListNew.add(compradetalleListNewCompradetalleToAttach);
-            }
-            compradetalleListNew = attachedCompradetalleListNew;
-            producto.setCompradetalleList(compradetalleListNew);
-            List<Cotizaciondetalle> attachedCotizaciondetalleListNew = new ArrayList<Cotizaciondetalle>();
-            for (Cotizaciondetalle cotizaciondetalleListNewCotizaciondetalleToAttach : cotizaciondetalleListNew) {
-                cotizaciondetalleListNewCotizaciondetalleToAttach = em.getReference(cotizaciondetalleListNewCotizaciondetalleToAttach.getClass(), cotizaciondetalleListNewCotizaciondetalleToAttach.getCotizacionDetalleID());
-                attachedCotizaciondetalleListNew.add(cotizaciondetalleListNewCotizaciondetalleToAttach);
-            }
-            cotizaciondetalleListNew = attachedCotizaciondetalleListNew;
-            producto.setCotizaciondetalleList(cotizaciondetalleListNew);
-            List<Solicituddetalle> attachedSolicituddetalleListNew = new ArrayList<Solicituddetalle>();
-            for (Solicituddetalle solicituddetalleListNewSolicituddetalleToAttach : solicituddetalleListNew) {
-                solicituddetalleListNewSolicituddetalleToAttach = em.getReference(solicituddetalleListNewSolicituddetalleToAttach.getClass(), solicituddetalleListNewSolicituddetalleToAttach.getSolicitudDetalleID());
-                attachedSolicituddetalleListNew.add(solicituddetalleListNewSolicituddetalleToAttach);
-            }
-            solicituddetalleListNew = attachedSolicituddetalleListNew;
-            producto.setSolicituddetalleList(solicituddetalleListNew);
-            List<Ventadetalle> attachedVentadetalleListNew = new ArrayList<Ventadetalle>();
-            for (Ventadetalle ventadetalleListNewVentadetalleToAttach : ventadetalleListNew) {
-                ventadetalleListNewVentadetalleToAttach = em.getReference(ventadetalleListNewVentadetalleToAttach.getClass(), ventadetalleListNewVentadetalleToAttach.getVentaDetalleID());
-                attachedVentadetalleListNew.add(ventadetalleListNewVentadetalleToAttach);
-            }
-            ventadetalleListNew = attachedVentadetalleListNew;
-            producto.setVentadetalleList(ventadetalleListNew);
-            List<Inventario> attachedInventarioListNew = new ArrayList<Inventario>();
-            for (Inventario inventarioListNewInventarioToAttach : inventarioListNew) {
-                inventarioListNewInventarioToAttach = em.getReference(inventarioListNewInventarioToAttach.getClass(), inventarioListNewInventarioToAttach.getInventarioID());
-                attachedInventarioListNew.add(inventarioListNewInventarioToAttach);
-            }
-            inventarioListNew = attachedInventarioListNew;
-            producto.setInventarioList(inventarioListNew);
+            
             producto = em.merge(producto);
             if (categoriaIDOld != null && !categoriaIDOld.equals(categoriaIDNew)) {
                 categoriaIDOld.getProductoList().remove(producto);
@@ -337,74 +243,8 @@ public class ProductoJpaController implements Serializable {
                 marcaIDNew.getProductoList().add(producto);
                 marcaIDNew = em.merge(marcaIDNew);
             }
-            for (Inventariodetalleacciones inventariodetalleaccionesListNewInventariodetalleacciones : inventariodetalleaccionesListNew) {
-                if (!inventariodetalleaccionesListOld.contains(inventariodetalleaccionesListNewInventariodetalleacciones)) {
-                    Producto oldProductoIDOfInventariodetalleaccionesListNewInventariodetalleacciones = inventariodetalleaccionesListNewInventariodetalleacciones.getProductoID();
-                    inventariodetalleaccionesListNewInventariodetalleacciones.setProductoID(producto);
-                    inventariodetalleaccionesListNewInventariodetalleacciones = em.merge(inventariodetalleaccionesListNewInventariodetalleacciones);
-                    if (oldProductoIDOfInventariodetalleaccionesListNewInventariodetalleacciones != null && !oldProductoIDOfInventariodetalleaccionesListNewInventariodetalleacciones.equals(producto)) {
-                        oldProductoIDOfInventariodetalleaccionesListNewInventariodetalleacciones.getInventariodetalleaccionesList().remove(inventariodetalleaccionesListNewInventariodetalleacciones);
-                        oldProductoIDOfInventariodetalleaccionesListNewInventariodetalleacciones = em.merge(oldProductoIDOfInventariodetalleaccionesListNewInventariodetalleacciones);
-                    }
-                }
-            }
-            for (Compradetalle compradetalleListNewCompradetalle : compradetalleListNew) {
-                if (!compradetalleListOld.contains(compradetalleListNewCompradetalle)) {
-                    Producto oldProductoIDOfCompradetalleListNewCompradetalle = compradetalleListNewCompradetalle.getProductoID();
-                    compradetalleListNewCompradetalle.setProductoID(producto);
-                    compradetalleListNewCompradetalle = em.merge(compradetalleListNewCompradetalle);
-                    if (oldProductoIDOfCompradetalleListNewCompradetalle != null && !oldProductoIDOfCompradetalleListNewCompradetalle.equals(producto)) {
-                        oldProductoIDOfCompradetalleListNewCompradetalle.getCompradetalleList().remove(compradetalleListNewCompradetalle);
-                        oldProductoIDOfCompradetalleListNewCompradetalle = em.merge(oldProductoIDOfCompradetalleListNewCompradetalle);
-                    }
-                }
-            }
-            for (Cotizaciondetalle cotizaciondetalleListNewCotizaciondetalle : cotizaciondetalleListNew) {
-                if (!cotizaciondetalleListOld.contains(cotizaciondetalleListNewCotizaciondetalle)) {
-                    Producto oldProductoIDOfCotizaciondetalleListNewCotizaciondetalle = cotizaciondetalleListNewCotizaciondetalle.getProductoID();
-                    cotizaciondetalleListNewCotizaciondetalle.setProductoID(producto);
-                    cotizaciondetalleListNewCotizaciondetalle = em.merge(cotizaciondetalleListNewCotizaciondetalle);
-                    if (oldProductoIDOfCotizaciondetalleListNewCotizaciondetalle != null && !oldProductoIDOfCotizaciondetalleListNewCotizaciondetalle.equals(producto)) {
-                        oldProductoIDOfCotizaciondetalleListNewCotizaciondetalle.getCotizaciondetalleList().remove(cotizaciondetalleListNewCotizaciondetalle);
-                        oldProductoIDOfCotizaciondetalleListNewCotizaciondetalle = em.merge(oldProductoIDOfCotizaciondetalleListNewCotizaciondetalle);
-                    }
-                }
-            }
-            for (Solicituddetalle solicituddetalleListNewSolicituddetalle : solicituddetalleListNew) {
-                if (!solicituddetalleListOld.contains(solicituddetalleListNewSolicituddetalle)) {
-                    Producto oldProductoIDOfSolicituddetalleListNewSolicituddetalle = solicituddetalleListNewSolicituddetalle.getProductoID();
-                    solicituddetalleListNewSolicituddetalle.setProductoID(producto);
-                    solicituddetalleListNewSolicituddetalle = em.merge(solicituddetalleListNewSolicituddetalle);
-                    if (oldProductoIDOfSolicituddetalleListNewSolicituddetalle != null && !oldProductoIDOfSolicituddetalleListNewSolicituddetalle.equals(producto)) {
-                        oldProductoIDOfSolicituddetalleListNewSolicituddetalle.getSolicituddetalleList().remove(solicituddetalleListNewSolicituddetalle);
-                        oldProductoIDOfSolicituddetalleListNewSolicituddetalle = em.merge(oldProductoIDOfSolicituddetalleListNewSolicituddetalle);
-                    }
-                }
-            }
-            for (Ventadetalle ventadetalleListNewVentadetalle : ventadetalleListNew) {
-                if (!ventadetalleListOld.contains(ventadetalleListNewVentadetalle)) {
-                    Producto oldProductoIDOfVentadetalleListNewVentadetalle = ventadetalleListNewVentadetalle.getProductoID();
-                    ventadetalleListNewVentadetalle.setProductoID(producto);
-                    ventadetalleListNewVentadetalle = em.merge(ventadetalleListNewVentadetalle);
-                    if (oldProductoIDOfVentadetalleListNewVentadetalle != null && !oldProductoIDOfVentadetalleListNewVentadetalle.equals(producto)) {
-                        oldProductoIDOfVentadetalleListNewVentadetalle.getVentadetalleList().remove(ventadetalleListNewVentadetalle);
-                        oldProductoIDOfVentadetalleListNewVentadetalle = em.merge(oldProductoIDOfVentadetalleListNewVentadetalle);
-                    }
-                }
-            }
-            for (Inventario inventarioListNewInventario : inventarioListNew) {
-                if (!inventarioListOld.contains(inventarioListNewInventario)) {
-                    Producto oldProductoIDOfInventarioListNewInventario = inventarioListNewInventario.getProductoID();
-                    inventarioListNewInventario.setProductoID(producto);
-                    inventarioListNewInventario = em.merge(inventarioListNewInventario);
-                    if (oldProductoIDOfInventarioListNewInventario != null && !oldProductoIDOfInventarioListNewInventario.equals(producto)) {
-                        oldProductoIDOfInventarioListNewInventario.getInventarioList().remove(inventarioListNewInventario);
-                        oldProductoIDOfInventarioListNewInventario = em.merge(oldProductoIDOfInventarioListNewInventario);
-                    }
-                }
-            }
             em.getTransaction().commit();
-        } catch (Exception ex) {
+        } catch (IllegalOrphanException ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = producto.getProductoID();

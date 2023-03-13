@@ -68,10 +68,15 @@ public class Reports {
         }
     }
     
-    public void GenerateTicketAbono(int AbonoID)
+    public void GenerateTicketAbono(int AbonoID, int type)
     {
         try {
-            File archivo = new File("reports/Abono.jasper");
+            Map<Integer, String> fileName = new HashMap<>();
+            fileName.put(1, "reports/Abono.jasper");
+            fileName.put(1, "reports/AbonoSolicitud.jasper");
+            fileName.put(1, "reports/AbonoCompra.jasper");
+            
+            File archivo = new File(fileName.get(type));
             if(archivo.exists())
             {
                 JasperReport jr = (JasperReport) JRLoader.loadObject(archivo);
@@ -134,6 +139,28 @@ public class Reports {
         }
     }
     
+    public void GenerateTicketArqueo(int ArqueoID)
+    {
+        try {
+            File archivo = new File("reports/ArqueoGeneral.jasper");
+            if(archivo.exists())
+            {
+                JasperReport jr = (JasperReport) JRLoader.loadObject(archivo);
+                Map<String, Object> parameters = getCompanyParameters();
+                parameters.put("ArqueoID", ArqueoID);
+                parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
+                
+                sendPrintTicket(jr, parameters);
+            }else
+            {
+                Dialogs.ShowMessageDialog("El archivo base de factura no fue encontrado", Dialogs.ERROR_ICON);
+            }
+        } catch (JRException ex) {
+            System.err.println("Error: "+ex.getMessage());
+            Dialogs.ShowMessageDialog("Ups... Ha ocurrido un error al enviar a imprimir", Dialogs.ERROR_ICON);
+        }
+    }
+    
     public void GenerateTicketCloseDay(float SaldoInicial){
         try {
             File archivo = new File("reports/Arqueo.jasper");
@@ -141,9 +168,10 @@ public class Reports {
             if(archivo.exists())
             {
                 JasperReport jr = (JasperReport) JRLoader.loadObject(archivo);
+                
                 Map<String, Object> parameters = getCompanyParameters();
-                parameters.put("Usuario", Utilities.getUsuarioActual().getNombre());
                 parameters.put("SaldoInicial", SaldoInicial);
+                parameters.put("Usuario", Utilities.getUsuarioActual().getNombre());
                 parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
                 
                 JasperPrint print = JasperFillManager.fillReport(jr, parameters, new LocalConection().getconec());

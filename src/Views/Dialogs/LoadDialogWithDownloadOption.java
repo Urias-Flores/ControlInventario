@@ -10,7 +10,7 @@ public class LoadDialogWithDownloadOption extends javax.swing.JDialog {
     public LoadDialogWithDownloadOption(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        vc = new LoadDialogWithDownloadOptionViewController(this, lbIcons, lbTexto, pbCarga, lbVersion);
+        vc = new LoadDialogWithDownloadOptionViewController(this, lbIcons, lbTexto, pbCarga, lbPorcentaje, lbVersion);
     }
     
     @SuppressWarnings("unchecked")
@@ -25,6 +25,7 @@ public class LoadDialogWithDownloadOption extends javax.swing.JDialog {
         pbCarga = new javax.swing.JProgressBar();
         lbTexto = new javax.swing.JLabel();
         lbIcons = new javax.swing.JLabel();
+        lbPorcentaje = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -73,15 +74,20 @@ public class LoadDialogWithDownloadOption extends javax.swing.JDialog {
         );
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(376, 0, 550, 401));
-        jPanel1.add(pbCarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 359, 339, 19));
+        jPanel1.add(pbCarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 339, 19));
 
         lbTexto.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         lbTexto.setText(" Estableciento conexion con el servidor...");
-        jPanel1.add(lbTexto, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 314, 339, 33));
+        jPanel1.add(lbTexto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 339, 33));
 
         lbIcons.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbIcons.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Precaucion.png"))); // NOI18N
-        jPanel1.add(lbIcons, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 19, 339, 289));
+        jPanel1.add(lbIcons, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 19, 339, 250));
+
+        lbPorcentaje.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        lbPorcentaje.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbPorcentaje.setText("0%");
+        jPanel1.add(lbPorcentaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 371, 339, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -142,6 +148,7 @@ public class LoadDialogWithDownloadOption extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lbIcons;
+    private javax.swing.JLabel lbPorcentaje;
     private javax.swing.JLabel lbTexto;
     private javax.swing.JLabel lbVersion;
     private javax.swing.JProgressBar pbCarga;

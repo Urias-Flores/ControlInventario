@@ -80,8 +80,8 @@ public class MainViewController {
                     
                     Principal.addTab("Facturar", FacturarIcon, facturar);
                     Principal.addTab("Facturas del dia", FacturaDiaIcon, facturasDia);
-                    //Principal.addTab("Gastos", GastoIcon, gastos);
-                    //Principal.addTab("Arqueos", ArqueoIcon, arqueos);
+                    Principal.addTab("Gastos", GastoIcon, gastos);
+                    Principal.addTab("Arqueos", ArqueoIcon, arqueos);
                     break;
                 case 2:
                     

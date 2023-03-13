@@ -14,10 +14,6 @@ import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author Dell
- */
 @Entity
 @XmlRootElement
 @NamedQueries({
@@ -48,8 +44,6 @@ public class Cliente implements Serializable {
     private float saldo;
     @OneToMany(mappedBy = "clienteID")
     private List<Venta> ventaList;
-    @OneToMany(mappedBy = "clienteID")
-    private List<Abono> abonoList;
     @OneToMany(mappedBy = "clienteID")
     private List<Cotizacion> cotizacionList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteID")
@@ -139,15 +133,6 @@ public class Cliente implements Serializable {
 
     public void setVentaList(List<Venta> ventaList) {
         this.ventaList = ventaList;
-    }
-
-    @XmlTransient
-    public List<Abono> getAbonoList() {
-        return abonoList;
-    }
-
-    public void setAbonoList(List<Abono> abonoList) {
-        this.abonoList = abonoList;
     }
 
     @XmlTransient

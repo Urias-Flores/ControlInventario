@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Models;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
@@ -16,18 +13,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author Dell
- */
 @Entity
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Gasto.findAll", query = "SELECT g FROM Gasto g"),
     @NamedQuery(name = "Gasto.findByGastoID", query = "SELECT g FROM Gasto g WHERE g.gastoID = :gastoID"),
+    @NamedQuery(name = "Gasto.findByFecha", query = "SELECT g FROM Gasto g WHERE g.fecha = :fecha"),
+    @NamedQuery(name = "Gasto.findByHora", query = "SELECT g FROM Gasto g WHERE g.hora = :hora"),
     @NamedQuery(name = "Gasto.findByDescripcion", query = "SELECT g FROM Gasto g WHERE g.descripcion = :descripcion"),
     @NamedQuery(name = "Gasto.findByTotal", query = "SELECT g FROM Gasto g WHERE g.total = :total")})
 public class Gasto implements Serializable {
@@ -37,6 +34,12 @@ public class Gasto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer gastoID;
+    @Basic(optional = false)
+    @Temporal(TemporalType.DATE)
+    private Date fecha;
+    @Basic(optional = false)
+    @Temporal(TemporalType.TIME)
+    private Date hora;
     @Basic(optional = false)
     private String descripcion;
     @Basic(optional = false)
@@ -54,8 +57,10 @@ public class Gasto implements Serializable {
         this.gastoID = gastoID;
     }
 
-    public Gasto(Integer gastoID, String descripcion, float total) {
+    public Gasto(Integer gastoID, Date fecha, Date hora, String descripcion, float total) {
         this.gastoID = gastoID;
+        this.fecha = fecha;
+        this.hora = hora;
         this.descripcion = descripcion;
         this.total = total;
     }
@@ -66,6 +71,22 @@ public class Gasto implements Serializable {
 
     public void setGastoID(Integer gastoID) {
         this.gastoID = gastoID;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public Date getHora() {
+        return hora;
+    }
+
+    public void setHora(Date hora) {
+        this.hora = hora;
     }
 
     public String getDescripcion() {
@@ -123,7 +144,7 @@ public class Gasto implements Serializable {
 
     @Override
     public String toString() {
-        return "Models.Gasto[ gastoID=" + gastoID + " ]";
+        return "ModelTest.Gasto[ gastoID=" + gastoID + " ]";
     }
     
 }

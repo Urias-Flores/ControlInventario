@@ -378,10 +378,10 @@ public class FacturaViewController {
                     //Agregando informacion de arqueo
                     float total = Float.parseFloat(Total.getText().replace(",", ""));
                     Map<Integer, String> formaPago = new HashMap<>();
-                    formaPago.put(0, "CN");
-                    formaPago.put(1, "CR");
-                    formaPago.put(2, "TD");
-                    float efectivo = Dialogs.ShowArqueoDialog(VentaID, formaPago.get(FormaPago.getSelectedIndex()), "O",total);
+                    formaPago.put(0, "CN"); //Contado
+                    formaPago.put(1, "CR"); //Credito
+                    formaPago.put(2, "TD"); //Tarjeta o deposito
+                    float efectivo = Dialogs.ShowArqueoDialog(VentaID, formaPago.get(FormaPago.getSelectedIndex()), "V",total);
 
                     setLoad(false);
                     Dialogs.ShowMessageDialog("La factura ha sido ingresada exitosamente", Dialogs.COMPLETE_ICON);
@@ -423,10 +423,10 @@ public class FacturaViewController {
                     //Agregando informacion de arqueo
                     float total = Float.parseFloat(Total.getText().replace(",", ""));
                     Map<Integer, String> formaPago = new HashMap<>();
-                    formaPago.put(0, "CN");
-                    formaPago.put(1, "CR");
-                    formaPago.put(2, "TD");
-                    float efectivo = Dialogs.ShowArqueoDialog(SolicitudID, formaPago.get(FormaPago.getSelectedIndex()), "N", total);
+                    formaPago.put(0, "CN"); //Contado
+                    formaPago.put(1, "CR"); //Credito
+                    formaPago.put(2, "TD"); //Tarjeta o deposito
+                    float efectivo = Dialogs.ShowArqueoDialog(SolicitudID, formaPago.get(FormaPago.getSelectedIndex()), "S", total);
 
                     setLoad(false);
                     Dialogs.ShowMessageDialog("La factura ha sido ingresada exitosamente", Dialogs.COMPLETE_ICON);

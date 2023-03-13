@@ -25,29 +25,6 @@
     <class>Models.Gasto</class>
     <class>Models.Arqueodetalle</class>
     <class>Models.Solicitud</class>
-    <class>Controllers.TestModels.Cotizaciondetalle</class>
-    <class>Controllers.TestModels.Solicituddetalle</class>
-    <class>Controllers.TestModels.Gasto</class>
-    <class>Controllers.TestModels.Cotizacion</class>
-    <class>Controllers.TestModels.Arqueo</class>
-    <class>Controllers.TestModels.Arqueodetalle</class>
-    <class>Controllers.TestModels.Cliente</class>
-    <class>Controllers.TestModels.Venta</class>
-    <class>Controllers.TestModels.Solicitud</class>
-    <class>Controllers.TestModels.Inventariodetalleacciones</class>
-    <class>Controllers.TestModels.Proveedor</class>
-    <class>Controllers.TestModels.Abono</class>
-    <class>Controllers.TestModels.Ventadetalle</class>
-    <class>Controllers.TestModels.Producto</class>
-    <class>Controllers.TestModels.Marca</class>
-    <class>Controllers.TestModels.Notificacion</class>
-    <class>Controllers.TestModels.Configuracion</class>
-    <class>Controllers.TestModels.Inventario</class>
-    <class>Controllers.TestModels.Empleado</class>
-    <class>Controllers.TestModels.Compra</class>
-    <class>Controllers.TestModels.Compradetalle</class>
-    <class>Controllers.TestModels.Categoria</class>
-    <class>Controllers.TestModels.Usuario</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/inventario?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

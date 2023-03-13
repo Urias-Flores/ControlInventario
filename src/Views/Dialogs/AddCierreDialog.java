@@ -12,12 +12,19 @@ public class AddCierreDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        btnClose.addMouseListener(Utilities.getMLGeneralButton());
+        btnClose.addMouseListener(Utilities.getMLButtonCloseBlue());
         btnPagar.addMouseListener(Utilities.getMLGeneralButton());
         
-        vc = new AddCierreDialogViewController(this, txtSaldoInicial, tbArqueos, txtFacturado, txtEfectivo, txtCambio, txtSaldoFinal, txtSaldoReal);
+        vc = new AddCierreDialogViewController(this, txtSaldoInicial, tbArqueos, txtFacturado, 
+                txtEfectivo, txtCambio, txtSaldoFinal, txtSaldoReal, lbCargando);
     }
 
+    public void setExistArqueo(int ArqueoID){
+        btnPagar.setVisible(false);
+        lbTitulo.setText("Información de arqueo");
+        vc.loadExisting(ArqueoID);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

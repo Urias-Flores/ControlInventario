@@ -18,16 +18,16 @@
 	<parameter name="Usuario" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
-TransaccionID as NoFactura,
+TransaccionID as NoTransaccion,
 Tipo,
 Total,
 Efectivo,
 Cambio
 FROM ArqueoDetalle]]>
 	</queryString>
-	<field name="NoFactura" class="java.lang.Object">
-		<property name="com.jaspersoft.studio.field.name" value="NoFactura"/>
-		<property name="com.jaspersoft.studio.field.label" value="NoFactura"/>
+	<field name="NoTransaccion" class="java.lang.Object">
+		<property name="com.jaspersoft.studio.field.name" value="NoTransaccion"/>
+		<property name="com.jaspersoft.studio.field.label" value="NoTransaccion"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ArqueoDetalle"/>
 	</field>
 	<field name="Tipo" class="java.lang.Object">
@@ -253,19 +253,9 @@ FROM ArqueoDetalle]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="10" splitType="Prevent">
+		<band height="12" splitType="Prevent">
 			<property name="com.jaspersoft.studio.layout"/>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<textField pattern="00000000">
-				<reportElement x="-6" y="0" width="47" height="10" uuid="51b2d640-4579-4018-9327-1a6d8b1d1cc8">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f12483ad-702c-408a-8843-64f4e578044d"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{NoFactura}]]></textFieldExpression>
-			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="70" y="0" width="40" height="10" uuid="be7552e5-e112-41b8-8711-40c01152f6d1">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="72f7f62b-bf69-49c3-867d-c59e03bc8321"/>
@@ -302,7 +292,16 @@ FROM ArqueoDetalle]]>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Tipo}.equals( "O" ) ? "Oficial" : "No oficial"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Tipo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#00000000">
+				<reportElement x="-6" y="0" width="47" height="10" uuid="515323f5-f265-4331-93df-d6b0a3039f2b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bb31a764-513b-4aed-b54b-d6a939d3e49f"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NoTransaccion}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

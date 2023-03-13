@@ -32,13 +32,15 @@ public class LoadDialogWithDownloadOptionViewController {
     private JLabel Icons;
     private JLabel Texto;
     private JProgressBar Barra;
+    private JLabel Porcentaje;
     private JLabel Version;
     
-    public LoadDialogWithDownloadOptionViewController(LoadDialogWithDownloadOption Instance, JLabel Icons, JLabel Texto, JProgressBar Barra, JLabel Version) {
+    public LoadDialogWithDownloadOptionViewController(LoadDialogWithDownloadOption Instance, JLabel Icons, JLabel Texto, JProgressBar Barra, JLabel Porcentaje,JLabel Version) {
         this.Instance = Instance;
         this.Icons = Icons;
         this.Texto = Texto;
         this.Barra = Barra;
+        this.Porcentaje = Porcentaje;
         this.Version = Version;
         
         loadVersion();
@@ -373,6 +375,7 @@ public class LoadDialogWithDownloadOptionViewController {
             int porcent = (int) ((100 * file.length()) / tamano);
             try {
                 Barra.setValue(porcent);
+                Porcentaje.setText(String.valueOf(porcent)+"%");
                 Thread.sleep(15); //Este ira actualizando el porcentaje cada 15 milisegundos
             } catch (InterruptedException ex) { }
         }
@@ -381,6 +384,7 @@ public class LoadDialogWithDownloadOptionViewController {
     private void loadBar(int init, int end) throws InterruptedException{
         for(int i = init; i <= end; i++){
             Barra.setValue(i);
+            Porcentaje.setText(String.valueOf(i)+"%");
             Thread.sleep(15);
         }
     }

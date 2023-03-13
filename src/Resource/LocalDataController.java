@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -157,14 +159,47 @@ public class LocalDataController {
         }
     }
     
+    public void editArqueoDetalle(int TransaccionID, float TotalFactura, float TotalEfectivo, float TotalCambio, String Tipo){
+        try {
+            PreparedStatement ps = localConection.getconec()
+                    .prepareStatement("UPDATE ArqueoDetalle SET Total = ?, Efectivo = ?, Cambio = ? WHERE TransaccionID = ? AND Tipo = ?");
+            ps.setFloat(1, TotalFactura);
+            ps.setFloat(2, TotalEfectivo);
+            ps.setFloat(3, TotalCambio);
+            ps.setInt(4, TransaccionID);
+            ps.setString(5, Tipo);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            System.err.print("Error code: "+ex.getErrorCode()+" Error: "+ex.getMessage());
+        }
+    }
+    
+    public void deleteArqueoDetalle(int TransaccionID, String Tipo){
+        try {
+            PreparedStatement ps = localConection.getconec()
+                    .prepareStatement("DELETE FROM ArqueoDetalle WHERE TransaccionID = ? AND Tipo = ?");
+            ps.setInt(1, TransaccionID);
+            ps.setString(2, Tipo);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            System.err.print("Error code: "+ex.getErrorCode()+" Error: "+ex.getMessage());
+        }
+    }
+    
     public ArrayList<Object[]> getArqueos(){
         ArrayList<Object[]> list = new ArrayList<>();
         try {
+            Map<String, String> type = new HashMap<>();
+            type.put("V", "Venta");
+            type.put("S", "Solicitud");
+            type.put("G", "Gasto");
             ResultSet rs = localConection.getStatement().executeQuery("SELECT * FROM ArqueoDetalle");
             while(rs.next()){
                 Object[] row = {
                     rs.getInt("TransaccionID"),
-                    rs.getString("Tipo").equals("O") ? "Oficial" : "No Oficial",
+                    type.get(rs.getString("Tipo")),
                     rs.getFloat("Total"),
                     rs.getFloat("Efectivo"),
                     rs.getFloat("Cambio")

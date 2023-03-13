@@ -11,6 +11,7 @@ import Models.Abono;
 import Models.Cliente;
 import Models.Compra;
 import Models.Proveedor;
+import Models.Solicitud;
 import Models.Venta;
 import Resource.Conection;
 import Resource.Utilities;
@@ -63,11 +64,12 @@ public class CuentasPendientesDialogViewController {
     }
     
     private void setModelTable(){
-        String[] columns = {"No. Factura", "Fecha", "Hora", "Total", "Abonado"};
+        String[] columns = {"No.", "Tipo","Fecha", "Hora", "Total", "Abonado"};
         model.setColumnIdentifiers(columns);
         
         Cuentas.setModel(model);  
-        Cuentas.getColumn("No. Factura").setPreferredWidth(55);
+        Cuentas.getColumn("No.").setPreferredWidth(55);
+        Cuentas.getColumn("Tipo").setPreferredWidth(55);
         Cuentas.getColumn("Fecha").setPreferredWidth(80);
         Cuentas.getColumn("Hora").setPreferredWidth(80);
         Cuentas.getColumn("Total").setPreferredWidth(110);
@@ -90,9 +92,13 @@ public class CuentasPendientesDialogViewController {
 
                 List<Object[]> facturas = sp.getResultList();
                 facturas.forEach(factura -> {
-                    if(factura[3] != null){
-                        factura[3] = getNumberFormat(Float.parseFloat(factura[3].toString()));
-                        factura[4] = getNumberFormat(getTotalBillCredits(new Venta(Integer.valueOf(factura[0].toString()))));
+                    if(factura[4] != null){
+                        factura[4] = getNumberFormat(Float.parseFloat(factura[4].toString()));
+                        if(factura[1].toString().equals("Venta")){
+                            factura[5] = getNumberFormat(getTotalBillCredits(new Venta(Integer.valueOf(factura[0].toString()))));
+                        } else {
+                            factura[5] = getNumberFormat(getTotalRequestCredits(new Solicitud(Integer.valueOf(factura[0].toString()))));
+                        }
                     }
                     model.addRow(factura);
                 });
@@ -118,9 +124,9 @@ public class CuentasPendientesDialogViewController {
 
                 List<Object[]> facturas = sp.getResultList();
                 facturas.forEach(factura -> {
-                    if(factura[3] != null){
-                        factura[3] = getNumberFormat(Float.parseFloat(factura[3].toString()));
-                        factura[4] = getNumberFormat(getTotalBuyCredits(new Compra(Integer.valueOf(factura[0].toString()))));
+                    if(factura[4] != null){
+                        factura[4] = getNumberFormat(Float.parseFloat(factura[4].toString()));
+                        factura[5] = getNumberFormat(getTotalBuyCredits(new Compra(Integer.valueOf(factura[0].toString()))));
                     }
                     model.addRow(factura);
                 });
@@ -136,6 +142,20 @@ public class CuentasPendientesDialogViewController {
         List<Abono> abonos = Conection.createEntityManagerFactory().createEntityManager()
                 .createNamedQuery("Abono.findByVentaID")
                 .setParameter("ventaID", VentaID)
+                .getResultList();
+        float TotalAbonado = 0;
+        if(!abonos.isEmpty()){
+            for(Abono abono : abonos){
+                TotalAbonado+=abono.getTotal();
+            }
+        }
+        return TotalAbonado;
+    }
+    
+    private float getTotalRequestCredits(Solicitud SolicitudID){
+        List<Abono> abonos = Conection.createEntityManagerFactory().createEntityManager()
+                .createNamedQuery("Abono.findBySolicitudID")
+                .setParameter("solicitudID", SolicitudID)
                 .getResultList();
         float TotalAbonado = 0;
         if(!abonos.isEmpty()){
@@ -167,7 +187,11 @@ public class CuentasPendientesDialogViewController {
         int fila = Cuentas.getSelectedRow();
         if(fila >= 0){
             if(Cliente != 0){ 
-                Dialogs.ShowAbonosClientesDialog(Integer.parseInt(Cuentas.getValueAt(fila, 0).toString()));
+                if(Cuentas.getValueAt(fila, 1).toString().equals("Venta")){
+                    Dialogs.ShowAbonosVentaClienteDialog(Integer.parseInt(Cuentas.getValueAt(fila, 0).toString()));
+                } else if(Cuentas.getValueAt(fila, 1).toString().equals("Solicitud")){
+                    Dialogs.ShowAbonosSolicitudClienteDialog(Integer.parseInt(Cuentas.getValueAt(fila, 0).toString()));
+                }
                 loadClient(); 
             }else if(Proveedor != 0){ 
                 Dialogs.ShowAbonosProveedorDialog(Integer.parseInt(Cuentas.getValueAt(fila, 0).toString()));
@@ -306,8 +330,6 @@ public class CuentasPendientesDialogViewController {
         abono.setTipo(Cliente != 0 ? "V" : "C");
         abono.setVentaID(Cliente != 0 ? venta : null);
         abono.setCompraID(Proveedor != 0 ? compra : null);
-        abono.setClienteID(Cliente != 0 ? venta.getClienteID() : null);
-        abono.setProveedorID(Proveedor != 0 ? compra.getProveedorID() : null);
         
         float totalAporPagar = Float
                     .parseFloat(Cuentas.getValueAt(Fila, 3).toString().replace(",", "")) - Float
@@ -395,8 +417,8 @@ public class CuentasPendientesDialogViewController {
         float totalAbonado = 0;
         for(int i = 0; i < Cuentas.getModel().getRowCount(); i++){
             if(Cuentas.getValueAt(i, 3) != null && Cuentas.getValueAt(i, 4) != null){
-                total += Float.parseFloat(Cuentas.getValueAt(i, 3).toString().replace(",", ""));
-                totalAbonado += Float.parseFloat(Cuentas.getValueAt(i, 4).toString().replace(",", ""));
+                total += Float.parseFloat(Cuentas.getValueAt(i, 4).toString().replace(",", ""));
+                totalAbonado += Float.parseFloat(Cuentas.getValueAt(i, 5).toString().replace(",", ""));
             }
         }
         

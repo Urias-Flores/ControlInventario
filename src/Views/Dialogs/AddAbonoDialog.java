@@ -30,6 +30,9 @@ public class AddAbonoDialog extends javax.swing.JDialog {
             case "C":
                 vc.setBuy(TransaccionID);
                 break;
+            case "S":
+                vc.setRequest(TransaccionID);
+                break;
             default:
                 Dialogs.ShowMessageDialog("", Dialogs.ERROR_ICON);
         }

@@ -31,9 +31,6 @@ public class Facturar extends javax.swing.JPanel {
                 cmbFormaPago, txtBarra,
                 txtNoCotizacion, tbVentas, txtSubtotal,
                 txtDescuento, txtImporte, txtISV, txtTotal, btnIniciarDia);
-        
-        //Para garantizar el funcionamiento pre-solicitud
-        btnSolicitar.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")

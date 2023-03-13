@@ -249,9 +249,16 @@ public class Dialogs {
         cpd.dispose();
     }
     
-    public static void ShowAbonosClientesDialog(int VentaID){
+    public static void ShowAbonosVentaClienteDialog(int VentaID){
         AddAbonoDialog ad = new AddAbonoDialog(null, true);    
         ad.setFactura(VentaID, "V");
+        ad.setVisible(true);
+        ad.dispose();
+    }
+    
+    public static void ShowAbonosSolicitudClienteDialog(int SolicitudID){
+        AddAbonoDialog ad = new AddAbonoDialog(null, true);    
+        ad.setFactura(SolicitudID, "S");
         ad.setVisible(true);
         ad.dispose();
     }
@@ -310,5 +317,25 @@ public class Dialogs {
         AddCierreDialog acd = new AddCierreDialog(null, true);
         acd.setVisible(true);
         acd.dispose();
+    }
+    
+    public static void ShowInfoArqueo(int ArqueoID){
+        AddCierreDialog acd = new AddCierreDialog(null, true);
+        acd.setExistArqueo(ArqueoID);
+        acd.setVisible(true);
+        acd.dispose();
+    }
+    
+    public static void ShowAddExpenseDialog(){
+        AddGastoDialog agd = new AddGastoDialog(null, true);
+        agd.setVisible(true);
+        agd.dispose();
+    }
+    
+    public static void ShowModifyExpenseDialog(int GastoID){
+        AddGastoDialog agd = new AddGastoDialog(null, true);
+        agd.setEditable(GastoID);
+        agd.setVisible(true);
+        agd.dispose();
     }
 }

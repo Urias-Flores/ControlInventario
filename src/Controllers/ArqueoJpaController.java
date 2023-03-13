@@ -26,9 +26,9 @@ public class ArqueoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Arqueo arqueo) {
+    public int create(Arqueo arqueo) {
         if (arqueo.getArqueodetalleList() == null) {
-            arqueo.setArqueodetalleList(new ArrayList<Arqueodetalle>());
+            arqueo.setArqueodetalleList(new ArrayList<>());
         }
         EntityManager em = null;
         try {
@@ -39,7 +39,7 @@ public class ArqueoJpaController implements Serializable {
                 usuarioID = em.getReference(usuarioID.getClass(), usuarioID.getUsuarioID());
                 arqueo.setUsuarioID(usuarioID);
             }
-            List<Arqueodetalle> attachedArqueodetalleList = new ArrayList<Arqueodetalle>();
+            List<Arqueodetalle> attachedArqueodetalleList = new ArrayList<>();
             for (Arqueodetalle arqueodetalleListArqueodetalleToAttach : arqueo.getArqueodetalleList()) {
                 arqueodetalleListArqueodetalleToAttach = em.getReference(arqueodetalleListArqueodetalleToAttach.getClass(), arqueodetalleListArqueodetalleToAttach.getArqueoDetalleID());
                 attachedArqueodetalleList.add(arqueodetalleListArqueodetalleToAttach);
@@ -59,7 +59,9 @@ public class ArqueoJpaController implements Serializable {
                     oldArqueoIDOfArqueodetalleListArqueodetalle = em.merge(oldArqueoIDOfArqueodetalleListArqueodetalle);
                 }
             }
+            em.flush();
             em.getTransaction().commit();
+            return arqueo.getArqueoID();
         } finally {
             if (em != null) {
                 em.close();
@@ -82,7 +84,7 @@ public class ArqueoJpaController implements Serializable {
                 for (Arqueodetalle arqueodetalleListOldArqueodetalle : arqueodetalleListOld) {
                     if (!arqueodetalleListNew.contains(arqueodetalleListOldArqueodetalle)) {
                         if (illegalOrphanMessages == null) {
-                            illegalOrphanMessages = new ArrayList<String>();
+                            illegalOrphanMessages = new ArrayList<>();
                         }
                         illegalOrphanMessages.add("You must retain Arqueodetalle " + arqueodetalleListOldArqueodetalle + " since its arqueoID field is not nullable.");
                     }
@@ -95,7 +97,7 @@ public class ArqueoJpaController implements Serializable {
                 usuarioIDNew = em.getReference(usuarioIDNew.getClass(), usuarioIDNew.getUsuarioID());
                 arqueo.setUsuarioID(usuarioIDNew);
             }
-            List<Arqueodetalle> attachedArqueodetalleListNew = new ArrayList<Arqueodetalle>();
+            List<Arqueodetalle> attachedArqueodetalleListNew = new ArrayList<>();
             if(arqueodetalleListNew != null){
                 for (Arqueodetalle arqueodetalleListNewArqueodetalleToAttach : arqueodetalleListNew) {
                     arqueodetalleListNewArqueodetalleToAttach = em.getReference(arqueodetalleListNewArqueodetalleToAttach.getClass(), arqueodetalleListNewArqueodetalleToAttach.getArqueoDetalleID());

@@ -13,7 +13,8 @@ import Views.Dialogs.Dialogs;
 import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
@@ -157,13 +158,12 @@ public class AddProductDialogViewController {
                             Instance.setVisible(false);
                             Dialogs.ShowMessageDialog("El producto ha sido modificado exitosamente", Dialogs.COMPLETE_ICON);
                         } catch (NonexistentEntityException | IllegalOrphanException ex) {
-                            System.err.println("Error: "+ex.getMessage());
+                            //System.err.println("Error: "+ex.getMessage());
+                            Logger.getLogger(AddProductDialogViewController.class.getName()).log(Level.SEVERE, null, ex);
                             setLoad(false);
                             Dialogs.ShowMessageDialog("El producto esta ligado a otros datos, no pudo ser modificado", Dialogs.ERROR_ICON);
                         } catch (Exception ex) {
-                            System.err.println("Error: "+ex.getMessage());
-                            setLoad(false);
-                            Dialogs.ShowMessageDialog("Ha ocurrido un error inesperado al modificar producto", Dialogs.ERROR_ICON);
+                            Logger.getLogger(AddProductDialogViewController.class.getName()).log(Level.SEVERE, null, ex);
                         }                        
                     } else {
                         Error.setBackground(new Color(185, 0, 0));

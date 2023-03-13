@@ -32,9 +32,6 @@ public class ClienteJpaController implements Serializable {
         if (cliente.getVentaList() == null) {
             cliente.setVentaList(new ArrayList<>());
         }
-        if (cliente.getAbonoList() == null) {
-            cliente.setAbonoList(new ArrayList<>());
-        }
         if (cliente.getCotizacionList() == null) {
             cliente.setCotizacionList(new ArrayList<>());
         }
@@ -53,14 +50,6 @@ public class ClienteJpaController implements Serializable {
                 }
             }
             cliente.setVentaList(attachedVentaList);
-            List<Abono> attachedAbonoList = new ArrayList<>();
-            if(cliente.getAbonoList() != null){
-                for (Abono abonoListAbonoToAttach : cliente.getAbonoList()) {
-                    abonoListAbonoToAttach = em.getReference(abonoListAbonoToAttach.getClass(), abonoListAbonoToAttach.getAbonoID());
-                    attachedAbonoList.add(abonoListAbonoToAttach);
-                }
-            }
-            cliente.setAbonoList(attachedAbonoList);
             List<Cotizacion> attachedCotizacionList = new ArrayList<>();
             if(cliente.getCotizacionList() != null){
                 for (Cotizacion cotizacionListCotizacionToAttach : cliente.getCotizacionList()) {
@@ -87,18 +76,6 @@ public class ClienteJpaController implements Serializable {
                     if (oldClienteIDOfVentaListVenta != null) {
                         oldClienteIDOfVentaListVenta.getVentaList().remove(ventaListVenta);
                         oldClienteIDOfVentaListVenta = em.merge(oldClienteIDOfVentaListVenta);
-                    }
-                }
-            }
-            
-            if(cliente.getAbonoList() != null){
-                for (Abono abonoListAbono : cliente.getAbonoList()) {
-                    Cliente oldClienteIDOfAbonoListAbono = abonoListAbono.getClienteID();
-                    abonoListAbono.setClienteID(cliente);
-                    abonoListAbono = em.merge(abonoListAbono);
-                    if (oldClienteIDOfAbonoListAbono != null) {
-                        oldClienteIDOfAbonoListAbono.getAbonoList().remove(abonoListAbono);
-                        oldClienteIDOfAbonoListAbono = em.merge(oldClienteIDOfAbonoListAbono);
                     }
                 }
             }
@@ -142,8 +119,6 @@ public class ClienteJpaController implements Serializable {
             Cliente persistentCliente = em.find(Cliente.class, cliente.getClienteID());
             List<Venta> ventaListOld = persistentCliente.getVentaList();
             List<Venta> ventaListNew = cliente.getVentaList();
-            List<Abono> abonoListOld = persistentCliente.getAbonoList();
-            List<Abono> abonoListNew = cliente.getAbonoList();
             List<Cotizacion> cotizacionListOld = persistentCliente.getCotizacionList();
             List<Cotizacion> cotizacionListNew = cliente.getCotizacionList();
             List<Solicitud> solicitudListOld = persistentCliente.getSolicitudList();
@@ -152,7 +127,7 @@ public class ClienteJpaController implements Serializable {
             for (Solicitud solicitudListOldSolicitud : solicitudListOld) {
                 if (!solicitudListNew.contains(solicitudListOldSolicitud)) {
                     if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+                        illegalOrphanMessages = new ArrayList<>();
                     }
                     illegalOrphanMessages.add("You must retain Solicitud " + solicitudListOldSolicitud + " since its clienteID field is not nullable.");
                 }
@@ -160,28 +135,21 @@ public class ClienteJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            List<Venta> attachedVentaListNew = new ArrayList<Venta>();
+            List<Venta> attachedVentaListNew = new ArrayList<>();
             for (Venta ventaListNewVentaToAttach : ventaListNew) {
                 ventaListNewVentaToAttach = em.getReference(ventaListNewVentaToAttach.getClass(), ventaListNewVentaToAttach.getVentaID());
                 attachedVentaListNew.add(ventaListNewVentaToAttach);
             }
             ventaListNew = attachedVentaListNew;
             cliente.setVentaList(ventaListNew);
-            List<Abono> attachedAbonoListNew = new ArrayList<Abono>();
-            for (Abono abonoListNewAbonoToAttach : abonoListNew) {
-                abonoListNewAbonoToAttach = em.getReference(abonoListNewAbonoToAttach.getClass(), abonoListNewAbonoToAttach.getAbonoID());
-                attachedAbonoListNew.add(abonoListNewAbonoToAttach);
-            }
-            abonoListNew = attachedAbonoListNew;
-            cliente.setAbonoList(abonoListNew);
-            List<Cotizacion> attachedCotizacionListNew = new ArrayList<Cotizacion>();
+            List<Cotizacion> attachedCotizacionListNew = new ArrayList<>();
             for (Cotizacion cotizacionListNewCotizacionToAttach : cotizacionListNew) {
                 cotizacionListNewCotizacionToAttach = em.getReference(cotizacionListNewCotizacionToAttach.getClass(), cotizacionListNewCotizacionToAttach.getCotizacionID());
                 attachedCotizacionListNew.add(cotizacionListNewCotizacionToAttach);
             }
             cotizacionListNew = attachedCotizacionListNew;
             cliente.setCotizacionList(cotizacionListNew);
-            List<Solicitud> attachedSolicitudListNew = new ArrayList<Solicitud>();
+            List<Solicitud> attachedSolicitudListNew = new ArrayList<>();
             for (Solicitud solicitudListNewSolicitudToAttach : solicitudListNew) {
                 solicitudListNewSolicitudToAttach = em.getReference(solicitudListNewSolicitudToAttach.getClass(), solicitudListNewSolicitudToAttach.getSolicitudID());
                 attachedSolicitudListNew.add(solicitudListNewSolicitudToAttach);
@@ -203,23 +171,6 @@ public class ClienteJpaController implements Serializable {
                     if (oldClienteIDOfVentaListNewVenta != null && !oldClienteIDOfVentaListNewVenta.equals(cliente)) {
                         oldClienteIDOfVentaListNewVenta.getVentaList().remove(ventaListNewVenta);
                         oldClienteIDOfVentaListNewVenta = em.merge(oldClienteIDOfVentaListNewVenta);
-                    }
-                }
-            }
-            for (Abono abonoListOldAbono : abonoListOld) {
-                if (!abonoListNew.contains(abonoListOldAbono)) {
-                    abonoListOldAbono.setClienteID(null);
-                    abonoListOldAbono = em.merge(abonoListOldAbono);
-                }
-            }
-            for (Abono abonoListNewAbono : abonoListNew) {
-                if (!abonoListOld.contains(abonoListNewAbono)) {
-                    Cliente oldClienteIDOfAbonoListNewAbono = abonoListNewAbono.getClienteID();
-                    abonoListNewAbono.setClienteID(cliente);
-                    abonoListNewAbono = em.merge(abonoListNewAbono);
-                    if (oldClienteIDOfAbonoListNewAbono != null && !oldClienteIDOfAbonoListNewAbono.equals(cliente)) {
-                        oldClienteIDOfAbonoListNewAbono.getAbonoList().remove(abonoListNewAbono);
-                        oldClienteIDOfAbonoListNewAbono = em.merge(oldClienteIDOfAbonoListNewAbono);
                     }
                 }
             }
@@ -295,11 +246,6 @@ public class ClienteJpaController implements Serializable {
             for (Venta ventaListVenta : ventaList) {
                 ventaListVenta.setClienteID(null);
                 ventaListVenta = em.merge(ventaListVenta);
-            }
-            List<Abono> abonoList = cliente.getAbonoList();
-            for (Abono abonoListAbono : abonoList) {
-                abonoListAbono.setClienteID(null);
-                abonoListAbono = em.merge(abonoListAbono);
             }
             List<Cotizacion> cotizacionList = cliente.getCotizacionList();
             for (Cotizacion cotizacionListCotizacion : cotizacionList) {

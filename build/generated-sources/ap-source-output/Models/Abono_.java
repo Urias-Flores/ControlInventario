@@ -1,8 +1,7 @@
 package Models;
 
-import Models.Cliente;
 import Models.Compra;
-import Models.Proveedor;
+import Models.Solicitud;
 import Models.Usuario;
 import Models.Venta;
 import java.util.Date;
@@ -10,15 +9,14 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-03-06T10:50:12")
+@Generated(value="EclipseLink-2.7.10.v20211216-rNA", date="2023-03-11T10:21:14")
 @StaticMetamodel(Abono.class)
 public class Abono_ { 
 
     public static volatile SingularAttribute<Abono, Date> fecha;
     public static volatile SingularAttribute<Abono, String> tipo;
     public static volatile SingularAttribute<Abono, Float> total;
-    public static volatile SingularAttribute<Abono, Cliente> clienteID;
-    public static volatile SingularAttribute<Abono, Proveedor> proveedorID;
+    public static volatile SingularAttribute<Abono, Solicitud> solicitudID;
     public static volatile SingularAttribute<Abono, Date> hora;
     public static volatile SingularAttribute<Abono, Venta> ventaID;
     public static volatile SingularAttribute<Abono, Integer> abonoID;
