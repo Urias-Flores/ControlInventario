@@ -176,11 +176,6 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
         lbCargando.setToolTipText("");
         lbCargando.setOpaque(true);
         lbCargando.setPreferredSize(new java.awt.Dimension(38, 38));
-        lbCargando.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbCargandoMouseClicked(evt);
-            }
-        });
 
         jPanel2.setBackground(new java.awt.Color(250, 250, 250));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(220, 220, 220)));
@@ -316,7 +311,7 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
     private void btnPagarFacturaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPagarFacturaMouseClicked
         if(isCliente){
             vc.payBill();
-        }else{
+        } else{
             vc.payBuy();
         }
     }//GEN-LAST:event_btnPagarFacturaMouseClicked
@@ -332,10 +327,6 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
     private void btnAbonoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAbonoMouseClicked
         vc.loadCredits();
     }//GEN-LAST:event_btnAbonoMouseClicked
-
-    private void lbCargandoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbCargandoMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lbCargandoMouseClicked
 
     public void setCompraState(){
         lbTituloTotal.setForeground(new Color(185, 0, 0));

@@ -9,7 +9,8 @@ import java.util.logging.Logger;
 public class TestOsCommand {
     public static void main(String args[]) throws InterruptedException{
         try {
-            Process process = Runtime.getRuntime().exec("NET START MYSQL80");
+            String[] command = {"ls"};
+            Process process = Runtime.getRuntime().exec(command);
             process.waitFor();
             InputStream in = process.getInputStream();
             OutputStream out = new FileOutputStream("out.txt");

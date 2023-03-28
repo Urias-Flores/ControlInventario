@@ -38,8 +38,8 @@
     SUM(v2.Precio * v2.Cantidad - v2.Descuento) - ( SELECT SUM(Total) - a.Total FROM abono where VentaID = a.VentaID )- a.Total as NuevoSaldo
 FROM abono as a
 INNER JOIN usuario u on a.UsuarioID = u.UsuarioID
-INNER JOIN cliente c on a.ClienteID = c.ClienteID
 INNER JOIN venta v on a.VentaID = v.VentaID
+INNER JOIN cliente c on v.ClienteID = c.ClienteID
 INNER JOIN ventadetalle v2 on v.VentaID = v2.VentaID
 WHERE AbonoID =  $P{AbonoID}]]>
 	</queryString>

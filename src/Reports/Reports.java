@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -68,14 +70,21 @@ public class Reports {
         }
     }
     
+    /**
+     * 
+     * @param AbonoID define el numero de abono que se desea imprimir
+     * @param type  define el tipo de transaccion que se desea imprimir 1 si
+     * para venta, 2 si es para solicitud de venta y 3 para compra
+     */
     public void GenerateTicketAbono(int AbonoID, int type)
     {
         try {
             Map<Integer, String> fileName = new HashMap<>();
             fileName.put(1, "reports/Abono.jasper");
-            fileName.put(1, "reports/AbonoSolicitud.jasper");
-            fileName.put(1, "reports/AbonoCompra.jasper");
+            fileName.put(2, "reports/AbonoSolicitud.jasper");
+            fileName.put(3, "reports/AbonoCompra.jasper");
             
+            System.out.println(fileName.get(type));
             File archivo = new File(fileName.get(type));
             if(archivo.exists())
             {
@@ -263,7 +272,8 @@ public class Reports {
             Desktop desktop = Desktop.getDesktop();
             desktop.open(new File("temp/tempTikect.pdf"));
         } catch (JRException | IOException ex) {
-            System.err.println("Error"+ex.getMessage());
+            Logger.getLogger(Reports.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Error: "+ex.getMessage());
             Dialogs.ShowMessageDialog("Error al intentar abrir archivo de impresion", Dialogs.ERROR_ICON);
         }
     }

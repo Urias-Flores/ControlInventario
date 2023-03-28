@@ -44,12 +44,12 @@ public class Abono implements Serializable {
     private String tipo;
     @Basic(optional = false)
     private float total;
-    @JoinColumn(name = "CompraID", referencedColumnName = "CompraID")
-    @ManyToOne
-    private Compra compraID;
     @JoinColumn(name = "UsuarioID", referencedColumnName = "UsuarioID")
     @ManyToOne(optional = false)
     private Usuario usuarioID;
+    @JoinColumn(name = "CompraID", referencedColumnName = "CompraID")
+    @ManyToOne
+    private Compra compraID;
     @JoinColumn(name = "VentaID", referencedColumnName = "VentaID")
     @ManyToOne
     private Venta ventaID;

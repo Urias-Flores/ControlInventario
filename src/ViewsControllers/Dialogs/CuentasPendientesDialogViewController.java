@@ -4,6 +4,7 @@ import Controllers.AbonoJpaController;
 import Controllers.ClienteJpaController;
 import Controllers.CompraJpaController;
 import Controllers.ProveedorJpaController;
+import Controllers.SolicitudJpaController;
 import Controllers.VentaJpaController;
 import Controllers.exceptions.IllegalOrphanException;
 import Controllers.exceptions.NonexistentEntityException;
@@ -13,6 +14,7 @@ import Models.Compra;
 import Models.Proveedor;
 import Models.Solicitud;
 import Models.Venta;
+import Reports.Reports;
 import Resource.Conection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
@@ -225,8 +227,8 @@ public class CuentasPendientesDialogViewController {
         int fila = Cuentas.getSelectedRow();
         if(fila >= 0){
             float totalAporPagar = 
-                    Float.parseFloat(Cuentas.getValueAt(fila, 3).toString().replace(",", "")) 
-                  - Float.parseFloat(Cuentas.getValueAt(fila, 4).toString().replace(",", ""));
+                    Float.parseFloat(Cuentas.getValueAt(fila, 4).toString().replace(",", "")) 
+                  - Float.parseFloat(Cuentas.getValueAt(fila, 5).toString().replace(",", ""));
             
             if(Dialogs.ShowEnterPasswordDialog("Esta a punto de marcar como pagada una factura se realizara un abono", 
                     "a la factura con un valor de: "+getNumberFormat(totalAporPagar)+" Lps. por medidas de seguridad", 
@@ -235,32 +237,69 @@ public class CuentasPendientesDialogViewController {
                 setLoad(true);
                 Runnable run = ()->{
                     try {
-                        int VentaID = Integer.parseInt(Cuentas.getValueAt(fila, 0).toString());
-                        //Creando objeto de venta
-                        VentaJpaController controllerVenta = new VentaJpaController(Conection.createEntityManagerFactory());
-                        Venta venta = controllerVenta.findVenta(VentaID);
-                        venta.setEstado("P");
-                        
-                        //Creando objecto de abono
+                        int TransaccionID = Integer.parseInt(Cuentas.getValueAt(fila, 0).toString());                        
+                        //Creando controllador de abono
                         AbonoJpaController controllerAbono = new AbonoJpaController(Conection.createEntityManagerFactory());
-                        Abono abono = createObjectAbono(venta, null, fila);
+                        //Obteniendo tipo de dato que se va ingresar
+                        final String transaccionType = Cuentas.getValueAt(fila, 1).toString();
+                        Abono abono;
                         
-                        //Enviando a editar la venta para marcar como pagada
-                        controllerVenta.edit(venta);
-                        //Creando un abono conrespecto al pago realizado
-                        controllerAbono.create(abono);
+                        switch (transaccionType) {
+                            case "Venta":
+                                
+                                //Creando objeto de venta
+                                VentaJpaController controllerVenta = new VentaJpaController(Conection.createEntityManagerFactory());
+                                Venta venta = controllerVenta.findVenta(TransaccionID);
+                                
+                                venta.setEstado("P");
+                                abono = createObjectAbono(venta, null, null, fila);
+                                
+                                //Creando un abono conrespecto al pago realizado
+                                int AbonoID = controllerAbono.create(abono);
+                                        
+                                abono.setAbonoID(AbonoID);
+                                System.err.println("Venta en abono: "+abono.getVentaID());
+                                
+                                //Enviando a editar la venta para marcar como pagada
+                                controllerVenta.edit(venta);
+                                
+                                break;
+                            case "Solicitud":
+                                
+                                //Creando obejto de solicitud
+                                SolicitudJpaController controllerSolicitud = new SolicitudJpaController(Conection.createEntityManagerFactory());
+                                Solicitud solicitud = controllerSolicitud.findSolicitud(TransaccionID);
+                                
+                                solicitud.setEstado("P");
+                                abono = createObjectAbono(null, null, solicitud, fila);
+                                
+                                //Creando un abono conrespecto al pago realizado
+                                abono.setAbonoID(controllerAbono.create(abono));
+                                
+                                //Enviando a editar la solicitud para marca como pagada
+                                controllerSolicitud.edit(solicitud);
+                                
+                                break;
+                            default:
+                                throw new AssertionError();
+                        }
                         
                         setLoad(false);
                         loadClient();
                         Dialogs.ShowMessageDialog("La factura ha sido marcada como pagada exitosamente", Dialogs.COMPLETE_ICON);
                         
-                        if(Dialogs.ShowOKCancelDialog("¿Deseea enviar a imprimir el rebido de abono a cuenta?", Dialogs.WARNING_ICON)){
-                            setLoad(true);
-                            Runnable runnable = () -> {
-                                //Caodigo para enviar a imprimir abono
-                                setLoad(false);
-                            };
-                            new Thread(runnable).start();
+                        //Definiendo se enviara a imprimir el recibo de pago
+                        if(abono != null){
+                            if(Dialogs.ShowOKCancelDialog("¿Deseea enviar a imprimir el rebido de abono a cuenta?", Dialogs.WARNING_ICON)){
+                                setLoad(true);
+                                Runnable runnable = () -> {
+                                    Reports reports = new Reports();
+                                    int type = transaccionType.equals("Venta") ? 1 : 2;
+                                    reports.GenerateTicketAbono(abono.getAbonoID(), type);
+                                    setLoad(false);
+                                };
+                                new Thread(runnable).start();
+                            }
                         }
                     } catch (IllegalOrphanException | NonexistentEntityException | NumberFormatException ex) {
                         System.err.println("Error al enviar a pagar factura: "+ex.getMessage());
@@ -269,6 +308,8 @@ public class CuentasPendientesDialogViewController {
                 };
                 new Thread(run).start();
             }
+        } else {
+            Dialogs.ShowMessageDialog("Seleccion una factura de la lista", Dialogs.ERROR_ICON);
         }
     }
     
@@ -290,7 +331,7 @@ public class CuentasPendientesDialogViewController {
                         
                         //Creando objeto de abono
                         AbonoJpaController controllerAbono = new AbonoJpaController(Conection.createEntityManagerFactory());
-                        Abono abono = createObjectAbono(null, compra, fila);
+                        Abono abono = createObjectAbono(null, compra, null, fila);
                         
                         //Enviando a marcas la compra como pagada
                         controllerCompra.edit(compra);
@@ -321,21 +362,23 @@ public class CuentasPendientesDialogViewController {
         }
     }
     
-    public Abono createObjectAbono(Venta venta, Compra compra, int Fila){
+    public Abono createObjectAbono(Venta venta, Compra compra, Solicitud solicitud, int fila){
         Abono abono = new Abono();
         
         abono.setFecha(Utilities.getDate());
         abono.setHora(Utilities.getTime());
         abono.setUsuarioID(Utilities.getUsuarioActual());
-        abono.setTipo(Cliente != 0 ? "V" : "C");
-        abono.setVentaID(Cliente != 0 ? venta : null);
-        abono.setCompraID(Proveedor != 0 ? compra : null);
+        abono.setTipo(Cliente != 0 && solicitud == null ? "V" : Cliente != 0 && solicitud != null ? "S" : "C");
+        abono.setVentaID(venta);
+        abono.setSolicitudID(solicitud);
+        abono.setCompraID(compra);
         
-        float totalAporPagar = Float
-                    .parseFloat(Cuentas.getValueAt(Fila, 3).toString().replace(",", "")) - Float
-                    .parseFloat(Cuentas.getValueAt(Fila, 4).toString().replace(",", ""));
+        float totalFactura = Float.parseFloat(Cuentas.getValueAt(fila, 4).toString().replace(",", ""));
+        float totalAbonado = Float.parseFloat(Cuentas.getValueAt(fila, 5).toString().replace(",", ""));
+        float totalAporPagar = totalFactura - totalAbonado;
+        
         abono.setTotal(totalAporPagar);
-      
+
         return abono;
     }
     
@@ -358,7 +401,7 @@ public class CuentasPendientesDialogViewController {
                     try {
                         //Creando objeto de abono a factura
                         AbonoJpaController controllerAbono = new AbonoJpaController(Conection.createEntityManagerFactory());
-                        Abono abono = createObjectAbono(venta, null, fila);
+                        Abono abono = createObjectAbono(venta, null, null, fila);
                         
                         //Enviando a marcar venta como pagada
                         controllerVenta.edit(venta);

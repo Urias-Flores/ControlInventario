@@ -34,7 +34,6 @@ public class AddMarcaDialogViewController {
     //Task
     public void Insert(){
         if(validate()){
-            
             setLoad(true);
             Runnable run = () -> {
                 MarcaJpaController controller = new MarcaJpaController(Conection.createEntityManagerFactory());
@@ -52,7 +51,6 @@ public class AddMarcaDialogViewController {
                     Error.setBackground(new Color(185, 0, 0));
                     Error.setText("El nombre de la marca ingresada ya existe");
                 }
-                
                 setLoad(false);
             };
             new Thread(run).start();
@@ -60,7 +58,7 @@ public class AddMarcaDialogViewController {
         }else{ Error.setBackground(new Color(185, 0, 0)); }
     }
     
-    public boolean validate(){
+    private boolean validate(){
         if(Nombre.getText().isEmpty()){
             Error.setText("El nombre de la marca es obligatorio");
             return false;

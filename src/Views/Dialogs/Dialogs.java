@@ -21,6 +21,23 @@ public class Dialogs {
         gd.dispose();
     }
     
+    /**
+     * 
+     * @param texto escriba el texto a insertar en el dialogo
+     * @param Icono especifique el tipo de icono que se mostrara en el dialogo
+     * <code>-2 - DeleteIcon</code>
+     * <code>-1 - WarningIcon</code>
+     * <code> 0 - ErrorIcon</code>
+     * <code> 1 - SuccesIcon</code>
+     */
+    public static void ShowErrorDialog(String texto, int Icono){
+        ErrorDialog gd = new ErrorDialog(null, true);
+        gd.setText(texto);
+        gd.setIcon(Icono);
+        gd.setVisible(true);
+        gd.dispose();
+    }
+    
     public static boolean ShowOKCancelDialog(String texto, int Icono){
         OkCancelDialog ocd = new OkCancelDialog(null, true);
         ocd.setText(texto);
