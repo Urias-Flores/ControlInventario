@@ -21,15 +21,10 @@ import Views.Panels.Preferencias.Empleados;
 import Views.Panels.Preferencias.Proveedores;
 import Views.Panels.Preferencias.Usuarios;
 import java.awt.Color;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 public class MainViewController {

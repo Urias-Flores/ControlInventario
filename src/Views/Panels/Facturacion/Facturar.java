@@ -3,7 +3,6 @@ package Views.Panels.Facturacion;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import ViewsControllers.Panels.Facturacion.FacturaViewController;
-import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JLabel;
@@ -14,17 +13,17 @@ public class Facturar extends javax.swing.JPanel {
     private FacturaViewController vc;
 
     public Facturar() {
-        initComponents();
+        initComponents(); 
         
         //Agregando efectos a botones y placeholders a campos de escritura
-        List<JLabel> grayButtons = Arrays.asList(btnAgregarCliente, btnAgregarCarrito, btnEditarCarrito, btnEliminarCarrito, btnEliminarTodo);
+        List<JLabel> grayButtons = Arrays.asList(btnBuscarCliente, btnAgregarCliente, btnAgregarCarrito, btnEditarCarrito, btnEliminarCarrito, btnEliminarTodo);
         grayButtons.forEach(button -> {button.addMouseListener(Utilities.getMLGrayButton());});
         List<JLabel> generalButton = Arrays.asList(btnAgregar, btnSolicitar, btnCotizar, btnIniciarDia);
         generalButton.forEach(button -> {button.addMouseListener(Utilities.getMLGeneralButton());});
         List<JTextField> fields = Arrays.asList(txtRTN, txtBarra, txtNoCotizacion);
         fields.forEach(field -> {field.addFocusListener(Utilities.getFLPlaceHolderEfect());});
 
-        vc = new FacturaViewController(lbCargando, cmbCliente, txtRTN,
+        vc = new FacturaViewController(lbCargando, txtCliente, txtRTN,
                 cmbFormaPago, txtBarra,
                 txtNoCotizacion, tbVentas, txtSubtotal,
                 txtDescuento, txtImporte, txtISV, txtTotal, btnIniciarDia);
@@ -33,6 +32,8 @@ public class Facturar extends javax.swing.JPanel {
     
     private void addDesing(){
         txtBarra.putClientProperty("JTextField.placeholderText", "Ingrese el código de barras...");
+        txtCliente.putClientProperty("JTextField.placeholderText", "Seleccione un cliente...");
+        txtRTN.putClientProperty("JTextField.placeholderText", "Seleccione un cliente...");
         txtNoCotizacion.putClientProperty("JTextField.placeholderText", "Ingrese el número de cotización...");
     }
 
@@ -44,7 +45,6 @@ public class Facturar extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         txtRTN = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        cmbCliente = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbVentas = new javax.swing.JTable();
         btnAgregar = new javax.swing.JLabel();
@@ -74,6 +74,8 @@ public class Facturar extends javax.swing.JPanel {
         btnSolicitar = new javax.swing.JLabel();
         cmbFormaPago = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
+        btnBuscarCliente = new javax.swing.JLabel();
+        txtCliente = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -90,15 +92,6 @@ public class Facturar extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(90, 90, 90));
         jLabel1.setText("Cliente");
-
-        cmbCliente.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        cmbCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Seleccione cliente --" }));
-        cmbCliente.setPreferredSize(new java.awt.Dimension(246, 38));
-        cmbCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbClienteActionPerformed(evt);
-            }
-        });
 
         tbVentas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -205,7 +198,7 @@ public class Facturar extends javax.swing.JPanel {
         btnAgregarCliente.setBackground(new java.awt.Color(255, 255, 255));
         btnAgregarCliente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnAgregarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/agregarAzul.png"))); // NOI18N
-        btnAgregarCliente.setToolTipText("Agregar proveedor");
+        btnAgregarCliente.setToolTipText("Agregar cliente");
         btnAgregarCliente.setOpaque(true);
         btnAgregarCliente.setPreferredSize(new java.awt.Dimension(38, 38));
         btnAgregarCliente.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -219,7 +212,6 @@ public class Facturar extends javax.swing.JPanel {
         jLabel9.setText("Forma de pago");
 
         txtBarra.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtBarra.setForeground(new java.awt.Color(180, 180, 180));
         txtBarra.setPreferredSize(new java.awt.Dimension(148, 38));
         txtBarra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -316,6 +308,25 @@ public class Facturar extends javax.swing.JPanel {
         jLabel12.setForeground(new java.awt.Color(90, 90, 90));
         jLabel12.setText("Realizar cambios");
 
+        btnBuscarCliente.setBackground(new java.awt.Color(255, 255, 255));
+        btnBuscarCliente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/buscarEnLista.png"))); // NOI18N
+        btnBuscarCliente.setToolTipText("Buscar cliente");
+        btnBuscarCliente.setOpaque(true);
+        btnBuscarCliente.setPreferredSize(new java.awt.Dimension(38, 38));
+        btnBuscarCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBuscarClienteMouseClicked(evt);
+            }
+        });
+
+        txtCliente.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        txtCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtClienteKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -326,18 +337,20 @@ public class Facturar extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(cmbCliente, 0, 309, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnAgregarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtRTN, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE))
+                            .addComponent(txtRTN, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cmbFormaPago, 0, 258, Short.MAX_VALUE))
+                            .addComponent(cmbFormaPago, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -369,7 +382,7 @@ public class Facturar extends javax.swing.JPanel {
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtNoCotizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 221, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 272, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -395,35 +408,39 @@ public class Facturar extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtRTN, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1, 1, 1))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnEliminarTodo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnEditarCarrito, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnAgregarCarrito, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnEliminarCarrito)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnAgregarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnBuscarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtCliente)))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel6)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txtRTN, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(cmbFormaPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(cmbFormaPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(btnEliminarTodo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnEditarCarrito, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnAgregarCarrito, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnEliminarCarrito)))
-                                .addComponent(cmbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnAgregarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(18, 18, 18)
+                            .addComponent(txtBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(19, 19, 19)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -474,25 +491,6 @@ public class Facturar extends javax.swing.JPanel {
         vc.addClient();
     }//GEN-LAST:event_btnAgregarClienteMouseClicked
 
-    private void cmbClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClienteActionPerformed
-        switch (cmbCliente.getSelectedIndex()) {
-            case 0:
-                txtRTN.setText("Seleccione un cliente...");
-                txtRTN.setForeground(new Color(180, 180 , 180));
-                cmbFormaPago.setEnabled(false);
-                break;
-            case 1:
-                txtRTN.setText("Sin RTN");
-                txtRTN.setForeground(new Color(180, 180 , 180));
-                cmbFormaPago.setEnabled(false);
-                break;
-            default:
-                vc.setRTN();
-                cmbFormaPago.setEnabled(true);
-                break;
-        }
-    }//GEN-LAST:event_cmbClienteActionPerformed
-
     private void txtBarraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBarraActionPerformed
         vc.loadProductByBarCode();
     }//GEN-LAST:event_txtBarraActionPerformed
@@ -521,18 +519,26 @@ public class Facturar extends javax.swing.JPanel {
         vc.InsertRequest();
     }//GEN-LAST:event_btnSolicitarMouseClicked
 
+    private void btnBuscarClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarClienteMouseClicked
+        vc.loadClient();
+    }//GEN-LAST:event_btnBuscarClienteMouseClicked
+
+    private void txtClienteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtClienteKeyReleased
+        vc.verifyClienteSelected();
+    }//GEN-LAST:event_txtClienteKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgEstado;
     private javax.swing.JLabel btnAgregar;
     private javax.swing.JLabel btnAgregarCarrito;
     private javax.swing.JLabel btnAgregarCliente;
+    private javax.swing.JLabel btnBuscarCliente;
     private javax.swing.JLabel btnCotizar;
     private javax.swing.JLabel btnEditarCarrito;
     private javax.swing.JLabel btnEliminarCarrito;
     private javax.swing.JLabel btnEliminarTodo;
     private javax.swing.JLabel btnIniciarDia;
     private javax.swing.JLabel btnSolicitar;
-    private javax.swing.JComboBox<String> cmbCliente;
     private javax.swing.JComboBox<String> cmbFormaPago;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -549,6 +555,7 @@ public class Facturar extends javax.swing.JPanel {
     private javax.swing.JLabel lbCargando;
     private javax.swing.JTable tbVentas;
     private javax.swing.JTextField txtBarra;
+    private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtDescuento;
     private javax.swing.JTextField txtISV;
     private javax.swing.JTextField txtImporte;

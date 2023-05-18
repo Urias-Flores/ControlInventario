@@ -24,7 +24,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 public class Reports {
-    public void GenerateTickeVenta(int VentaID, float Efectivo)
+    public void GenerateTickeVenta(int VentaID, String Cliente, float Efectivo)
     {
         try {
             File archivo = new File("reports/FacturaVenta.jasper");
@@ -35,6 +35,7 @@ public class Reports {
                 Map<String, Object> parameters = getCompanyParameters();
                 parameters.put("VentaID", VentaID);
                 parameters.put("Efectivo", Efectivo);
+                parameters.put("Cliente", Cliente);
                 parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
                 
                 sendPrintTicket(jr, parameters);

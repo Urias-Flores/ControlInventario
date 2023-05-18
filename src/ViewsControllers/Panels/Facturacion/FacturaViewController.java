@@ -1,6 +1,5 @@
 package ViewsControllers.Panels.Facturacion;
 
-import Controllers.ClienteJpaController;
 import Controllers.CotizacionJpaController;
 import Controllers.CotizaciondetalleJpaController;
 import Controllers.ProductoJpaController;
@@ -48,7 +47,7 @@ public class FacturaViewController {
         }
     };
 
-    private JComboBox<Cliente> Clientes;
+    private JTextField Cliente;
     private JTextField RTN;
 
     private JComboBox FormaPago;
@@ -67,11 +66,12 @@ public class FacturaViewController {
     private JLabel Cargando;
 
     private boolean isDayInit = false;
+    private Cliente currentClient = null;
 
-    public FacturaViewController(JLabel Cargando, JComboBox Clientes, JTextField RTN, JComboBox FormaPago, JTextField Barra, JTextField Cotizacion, JTable Ventas, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total, JLabel dayState) {
+    public FacturaViewController(JLabel Cargando, JTextField Cliente, JTextField RTN, JComboBox FormaPago, JTextField Barra, JTextField Cotizacion, JTable Ventas, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total, JLabel dayState) {
         this.Cargando = Cargando;
         this.dayState = dayState;
-        this.Clientes = Clientes;
+        this.Cliente = Cliente;
         this.RTN = RTN;
         this.FormaPago = FormaPago;
         this.Barra = Barra;
@@ -105,7 +105,6 @@ public class FacturaViewController {
     private void Init() {
         setLoad(true);
         Runnable run = () -> {
-            loadClients();
             setLoad(false);
         };
         new Thread(run).start();
@@ -147,36 +146,37 @@ public class FacturaViewController {
         //Enviando a actualizar estado de dia iniciado
         verifyDayInit();
     }
-
-    private void loadClients() {
-        //Agregando unicamente comsumidor final para que este siempre al inicio de la lista
-        Cliente ConsumidorFinal = new ClienteJpaController(Conection.createEntityManagerFactory()).findCliente(1);
-        Clientes.addItem(ConsumidorFinal);
-        
-        //Agregando los demas clientes en orden alfabetico
-        List<Cliente> clientes = Conection.createEntityManager().createNamedQuery("Cliente.findAll").getResultList();
-        clientes.forEach(cliente -> {
-            //Verifificando que el cliente comsumidor final no se vualva agregar
-            if (cliente.getClienteID() != 1) {
-                Clientes.addItem(cliente);
-            }
-        });
-    }
-
-    public void addClient() {
-        //Mostrando dialogo para agregar un nuevo cliente y luego actualizando lista de clientes
+    
+    public void addClient(){
         Dialogs.ShowAddClienteDialog();
-        Clientes.removeAllItems();
-        Clientes.addItem(new Cliente(0, "-- Seleccione cliente --", 0));
-        Init();
     }
     
-    public void setRTN(){
-        //Modificando campo de RTN  segun RTN del cliente seleccionado
-        if(Clientes.getSelectedIndex() >= 2 ){
-            Cliente cliente = (Cliente) Clientes.getSelectedItem();
+    public void loadClient(){
+        Cliente cliente = Dialogs.ShowClienteDialog();
+        if(cliente != new Cliente() && cliente.getClienteID() != null){
+            Cliente.setText(cliente.getNombre());
+            Cliente.setName(String.valueOf(cliente.getClienteID()));
             RTN.setText(cliente.getRtn() != null ? cliente.getRtn() : "Cliente sin RTN");
             RTN.setForeground(cliente.getRtn() != null ? Color.black : new Color(180, 180, 180));
+            
+            currentClient = cliente;
+            
+            FormaPago.setEnabled(cliente.getClienteID() > 1);
+            if(cliente.getClienteID() == 1){
+                FormaPago.setSelectedIndex(0);
+            }
+        } else {
+            Cliente.setText("");
+            Cliente.setName(null);
+            currentClient = new Cliente();
+        }
+    }
+    
+    public void verifyClienteSelected(){
+        if(Cliente.getName() != null){
+            Cliente.setText("");
+            Cliente.setName(null);
+            RTN.setText("");
         }
     }
 
@@ -454,13 +454,15 @@ public class FacturaViewController {
                         setLoad(true);
                         Runnable runnable = () -> {
                             Reports reports = new Reports();
-                            reports.GenerateTickeVenta(VentaID != 0 ? VentaID : venta.getVentaID(), efectivo);
+                            reports.GenerateTickeVenta(VentaID != 0 ? VentaID : venta.getVentaID(), Cliente.getName() == null ? Cliente.getText() : null, efectivo);
+                            clear();
                             setLoad(false);
                         };
                         new Thread(runnable).start();
+                    } else {
+                        clear();
+                        setLoad(false);
                     }
-                    clear();
-                    setLoad(false);
                 };
                 new Thread(run).start();
             } else {
@@ -502,9 +504,9 @@ public class FacturaViewController {
                             reports.GenerateTicketSolicitud(SolicitudID, efectivo);
                             setLoad(false);
                         };
+                        clear();
                         new Thread(runnable).start();
                     }
-                    clear();
                     setLoad(false);
                 };
                 new Thread(run).start();
@@ -552,8 +554,8 @@ public class FacturaViewController {
         Venta venta = new Venta();
 
         venta.setRtn(RTN.getForeground().equals(Color.BLACK) && !RTN.getText().isEmpty() ? RTN.getText() : null);
-        venta.setClienteID((Cliente) Clientes.getSelectedItem());
-        if (Clientes.getSelectedIndex() < 2) {
+        venta.setClienteID(Cliente.getName() != null ? currentClient : new Cliente(1));
+        if (currentClient == null || currentClient.getClienteID() == 1) {
             venta.setEstado("P");
         } else {
             venta.setEstado(FormaPago.getSelectedIndex() == 0 || FormaPago.getSelectedIndex() == 2 ? "P" : "N");
@@ -594,8 +596,8 @@ public class FacturaViewController {
     private Solicitud createObjectRequest() {
         Solicitud solicitud = new Solicitud();
 
-        solicitud.setClienteID((Cliente) Clientes.getSelectedItem());
-        if (Clientes.getSelectedIndex() < 2) {
+        solicitud.setClienteID(Cliente.getName() != null ? currentClient : new Cliente(1));
+        if (currentClient.getClienteID() == 1 || currentClient.getClienteID() == null) {
             solicitud.setEstado("P");
         } else {
             solicitud.setEstado(FormaPago.getSelectedIndex() == 0 || FormaPago.getSelectedIndex() == 2 ? "P" : "N");
@@ -636,7 +638,7 @@ public class FacturaViewController {
     private Cotizacion createObjectQuote() {
         Cotizacion cotizacion = new Cotizacion();
 
-        cotizacion.setClienteID((Cliente) Clientes.getSelectedItem());
+        cotizacion.setClienteID(Cliente.getName() != null ? currentClient : new Cliente(1));
         cotizacion.setUsuarioID(Utilities.getUsuarioActual());
         cotizacion.setFecha(Utilities.getDate());
         cotizacion.setHora(Utilities.getTime());
@@ -696,8 +698,8 @@ public class FacturaViewController {
             Dialogs.ShowMessageDialog("Para " + action + " la " + type + " debe agregar al menos un producto", Dialogs.ERROR_ICON);
             return false;
         }
-        if (Clientes.getSelectedIndex() == 0) {
-            Dialogs.ShowMessageDialog("Para " + action + " la " + type + " debe seleccionar un cliente", Dialogs.ERROR_ICON);
+        if (Cliente.getText().isEmpty() && (Cliente.getName() == null || Cliente.getName().isEmpty())) {
+            Dialogs.ShowMessageDialog("Para " + action + " la " + type + " debe seleccionar o escribir el nombre del cliente", Dialogs.ERROR_ICON);
             return false;
         }
 
@@ -709,8 +711,9 @@ public class FacturaViewController {
      * y los productos agregados a la factura
      */
     private void clear() {
-        Clientes.setSelectedIndex(0);
-        RTN.setText("Escriba el RTN...");
+        Cliente.setText("");
+        Cliente.setName(null);
+        RTN.setText("");
         RTN.setForeground(new Color(180, 180, 180));
 
         Subtotal.setText("0.00");

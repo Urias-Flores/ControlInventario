@@ -1,5 +1,7 @@
 package Views.Dialogs;
 
+import Models.Cliente;
+
 public class Dialogs {
     
     public static int DELETE_ICON = -2;
@@ -140,6 +142,14 @@ public class Dialogs {
         cd.EditingMode(ClienteID);
         cd.setVisible(true);
         cd.dispose();
+    }
+    
+    public static Cliente ShowClienteDialog(){
+        ClientesDialog cd = new ClientesDialog(null, true);
+        cd.setVisible(true);
+        Cliente cliente = cd.getValue();
+        cd.dispose();
+        return cliente;
     }
     
     public static void ShowAddUsuarioDialog(){

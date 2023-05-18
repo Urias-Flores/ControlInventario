@@ -262,7 +262,7 @@ public class AccionesViewController {
                             
                         }
                         Reports report = new Reports();
-                        report.GenerateTickeVenta(TransactionID, 
+                        report.GenerateTickeVenta(TransactionID, null, 
                                 efectivoLocal == -1 ? (arqueo != null ? arqueo.getEfectivo() : 0) : efectivoLocal);
                         setLoad(false); 
                     };

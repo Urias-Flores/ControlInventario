@@ -299,7 +299,7 @@ public class FacturasDiaViewController {
 
                     int transaccionID = Integer.parseInt(Facturas.getValueAt(fila, 0).toString());
                     if(Facturas.getValueAt(fila, 1).toString().equals("Venta")){
-                        reports.GenerateTickeVenta(transaccionID, ldc.getTotal(transaccionID, "V"));
+                        reports.GenerateTickeVenta(transaccionID, null, ldc.getTotal(transaccionID, "V"));
                     }else{
                         reports.GenerateTicketSolicitud(transaccionID, ldc.getTotal(transaccionID, "S"));
                     }

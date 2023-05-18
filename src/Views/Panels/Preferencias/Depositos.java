@@ -16,6 +16,7 @@ public class Depositos extends javax.swing.JPanel {
         
         btnImprimir.addMouseListener(Utilities.getMLGeneralButton());
         btnAplicar.addMouseListener(Utilities.getMLGeneralButton());
+        btnInformacion.addMouseListener(Utilities.getMLGrayButton());
         btnActualizar.addMouseListener(Utilities.getMLGrayButton());
         
         Utilities.CargarAnios(cmbAnioInicial, 0);
@@ -444,7 +445,7 @@ public class Depositos extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnImprimirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnImprimirMouseClicked
-        
+        Dialogs.ShowMessageDialog("Función aún no disponible", Dialogs.WARNING_ICON);
     }//GEN-LAST:event_btnImprimirMouseClicked
 
     private void btnAplicarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAplicarMouseClicked

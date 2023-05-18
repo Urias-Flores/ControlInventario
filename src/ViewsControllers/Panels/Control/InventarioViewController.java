@@ -2,6 +2,7 @@ package ViewsControllers.Panels.Control;
 
 import Models.Categoria;
 import Models.Marca;
+import Models.Producto;
 import Reports.Reports;
 import Resource.Conection;
 import Resource.Utilities;
@@ -149,18 +150,36 @@ public class InventarioViewController {
 
     public void filter(){
         List<RowFilter<TableModel, String>> searchfilters = new LinkedList<>();
-        if(!Buscar.getText().isEmpty() || !Buscar.getForeground().equals(new Color(180, 180, 180))){
+        if(!Buscar.getText().isEmpty()){
             String[] words = Buscar.getText().split(" ");
+            
             for(String word : words){
-                searchfilters.add(RowFilter.regexFilter(Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+word, 1, 2));
+                searchfilters.add(RowFilter.regexFilter(Buscar.getForeground().equals(new Color(180, 180, 180)) ? "" : "(?i)"+word,0,  1, 2));
             }
         }
+        
+        RowFilter barCodeFilter = RowFilter.regexFilter("", 0);
+        boolean barCodeExist = false;
+        if(Buscar.getText().split(" ").length == 1){
+            List<Producto> productos = Conection.createEntityManager()
+            .createNamedQuery("Producto.findByBarra")
+            .setParameter("barra", Buscar.getText())
+            .getResultList();
+
+            if(!productos.isEmpty()){
+                Producto producto = productos.get(0);
+                barCodeFilter = RowFilter.regexFilter("(?i)"+String.valueOf(producto.getProductoID()), 0);
+                barCodeExist = true;
+            }
+        }
+        
         RowFilter wordsFilter = RowFilter.andFilter(searchfilters);
         RowFilter brandsFilter = RowFilter.regexFilter(Marcas.getSelectedIndex() > 0 ? Marcas.getSelectedItem().toString() : "", 2);
         RowFilter categoryFilter = RowFilter.regexFilter(Categorias.getSelectedIndex() > 0 ? Categorias.getSelectedItem().toString() : "", 3);
         
-        List<RowFilter<TableModel, String>> filters = Arrays.asList(wordsFilter, brandsFilter, categoryFilter);
-        rowSorter.setRowFilter(RowFilter.andFilter(filters));
+        List<RowFilter<TableModel, String>> filters = Arrays.asList(barCodeFilter, wordsFilter, brandsFilter, categoryFilter);
+        
+        rowSorter.setRowFilter(barCodeExist ? barCodeFilter : RowFilter.andFilter(filters));
         Inventario.setRowSorter(rowSorter);
     }
 
