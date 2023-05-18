@@ -6,6 +6,7 @@ import Resource.LocalDataController;
 import Resource.NoJpaConection;
 import Resource.UpdateDataController;
 import Views.Dialogs.LoadDialogWithDownloadOption;
+import Views.Main;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.io.File;
@@ -22,6 +23,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -83,19 +86,25 @@ public class LoadDialogWithDownloadOptionViewController {
             Thread.sleep(1000);
             return false;
         }
-        loadBar(0, 33);
+        loadBar(0, 25);
         if(!testJpaConection()){
             Texto.setText("Error al intentar crear la persistencia de datos");
             Thread.sleep(1000);
             return false;
         }
-        loadBar(33, 66);
+        loadBar(25, 50);
         if(!testFileLocalConection()){
             Texto.setText("Error en la busqueda de archivo de datos local");
             Thread.sleep(1000);
             return false;
         }
-        loadBar(66, 100);
+        loadBar(50, 75);
+        if(!testLoadModules()){
+            Texto.setText("Error al cargado modulos");
+            Thread.sleep(1000);
+            return false;
+        }
+        loadBar(75, 100);
         Icons.setIcon(new ImageIcon(getClass().getResource("/Icons/Completado.png")));
         Texto.setText("¡Todo listo!");
         return true;
@@ -104,7 +113,7 @@ public class LoadDialogWithDownloadOptionViewController {
     private boolean testNoJpaConection(){
         NoJpaConection conectionNoJpa = new NoJpaConection();
         if(conectionNoJpa.getconec() != null){
-            Texto.setText("¡Conexión con el servidor establecida!");
+            Texto.setText("Estableciendo conexion con el servidor...");
             return true;
         }
         return false;
@@ -113,7 +122,7 @@ public class LoadDialogWithDownloadOptionViewController {
     private boolean testJpaConection(){
         Object result = Conection.createEntityManager().createNativeQuery("SELECT 1").getSingleResult();
         if(result != null){
-            Texto.setText("¡Conexión con pesistencia creada!");
+            Texto.setText("Creando persistencia...");
             return true;
         }
         return false;
@@ -122,10 +131,22 @@ public class LoadDialogWithDownloadOptionViewController {
     private boolean testFileLocalConection(){
         LocalDataController ldc = new LocalDataController();
         if(ldc.getValue("User") != null){
-            Texto.setText("¡Carga de informacion local completada!");
+            Texto.setText("Cargando informacion local...");
             return true;
         }
         return false;
+    }
+    
+    private boolean testLoadModules(){
+        try{
+            Texto.setText("Cargando modulos...");
+            Main.loadAllCView();
+            return true;
+        } catch(Exception ex) {
+            Logger.getLogger(LoadDialogWithDownloadOptionViewController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error en la cargar de modulos: "+ex);
+            return true;
+        }
     }
     
     //Comprobando existencia de nuevaversion

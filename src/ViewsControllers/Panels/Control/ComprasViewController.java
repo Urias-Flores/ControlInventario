@@ -45,8 +45,7 @@ public class ComprasViewController {
     private JComboBox MesVencimiento;
     private JComboBox AnioVencimiento;
     
-    private JRadioButton Pagado;
-    private JRadioButton Pendiente;
+    private JComboBox FormaPago;
     
     private JTextField Barra;
     
@@ -58,7 +57,7 @@ public class ComprasViewController {
     private JTextField Total;
     private JLabel Cargando;
 
-    public ComprasViewController(JComboBox Proveedores, JTextField Factura, JComboBox DiaCompra, JComboBox MesCompra, JComboBox AnioCompra, JComboBox DiaVencimiento, JComboBox MesVencimiento, JComboBox AnioVencimiento, JRadioButton Pagado, JRadioButton Pendiente, JTextField Barra, JTable Compras, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total, JLabel Cargando) {
+    public ComprasViewController(JComboBox Proveedores, JTextField Factura, JComboBox DiaCompra, JComboBox MesCompra, JComboBox AnioCompra, JComboBox DiaVencimiento, JComboBox MesVencimiento, JComboBox AnioVencimiento, JComboBox FormaPago, JTextField Barra, JTable Compras, JTextField Subtotal, JTextField Descuento, JTextField Importe, JTextField ISV, JTextField Total, JLabel Cargando) {
         this.Proveedores = Proveedores;
         this.Factura = Factura;
         this.DiaCompra = DiaCompra;
@@ -67,8 +66,7 @@ public class ComprasViewController {
         this.DiaVencimiento = DiaVencimiento;
         this.MesVencimiento = MesVencimiento;
         this.AnioVencimiento = AnioVencimiento;
-        this.Pagado = Pagado;
-        this.Pendiente = Pendiente;
+        this.FormaPago = FormaPago;
         this.Barra = Barra;
         this.Compras = Compras;
         this.Subtotal = Subtotal;
@@ -311,7 +309,7 @@ public class ComprasViewController {
         compra.setNoFactura(Factura.getText());
         compra.setUsuarioID(Utilities.getUsuarioActual());
         compra.setProveedorID((Proveedor) Proveedores.getSelectedItem());
-        compra.setEstado(!Pagado.isSelected() ? "N": "P");
+        compra.setEstado(FormaPago.getSelectedIndex() == 1 ? "N": "P");
         compra.setFecha(Utilities.getDate());
         compra.setHora(Utilities.getTime());
         compra.setFechaCompra(getRealBuyDate());
@@ -385,12 +383,6 @@ public class ComprasViewController {
             Dialogs.ShowMessageDialog("Para agregar la compra debe seleccionar un proveedor", Dialogs.ERROR_ICON);
             return false;
         }
-        if(Proveedores.getSelectedIndex() !=  0){
-            if(!Pendiente.isSelected() && !Pagado.isSelected()){
-                Dialogs.ShowMessageDialog("Para agregar la compra debe seleccionar la forma de pago de la factura", Dialogs.ERROR_ICON);
-                return false;
-            }
-        }
         if(Factura.getForeground().equals(new Color(180, 180, 180)) || Factura.getText().isEmpty()){
             Dialogs.ShowMessageDialog("Para agregar la compra debe agregar el numero de factura", Dialogs.ERROR_ICON);
             return false;
@@ -403,7 +395,7 @@ public class ComprasViewController {
             Dialogs.ShowMessageDialog("La fecha de vencimiento no puede ser menor a la fecha de compra real", Dialogs.ERROR_ICON);
             return false;
         }
-        if(Pendiente.isSelected()){
+        if(FormaPago.getSelectedIndex() == 1){
             if(getDueBuyDate().compareTo(getRealBuyDate()) == 0){
                 Dialogs.ShowMessageDialog("En factura pendiente de pago debe agregar fecha de vencimiento", Dialogs.ERROR_ICON);
                 return false;

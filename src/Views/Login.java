@@ -21,6 +21,15 @@ public class Login extends javax.swing.JFrame {
         txtNombre.addFocusListener(Utilities.getFLPlaceHolderEfect());
         loginVC = new LoginViewController(this, txtNombre, txtContrasena, cbRecordarme, lbError);
         loginVC.CargarUsuario();
+        
+        //Diseños agregados 
+        addDesing();
+    }
+    
+    private void addDesing(){
+        txtNombre.putClientProperty("JTextField.showClearButton", true);
+        txtNombre.putClientProperty("JTextField.placeholderText", "Ingresa tu nombre de usuario...");
+        txtContrasena.putClientProperty("JTextField.placeholderText", "Ingresa tu contraseña...");
     }
 
     @SuppressWarnings("unchecked")
@@ -243,7 +252,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIniciarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIniciarSesionMouseClicked
-        IniciarSesion();
+        LogIn();
     }//GEN-LAST:event_btnIniciarSesionMouseClicked
 
     private void pnBarraMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnBarraMousePressed
@@ -268,11 +277,11 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCloseMouseClicked
 
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
-        IniciarSesion();
+        LogIn();
     }//GEN-LAST:event_txtNombreActionPerformed
 
     private void txtContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContrasenaActionPerformed
-        IniciarSesion();
+        LogIn();
     }//GEN-LAST:event_txtContrasenaActionPerformed
 
     private void lbOlvidasteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbOlvidasteMouseClicked
@@ -287,7 +296,7 @@ public class Login extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_lbCrearMouseClicked
 
-    public void IniciarSesion() {
+    public void LogIn() {
         txtCargando.setIcon(new ImageIcon(getClass().getResource("/Icons/cargando32px.gif")));
         Runnable run = () -> {
             loginVC.IniciarSesion();

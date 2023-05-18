@@ -77,13 +77,13 @@ public class AddArqueoDetalleDialog extends javax.swing.JDialog {
         lbTitulo.setFont(new java.awt.Font("Roboto", 1, 30)); // NOI18N
         lbTitulo.setText("Cobrar factura");
 
-        lbEntidad9.setFont(new java.awt.Font("Roboto", 0, 25)); // NOI18N
+        lbEntidad9.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbEntidad9.setText("Total factura");
 
-        lbEntidad10.setFont(new java.awt.Font("Roboto", 0, 25)); // NOI18N
+        lbEntidad10.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbEntidad10.setText("Total efectivo");
 
-        lbEntidad11.setFont(new java.awt.Font("Roboto", 0, 25)); // NOI18N
+        lbEntidad11.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbEntidad11.setText("Total cambio");
 
         txtTotalFactura.setEditable(false);
@@ -91,10 +91,12 @@ public class AddArqueoDetalleDialog extends javax.swing.JDialog {
         txtTotalFactura.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
         txtTotalFactura.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtTotalFactura.setText("0.00");
+        txtTotalFactura.setPreferredSize(new java.awt.Dimension(80, 38));
 
         txtTotalEfectivo.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
         txtTotalEfectivo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtTotalEfectivo.setText("0.00");
+        txtTotalEfectivo.setPreferredSize(new java.awt.Dimension(80, 38));
         txtTotalEfectivo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtTotalEfectivoKeyReleased(evt);
@@ -106,6 +108,7 @@ public class AddArqueoDetalleDialog extends javax.swing.JDialog {
         txtTotalCambio.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
         txtTotalCambio.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtTotalCambio.setText("0.00");
+        txtTotalCambio.setPreferredSize(new java.awt.Dimension(80, 38));
 
         lbError.setBackground(new java.awt.Color(255, 255, 255));
         lbError.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
@@ -153,11 +156,11 @@ public class AddArqueoDetalleDialog extends javax.swing.JDialog {
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(lbEntidad10, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-                                    .addComponent(txtTotalEfectivo))
+                                    .addComponent(txtTotalEfectivo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lbEntidad11, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtTotalCambio))))))
+                                    .addComponent(txtTotalCambio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addGap(18, 18, 18))
         );
         jPanel1Layout.setVerticalGroup(
@@ -173,16 +176,16 @@ public class AddArqueoDetalleDialog extends javax.swing.JDialog {
                     .addComponent(lbEntidad11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTotalFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTotalEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTotalCambio, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTotalFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotalEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotalCambio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lbError, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnPagar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 16, Short.MAX_VALUE))
+                .addGap(0, 27, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

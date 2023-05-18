@@ -1,6 +1,5 @@
 package ViewsControllers.Panels.Control;
 
-import Controllers.ProductoJpaController;
 import Models.Categoria;
 import Models.Marca;
 import Models.Producto;

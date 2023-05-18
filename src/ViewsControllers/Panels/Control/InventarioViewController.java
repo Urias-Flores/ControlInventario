@@ -157,7 +157,7 @@ public class InventarioViewController {
         }
         RowFilter wordsFilter = RowFilter.andFilter(searchfilters);
         RowFilter brandsFilter = RowFilter.regexFilter(Marcas.getSelectedIndex() > 0 ? Marcas.getSelectedItem().toString() : "", 2);
-        RowFilter categoryFilter = RowFilter.regexFilter(Categorias.getSelectedIndex() > 0 ? Categorias.getSelectedItem().toString() : "", 2);
+        RowFilter categoryFilter = RowFilter.regexFilter(Categorias.getSelectedIndex() > 0 ? Categorias.getSelectedItem().toString() : "", 3);
         
         List<RowFilter<TableModel, String>> filters = Arrays.asList(wordsFilter, brandsFilter, categoryFilter);
         rowSorter.setRowFilter(RowFilter.andFilter(filters));
@@ -166,9 +166,11 @@ public class InventarioViewController {
 
     public void printReportInventory() {
         if(Dialogs.ShowOKCancelDialog("¿Desea imprimir el reporte de inventario ahora?", Dialogs.WARNING_ICON)){
+            setLoad(true);
             Runnable run = () -> {
                 Reports report = new Reports();
                 report.GenerateInventarioReport(Utilities.getUsuarioActual().getNombre());
+                setLoad(false);
             };
             new Thread(run).start();
         }

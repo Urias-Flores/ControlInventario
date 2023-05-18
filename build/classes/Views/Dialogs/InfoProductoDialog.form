@@ -210,9 +210,9 @@
         <Component class="javax.swing.JLabel" name="lbTitulo">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Roboto" size="26" style="1"/>
+              <Font name="Roboto" size="30" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Informacion completa"/>
+            <Property name="text" type="java.lang.String" value="Informaci&#xf3;n completa"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">

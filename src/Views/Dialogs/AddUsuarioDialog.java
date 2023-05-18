@@ -22,6 +22,12 @@ public class AddUsuarioDialog extends javax.swing.JDialog {
         
         txtError.setBackground(Color.white);
         vc = new AddUsuarioDialogViewController(this, txtNombre, cmbCargo, txtEmpleado, txtError, lbCargando);
+    
+        addDesing();
+    }
+    
+    private void addDesing(){
+        txtNombre.putClientProperty("JTextField.placeholderText", "Ingrese el nombre de usuario...");
     }
     
     public void EditingMode(int UsuarioID){
@@ -100,18 +106,16 @@ public class AddUsuarioDialog extends javax.swing.JDialog {
             .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
         );
 
-        lbTitulo.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
+        lbTitulo.setFont(new java.awt.Font("Roboto", 1, 30)); // NOI18N
         lbTitulo.setText("Agregar usuario");
 
-        jLabel2.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel2.setText("Nombre de usuario:");
+        jLabel2.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel2.setText("Nombre de usuario");
 
         txtNombre.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtNombre.setForeground(new java.awt.Color(180, 180, 180));
-        txtNombre.setText("Ingrese el nombre de usuario...");
 
-        jLabel3.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel3.setText("Empleado vinculado al usuario:");
+        jLabel3.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel3.setText("Empleado vinculado al usuario");
 
         txtEmpleado.setEditable(false);
         txtEmpleado.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
@@ -149,11 +153,11 @@ public class AddUsuarioDialog extends javax.swing.JDialog {
 
         jLabel4.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(90, 90, 90));
-        jLabel4.setText("La informacion para la configuracion del usuario se enviara al mismo por ");
+        jLabel4.setText("La información para la configuración del usuario se enviara al mismo por ");
 
         jLabel5.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(90, 90, 90));
-        jLabel5.setText("medio del correo vinculado al empleado.");
+        jLabel5.setText("medio del correo electrónico vinculado al empleado.");
 
         btnAgregar.setBackground(new java.awt.Color(3, 57, 103));
         btnAgregar.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
@@ -168,8 +172,8 @@ public class AddUsuarioDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel6.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel6.setText("Cargo del usuario:");
+        jLabel6.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel6.setText("Cargo del usuario");
 
         cmbCargo.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         cmbCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Seleccione el cargo --", "Administrador", "Dependiente" }));

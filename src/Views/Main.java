@@ -23,7 +23,10 @@ public class Main extends javax.swing.JFrame {
         vc = new MainViewController(this, txtUsuarioActual, lbNotificaciones,btnFacturacion, btnControl, btnEstadisticas, btnCuetas, btnAjustes, btnCerrarSesion, tbpPrincipal);
         vc.loadPanel(1);
         vc.enableButton(btnFacturacion);
-        //vc.updateNotifications();
+    }
+    
+    public static void loadAllCView(){
+        MainViewController.loadAllView();
     }
 
     @SuppressWarnings("unchecked")

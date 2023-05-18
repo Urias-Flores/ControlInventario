@@ -43,9 +43,11 @@ public class AddGastoDialogViewController {
     }
     
     public void save(){
+        //En caso de ser cero inserta el gasto como un nuevo gasto
         if (GastoID == 0) {
             insertExpense();
         } else {
+            //Caso contrario edita el gasto que se ha deseado
             editExpense();
         }
     }
@@ -121,12 +123,17 @@ public class AddGastoDialogViewController {
         }
     }
     
+    //Inside task
     private Gasto createObjectExpense(){
         Gasto gasto = new Gasto();
+        if(GastoID > 0){
+            gasto = controller.findGasto(GastoID);
+        }
+        
         gasto.setGastoID(GastoID > 0 ? GastoID : null);
-        gasto.setFecha(Utilities.getDate());
-        gasto.setHora(Utilities.getTime());
-        gasto.setUsuarioID(Utilities.getUsuarioActual());
+        gasto.setFecha(GastoID > 0 ? gasto.getFecha() : Utilities.getDate());
+        gasto.setHora(GastoID > 0  ? gasto.getHora() : Utilities.getTime());
+        gasto.setUsuarioID(GastoID > 0 ? gasto.getUsuarioID() : Utilities.getUsuarioActual());
         gasto.setDescripcion(Descripcion.getText());
         gasto.setTotal(-Float.parseFloat(Total.getText().replace(",", "")));
         
@@ -134,17 +141,19 @@ public class AddGastoDialogViewController {
     }
     
     private boolean validate(){
+        //Validacion de campo de descripcion
         if(Descripcion.getText().isEmpty()){
-            Error.setText("La descripcion del gasto es obligatoria");
+            Error.setText("La descripción del gasto es obligatoria");
             return false;
         }
         if(Total.getText().isEmpty()){
             Error.setText("El total del gasto es obligatorio");
             return false;
         }
+
+        //Validacion de campo del total de gasto
         try {
             float total = Float.parseFloat(Total.getText());
-            
             if(total <= 0){
                 Error.setText("El total del gasto debe ser mayor 0");
                 return false;

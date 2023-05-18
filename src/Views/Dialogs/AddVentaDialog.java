@@ -26,6 +26,15 @@ public class AddVentaDialog extends javax.swing.JDialog {
         vc = new AddVentaDialogViewController(txtBuscar, cmbMarcas, txtCargando, tbProductos, 
                 txtExistencia,txtDescuentoPorcentaje, txtDescuentoLempiras, txtPrecio, 
                 txtCantidad, txtSubtotal, txtError);
+        
+        addDesing();
+        
+        this.revalidate();
+        this.repaint();
+    }
+    
+    private void addDesing(){
+        txtBuscar.putClientProperty("JTextField.placeholderText", "Buscar...");
     }
 
     @SuppressWarnings("unchecked")
@@ -102,12 +111,11 @@ public class AddVentaDialog extends javax.swing.JDialog {
             .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
         );
 
-        jLabel1.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Roboto", 1, 30)); // NOI18N
         jLabel1.setText("Agregar un poducto a la factura");
 
         txtBuscar.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         txtBuscar.setForeground(new java.awt.Color(180, 180, 180));
-        txtBuscar.setText("Buscar...");
         txtBuscar.setPreferredSize(new java.awt.Dimension(38, 32));
         txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -129,7 +137,7 @@ public class AddVentaDialog extends javax.swing.JDialog {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/buscar.png"))); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel3.setText("Seleccione el producto");
 
         tbProductos.setModel(new javax.swing.table.DefaultTableModel(
@@ -244,6 +252,7 @@ public class AddVentaDialog extends javax.swing.JDialog {
         });
 
         jLabel4.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Filtrar:");
 
         cmbMarcas.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
@@ -329,14 +338,14 @@ public class AddVentaDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbMarcas)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)

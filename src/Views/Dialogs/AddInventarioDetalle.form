@@ -173,7 +173,7 @@
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Roboto" size="26" style="1"/>
+              <Font name="Roboto" size="30" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Editar valores de inventario"/>
           </Properties>
@@ -181,7 +181,7 @@
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Roboto" size="20" style="0"/>
+              <Font name="Roboto" size="20" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Justificacion de accion (Eliminacion, modificacion de inventario):"/>
           </Properties>
@@ -207,7 +207,7 @@
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Roboto" size="20" style="0"/>
+              <Font name="Roboto" size="20" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Existencia previa:"/>
           </Properties>
@@ -215,7 +215,7 @@
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Roboto" size="20" style="0"/>
+              <Font name="Roboto" size="20" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Existencia real:"/>
           </Properties>
@@ -223,7 +223,7 @@
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Roboto" size="20" style="0"/>
+              <Font name="Roboto" size="20" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Cantidad a modificar:"/>
           </Properties>

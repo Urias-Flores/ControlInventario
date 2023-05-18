@@ -433,7 +433,7 @@
         <Component class="javax.swing.JLabel" name="jLabel13">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Roboto" size="26" style="1"/>
+              <Font name="Roboto" size="30" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Editar poducto de la factura"/>
           </Properties>

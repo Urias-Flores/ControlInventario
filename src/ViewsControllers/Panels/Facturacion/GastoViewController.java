@@ -11,8 +11,6 @@ import Views.Dialogs.Dialogs;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
 import javax.swing.Icon;
@@ -72,6 +70,7 @@ public class GastoViewController {
         Init();
     }
     
+    //Setea el modelo de la tabla
     private void setModelTable(){
         String[] columns = {"No.", "Fecha", "Hora", "Usuario",  "Total"};
         model.setColumnIdentifiers(columns);
@@ -84,6 +83,7 @@ public class GastoViewController {
         Gastos.getColumn("Total").setPreferredWidth(250);
     }
     
+    //Inside task
     private void loadUsers(){
         Usuarios.removeAllItems();
         Usuarios.addItem("-- Todos los usuarios --");
@@ -91,6 +91,7 @@ public class GastoViewController {
         usuarios.forEach(Usuarios::addItem);
     }
     
+    //Inside Task
     private void loadExpenses(){
         model.setRowCount(0);
         StoredProcedureQuery sp = Conection.createEntityManager().createStoredProcedureQuery("psLoadExpenses")
@@ -110,19 +111,37 @@ public class GastoViewController {
             };
             model.addRow(row);
         });
+        updateTotal();
+    }
+    
+    private void updateTotal(){
+        int nfila = model.getRowCount();
+        if(nfila > 0){
+            int counter = 0;
+            float Total = 0;
+            while(counter < nfila){
+                Total += Float.parseFloat(model.getValueAt(counter, 4).toString());
+                counter++;
+            }
+            
+            TotalGasto.setText(getNumberFormat(Total * -1));
+        }
+    }
+    
+    public void filter(){
+        
     }
     
     public void editExpense(){
         int fila = Gastos.getSelectedRow();
         if(fila >= 0){
             if(Dialogs.ShowEnterPasswordDialog(
-                    "La edición de gastos no es recomendable puede ocasionar", 
+                    "La edición de gastos no es recomendable, puede ocasionar", 
                     "desbalances en las cuentas y arqueos previos.", 
                     "Si desea continuar con la edición ingrese su contraseña.", Dialogs.WARNING_ICON)){
                 Dialogs.ShowModifyExpenseDialog(Integer.parseInt(Gastos.getValueAt(fila, 0).toString()));
                 Init();
             }
-            
         } else {
             Dialogs.ShowMessageDialog("Seleccione un gasto de la lista", Dialogs.ERROR_ICON);
         }
@@ -140,9 +159,12 @@ public class GastoViewController {
                 Runnable run = () -> {
                     try {
                         int GastoID = Integer.parseInt(Gastos.getValueAt(fila, 0).toString());
-                        new GastoJpaController(Conection.createEntityManagerFactory()).destroy(GastoID);
-                        
                         LocalDataController ldc = new LocalDataController();
+                        
+                        //Eliminando registro de gasto de la base de datos
+                        new GastoJpaController(Conection.createEntityManagerFactory()).destroy(GastoID);
+
+                        //Eliminando registro de gasto de la base datos local
                         ldc.deleteArqueoDetalle(GastoID, "G");
                         
                         Init();
@@ -167,7 +189,7 @@ public class GastoViewController {
             Dialogs.ShowAddExpenseDialog();
             Init();
         }else{
-            Dialogs.ShowMessageDialog("El dia de facturacion aun no ha sido iniciado", Dialogs.ERROR_ICON);
+            Dialogs.ShowMessageDialog("El día de facturación aún no ha sido iniciado", Dialogs.ERROR_ICON);
         }
     }
     

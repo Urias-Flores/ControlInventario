@@ -77,17 +77,16 @@ public class IniciarDiaDialog extends javax.swing.JDialog {
         lbTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbTitulo.setText("Iniciar dia de facturación");
 
-        lbEntidad9.setFont(new java.awt.Font("Roboto", 0, 25)); // NOI18N
+        lbEntidad9.setFont(new java.awt.Font("Roboto", 1, 25)); // NOI18N
         lbEntidad9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbEntidad9.setText("Saldo inicial");
 
-        txtSaldo.setBackground(new java.awt.Color(255, 255, 255));
         txtSaldo.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
         txtSaldo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtSaldo.setText("0.00");
 
         btnIniciar.setBackground(new java.awt.Color(3, 57, 103));
-        btnIniciar.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        btnIniciar.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         btnIniciar.setForeground(new java.awt.Color(255, 255, 255));
         btnIniciar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnIniciar.setText("Iniciar");

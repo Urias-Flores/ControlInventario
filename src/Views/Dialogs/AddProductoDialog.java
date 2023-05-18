@@ -4,6 +4,9 @@ package Views.Dialogs;
 import Resource.Utilities;
 import ViewsControllers.Dialogs.AddProductDialogViewController;
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.JTextField;
 
 public class AddProductoDialog extends javax.swing.JDialog {
 
@@ -23,16 +26,29 @@ public class AddProductoDialog extends javax.swing.JDialog {
         btnAgregar.addMouseListener(Utilities.getMLGeneralButton());
         txtError.setBackground(Color.white);
         
-        txtBarra.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        txtUnidad.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        txtCantidadMinima.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        txtPrecioCompra.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        txtPrecioVenta.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        
         vc = new AddProductDialogViewController(this, txtDescripcion, txtMarca, 
                 txtCategoria, txtBarra, txtUnidad, 
                 txtCantidadMinima, txtPrecioCompra, 
                 txtPrecioVenta, txtError, lbCargando);
+        
+        addDesing();
+    }
+    
+    private void addDesing(){
+        List<JTextField> fields = Arrays.asList(txtBarra, txtUnidad, txtCantidadMinima, txtPrecioCompra, txtPrecioVenta);
+        String[] texts = {
+            "Ingrese el código de barra del producto...",
+            "Ingrese las unidades del producto. Ejm: Libras",
+            "0.00",
+            "0.00",
+            "0.00"
+        };
+        
+        int counter = 0;
+        for(JTextField field : fields){
+            field.putClientProperty("JTextField.placeholderText", texts[counter]);
+            counter++;
+        }
     }
 
     public void EditigingMode(int ProductoID){
@@ -116,19 +132,19 @@ public class AddProductoDialog extends javax.swing.JDialog {
             .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
         );
 
-        jLabel1.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Roboto", 1, 30)); // NOI18N
         jLabel1.setText("Agregar nuevo producto");
 
-        jLabel2.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel2.setText("Descripcion:");
+        jLabel2.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel2.setText("Descripción");
 
         txtDescripcion.setColumns(20);
         txtDescripcion.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtDescripcion.setRows(5);
         jScrollPane1.setViewportView(txtDescripcion);
 
-        jLabel3.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel3.setText("Marca:");
+        jLabel3.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel3.setText("Marca");
 
         txtMarca.setEditable(false);
         txtMarca.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
@@ -184,28 +200,24 @@ public class AddProductoDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel8.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel8.setText("Categoria:");
+        jLabel8.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel8.setText("Categoría");
 
-        jLabel9.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel9.setText("Codigo de barras:");
+        jLabel9.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel9.setText("Código de barras");
 
         txtBarra.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtBarra.setForeground(new java.awt.Color(180, 180, 180));
-        txtBarra.setText("Escriba el codigo de barras...");
 
-        jLabel10.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel10.setText("Tipo de unidad del producto:");
+        jLabel10.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel10.setText("Tipo de unidad del producto");
 
         txtUnidad.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtUnidad.setForeground(new java.awt.Color(180, 180, 180));
-        txtUnidad.setText("Ingrese el tipo de unidad ejm. Libras.");
 
-        jLabel11.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel11.setText("Precio de compra:");
+        jLabel11.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel11.setText("Precio de compra");
 
-        jLabel12.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel12.setText("Precio de venta:");
+        jLabel12.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel12.setText("Precio de venta");
 
         btnAgregar.setBackground(new java.awt.Color(3, 57, 103));
         btnAgregar.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
@@ -225,13 +237,11 @@ public class AddProductoDialog extends javax.swing.JDialog {
         txtError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         txtError.setOpaque(true);
 
-        jLabel13.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel13.setText("Cantidad minima en inventario");
+        jLabel13.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel13.setText("Cantidad mínima en inventario");
 
         txtCantidadMinima.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtCantidadMinima.setForeground(new java.awt.Color(180, 180, 180));
         txtCantidadMinima.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        txtCantidadMinima.setText("0.00");
         txtCantidadMinima.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtCantidadMinimaFocusLost(evt);
@@ -239,9 +249,7 @@ public class AddProductoDialog extends javax.swing.JDialog {
         });
 
         txtPrecioCompra.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtPrecioCompra.setForeground(new java.awt.Color(180, 180, 180));
         txtPrecioCompra.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        txtPrecioCompra.setText("0.00");
         txtPrecioCompra.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtPrecioCompraFocusLost(evt);
@@ -249,9 +257,7 @@ public class AddProductoDialog extends javax.swing.JDialog {
         });
 
         txtPrecioVenta.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtPrecioVenta.setForeground(new java.awt.Color(180, 180, 180));
         txtPrecioVenta.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        txtPrecioVenta.setText("0.00");
         txtPrecioVenta.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtPrecioVentaFocusLost(evt);

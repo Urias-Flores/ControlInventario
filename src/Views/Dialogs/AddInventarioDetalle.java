@@ -91,10 +91,10 @@ public class AddInventarioDetalle extends javax.swing.JDialog {
             .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
         );
 
-        jLabel1.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Roboto", 1, 30)); // NOI18N
         jLabel1.setText("Editar valores de inventario");
 
-        jLabel2.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel2.setText("Justificacion de accion (Eliminacion, modificacion de inventario):");
 
         txtDescripcion.setColumns(20);
@@ -102,13 +102,13 @@ public class AddInventarioDetalle extends javax.swing.JDialog {
         txtDescripcion.setRows(5);
         jScrollPane1.setViewportView(txtDescripcion);
 
-        jLabel3.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel3.setText("Existencia previa:");
 
-        jLabel4.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel4.setText("Existencia real:");
 
-        jLabel5.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel5.setText("Cantidad a modificar:");
 
         txtCantidad.setEditable(false);

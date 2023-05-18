@@ -17,8 +17,13 @@ public class AddMarcaDialog extends javax.swing.JDialog {
         btnAceptar.addMouseListener(Utilities.getMLGeneralButton());
         
         vc = new AddMarcaDialogViewController(this, txtNombre, lbError, lbCargando);
+        addDesing();
     }
 
+    private void addDesing(){
+        txtNombre.putClientProperty("JTextField.placeholderText", "Ingrese el nombre de la marca...");
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -75,15 +80,13 @@ public class AddMarcaDialog extends javax.swing.JDialog {
             .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
         );
 
-        jLabel1.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Roboto", 1, 30)); // NOI18N
         jLabel1.setText("Agregar nueva marca");
 
-        jLabel2.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel2.setText("Nombre:");
+        jLabel2.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel2.setText("Nombre");
 
         txtNombre.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtNombre.setForeground(new java.awt.Color(180, 180, 180));
-        txtNombre.setText("Escribe el nombre de la marca...");
 
         btnAceptar.setBackground(new java.awt.Color(3, 57, 103));
         btnAceptar.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N

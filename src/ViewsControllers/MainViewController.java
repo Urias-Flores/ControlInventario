@@ -16,14 +16,20 @@ import Views.Panels.Facturacion.Facturar;
 import Views.Panels.Facturacion.FacturasDia;
 import Views.Panels.Facturacion.Gasto;
 import Views.Panels.Preferencias.Clientes;
+import Views.Panels.Preferencias.Depositos;
 import Views.Panels.Preferencias.Empleados;
 import Views.Panels.Preferencias.Proveedores;
 import Views.Panels.Preferencias.Usuarios;
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 public class MainViewController {
@@ -38,7 +44,35 @@ public class MainViewController {
     private JLabel CerrarSesion;
     private JTabbedPane Principal;
     private int PanelActivo = 0;
-
+    
+    //Seccion de facturar
+    private static Facturar facturar;
+    private static FacturasDia facturasDia;
+    private static Gasto gastos;
+    private static Arqueo arqueos;
+    
+    //Seccion de control
+    private static Productos productos;
+    private static Inventario inventario;
+    private static Compras compras;
+    
+    //Seccion de estadisticas
+    private static Resumenes resumenes;
+    private static Acciones acciones;
+    
+    //Seccion de cuentas
+    private static Proveedores proveedores;
+    private static Clientes clientes;
+    private static Depositos depositos;
+    private static Empleados empleados;
+    private static Usuarios usuarios;
+    
+    //Seccion de ajustes
+    private static Reportes reportes;
+    private static Email email;
+    private static Empresa empresa;
+    
+    
     public MainViewController(JFrame Instance, JLabel UsuarioActual, JLabel Notificaciones,JLabel Facturacion, JLabel Control, JLabel Estadisticas, JLabel Preferencias, JLabel Ajustes, JLabel CerrarSesion, JTabbedPane Principal) {
         this.Instance = Instance;
         this.UsuarioActual = UsuarioActual;
@@ -58,6 +92,33 @@ public class MainViewController {
         updateNotifications();
     }
     
+    
+    public static void loadAllView(){
+        facturar = new Facturar();
+        facturasDia = new FacturasDia();
+        gastos = new Gasto();
+        arqueos = new Arqueo();
+        
+        productos = new Productos();
+        inventario = new Inventario();
+        compras = new Compras();
+        
+        resumenes = new Resumenes();
+        acciones = new Acciones();
+        
+        proveedores = new Proveedores();
+        clientes = new Clientes();
+        depositos = new Depositos();
+        usuarios = new Usuarios();
+        empleados = new Empleados();
+        
+        reportes = new Reportes();
+        email = new Email();
+        empresa = new Empresa();
+    }
+    
+    
+    
     private void loadUser(String Usuario){
         UsuarioActual.setText(Usuario);
     }
@@ -67,11 +128,6 @@ public class MainViewController {
             Principal.removeAll();
             switch(Panel){
                 case 1:
-
-                    Facturar facturar = new Facturar();
-                    FacturasDia facturasDia = new FacturasDia();
-                    Gasto gastos = new Gasto();
-                    Arqueo arqueos = new Arqueo();
                     
                     Icon FacturarIcon = new ImageIcon(getClass().getResource("/Icons/factura.png"));
                     Icon FacturaDiaIcon = new ImageIcon(getClass().getResource("/Icons/facturaDia.png"));
@@ -85,10 +141,6 @@ public class MainViewController {
                     break;
                 case 2:
                     
-                    Productos productos = new Productos();
-                    Inventario inventario = new Inventario();
-                    Compras compras = new Compras();
-
                     Icon InventarioIcon = new ImageIcon(getClass().getResource("/Icons/inventario.png"));
                     Icon ProductoIcon = new ImageIcon(getClass().getResource("/Icons/producto.png"));
                     Icon CompraIcon = new ImageIcon(getClass().getResource("/Icons/compra.png"));
@@ -99,9 +151,6 @@ public class MainViewController {
                     
                     break;
                 case 3:
-
-                    Resumenes resumenes = new Resumenes();
-                    Acciones acciones = new Acciones();
                     
                     Icon ResumenIcon = new ImageIcon(getClass().getResource("/Icons/grafica.png"));
                     Icon TransaccionesIcon = new ImageIcon(getClass().getResource("/Icons/transacciones.png"));
@@ -111,31 +160,26 @@ public class MainViewController {
                     
                     break;
                 case 4:
-                    Proveedores proveedores = new Proveedores();
-                    Clientes clientes = new Clientes();
 
                     Icon UsuarioIcon = new ImageIcon(getClass().getResource("/Icons/usuarios.png"));
                     Icon EmpleadoIcon = new ImageIcon(getClass().getResource("/Icons/empleados.png"));
+                    Icon DepositoIcon = new ImageIcon(getClass().getResource("/Icons/deposito.png"));
                     Icon ClienteIcon = new ImageIcon(getClass().getResource("/Icons/clientes.png"));
                     Icon ProveedorIcon = new ImageIcon(getClass().getResource("/Icons/proveedores.png"));
                     
                     Principal.addTab("Clientes", ClienteIcon, clientes);
                     Principal.addTab("Proveedores", ProveedorIcon, proveedores);
+                    Principal.addTab("Depositos", DepositoIcon, depositos);
                     
                     if(Utilities.getUsuarioActual().getCargo().equals("A")){
-                        Usuarios usuario = new Usuarios();
-                        Empleados empleados = new Empleados();
                         Principal.addTab("Empleados", EmpleadoIcon, empleados);
-                        Principal.addTab("Usuarios", UsuarioIcon, usuario);
+                        Principal.addTab("Usuarios", UsuarioIcon, usuarios);
                     }
                     
                     break;
                 case 5:
                     //Para ajustes generales, en caso de requerirse a futuro
                     //General general = new General();
-                    Reportes reportes = new Reportes();
-                    Email email = new Email();
-                    Empresa empresa = new Empresa();
                     
                     //Icon AjustesGeneralIcon = new ImageIcon(getClass().getResource("/Icons/ajustes.png"));
                     Icon AjustesReportesIcon = new ImageIcon(getClass().getResource("/Icons/reporte.png"));

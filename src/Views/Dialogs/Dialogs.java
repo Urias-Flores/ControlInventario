@@ -109,6 +109,7 @@ public class Dialogs {
     public static Object[] ShowEditVentaDialog(Object[] values){
         EditVentaDialog evd = new EditVentaDialog(null, true);
         evd.setValues(values);
+        evd.setVentaState();
         evd.setVisible(true);
         values = evd.getValues();
         evd.dispose();

@@ -118,18 +118,18 @@ public class AddAbonoDialog extends javax.swing.JDialog {
         lbFactura.setText("No. Factura");
 
         jLabel3.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel3.setText("Deuda total:");
+        jLabel3.setText("Deuda total");
 
         lbDeudaTotal.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbDeudaTotal.setText("0.00");
 
         jLabel5.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel5.setText("Total abonado:");
+        jLabel5.setText("Total abonado");
 
         lbTotalAbonado.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbTotalAbonado.setText("0.00");
 
-        jLabel7.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel7.setText("Registro de abonos");
 
         tbAbonos.setModel(new javax.swing.table.DefaultTableModel(
@@ -145,7 +145,7 @@ public class AddAbonoDialog extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(tbAbonos);
 
-        jLabel8.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel8.setText("Total a abonar");
 
@@ -173,7 +173,7 @@ public class AddAbonoDialog extends javax.swing.JDialog {
         lbError.setText("Texto de error");
         lbError.setOpaque(true);
 
-        jLabel9.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel9.setText("Pendiente");
 
@@ -183,7 +183,7 @@ public class AddAbonoDialog extends javax.swing.JDialog {
         txtTotalPendiente.setText("0.00");
 
         jLabel6.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel6.setText("Deuda pendiente:");
+        jLabel6.setText("Deuda pendiente");
 
         lbDeudaPendiente.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbDeudaPendiente.setText("0.00");

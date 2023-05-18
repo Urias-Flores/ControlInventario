@@ -36,6 +36,10 @@ public class EditVentaDialog extends javax.swing.JDialog {
         isCompra = true;
     }
     
+    public void setVentaState(){
+        vc.setIsVenta(true);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -67,7 +71,6 @@ public class EditVentaDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(710, 610));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -218,7 +221,7 @@ public class EditVentaDialog extends javax.swing.JDialog {
         lbUnidades.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbUnidades.setText("Libras");
 
-        jLabel13.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Roboto", 1, 30)); // NOI18N
         jLabel13.setText("Editar poducto de la factura");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

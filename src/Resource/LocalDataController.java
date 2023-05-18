@@ -252,6 +252,6 @@ public class LocalDataController {
             System.err.print("Error code: "+ex.getErrorCode()+" Error: "+ex.getMessage());
         }
         
-        return 0;
+        return -1;
     }
 }

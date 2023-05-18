@@ -3,6 +3,9 @@ package Views.Dialogs;
 import Resource.Utilities;
 import ViewsControllers.Dialogs.AddProveedorDialogViewController;
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.JTextField;
 
 public class AddProveedorDialog extends javax.swing.JDialog {
 
@@ -16,13 +19,26 @@ public class AddProveedorDialog extends javax.swing.JDialog {
         btnClose.addMouseListener(Utilities.getMLButtonCloseBlue());
         btnAgregar.addMouseListener(Utilities.getMLGeneralButton());
         
-        txtNombre.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        txtRNT.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        txtCorreo.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        txtNumero.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtError.setBackground(Color.white);
         
         vc = new AddProveedorDialogViewController(this, txtNombre, txtRNT, txtCorreo, txtNumero, txtError, lbCargando);
+        addDesing();
+    }
+    
+    private void addDesing(){
+        List<JTextField> fields = Arrays.asList(txtNombre, txtRNT, txtNumero, txtCorreo);
+        String[] texts = {
+            "Ingrese el nombre del proveedor...",
+            "Ingrese el R.T.N del proveedor...",
+            "Ingrese el número telefónico del proveedor...",
+            "Ingrese el correo electrónico del proveedor..."
+        };
+        
+        int counter = 0;
+        for(JTextField field : fields){
+            field.putClientProperty("JTextField.placeholderText", texts[counter]);
+            counter++;
+        }
     }
     
     public void EditingMode(int ProveedorID){
@@ -95,36 +111,28 @@ public class AddProveedorDialog extends javax.swing.JDialog {
             .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
         );
 
-        lbTitulo.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
+        lbTitulo.setFont(new java.awt.Font("Roboto", 1, 30)); // NOI18N
         lbTitulo.setText("Agregar proveedor");
 
         txtNombre.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtNombre.setForeground(new java.awt.Color(180, 180, 180));
-        txtNombre.setText("Ingrese el nombre del proveedor...");
 
-        jLabel3.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel3.setText("RTN:");
+        jLabel3.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel3.setText("RTN");
 
         txtRNT.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtRNT.setForeground(new java.awt.Color(180, 180, 180));
-        txtRNT.setText("Ingrese el RTN del proveedor...");
 
-        jLabel4.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel4.setText("Correo Electronico:");
+        jLabel4.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel4.setText("Correo Electronico");
 
         txtCorreo.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtCorreo.setForeground(new java.awt.Color(180, 180, 180));
-        txtCorreo.setText("Ingrese el correo electronico del proveedor...");
 
-        jLabel5.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel5.setText("Numero telefonico:");
+        jLabel5.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel5.setText("Numero telefonico");
 
         txtNumero.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtNumero.setForeground(new java.awt.Color(180, 180, 180));
-        txtNumero.setText("Ingrese el numero telefonico del proveedor...");
 
-        jLabel2.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel2.setText("Nombre:");
+        jLabel2.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel2.setText("Nombre");
 
         txtError.setBackground(new java.awt.Color(185, 0, 0));
         txtError.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
@@ -181,7 +189,7 @@ public class AddProveedorDialog extends javax.swing.JDialog {
                 .addComponent(pnBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lbTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -203,7 +211,7 @@ public class AddProveedorDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
                     .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 16, Short.MAX_VALUE))
+                .addGap(0, 18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

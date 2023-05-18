@@ -170,7 +170,7 @@
         <Component class="javax.swing.JLabel" name="lbEntidad12">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Roboto" size="25" style="0"/>
+              <Font name="Roboto" size="22" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Descripci&#xf3;n"/>
           </Properties>

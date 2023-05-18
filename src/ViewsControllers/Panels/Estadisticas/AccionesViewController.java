@@ -1,14 +1,18 @@
 package ViewsControllers.Panels.Estadisticas;
 
+import Models.Arqueodetalle;
 import Models.Usuario;
+import Models.Venta;
 import Reports.Reports;
 import Resource.Conection;
+import Resource.LocalDataController;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
+import javax.persistence.NoResultException;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
 import javax.swing.ImageIcon;
@@ -134,6 +138,7 @@ public class AccionesViewController {
 
         List<Object[]> transacciones = sp.getResultList();
         transacciones.forEach(transaccion -> {
+            transaccion[0] = new DecimalFormat("00000000").format(transaccion[0]);
             transaccion[5] = getNumberFormat(Float.parseFloat(transaccion[5].toString()));
             model.addRow(transaccion);
         });
@@ -245,9 +250,21 @@ public class AccionesViewController {
                 if(type.equalsIgnoreCase("Venta")){
                     setLoad(true);
                     Runnable run = () ->{
+                        LocalDataController ldc = new LocalDataController();
+                        float efectivoLocal = ldc.getTotal(TransactionID, "V");
+                        Arqueodetalle arqueo = null;
+                        try {
+                            arqueo = (Arqueodetalle) Conection.createEntityManager()
+                                .createNamedQuery("Arqueodetalle.findByVentaID")
+                                .setParameter("facturaID", new Venta(TransactionID))
+                                .getSingleResult();
+                        } catch (NoResultException e) {
+                            
+                        }
                         Reports report = new Reports();
-                        report.GenerateTickeVenta(TransactionID, 0);
-                        setLoad(false);
+                        report.GenerateTickeVenta(TransactionID, 
+                                efectivoLocal == -1 ? (arqueo != null ? arqueo.getEfectivo() : 0) : efectivoLocal);
+                        setLoad(false); 
                     };
                     new Thread(run).start();
                 } else{

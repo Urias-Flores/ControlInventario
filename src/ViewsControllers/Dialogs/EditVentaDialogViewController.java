@@ -51,43 +51,52 @@ public class EditVentaDialogViewController {
 
         Cantidad.setText(values[3].toString());
         Precio.setText(values[4].toString());
-        DescuentoLempiras.setText(values[5].toString());
+        
         updateLempirasPorcent();
 
         float cantidad = Float.parseFloat(values[3].toString().replace(",", ""));
         float precio = Float.parseFloat(values[4].toString().replace(",", ""));
         float descuento = Float.parseFloat(values[5].toString().replace(",", ""));
+        DescuentoLempiras.setText(getNumberFormat(descuento / cantidad));
 
         Subtotal.setText(getNumberFormat((cantidad * precio) - descuento));
     }
 
     public Object[] getValuesforSale() {
-        Object[] values = {
-            Cantidad.getText().replace(",", ""),
-            DescuentoLempiras.getText().replace(",", ""),
-            Subtotal.getText().replace(",", "").replace("Lps.", "")
-        };
-        return values;
+        if(validate()){
+            float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
+            float descuentoUnitario = Float.parseFloat(DescuentoLempiras.getText().replace(",", ""));
+            Object[] values = {
+                cantidad,
+                descuentoUnitario * cantidad,
+                Subtotal.getText().replace(",", "").replace("Lps.", "")
+            };
+            return values;
+        }
+        return null;
     }
 
     public Object[] getValuesforBuy() {
-        Object[] values = {
-            Cantidad.getText().replace(",", ""),
-            Precio.getText().replace(",", ""),
-            DescuentoLempiras.getText().replace(",", ""),
-            Subtotal.getText().replace(",", "").replace("Lps.", "")
-        };
-        return values;
+        if(validate()){
+            Object[] values = {
+                Cantidad.getText().replace(",", ""),
+                Precio.getText().replace(",", ""),
+                DescuentoLempiras.getText().replace(",", ""),
+                Subtotal.getText().replace(",", "").replace("Lps.", "")
+            };
+            return values;
+        }
+        return null;
     }
 
     public void updateSubtotal() {
         if (validate()) {
             Error.setBackground(Color.white);
-            float descuento = Float.parseFloat(DescuentoLempiras.getText().replace(",", ""));
             float precio = Float.parseFloat(Precio.getText().replace(",", ""));
             float cantidad = Float.parseFloat(Cantidad.getText().replace(",", ""));
+            float descuento = Float.parseFloat(DescuentoLempiras.getText().replace(",", "")) * cantidad;
             float subtotal = (precio * cantidad) - descuento;
-            Subtotal.setText(getNumberFormat(subtotal) + " Lps.");
+            Subtotal.setText(getNumberFormat(subtotal));
         } else {
             Error.setBackground(new Color(185, 0, 0));
         }

@@ -90,12 +90,13 @@ public class AddCierreDialogViewController {
                 float totalFacturado = 0;
                 float totalEfectivo = 0;
                 float totalCambio = 0;
+                DecimalFormat df = new DecimalFormat("00000000");
                 for(Arqueodetalle arqueodetalle : arqueodetalles){
                     Object[] row = {
                         //Cargando no. de factura o solicitud o gasto segun sea el que este disponible
-                        arqueodetalle.getFacturaID() != null ? arqueodetalle.getFacturaID().getVentaID()
-                            : arqueodetalle.getSolicitudID() != null ? arqueodetalle.getSolicitudID().getSolicitudID()
-                            : arqueodetalle.getGastoID() != null ? arqueodetalle.getGastoID().getGastoID() : 0,
+                        arqueodetalle.getFacturaID() != null ? df.format(arqueodetalle.getFacturaID().getVentaID())
+                            : arqueodetalle.getSolicitudID() != null ? df.format(arqueodetalle.getSolicitudID().getSolicitudID())
+                            : arqueodetalle.getGastoID() != null ? df.format(arqueodetalle.getGastoID().getGastoID()) : df.format(0),
                         
                         //Cargando el tipo segun la disponibilidad del numero
                         arqueodetalle.getFacturaID() != null ? "Venta"
@@ -134,7 +135,7 @@ public class AddCierreDialogViewController {
                 float total = Float.parseFloat(arqueo[2].toString());
                 float efectivo = Float.parseFloat(arqueo[3].toString());
                 float cambio = Float.parseFloat(arqueo[4].toString());
-                
+                arqueo[0] = new DecimalFormat("00000000").format(arqueo[0]);
                 arqueo[2] = getNumberFormat(total);
                 arqueo[3] = getNumberFormat(efectivo);
                 arqueo[4] = getNumberFormat(cambio);

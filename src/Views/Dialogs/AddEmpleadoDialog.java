@@ -4,6 +4,8 @@ import Resource.Utilities;
 import ViewsControllers.Dialogs.AddEmpleadoDialogViewController;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.JTextField;
 
 public class AddEmpleadoDialog extends javax.swing.JDialog {
@@ -31,6 +33,24 @@ public class AddEmpleadoDialog extends javax.swing.JDialog {
             field.addFocusListener(Utilities.getFLPlaceHolderEfect());
         });
         vc = new AddEmpleadoDialogViewController(this, txtNombre, txtApellido, txtIdentidad, txtCorreo, txtNumero, cmbDia, cmbMes, cmbAnio, txtDomicilio, txtError, lbCargando); 
+        addDesign();
+    }
+    
+    private void addDesign(){
+        List<JTextField> fields = Arrays.asList(txtNombre, txtApellido, txtIdentidad, txtCorreo, txtNumero);
+        String[] texts = {
+            "Ingrese los nombres del empleado...",
+            "Ingrese los apellidos del empleado...",
+            "Ingrese el número de identidad del empleado...",
+            "Ingrese el correo electrónico del empleado...",
+            "Ingrese el número telefónico del empleado..."
+        };
+        
+        int counter = 0;
+        for(JTextField field : fields){
+            field.putClientProperty("JTextField.placeholderText", texts[counter]);
+            counter++;
+        }
     }
     
     public void EditingMode(int EmpleadoID){
@@ -111,49 +131,44 @@ public class AddEmpleadoDialog extends javax.swing.JDialog {
             .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
         );
 
-        lbTitulo.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
+        lbTitulo.setFont(new java.awt.Font("Roboto", 1, 30)); // NOI18N
         lbTitulo.setText("Agregar empleado");
 
-        jLabel2.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel2.setText("Nombre:");
+        jLabel2.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel2.setText("Nombre");
 
         txtNombre.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtNombre.setForeground(new java.awt.Color(180, 180, 180));
-        txtNombre.setText("Ingrese el nombre del empleado...");
 
-        jLabel3.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel3.setText("Apellido:");
+        jLabel3.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel3.setText("Apellido");
 
         txtApellido.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtApellido.setForeground(new java.awt.Color(180, 180, 180));
-        txtApellido.setText("Ingrese los apellido del empleado...");
 
-        jLabel4.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel4.setText("No. de Identidad:");
+        jLabel4.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel4.setText("No. de Identidad");
 
         txtIdentidad.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtIdentidad.setForeground(new java.awt.Color(180, 180, 180));
-        txtIdentidad.setText("Ingrese el numero de identidad del empleado...");
 
-        jLabel5.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel5.setText("Correo Electronico:");
+        jLabel5.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel5.setText("Correo Electrónico");
 
         txtCorreo.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtCorreo.setForeground(new java.awt.Color(180, 180, 180));
-        txtCorreo.setText("Ingrese el correo electronico del empleado...");
 
-        jLabel6.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel6.setText("Numero telefonico:");
+        jLabel6.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel6.setText("Número telefónico");
 
         txtNumero.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtNumero.setForeground(new java.awt.Color(180, 180, 180));
-        txtNumero.setText("Ingrese el numero telefonico del empleado...");
 
-        jLabel7.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel7.setText("Fecha de nacimiento:");
+        jLabel7.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel7.setText("Fecha de nacimiento");
 
-        jLabel8.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        jLabel8.setText("Domicilio:");
+        jLabel8.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel8.setText("Domicilio");
 
         txtDomicilio.setColumns(20);
         txtDomicilio.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
@@ -234,7 +249,7 @@ public class AddEmpleadoDialog extends javax.swing.JDialog {
                 .addComponent(pnBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lbTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -267,7 +282,7 @@ public class AddEmpleadoDialog extends javax.swing.JDialog {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txtError, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))

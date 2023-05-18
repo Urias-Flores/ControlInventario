@@ -28,6 +28,12 @@ public class EnterPasswordDialogs extends javax.swing.JDialog {
         btnCancelar.addMouseListener(Utilities.getMLGeneralButton());
         txtError.setBackground(Color.white);
         txtUsuario.setText(Utilities.getUsuarioActual().getNombre());
+        
+        addDesing();
+    }
+    
+    private void addDesing(){
+        txtContrasena.putClientProperty("JTextField.placeholderText", "Ingrese su contraseña de usuario...");
     }
     
     public void setText(String texto){
@@ -137,15 +143,15 @@ public class EnterPasswordDialogs extends javax.swing.JDialog {
         lbText2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbText2.setText("Message");
 
-        lbText3.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        lbText3.setText("Usuario actual:");
+        lbText3.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        lbText3.setText("Usuario actual");
 
         txtUsuario.setEditable(false);
         txtUsuario.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         txtUsuario.setText("Usuario actual...");
 
-        lbText4.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        lbText4.setText("Contraseña:");
+        lbText4.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        lbText4.setText("Contraseña");
 
         txtContrasena.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
 

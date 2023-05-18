@@ -92,8 +92,8 @@ public class InfoProductoDialog extends javax.swing.JDialog {
             .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
         );
 
-        lbTitulo.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
-        lbTitulo.setText("Informacion completa");
+        lbTitulo.setFont(new java.awt.Font("Roboto", 1, 30)); // NOI18N
+        lbTitulo.setText("Información completa");
 
         jLabel2.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
         jLabel2.setText("Codigo de producto");

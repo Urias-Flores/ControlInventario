@@ -4,6 +4,10 @@ import Resource.Utilities;
 import Views.Dialogs.Dialogs;
 import ViewsControllers.Panels.Facturacion.FacturaViewController;
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class Facturar extends javax.swing.JPanel {
 
@@ -11,26 +15,25 @@ public class Facturar extends javax.swing.JPanel {
 
     public Facturar() {
         initComponents();
-
-        btnAgregarCliente.addMouseListener(Utilities.getMLGrayButton());
-        btnAgregarCarrito.addMouseListener(Utilities.getMLGrayButton());
-        btnEditarCarrito.addMouseListener(Utilities.getMLGrayButton());
-        btnEliminarCarrito.addMouseListener(Utilities.getMLGrayButton());
-        btnEliminarTodo.addMouseListener(Utilities.getMLGrayButton());
-
-        btnAgregar.addMouseListener(Utilities.getMLGeneralButton());
-        btnSolicitar.addMouseListener(Utilities.getMLGeneralButton());
-        btnCotizar.addMouseListener(Utilities.getMLGeneralButton());
-        btnIniciarDia.addMouseListener(Utilities.getMLGeneralButton());
-
-        txtRTN.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        txtBarra.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        txtNoCotizacion.addFocusListener(Utilities.getFLPlaceHolderEfect());
+        
+        //Agregando efectos a botones y placeholders a campos de escritura
+        List<JLabel> grayButtons = Arrays.asList(btnAgregarCliente, btnAgregarCarrito, btnEditarCarrito, btnEliminarCarrito, btnEliminarTodo);
+        grayButtons.forEach(button -> {button.addMouseListener(Utilities.getMLGrayButton());});
+        List<JLabel> generalButton = Arrays.asList(btnAgregar, btnSolicitar, btnCotizar, btnIniciarDia);
+        generalButton.forEach(button -> {button.addMouseListener(Utilities.getMLGeneralButton());});
+        List<JTextField> fields = Arrays.asList(txtRTN, txtBarra, txtNoCotizacion);
+        fields.forEach(field -> {field.addFocusListener(Utilities.getFLPlaceHolderEfect());});
 
         vc = new FacturaViewController(lbCargando, cmbCliente, txtRTN,
                 cmbFormaPago, txtBarra,
                 txtNoCotizacion, tbVentas, txtSubtotal,
                 txtDescuento, txtImporte, txtISV, txtTotal, btnIniciarDia);
+        addDesing();
+    }
+    
+    private void addDesing(){
+        txtBarra.putClientProperty("JTextField.placeholderText", "Ingrese el código de barras...");
+        txtNoCotizacion.putClientProperty("JTextField.placeholderText", "Ingrese el número de cotización...");
     }
 
     @SuppressWarnings("unchecked")
@@ -38,7 +41,6 @@ public class Facturar extends javax.swing.JPanel {
     private void initComponents() {
 
         bgEstado = new javax.swing.ButtonGroup();
-        jLabel2 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         txtRTN = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -71,14 +73,13 @@ public class Facturar extends javax.swing.JPanel {
         btnIniciarDia = new javax.swing.JLabel();
         btnSolicitar = new javax.swing.JLabel();
         cmbFormaPago = new javax.swing.JComboBox<>();
+        jLabel12 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setFont(new java.awt.Font("Roboto", 1, 28)); // NOI18N
-        jLabel2.setText("Facturar venta");
-
         jLabel6.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
-        jLabel6.setText("RTN de cliente:");
+        jLabel6.setForeground(new java.awt.Color(90, 90, 90));
+        jLabel6.setText("RTN de cliente");
 
         txtRTN.setEditable(false);
         txtRTN.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
@@ -87,7 +88,8 @@ public class Facturar extends javax.swing.JPanel {
         txtRTN.setPreferredSize(new java.awt.Dimension(148, 38));
 
         jLabel1.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
-        jLabel1.setText("Cliente:");
+        jLabel1.setForeground(new java.awt.Color(90, 90, 90));
+        jLabel1.setText("Cliente");
 
         cmbCliente.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         cmbCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Seleccione cliente --" }));
@@ -128,47 +130,53 @@ public class Facturar extends javax.swing.JPanel {
         });
 
         txtDescuento.setEditable(false);
-        txtDescuento.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        txtDescuento.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
         txtDescuento.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         txtDescuento.setText("0.00");
 
         jLabel7.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(90, 90, 90));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel7.setText("Descuento:");
 
         txtSubtotal.setEditable(false);
-        txtSubtotal.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        txtSubtotal.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
         txtSubtotal.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         txtSubtotal.setText("0.00");
 
         txtTotal.setEditable(false);
-        txtTotal.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        txtTotal.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
         txtTotal.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         txtTotal.setText("0.00");
 
         jLabel8.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(90, 90, 90));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel8.setText("Sub-Total:");
 
-        jLabel3.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(90, 90, 90));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel3.setText("Total:");
 
         txtISV.setEditable(false);
-        txtISV.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        txtISV.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
         txtISV.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         txtISV.setText("0.00");
+        txtISV.setMinimumSize(new java.awt.Dimension(80, 38));
 
         jLabel4.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(90, 90, 90));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel4.setText("ISV (15%):");
 
         txtImporte.setEditable(false);
-        txtImporte.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        txtImporte.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
         txtImporte.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         txtImporte.setText("0.00");
 
         jLabel5.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(90, 90, 90));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel5.setText("Importe ISV (15%):");
 
@@ -207,11 +215,11 @@ public class Facturar extends javax.swing.JPanel {
         });
 
         jLabel9.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
-        jLabel9.setText("Forma de pago:");
+        jLabel9.setForeground(new java.awt.Color(90, 90, 90));
+        jLabel9.setText("Forma de pago");
 
         txtBarra.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtBarra.setForeground(new java.awt.Color(180, 180, 180));
-        txtBarra.setText("9817329732...");
         txtBarra.setPreferredSize(new java.awt.Dimension(148, 38));
         txtBarra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -220,7 +228,8 @@ public class Facturar extends javax.swing.JPanel {
         });
 
         jLabel10.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
-        jLabel10.setText("Codigo de barras");
+        jLabel10.setForeground(new java.awt.Color(90, 90, 90));
+        jLabel10.setText("Código de barras");
 
         btnCotizar.setBackground(new java.awt.Color(3, 57, 103));
         btnCotizar.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
@@ -236,12 +245,11 @@ public class Facturar extends javax.swing.JPanel {
         });
 
         jLabel11.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
-        jLabel11.setText("Cargar cotizacion:");
-        jLabel11.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jLabel11.setForeground(new java.awt.Color(90, 90, 90));
+        jLabel11.setText("Cargar cotización:");
 
         txtNoCotizacion.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         txtNoCotizacion.setForeground(new java.awt.Color(180, 180, 180));
-        txtNoCotizacion.setText("Escriba el No. de cotizacion...");
         txtNoCotizacion.setPreferredSize(new java.awt.Dimension(148, 38));
         txtNoCotizacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -303,11 +311,10 @@ public class Facturar extends javax.swing.JPanel {
         cmbFormaPago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Contado", "Credito", "Tarjeta o Deposito" }));
         cmbFormaPago.setEnabled(false);
         cmbFormaPago.setPreferredSize(new java.awt.Dimension(246, 38));
-        cmbFormaPago.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbFormaPagoActionPerformed(evt);
-            }
-        });
+
+        jLabel12.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(90, 90, 90));
+        jLabel12.setText("Realizar cambios");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -317,11 +324,12 @@ public class Facturar extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(cmbCliente, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAgregarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cmbCliente, 0, 309, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnAgregarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -330,20 +338,22 @@ public class Facturar extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cmbFormaPago, 0, 258, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtBarra, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtBarra, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAgregarCarrito)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEditarCarrito)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEliminarCarrito)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEliminarTodo))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnAgregarCarrito)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnEditarCarrito)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnEliminarCarrito)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnEliminarTodo))
+                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jScrollPane1)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1371, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -356,10 +366,10 @@ public class Facturar extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNoCotizacion, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtNoCotizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 221, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -385,61 +395,54 @@ public class Facturar extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtRTN, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnEliminarCarrito, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnEditarCarrito)
-                                    .addComponent(btnAgregarCarrito))
-                                .addComponent(btnEliminarTodo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(cmbCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                                .addComponent(btnAgregarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel6)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtRTN, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(cmbFormaPago, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(txtBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(cmbFormaPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(btnEliminarTodo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnEditarCarrito, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnAgregarCarrito, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnEliminarCarrito)))
+                                .addComponent(cmbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnAgregarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtSubtotal)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtISV, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtDescuento)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtNoCotizacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtNoCotizacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtImporte, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtDescuento, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(txtISV, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtTotal))
                 .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -518,10 +521,6 @@ public class Facturar extends javax.swing.JPanel {
         vc.InsertRequest();
     }//GEN-LAST:event_btnSolicitarMouseClicked
 
-    private void cmbFormaPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFormaPagoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbFormaPagoActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgEstado;
     private javax.swing.JLabel btnAgregar;
@@ -538,7 +537,7 @@ public class Facturar extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

@@ -240,7 +240,7 @@ WHERE v.VentaID = $P{VentaID}]]>
 				<text><![CDATA[Usuario:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="24" y="65" width="110" height="9" uuid="fa2f2c7c-77db-48d9-93b7-6a1361b3242c">
+				<reportElement x="24" y="65" width="154" height="9" uuid="fa2f2c7c-77db-48d9-93b7-6a1361b3242c">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -258,11 +258,11 @@ WHERE v.VentaID = $P{VentaID}]]>
 				</textElement>
 				<text><![CDATA[Cliente:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="22" y="74" width="112" height="9" uuid="38ac0f5e-c0c6-4277-8952-dc8287e1030f">
+			<textField textAdjust="ScaleFont" isBlankWhenNull="false">
+				<reportElement x="22" y="74" width="156" height="9" uuid="38ac0f5e-c0c6-4277-8952-dc8287e1030f">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<textElement verticalAlignment="Middle">
+				<textElement verticalAlignment="Middle" markup="none">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Cliente}]]></textFieldExpression>
@@ -278,7 +278,7 @@ WHERE v.VentaID = $P{VentaID}]]>
 				<text><![CDATA[RNT:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="14" y="83" width="120" height="9" uuid="7d6606b1-3186-4611-809a-a1b5481da715">
+				<reportElement x="14" y="83" width="164" height="9" uuid="7d6606b1-3186-4611-809a-a1b5481da715">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">

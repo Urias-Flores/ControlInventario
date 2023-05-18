@@ -14,8 +14,11 @@ import Models.Ventadetalle;
 import Reports.Reports;
 import Resource.Conection;
 import Resource.LocalDataController;
+import Resource.NoJpaConection;
 import Resource.Utilities;
 import Views.Dialogs.Dialogs;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,12 +51,15 @@ public class FacturasDiaViewController {
     private JTextField Total;
     private JLabel Cargando;
 
+    //Creando modelo de tabla utilizado para cargar las facturas del dia
     private DefaultTableModel model = new DefaultTableModel() {
         @Override
         public boolean isCellEditable(int rowIndex, int columnIndex) {
             return false;
         }
     };
+    
+    //Creando modelo de tabla utilizado para cargar las vista previa de las facturas
     private DefaultTableModel modelPrevia = new DefaultTableModel() {
         @Override
         public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -116,6 +122,7 @@ public class FacturasDiaViewController {
         Init();
     }
 
+    //Ajusta las headers de la tabla
     private void setModelTableBills() {
         String[] columns = {"No.", "Tipo", "Cliente", "Usuario", "Hora", "Total"};
         model.setColumnIdentifiers(columns);
@@ -129,6 +136,7 @@ public class FacturasDiaViewController {
         Facturas.getColumn("Total").setPreferredWidth(90);
     }
 
+    //Cargar las facturas diferenciando entre si es una Venta normal o una no oficial
     private void loadBills() {
         model.setRowCount(0);
         Query query = Conection.createEntityManagerFactory().createEntityManager().createNativeQuery("SELECT *  FROM ViewFacturasDia ORDER BY Hora desc");
@@ -176,6 +184,7 @@ public class FacturasDiaViewController {
     }
 
     //Task
+    //Carga la vista preva de la factura que se selecciona en la tabla
     public void loadBill() {
         int fila = Facturas.getSelectedRow();
         if (fila >= 0) {
@@ -240,6 +249,7 @@ public class FacturasDiaViewController {
         }
     }
     
+    //Actualiza los campos de la vista previa con los datos relacionados a la factura seleccionada
     private void updateTotalSales() {
         float totalSales = 0;
         int counter = 0;
@@ -247,10 +257,10 @@ public class FacturasDiaViewController {
             totalSales += Float.parseFloat(Facturas.getValueAt(counter, 5).toString().replace(",", ""));
             counter++;
         }
-
         TotalVentas.setText(getNumberFormat(totalSales));
     }
 
+    //Carga la lista de clientes en el combobox
     private void loadClients() {
         Clientes.removeAllItems();
         Clientes.addItem(new Cliente(0, "-- Todos los clientes --", 0));
@@ -265,6 +275,7 @@ public class FacturasDiaViewController {
         });
     }
 
+    //Filtar la tabla para mostrar las datos segun cliente y tipo de transaccion (Venta, Solicitud)
     public void filter() {
         List<RowFilter<TableModel, String>> filters = new LinkedList<>();
         filters.add(RowFilter.regexFilter(Clientes.getSelectedIndex() == 0 || Clientes.getSelectedIndex() == -1 ? "" :Clientes.getSelectedItem().toString(), 2));
@@ -276,6 +287,7 @@ public class FacturasDiaViewController {
     }
 
     //Task
+    //Envia a imprimir las factura seleccionada
     public void printBill() {
         int fila = Facturas.getSelectedRow();
         if (fila >= 0) {
@@ -287,9 +299,9 @@ public class FacturasDiaViewController {
 
                     int transaccionID = Integer.parseInt(Facturas.getValueAt(fila, 0).toString());
                     if(Facturas.getValueAt(fila, 1).toString().equals("Venta")){
-                        reports.GenerateTickeVenta(transaccionID, ldc.getTotal(transaccionID, "O"));
+                        reports.GenerateTickeVenta(transaccionID, ldc.getTotal(transaccionID, "V"));
                     }else{
-                        reports.GenerateTicketSolicitud(transaccionID, ldc.getTotal(transaccionID, "N"));
+                        reports.GenerateTicketSolicitud(transaccionID, ldc.getTotal(transaccionID, "S"));
                     }
                     setLoad(false);
                 };
@@ -301,6 +313,7 @@ public class FacturasDiaViewController {
     }
 
     //Task
+    //Envia a imprimir el reporte de ventas del dia
     public void printSalesReport() {
         Cargando.setIcon(new ImageIcon(getClass().getResource(Utilities.getLoadingImage())));
         Runnable run = () -> {
@@ -313,19 +326,31 @@ public class FacturasDiaViewController {
     }
 
     //Task
+    //Elimina la factura seleccionada de la tabla
     public void deleteBill() {
         int fila = Facturas.getSelectedRow();
         if (fila >= 0) {
             if (Dialogs.ShowEnterPasswordDialog("No es recomendable la eliminación de facturas.",
                     "Esta acción puede ocacionar desorden en inventario real.",
                     "Para continuar con la eliminacion escriba su contraseña.", Dialogs.WARNING_ICON)) {
-
+                LocalDataController ldc = new LocalDataController();
                 setLoad(true);
                 Runnable run = () -> {
                     VentaJpaController controller = new VentaJpaController(Conection.createEntityManagerFactory());
                     deleteBillDetail(fila);
                     try {
-                        controller.destroy(Integer.valueOf(Facturas.getValueAt(fila, 0).toString()));
+                        int VentaID = Integer.parseInt(Facturas.getValueAt(fila, 0).toString());
+                        String TipoTransaccion = Facturas.getValueAt(fila, 1).toString().substring(0, 1);
+                        //Eliminando factura
+                        controller.destroy(VentaID);
+                        //Eliminando el detalle de arqueo
+                        ldc.deleteArqueoDetalle(VentaID, TipoTransaccion);
+                        //Actualizando el numero de factura al numero de factura que se elimina para que
+                        //se vuelva a recrear
+                        if(TipoTransaccion.equals("V")){
+                            resetBillNumber(VentaID);
+                        }
+                        //Actualizando tabla
                         Init();
                         Dialogs.ShowMessageDialog("La factura ha sido eliminada exitosamente", Dialogs.COMPLETE_ICON);
                     } catch (IllegalOrphanException | NonexistentEntityException ex) {
@@ -341,7 +366,27 @@ public class FacturasDiaViewController {
             Dialogs.ShowMessageDialog("Seleccione una factura de la lista", Dialogs.ERROR_ICON);
         }
     }
+    
+    /**
+     * 
+     * @param BillNumber recibe el numero de factura al que se desea que se reestablezca luego de la eliminacion
+     */
+    private void resetBillNumber(int BillNumber){
+        try {
+            PreparedStatement ps = new NoJpaConection().getconec().prepareStatement("ALTER TABLE Venta auto_increment = ?");
+            ps.setInt(1, BillNumber);
+            ps.execute();
+            ps.close();
+            System.out.println("Se actualizo el número de factura recurrente");
+        } catch (SQLException ex) {
+            Logger.getLogger(FacturasDiaViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
+    /**
+     * Elimina los detalle de la factura seleccionada en la tabla para eliminar dicha factura
+     * @param fila Recibe el numero de fila de la tabla seleccionada
+     */
     private void deleteBillDetail(int fila) {
         VentadetalleJpaController controller = new VentadetalleJpaController(Conection.createEntityManagerFactory());
         List<Ventadetalle> ventadetalles = controller.findVentadetalleEntities();
@@ -357,6 +402,7 @@ public class FacturasDiaViewController {
         });
     }
 
+    //Limpia todos los campos de la vista
     private void clear() {
         Subtotal.setText("0.00");
         Descuento.setText("0.00");
@@ -366,6 +412,7 @@ public class FacturasDiaViewController {
         modelPrevia.setRowCount(0);
     }
 
+    //
     private String getNumberFormat(float Value) {
         DecimalFormat format = new DecimalFormat("#,##0.00");
         return format.format(Value);

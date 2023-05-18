@@ -87,7 +87,7 @@ public class AddGastoDialog extends javax.swing.JDialog {
         lbTitulo.setFont(new java.awt.Font("Roboto", 1, 30)); // NOI18N
         lbTitulo.setText("Agregar nuevo gasto");
 
-        lbEntidad12.setFont(new java.awt.Font("Roboto", 0, 25)); // NOI18N
+        lbEntidad12.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbEntidad12.setText("Descripción");
 
         txtDescripcion.setColumns(20);

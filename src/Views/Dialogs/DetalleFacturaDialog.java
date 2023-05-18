@@ -130,7 +130,7 @@ public class DetalleFacturaDialog extends javax.swing.JDialog {
         txtDescuento.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         txtDescuento.setText("0.00");
 
-        jLabel7.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel7.setText("Descuento:");
 
@@ -140,15 +140,15 @@ public class DetalleFacturaDialog extends javax.swing.JDialog {
         txtSubtotal.setText("0.00");
 
         txtTotal.setEditable(false);
-        txtTotal.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        txtTotal.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
         txtTotal.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         txtTotal.setText("0.00");
 
-        jLabel8.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel8.setText("Sub-Total:");
 
-        jLabel3.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel3.setText("Total:");
 
@@ -157,7 +157,7 @@ public class DetalleFacturaDialog extends javax.swing.JDialog {
         txtISV.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         txtISV.setText("0.00");
 
-        jLabel4.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel4.setText("ISV (15%):");
 
@@ -166,26 +166,26 @@ public class DetalleFacturaDialog extends javax.swing.JDialog {
         txtImporte.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         txtImporte.setText("0.00");
 
-        jLabel5.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel5.setText("Importe ISV (15%):");
 
         lbFactura.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        lbFactura.setText("No. Factura:");
+        lbFactura.setText("No. Factura");
 
         txtFactura.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         txtFactura.setText("100001");
         txtFactura.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         lbEntidad.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        lbEntidad.setText("Cliente:");
+        lbEntidad.setText("Cliente");
 
         txtEntidad.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         txtEntidad.setText("Nombre de cliente...");
         txtEntidad.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         lbUsuario.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        lbUsuario.setText("Usuario:");
+        lbUsuario.setText("Usuario");
 
         txtUsuario.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         txtUsuario.setText("Nombre de usuario...");
@@ -196,14 +196,14 @@ public class DetalleFacturaDialog extends javax.swing.JDialog {
         txtHora.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         lbHora.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        lbHora.setText("Hora:");
+        lbHora.setText("Hora");
 
         txtFecha.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         txtFecha.setText("2022-01-01");
         txtFecha.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         lbFecha.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        lbFecha.setText("Fecha:");
+        lbFecha.setText("Fecha");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -223,7 +223,7 @@ public class DetalleFacturaDialog extends javax.swing.JDialog {
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtDescuento, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -293,22 +293,22 @@ public class DetalleFacturaDialog extends javax.swing.JDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(txtSubtotal)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtISV)
                     .addComponent(txtDescuento)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtTotal)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))

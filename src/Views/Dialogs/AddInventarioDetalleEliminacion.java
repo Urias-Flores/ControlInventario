@@ -81,7 +81,7 @@ public class AddInventarioDetalleEliminacion extends javax.swing.JDialog {
             .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
         );
 
-        jLabel1.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Roboto", 1, 30)); // NOI18N
         jLabel1.setText("Editar valores de inventario");
 
         jLabel2.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N

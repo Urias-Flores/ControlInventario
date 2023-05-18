@@ -101,7 +101,7 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
         lbTitulo.setText("Facturas pendientes");
 
         lbEntidad.setFont(new java.awt.Font("Roboto", 0, 20)); // NOI18N
-        lbEntidad.setText("Cliente:");
+        lbEntidad.setText("Cliente");
 
         lbNombre.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbNombre.setText("Nombre de cliente...");
@@ -251,7 +251,7 @@ public class CuentasPendientesDialog extends javax.swing.JDialog {
                 .addComponent(pnBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lbTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(lbEntidad)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

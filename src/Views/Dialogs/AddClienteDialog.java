@@ -4,6 +4,9 @@ package Views.Dialogs;
 import Resource.Utilities;
 import ViewsControllers.Dialogs.AddClienteViewController;
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.JTextField;
 
 public class AddClienteDialog extends javax.swing.JDialog {
 
@@ -17,14 +20,27 @@ public class AddClienteDialog extends javax.swing.JDialog {
         btnAgregar.addMouseListener(Utilities.getMLGeneralButton());
         btnClose.addMouseListener(Utilities.getMLButtonCloseBlue());
         
-        txtNombre.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        txtDocumento.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        txtRTN.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        txtCorreo.addFocusListener(Utilities.getFLPlaceHolderEfect());
-        txtNumero.addFocusListener(Utilities.getFLPlaceHolderEfect());
         txtError.setBackground(Color.white);
         
         vc = new AddClienteViewController(this, txtNombre, txtDocumento, txtRTN, txtCorreo, txtNumero, txtDomicilio, txtError, lbCargando);
+        addDesing();
+    }
+    
+    private void addDesing(){
+        List<JTextField> fields = Arrays.asList(txtNombre, txtDocumento, txtRTN, txtCorreo, txtNumero);
+        String[] texts = {
+            "Ingrese el nombre del cliente...", 
+            "Ingrese el número de documento del cliente...",
+            "Ingrese el R.T.N del cliente...",
+            "Ingrese el correo electrónico del cliente...",
+            "Ingrese el número telefonico del cliente..."
+        };
+        
+        int index = 0;
+        for(JTextField field : fields){
+            field.putClientProperty("JTextField.placeholderText", texts[index]);
+            index++;
+        }
     }
     
     public void EditingMode(int ClienteID){
@@ -103,36 +119,28 @@ public class AddClienteDialog extends javax.swing.JDialog {
             .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
         );
 
-        lbTitulo.setFont(new java.awt.Font("Roboto", 1, 26)); // NOI18N
+        lbTitulo.setFont(new java.awt.Font("Roboto", 1, 30)); // NOI18N
         lbTitulo.setText("Agregar cliente");
 
         jLabel2.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel2.setText("Nombre:");
 
         txtNombre.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtNombre.setForeground(new java.awt.Color(180, 180, 180));
-        txtNombre.setText("Ingrese el nombre del cliente...");
 
         jLabel3.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel3.setText("Documento:");
 
         txtDocumento.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtDocumento.setForeground(new java.awt.Color(180, 180, 180));
-        txtDocumento.setText("Ingrese el numero de documento del cliente...");
 
         jLabel4.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel4.setText("Correo Electronico:");
 
         txtCorreo.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtCorreo.setForeground(new java.awt.Color(180, 180, 180));
-        txtCorreo.setText("Ingrese el correo electronico del cliente...");
 
         jLabel5.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel5.setText("Numero telefonico:");
 
         txtNumero.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtNumero.setForeground(new java.awt.Color(180, 180, 180));
-        txtNumero.setText("Ingrese el numero telefonico del cliente...");
 
         jLabel6.setFont(new java.awt.Font("Roboto", 1, 20)); // NOI18N
         jLabel6.setText("Domicilio:");
@@ -169,8 +177,6 @@ public class AddClienteDialog extends javax.swing.JDialog {
         jLabel7.setText("RTN:");
 
         txtRTN.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
-        txtRTN.setForeground(new java.awt.Color(180, 180, 180));
-        txtRTN.setText("Ingrese el RTN del cliente...");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -209,7 +215,7 @@ public class AddClienteDialog extends javax.swing.JDialog {
                 .addComponent(pnBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lbTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -235,7 +241,7 @@ public class AddClienteDialog extends javax.swing.JDialog {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txtError, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
                     .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))

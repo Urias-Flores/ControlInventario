@@ -84,7 +84,7 @@ public class AddCierreDialog extends javax.swing.JDialog {
         pnBarraLayout.setHorizontalGroup(
             pnBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnBarraLayout.createSequentialGroup()
-                .addGap(0, 579, Short.MAX_VALUE)
+                .addGap(0, 580, Short.MAX_VALUE)
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnBarraLayout.setVerticalGroup(
@@ -95,13 +95,13 @@ public class AddCierreDialog extends javax.swing.JDialog {
         lbTitulo.setFont(new java.awt.Font("Roboto", 1, 30)); // NOI18N
         lbTitulo.setText("Realizar cierre");
 
-        lbEntidad9.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
+        lbEntidad9.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbEntidad9.setText("Total facturado");
 
-        lbEntidad10.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
+        lbEntidad10.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbEntidad10.setText("Efectivo recibido");
 
-        lbEntidad11.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
+        lbEntidad11.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbEntidad11.setText("Cambio entregado");
 
         txtFacturado.setEditable(false);
@@ -130,7 +130,7 @@ public class AddCierreDialog extends javax.swing.JDialog {
         txtSaldoInicial.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtSaldoInicial.setText("0.00");
 
-        lbEntidad12.setFont(new java.awt.Font("Roboto", 0, 25)); // NOI18N
+        lbEntidad12.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbEntidad12.setText("Saldo inicial");
 
         tbArqueos.setModel(new javax.swing.table.DefaultTableModel(
@@ -144,6 +144,7 @@ public class AddCierreDialog extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbArqueos.setShowHorizontalLines(true);
         jScrollPane1.setViewportView(tbArqueos);
 
         btnPagar.setBackground(new java.awt.Color(3, 57, 103));
@@ -159,14 +160,14 @@ public class AddCierreDialog extends javax.swing.JDialog {
             }
         });
 
-        lbEntidad13.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
+        lbEntidad13.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbEntidad13.setText("Saldo real en caja");
 
         txtSaldoReal.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
         txtSaldoReal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtSaldoReal.setText("0.00");
 
-        lbEntidad14.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
+        lbEntidad14.setFont(new java.awt.Font("Roboto", 1, 22)); // NOI18N
         lbEntidad14.setText("Saldo final ");
 
         txtSaldoFinal.setEditable(false);
@@ -220,7 +221,7 @@ public class AddCierreDialog extends javax.swing.JDialog {
                 .addComponent(pnBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lbTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(lbEntidad12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtSaldoInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -250,7 +251,7 @@ public class AddCierreDialog extends javax.swing.JDialog {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPagar, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
+                    .addComponent(btnPagar, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
                 .addGap(18, 18, 18))
         );
 
